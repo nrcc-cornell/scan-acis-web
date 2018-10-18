@@ -6,6 +6,8 @@ import { observable, computed, action } from 'mobx';
 import axios from 'axios';
 import moment from 'moment';
 
+const protocol = window.location.protocol;
+
 export class AppStore {
     ///////////////////////////////////////////////////////
     /// Pages on the site
@@ -300,7 +302,8 @@ export class AppStore {
         console.log("Call gddtool_downloadData")
         this.gddtool_setDataIsLoading(true);
         return axios
-          .post("http://data.rcc-acis.org/StnData", this.getAcisParams)
+          //.post("http://data.rcc-acis.org/StnData", this.getAcisParams)
+          .post(`${protocol}//data.rcc-acis.org/StnData`, this.getAcisParams)
           .then(res => {
             console.log('SUCCESS downloading from ACIS');
             console.log(res);
