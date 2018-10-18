@@ -1,0 +1,15 @@
+
+    .display-data-table{
+        float:left;
+        height: 356px;
+        width: 200px;
+        width: 40vw;
+        //width: max(100px,40vw);
+        margin: 26px 10px 10px 10px;
+        border: 2px solid lightgray;
+        text-align: center;
+        display: inline-block;
+        //font-size: 2vw;
+        font-size: calc(10px + 0.8vw);
+    }
+

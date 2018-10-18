@@ -1,0 +1,9 @@
+.tool-select {
+    //width: calc(300px + 10vw);
+    //width: calc(300px + 20vw);
+    width: 60vw;
+    //width: 60%;
+    left: 20vw;
+    border: 2px solid rgba(34,139,34,1.0);
+    font-size: calc(12px + 0.8vw);
+}

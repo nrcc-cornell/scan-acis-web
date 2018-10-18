@@ -1,0 +1,14 @@
+#gdd-chart {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-top: 0.5vw;
+  //width: 94vw;
+  width: 92vw;
+  //min-width: 400px;
+  height: 40vw;
+  background-color: #fff;
+}
+
+//.recharts-cartesian-axis { font-size: calc(8px+1.0vw); font-family: sans-serif; }
+.recharts-cartesian-axis { font-size: calc(10px + 0.2vw); font-family: sans-serif; }

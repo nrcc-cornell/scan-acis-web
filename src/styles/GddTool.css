@@ -1,0 +1,10 @@
+.gdd-tool {
+    // flex puts tool ui on left side of chart
+    //display: flex;
+    //margin-left: 5vw;
+    margin-right: 5vw;
+}
+.gdd-ui {
+    display: flex;
+    margin-left: 10vw;
+}

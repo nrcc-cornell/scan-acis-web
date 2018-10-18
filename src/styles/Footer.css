@@ -1,0 +1,6 @@
+.Footer {
+    display: flex;
+    height: 100px;
+    width: 100%;
+    background: rgba(34,139,34,1.0);
+}
