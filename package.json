@@ -1,6 +1,7 @@
 {
   "name": "nrcc-scan-acis",
   "version": "0.1.0",
+  "homepage": "https://scan-acis.github.io/scan-acis-web",
   "private": true,
   "devDependencies": {
     "custom-react-scripts": "0.2.2",
