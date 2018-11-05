@@ -114,13 +114,15 @@
     .date-picker-button {
         font-size: 0.9em;
         color: #000000;
-        width: 160px;
+        width: 140px;
         //height: 24px;
-        height: 40px;
-        background: rgb(240,240,240);
+        height: 36px;
+        //background: rgb(240,240,240);
+        background: white;
         //border-color: #4ca20b;
         border-color: rgba(34,139,34,1.0);
         border-width: 2px;
+        border-radius: 6px;
         margin: 1.0vw;
     }
 

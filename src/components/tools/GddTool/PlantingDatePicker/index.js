@@ -44,6 +44,10 @@ class PlantingDatePicker extends Component {
     return validMonths.includes(month)
   }
 
+  componentDidUpdate(prevProps) {
+    this.props.store.app.gddtool_setClimateSummary();
+  }
+
   render() {
         return (
             <div className='planting-datepicker-input-div'>
@@ -52,6 +56,7 @@ class PlantingDatePicker extends Component {
             </div>
             <div className='planting-datepicker-div'>
               <DatePicker
+                  ref='planting_datepicker'
                   customInput={<DatePickerButton />}
                   className='input-date'
                   calendarClassName='calendar-pdate'

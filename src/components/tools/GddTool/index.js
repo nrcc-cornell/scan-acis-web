@@ -10,6 +10,7 @@ import GddBaseSelect from './GddBaseSelect'
 //import GddBaseSelect8650 from './GddBaseSelect8650'
 import GddChartTitle from './GddChartTitle'
 import GddChart from './GddChart'
+import GddTable from './GddTable'
 import LoadingOverlay from 'react-loading-overlay';
 
 // Styles
@@ -28,6 +29,10 @@ class GddTool extends Component {
 
     render() {
 
+        let display;
+        if (app.getOutputType==='chart') { display = <GddChart /> }
+        if (app.getOutputType==='table') { display = <GddTable /> }
+
         return (
             <div className="gdd-tool">
                 <div className="gdd-ui">
@@ -38,11 +43,11 @@ class GddTool extends Component {
                 <LoadingOverlay
                     active={app.gddtool_dataIsLoading}
                     spinner
-                    background={'rgba(200,200,200,0.0)'}
+                    background={'rgba(255,255,255,1.0)'}
                     color={'rgba(34,139,34,1.0)'}
                     spinnerSize={'10vw'}
                   >
-                    <GddChart />
+                    {display}
                 </LoadingOverlay>
             </div>
         );

@@ -15,7 +15,7 @@ var disabled
 var selectOptions = []
 for(var idx=0; idx<selectValues.length; idx++){
     disabled = false
-    selectOptions.push({ value: selectValues[idx].toString(), label: selectValues[idx].toString(), clearableValue: false, disabled: disabled })
+    selectOptions.push({ value: selectValues[idx].toString(), label: selectValues[idx].toString()+'°F', clearableValue: false, disabled: disabled })
 }
 
 var app;
@@ -33,18 +33,18 @@ class GddBaseSelect extends Component {
         return (
             <div className="gdd-base-select">
                 <div className='gdd-base-select-label'>
-                  <label><b>GDD Base (°F)</b></label>
+                  <label><b>GDD Base</b></label>
                 </div>
                 <div className='gdd-base-select-menu'>
                     <Select
                         name="gdd_base"
-                        placeholder={app.gddtool_getBase}
+                        className="gdd-base-dropdown"
+                        placeholder={app.gddtool_getBase+'°F'}
                         value={app.gddtool_getBase}
                         clearable={false}
                         options={selectOptions}
                         onChange={app.gddtool_setBase}
                     />
-                </div>
 
               <div className={(app.gddtool_getBase==='50') ? "gdd-base-select-8650" : "hide-gdd-base-select-8650"}>
                 <form>
@@ -58,6 +58,8 @@ class GddBaseSelect extends Component {
                   </div>
                 </form>
               </div>
+
+                </div>
 
             </div>
         );

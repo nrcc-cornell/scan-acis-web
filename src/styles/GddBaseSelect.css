@@ -14,10 +14,24 @@
 
     .gdd-base-select-menu {
         //margin: 0px 0px 0px 8px;
+        display: flex;
+        position: relative;
         margin: 1vw;
-        width: 80px;
+        width: 200px;
+        height: 40px;
         font-size: 16px;
-        border: 2px solid rgba(34,139,34,1.0);
+        valign: bottom;
+        //border: 2px solid rgba(34,139,34,1.0);
+    }
+
+    .gdd-base-dropdown {
+        width: 100px;
+        height: 40px;
+        font-size: 16px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        //border: 2px solid rgba(34,139,34,1.0);
     }
 
     .gdd-base-select-8650 {
@@ -27,6 +41,10 @@
         //margin-top: 7vw;
         margin-left: 1vw;
         //font-size: calc(12px + 0.8vw);
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        //left: 0;
     }
 
    .hide-gdd-base-select-8650 {

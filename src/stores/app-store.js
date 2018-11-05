@@ -92,12 +92,27 @@ export class AppStore {
             return {'name':name, 'title':title, 'tagline':tagline, 'thumbnail':thumbnail}
         };
 
+    @observable outputType = 'chart';
+    @action setOutputType = (changeEvent) => {
+        console.log('Changing output type to ', changeEvent.target.value)
+        this.outputType = changeEvent.target.value
+    }
+    @computed get getOutputType() { return this.outputType };
+
+    // data is loading - boolean - to control disabling of outputType
+    // - return combined loading status for data in all tools
+    @computed get dataIsLoading() {
+        return this.gddtool_getDataIsLoading;
+    }
+
+
 
     //////////////////////////////////////////////
     /// StationPicker
     //////////////////////////////////////////////
     // get currently selected location object
-    @observable location = {"uid":29584,"state":"NE","ll":[-95.8991,41.3102],"name":"OMAHA EPPLEY AIRFIELD", "sid":"KOMA", "network":1};
+    //@observable location = {"uid":29584,"state":"NE","ll":[-95.8991,41.3102],"name":"OMAHA EPPLEY AIRFIELD", "sid":"KOMA", "network":1};
+    @observable location = {"uid":29861,"state":"NY","ll":[-76.1038,43.1111],"name":"SYRACUSE HANCOCK INTL AP", "sid":"KSYR", "network":1};
     @action setLocation = (l) => {
         this.location = this.getLocations.find(obj => obj.uid === l);
     }
@@ -212,7 +227,8 @@ export class AppStore {
     @observable planting_date = moment('05/15/'+this.latestSelectableYear,'MM-DD-YYYY');
     @action setPlantingDate = (v) => {
       this.planting_date = v
-      this.gddtool_setChartData()
+      //this.gddtool_setChartData()
+      //this.gddtool_setClimateSummary()
     };
     @computed get getPlantingDate() {
       return this.planting_date
@@ -257,12 +273,148 @@ export class AppStore {
         }
 
     // climate data saved in this var
+    // - the full request downloaded from ACIS
     @observable gddtool_climateData = null;
     @action gddtool_setClimateData = (res) => {
         this.gddtool_climateData = res
     }
     @computed get gddtool_getClimateData() {
         return this.gddtool_climateData
+    }
+
+    // climate summary saved in this var
+    // - values for all summaries include data from planting date to end of year
+    // - summaries include:
+    //     1) season-to-date values (obs)
+    //     2) 30-year normal values (normal)
+    //     3) 15-year average values (recent)
+    //     4) max observed for POR (max_por)
+    //     5) min observed for POR (min_por)
+    //@observable gddtool_climateSummary = null;
+    @observable gddtool_climateSummary = [{
+                'date': moment().format('YYYY-MM-DD'),
+                'obs': NaN,
+                'normal': NaN,
+                'recent': NaN,
+                'max_por': NaN,
+                'min_por': NaN,
+                'max_minus_min': NaN,
+                }];
+    @action gddtool_setClimateSummary = () => {
+        let average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+        let year_planting = this.getPlantingYear
+        //let doy_planting = this.getPlantingDate.dayOfYear()
+        let data = this.gddtool_getClimateData
+        let idxPlantingDate
+        let data_by_date = {}
+        let time_obj
+        let isLeapYear = moment([year_planting]).isLeapYear()
+        for (var i = 0, len = data.length; i < len; i++) {
+            time_obj = moment(data[i][0],'YYYY-MM-DD')
+            let year = time_obj.format('YYYY')
+            let month = time_obj.format('MM')
+            let day = time_obj.format('DD')
+            let month_day = month+'-'+day
+            if (month_day===this.getPlantingDate.format('MM')+'-'+this.getPlantingDate.format('DD')) { idxPlantingDate = i };
+            if (month_day>=this.getPlantingDate.format('MM')+'-'+this.getPlantingDate.format('DD')) {
+                if (!data_by_date.hasOwnProperty(month_day)) { data_by_date[month_day] = {} };
+                if ((data[i][1] !== -999) && (data[idxPlantingDate][1] !== -999)) {
+                    data_by_date[month_day][year] = data[i][1] - data[idxPlantingDate][1];
+                } else {
+                    data_by_date[month_day][year] = NaN
+                }
+             };
+        };
+
+        // get a sorted array of keys
+        let datesArray = Object.keys(data_by_date)
+        datesArray.sort()
+
+        // loop dates: from planting date to end of year
+        let obs
+        let normal
+        let recent
+        let max_por=[]
+        let min_por=[]
+        let max_minus_min=[]
+        let summary_data = []
+        //console.log(datesArray)
+        datesArray.forEach(function (d) {
+            // skip 2/29 if its not a leap year
+            if (d==='02-29' && !isLeapYear) { return }
+
+            // get array of all years observing this date
+            let yearsArray = Object.keys(data_by_date[d])
+
+            // get obs array: for this planting year
+            if (data_by_date[d].hasOwnProperty(year_planting)) {
+                obs = data_by_date[d][year_planting];
+            } else {
+                obs = NaN;
+            }
+
+            // get normal array: 30-year normal
+            let normal_data = []
+            yearsArray.forEach(function (y) {
+                if (y<='2010' && y>='1981') {
+                    normal_data.push(data_by_date[d][y])
+                }
+            });
+            normal = average(normal_data);
+
+            // get recent array: 15-year normal
+            let recent_data = []
+            yearsArray.forEach(function (y) {
+                if (y<='2017' && y>='2003') {
+                    recent_data.push(data_by_date[d][y])
+                }
+            });
+            recent = average(recent_data);
+
+            // all year values for this date
+            let valArray = Object.values(data_by_date[d])
+            // get max_por array: max value in POR
+            max_por = Math.max(...valArray);
+            // get min_por array: min value in POR
+            min_por = Math.min(...valArray);
+            // max minus min for this date
+            max_minus_min = max_por - min_por
+
+            // data summary
+            summary_data.push({
+                'date': year_planting + '-' + d,
+                'obs': parseInt(obs,10),
+                'normal': parseInt(normal,10),
+                'recent': parseInt(recent,10),
+                'max_por': parseInt(max_por,10),
+                'min_por': parseInt(min_por,10),
+                'max_minus_min': parseInt(max_minus_min,10),
+                })
+        });
+
+        // make sure summary statistics are properly managed for Feb 29
+        // - since we are working with accumulated GDD:
+        //     1) POR min on Feb 28 will always be lower than POR min on Feb 29
+        //     2) POR max on Mar 1 will always be higher than POR max on Feb 29
+        // - so it is valid to average values of Feb 28 and Mar 1 to get an estimated value for Feb 29
+        // - we will do the same for 15- and 30-year averages
+        if (isLeapYear) {
+            summary_data.forEach(function (value,index) {
+                if (value.date===year_planting+'-02-29' && index!==0) {
+                    summary_data[index].normal = parseInt( (summary_data[index-1].normal + summary_data[index+1].normal)/2. , 10)
+                    summary_data[index].recent = parseInt( (summary_data[index-1].recent + summary_data[index+1].recent)/2. , 10)
+                    summary_data[index].max_por = parseInt( (summary_data[index-1].max_por + summary_data[index+1].max_por)/2. , 10)
+                    summary_data[index].min_por = parseInt( (summary_data[index-1].min_por + summary_data[index+1].min_por)/2. , 10)
+                    summary_data[index].max_minus_min = parseInt( (summary_data[index-1].max_minus_min + summary_data[index+1].max_minus_min)/2. , 10)
+                    return;
+                }
+            });
+        }
+
+        this.gddtool_climateSummary = summary_data
+    }
+    @computed get gddtool_getClimateSummary() {
+        return this.gddtool_climateSummary
     }
 
     // GDD tool data download - set parameters
@@ -280,8 +432,6 @@ export class AppStore {
 
             return {
                     "sid":this.getLocation.uid.toString(),
-                    //"sdate":this.getPlantingYear+"-01-01",
-                    //"edate":this.getPlantingYear+"-12-31",
                     "sdate":"1981-01-01",
                     "edate":moment().format("YYYY-MM-DD"),
                     "elems":elems
@@ -302,13 +452,14 @@ export class AppStore {
         console.log("Call gddtool_downloadData")
         this.gddtool_setDataIsLoading(true);
         return axios
-          //.post("http://data.rcc-acis.org/StnData", this.getAcisParams)
+          //.post(`${protocol}//grid2.rcc-acis.org/GridData`, this.getAcisParams)
           .post(`${protocol}//data.rcc-acis.org/StnData`, this.getAcisParams)
           .then(res => {
             console.log('SUCCESS downloading from ACIS');
             console.log(res);
             this.gddtool_setClimateData(res.data.data.slice(0));
-            this.gddtool_setChartData()
+            //this.gddtool_setChartData()
+            this.gddtool_setClimateSummary()
             this.gddtool_setDataIsLoading(false);
           })
           .catch(err => {
