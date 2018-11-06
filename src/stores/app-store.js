@@ -255,13 +255,11 @@ export class AppStore {
                         chart_data.push({
                             'date': data[i][0],
                             'obs': parseInt(data[i][1],10) - data[idxPlantingDate][1],
-                            //'normal': parseInt(data[i][2]) - data[idxPlantingDate][2]
                             })
                     } else {
                         chart_data.push({
                             'date': data[i][0],
                             'obs': NaN,
-                            //'normal': parseInt(data[i][2]) - data[idxPlantingDate][2]
                         })
                     }
                 }
@@ -286,7 +284,7 @@ export class AppStore {
     // - values for all summaries include data from planting date to end of year
     // - summaries include:
     //     1) season-to-date values (obs)
-    //     2) 30-year normal values (normal)
+    //     2) POR average values (ave)
     //     3) 15-year average values (recent)
     //     4) max observed for POR (max_por)
     //     5) min observed for POR (min_por)
@@ -294,7 +292,7 @@ export class AppStore {
     @observable gddtool_climateSummary = [{
                 'date': moment().format('YYYY-MM-DD'),
                 'obs': NaN,
-                'normal': NaN,
+                'ave': NaN,
                 'recent': NaN,
                 'max_por': NaN,
                 'min_por': NaN,
@@ -332,7 +330,7 @@ export class AppStore {
 
         // loop dates: from planting date to end of year
         let obs
-        let normal
+        let ave
         let recent
         let max_por=[]
         let min_por=[]
@@ -353,16 +351,16 @@ export class AppStore {
                 obs = NaN;
             }
 
-            // get normal array: 30-year normal
-            let normal_data = []
+            // get ave array: POR ave
+            let ave_data = []
             yearsArray.forEach(function (y) {
-                if (y<='2010' && y>='1981') {
-                    normal_data.push(data_by_date[d][y])
+                if (y!=='2018') {
+                    if (data_by_date[d][y]) { ave_data.push(data_by_date[d][y]) }
                 }
             });
-            normal = average(normal_data);
+            ave = average(ave_data);
 
-            // get recent array: 15-year normal
+            // get recent array: 15-year ave
             let recent_data = []
             yearsArray.forEach(function (y) {
                 if (y<='2017' && y>='2003') {
@@ -371,8 +369,14 @@ export class AppStore {
             });
             recent = average(recent_data);
 
-            // all year values for this date
-            let valArray = Object.values(data_by_date[d])
+            // all year values (except current year) for this date
+            //let valArray = Object.values(data_by_date[d])
+            let valArray = []
+            yearsArray.forEach(function (y) {
+                if (y!=='2018') {
+                    if (data_by_date[d][y]) { valArray.push(data_by_date[d][y]) }
+                }
+            });
             // get max_por array: max value in POR
             max_por = Math.max(...valArray);
             // get min_por array: min value in POR
@@ -384,7 +388,7 @@ export class AppStore {
             summary_data.push({
                 'date': year_planting + '-' + d,
                 'obs': parseInt(obs,10),
-                'normal': parseInt(normal,10),
+                'ave': parseInt(ave,10),
                 'recent': parseInt(recent,10),
                 'max_por': parseInt(max_por,10),
                 'min_por': parseInt(min_por,10),
@@ -397,11 +401,11 @@ export class AppStore {
         //     1) POR min on Feb 28 will always be lower than POR min on Feb 29
         //     2) POR max on Mar 1 will always be higher than POR max on Feb 29
         // - so it is valid to average values of Feb 28 and Mar 1 to get an estimated value for Feb 29
-        // - we will do the same for 15- and 30-year averages
+        // - we will do the same for 15- and POR averages
         if (isLeapYear) {
             summary_data.forEach(function (value,index) {
                 if (value.date===year_planting+'-02-29' && index!==0) {
-                    summary_data[index].normal = parseInt( (summary_data[index-1].normal + summary_data[index+1].normal)/2. , 10)
+                    summary_data[index].ave = parseInt( (summary_data[index-1].ave + summary_data[index+1].ave)/2. , 10)
                     summary_data[index].recent = parseInt( (summary_data[index-1].recent + summary_data[index+1].recent)/2. , 10)
                     summary_data[index].max_por = parseInt( (summary_data[index-1].max_por + summary_data[index+1].max_por)/2. , 10)
                     summary_data[index].min_por = parseInt( (summary_data[index-1].min_por + summary_data[index+1].min_por)/2. , 10)

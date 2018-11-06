@@ -17,7 +17,7 @@ class Footer extends Component {
 
         return (
             <div className="Footer">
-                This is the footer
+                Copyrights, links to partners, links to info pages.
             </div>
         );
     }

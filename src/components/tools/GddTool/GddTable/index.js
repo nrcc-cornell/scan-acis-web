@@ -45,7 +45,7 @@ class GddTable extends Component {
         columns.push({Header:'Date', accessor:'date', sortable:true})
         columns.push({Header:'Observed', accessor:'obs', sortable:false})
         columns.push({Header:'15-yr ave', accessor:'recent', sortable:false})
-        columns.push({Header:'30-yr normal', accessor:'normal', sortable:false})
+        columns.push({Header:'Period ave', accessor:'ave', sortable:false})
         columns.push({Header:'Period min', accessor:'min_por', sortable:false})
         columns.push({Header:'Period max', accessor:'max_por', sortable:false})
 
@@ -58,7 +58,7 @@ class GddTable extends Component {
                     resolveData={data => data.map(row => {
                             row.obs = !isNaN(row.obs) ? row.obs : '--'
                             row.recent = !isNaN(row.recent) ? row.recent : '--'
-                            row.normal = !isNaN(row.normal) ? row.normal : '--'
+                            row.ave = !isNaN(row.ave) ? row.ave : '--'
                             row.min_por = !isNaN(row.min_por) ? row.min_por : '--'
                             row.max_por = !isNaN(row.max_por) ? row.max_por : '--'
                             return row

@@ -26,27 +26,27 @@
 
     .gdd-base-dropdown {
         width: 100px;
-        height: 40px;
+        height: 42px;
         font-size: 16px;
         position: absolute;
         bottom: 0;
         left: 0;
         //border: 2px solid rgba(34,139,34,1.0);
+        border: 2px solid rgba(34,139,34,1.0);
+        border-radius: 6px;
     }
 
     .gdd-base-select-8650 {
         font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
-        //margin: 0px 0px 10px 0px;
-        //margin: 1vw;
-        //margin-top: 7vw;
+        //color: #D3D3D3;
+        color: #B8B8B8;
         margin-left: 1vw;
-        //font-size: calc(12px + 0.8vw);
         position: absolute;
         bottom: 0;
         right: 0;
-        //left: 0;
     }
 
    .hide-gdd-base-select-8650 {
        display: none;
    }
+

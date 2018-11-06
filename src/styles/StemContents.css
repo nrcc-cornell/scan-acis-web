@@ -1,6 +1,4 @@
-.AboutContents {
-    display: flex;
-    flex-direction:column;
-    width: 100%;
-    border-bottom: 0.4vw solid steelblue;
+.StemContents {
+    margin: 10px 5vw 10px 5vw;
+    width: 88vw;
 }

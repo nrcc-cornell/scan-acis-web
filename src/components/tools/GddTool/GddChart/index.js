@@ -42,7 +42,7 @@ class GddChart extends Component {
                     const { dataKey, color, value, name } = entry
                     let style = {}
                     style = { color: color }
-                    if (dataKey==='obs' || dataKey==='normal' || dataKey==='recent') {
+                    if (dataKey==='obs' || dataKey==='ave' || dataKey==='recent') {
                       return (
                         <span className="tooltip-item">
                         <br/>
@@ -92,20 +92,32 @@ class GddChart extends Component {
               const { dataKey, color, value } = entry
               let style = {}
               style = { color: color }
+              if (dataKey==='obs' || dataKey==='ave' || dataKey==='recent') {
+                return (
+                  <span className="legend-item" style={style}>
+                    <Surface width={10} height={10} viewBox="0 0 10 10">
+                      <Symbols cx={5} cy={5} type="circle" size={50} fill={color} />
+                    </Surface>
+                    <span>{value}</span>
+                  </span>
+                )
+              } else {
+                return (
+                  <span className="tooltip-item"></span>
+                )
+              }
+            })
+          }
+          {
+            payload.map((entry) => {
+              const { dataKey, color, value } = entry
+              let style = {}
+              style = { color: color }
               if (dataKey==='min_por') {
                 return (
                   <span className="legend-item" style={style}>
                     <Surface width={10} height={10} viewBox="0 0 10 10">
                       <Symbols cx={5} cy={5} type="square" size={50} fill={color} />
-                    </Surface>
-                    <span>{value}</span>
-                  </span>
-                )
-              } else if (dataKey==='obs' || dataKey==='normal' || dataKey==='recent') {
-                return (
-                  <span className="legend-item" style={style}>
-                    <Surface width={10} height={10} viewBox="0 0 10 10">
-                      <Symbols cx={5} cy={5} type="circle" size={50} fill={color} />
                     </Surface>
                     <span>{value}</span>
                   </span>
@@ -127,7 +139,7 @@ class GddChart extends Component {
               <ComposedChart data={app.gddtool_getClimateSummary}>
                 <Area
                   stackId="1"
-                  name="Record"
+                  name="Period extremes"
                   dataKey={"min_por"}
                   stroke="#342E37"
                   fill="#FFF"
@@ -140,8 +152,8 @@ class GddChart extends Component {
                   fill="#F0F0F0"
                 />
                 <Line name="Season to date" type="monotone" dataKey="obs" stroke="green" fill="green" dot={true} r={1} />
-                <Line name="30-yr normal" type="monotone" dataKey="normal" stroke="purple" dot={false} />
                 <Line name="15-yr average" type="monotone" dataKey="recent" stroke="blue" dot={false} />
+                <Line name="Period average" type="monotone" dataKey="ave" stroke="purple" dot={false} />
                 <CartesianGrid stroke="#ccc" />
                 <Tooltip
                     labelFormatter={(name) => moment(name,"YYYY-MM-DD").format("MMM D, YYYY")}

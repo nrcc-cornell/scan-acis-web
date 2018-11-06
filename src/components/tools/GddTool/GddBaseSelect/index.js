@@ -51,6 +51,7 @@ class GddBaseSelect extends Component {
                   <div className="checkbox">
                     <label>
                       <input type="checkbox" value="8650"
+                          disabled
                           checked={app.gddtool_getIsMethod8650}
                           onChange={app.gddtool_setIsMethod8650} />
                       <span>use 86/50</span>

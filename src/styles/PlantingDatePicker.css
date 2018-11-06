@@ -112,11 +112,11 @@
     }
 
     .date-picker-button {
-        font-size: 0.9em;
+        font-size: 1.0em;
         color: #000000;
         width: 140px;
         //height: 24px;
-        height: 36px;
+        height: 41px;
         //background: rgb(240,240,240);
         background: white;
         //border-color: #4ca20b;
