@@ -1,0 +1,54 @@
+.LocationSelect {
+    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    width: 80vw;
+    margin-top: 2vw;
+    margin-bottom: 1vw;
+    margin-left: 16vw;
+    margin-right: 2vw;
+    font-size: calc(12px + 0.8vw);
+}
+
+.location-select-label {
+    margin: 8px 0px 2px 0px;
+    //font-size: 16px;
+    font-weight: bold;
+}
+
+.location-select-change-button {
+    margin-top: 2vw;
+    margin-bottom: 1vw;
+    margin-left: 2vw;
+    color: white;
+    font-size: calc(8px + 0.8vw);
+    border: 2px solid rgba(34,139,34,1.0);
+    border-radius: 6px;
+    background: rgba(34,139,34,1.0);
+}
+
+.Modal {
+    position: absolute;
+    top: 40px;
+    left: 40px;
+    right: 40px;
+    bottom: 40px;
+    background-color: white;
+  }
+
+  .Overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(200,200,200,0.8);
+  }
+
+.ReactModal__Content {
+  background-color: rgba(255,255,255,0.0);
+}
+
+.Modal:focus {
+    outline: none;
+}
+
+//.modal-open .modal { outline: none; }

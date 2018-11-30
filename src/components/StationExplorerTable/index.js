@@ -5,12 +5,12 @@ import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 
 // Styles
-import '../../styles/StationPickerTable.css';
+import '../../styles/StationExplorerTable.css';
 
 var app;
 
 @inject('store') @observer
-class StationPickerTable extends Component {
+class StationExplorerTable extends Component {
 
     constructor(props) {
         super(props);
@@ -32,4 +32,4 @@ class StationPickerTable extends Component {
     }
 }
 
-export default StationPickerTable;
+export default StationExplorerTable;

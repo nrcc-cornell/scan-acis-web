@@ -1,23 +1,18 @@
 
-    .StationPicker{
+    .StationExplorer{
         float:left;
         //right: 7vw;
         //margin: 10px 5vw 10px 5vw;
         //margin: 10px 10px 10px 0px;
         border: none;
-        top: 40px;
-        left: 40px;
-        right: 40px;
-        bottom: 40px;
         text-align: center;
         display: inline-block;
     }
 
-    .station-picker-header {
+    .station-explorer-header {
         font-size: calc(16px + 1.0vw);
-        //font-size: 16px;
         //font-size: 20px;
-        //margin: 1vw;
+        margin: 1vw;
     }
 
     .leaflet-container {
@@ -64,7 +59,7 @@
     font-size: 14px;
     text-align: left;
     //margin: 0px 4px 0px 0px;
-    //margin: 1vw 2vw 1vw 0px;
+    margin: 1vw 2vw 1vw 0px;
 }
 
 .map-legend-title {
@@ -79,7 +74,7 @@
   width: 18px;
   height: 10px;
   //margin: 5px;
-  //margin: 1vw;
+  margin: 1vw;
   margin: 1vw 0.5vw 1vw 1vw;
   border: 2px solid rgba(0, 0, 0, .5);
 }

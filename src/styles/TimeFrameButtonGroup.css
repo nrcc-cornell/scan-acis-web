@@ -1,0 +1,36 @@
+.btn-xl {
+  width: 64px;
+  height: 64px;
+  padding: 10px 10px;
+  line-height: 1.33;
+  border-radius: 50%;
+  background-color: #ffffff;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+  border-width: 2px;
+  border-color: #006600;
+  display: inline-block;
+  margin-bottom: 10px;
+  //margin-right: 30px;
+  //margin-left: 30px;
+}
+
+.btn-xl.selected {
+  background-color: #006600;
+  color: #ffffff;
+}
+
+.horizontal{
+    display: inline-block;
+    border-width: 1px;
+    border-color: gray;
+    width: 80px;
+}
+
+.row-fluid {
+    text-align: left;
+    //float: left;
+    //white-space: nowrap;
+    margin-left: 60px;
+}

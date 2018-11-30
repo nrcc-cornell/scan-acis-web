@@ -1,0 +1,125 @@
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+import React, { Component } from 'react';
+import { inject, observer} from 'mobx-react';
+import moment from 'moment';
+import { ResponsiveContainer, ComposedChart, AreaChart, LineChart, Line, Area, XAxis, YAxis, Surface, Symbols, CartesianGrid, Tooltip, Legend, Brush } from 'recharts';
+
+//Components
+
+// Styles
+import '../../../../styles/WxCharts.css';
+
+let formatXAxisForDate = (tickItem) => {
+    return moment(tickItem).format('MMM DD')
+}
+
+var app;
+
+const data = [
+      {name: '1', uv: 40, pv: 90},
+      {name: '2', uv: 30, pv: 72},
+      {name: '3', uv: 20, pv: 62},
+      {name: '4', uv: 12, pv: 54},
+      {name: '5', uv: 18, pv: 32},
+      {name: '6', uv: 23, pv: 25},
+      {name: '7', uv: 34, pv: 12},
+];
+
+@inject('store') @observer
+class WxCharts extends Component {
+
+    constructor(props) {
+        super(props);
+        this.state = {
+              active: ""
+            }
+        app = this.props.store.app;
+    }
+
+    render() {
+
+        return (
+    	<div id="wx-charts">
+        <LineChart width={600} height={100} data={data} syncId="anyId"
+              className={(app.wxgraph_getVars['airtemp']) ? "" : "isHidden"}
+              margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis dataKey="name" label={{ value: app.wxgraph_getVarLabels['airtemp_label'], angle: 0, position: 'top' }}/>
+          <YAxis label={{ value: app.wxgraph_getVarUnits['airtemp_units'], angle: -90, position: 'insideLeft' }} />
+          <Tooltip/>
+          <Line type='monotone' dataKey='uv' stroke='#8884d8' fill='#8884d8' />
+        </LineChart>
+        <LineChart width={600} height={100} data={data} syncId="anyId"
+              className={(app.wxgraph_getVars['rainfall']) ? "" : "isHidden"}
+              margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis dataKey="name" label={{ value: app.wxgraph_getVarLabels['rainfall_label'], angle: 0, position: 'top' }}/>
+          <YAxis label={{ value: app.wxgraph_getVarUnits['rainfall_units'], angle: -90, position: 'insideLeft' }} />
+          <Tooltip/>
+          <Line type='monotone' dataKey='pv' stroke='#82ca9d' fill='#82ca9d' />
+        </LineChart>
+        <AreaChart width={600} height={100} data={data} syncId="anyId"
+              className={(app.wxgraph_getVars['soiltemp']) ? "" : "isHidden"}
+              margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis dataKey="name" label={{ value: app.wxgraph_getVarLabels['soiltemp_label'], angle: 0, position: 'top' }}/>
+          <YAxis label={{ value: app.wxgraph_getVarUnits['soiltemp_units'], angle: -90, position: 'insideLeft' }} />
+          <Tooltip/>
+          <Area type='monotone' dataKey='pv' stroke='#82ca9d' fill='#82ca9d' />
+        </AreaChart>
+        <LineChart width={600} height={100} data={data} syncId="anyId"
+              className={(app.wxgraph_getVars['soilmoist']) ? "" : "isHidden"}
+              margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis dataKey="name" label={{ value: app.wxgraph_getVarLabels['soilmoist_label'], angle: 0, position: 'top' }}/>
+          <YAxis label={{ value: app.wxgraph_getVarUnits['soilmoist_units'], angle: -90, position: 'insideLeft' }} />
+          <Tooltip/>
+          <Line type='monotone' dataKey='uv' stroke='#8884d8' fill='#8884d8' />
+        </LineChart>
+        <LineChart width={600} height={100} data={data} syncId="anyId"
+              className={(app.wxgraph_getVars['humidity']) ? "" : "isHidden"}
+              margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis dataKey="name" label={{ value: app.wxgraph_getVarLabels['humidity_label'], angle: 0, position: 'top' }}/>
+          <YAxis label={{ value: app.wxgraph_getVarUnits['humidity_units'], angle: -90, position: 'insideLeft' }} />
+          <Tooltip/>
+          <Line type='monotone' dataKey='pv' stroke='#82ca9d' fill='#82ca9d' />
+        </LineChart>
+        <AreaChart width={600} height={100} data={data} syncId="anyId"
+              className={(app.wxgraph_getVars['solarrad']) ? "" : "isHidden"}
+              margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis dataKey="name" label={{ value: app.wxgraph_getVarLabels['solarrad_label'], angle: 0, position: 'top' }}/>
+          <YAxis label={{ value: app.wxgraph_getVarUnits['solarrad_units'], angle: -90, position: 'insideLeft' }} />
+          <Tooltip/>
+          <Area type='monotone' dataKey='pv' stroke='#82ca9d' fill='#82ca9d' />
+        </AreaChart>
+        <LineChart width={600} height={100} data={data} syncId="anyId"
+              className={(app.wxgraph_getVars['wind']) ? "" : "isHidden"}
+              margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis dataKey="name" label={{ value: app.wxgraph_getVarLabels['wind_label'], angle: 0, position: 'top' }}/>
+          <YAxis label={{ value: app.wxgraph_getVarUnits['wind_units'], angle: -90, position: 'insideLeft' }} />
+          <Tooltip/>
+          <Line type='monotone' dataKey='uv' stroke='#8884d8' fill='#8884d8' />
+        </LineChart>
+        <LineChart width={600} height={100} data={data} syncId="anyId"
+              className={(app.wxgraph_getVars['leafwet']) ? "" : "isHidden"}
+              margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+          <CartesianGrid strokeDasharray="3 3"/>
+          <XAxis dataKey="name" label={{ value: app.wxgraph_getVarLabels['leafwet_label'], angle: 0, position: 'top' }}/>
+          <YAxis label={{ value: app.wxgraph_getVarUnits['leafwet_units'], angle: -90, position: 'insideLeft' }} />
+          <Tooltip/>
+          <Line type='monotone' dataKey='pv' stroke='#82ca9d' fill='#82ca9d' />
+        </LineChart>
+      </div>
+
+        );
+
+    }
+}
+
+export default WxCharts;
+

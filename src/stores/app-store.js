@@ -80,7 +80,7 @@ export class AppStore {
                 tagline = 'Tagline for WaterDefCalc'
                 thumbnail = pathToImages+'GddTool-thumbnail.png'
             } else if (name==='wxgrapher') {
-                title = 'Weather Extremes Grapher'
+                title = 'Weather Grapher'
                 tagline = 'Tagline for WxGraphTool'
                 thumbnail = pathToImages+'GddTool-thumbnail.png'
             } else if (name==='livestock') {
@@ -101,9 +101,9 @@ export class AppStore {
 
     // data is loading - boolean - to control disabling of outputType
     // - return combined loading status for data in all tools
-    @computed get dataIsLoading() {
-        return this.gddtool_getDataIsLoading;
-    }
+    //@computed get dataIsLoading() {
+    //    return this.gddtool_getDataIsLoading;
+    //}
 
 
 
@@ -111,11 +111,17 @@ export class AppStore {
     /// StationPicker
     //////////////////////////////////////////////
     // get currently selected location object
-    //@observable location = {"uid":29584,"state":"NE","ll":[-95.8991,41.3102],"name":"OMAHA EPPLEY AIRFIELD", "sid":"KOMA", "network":1};
     @observable location = {"uid":29861,"state":"NY","ll":[-76.1038,43.1111],"name":"SYRACUSE HANCOCK INTL AP", "sid":"KSYR", "network":1};
     @action setLocation = (l) => {
         this.location = this.getLocations.find(obj => obj.uid === l);
     }
+    // set location from select menu
+    @action setSelectedLocation = (t) => {
+            if (this.getLocation.uid.toString() !== t.value) {
+                this.location = this.getLocations.find(obj => obj.uid.toString() === t.value);
+            }
+            if (this.getShowModalMap) { this.setShowModalMap(false) };
+        };
     @computed get getLocation() { return this.location };
 
     // all locations
@@ -126,9 +132,19 @@ export class AppStore {
     @computed get getLocations() { return this.locations };
 
     @action stationOnEachFeature = (feature, layer) => {
+        if (feature.properties && feature.properties.name) {
+            layer.bindPopup(feature.properties.name);
+        }
         layer.on({
             click: () => {
-                this.setLocation(feature.id)
+                this.setLocation(feature.id);
+                if (this.getShowModalMap) { this.setShowModalMap(false) };
+            },
+            mouseover: () => {
+                layer.openPopup();
+            },
+            mouseout: () => {
+                layer.closePopup();
             },
         });
     }
@@ -169,6 +185,19 @@ export class AppStore {
         stn_geojson["type"] = "FeatureCollection"
         stn_geojson["features"] = featuresList
         return stn_geojson
+    }
+
+    // show the location picker modal map
+    @observable showModalMap=false;
+    @action setShowModalMap = (b) => {
+            this.showModalMap=b
+            if (!this.getShowModalMap) {
+                if (this.getToolName==='gddtool') { this.gddtool_downloadData() }
+                if (this.getToolName==='wxgrapher') { this.wxgraph_downloadData() }
+            }
+        }
+    @computed get getShowModalMap() {
+        return this.showModalMap
     }
 
     // download list of station info
@@ -472,6 +501,235 @@ export class AppStore {
             );
           });
     }
+
+    //////////////////////////////////////////////
+    /// TOOL: Weather Grapher
+    //////////////////////////////////////////////
+    // for component: ExtremeSwitch
+    @observable wxgraph_extSwitch=false;
+    @action wxgraph_setExtSwitch = event => {
+            this.wxgraph_extSwitch = event.target.checked
+        }
+    @action wxgraph_setExtSwitchManual = (b) => {
+            this.wxgraph_extSwitch = b
+        }
+    @computed get wxgraph_getExtSwitch() {
+        return this.wxgraph_extSwitch
+    }
+
+    // for component: VarPicker
+    @observable wxgraph_vars={
+            airtemp : true,
+            rainfall : true,
+            soiltemp : true,
+            soilmoist : false,
+            humidity : false,
+            solarrad : false,
+            wind : false,
+            leafwet : false,
+        };
+    @action wxgraph_setVars = name => event => {
+            this.wxgraph_vars[name] = event.target.checked
+        }
+    @computed get wxgraph_getVars() {
+        return this.wxgraph_vars
+    }
+    @computed get wxgraph_getVarLabels() {
+        if (this.wxgraph_extSwitch) {
+          return {
+            airtemp_label : 'TBD',
+            rainfall_label : 'TBD',
+            soiltemp_label : 'TBD',
+            soilmoist_label : 'TBD',
+            humidity_label : 'TBD',
+            solarrad_label : 'TBD',
+            wind_label : 'TBD',
+            leafwet_label : 'TBD',
+          };
+        } else {
+          return {
+            airtemp_label : 'Air Temperature',
+            rainfall_label : 'Rainfall',
+            soiltemp_label : 'Soil Temperature',
+            soilmoist_label : 'Soil Moisture',
+            humidity_label : 'Humidity',
+            solarrad_label : 'Solar Radiation',
+            wind_label : 'Wind',
+            leafwet_label : 'Leaf Wetness',
+          };
+        }
+    }
+    @computed get wxgraph_getVarUnits() {
+        let varUnits = {}
+        if (this.wxgraph_extSwitch) {
+          varUnits = {
+            airtemp_units : 'days',
+            rainfall_units : 'days',
+            soiltemp_units : 'days',
+            soilmoist_units : 'days',
+            humidity_units : 'days',
+            solarrad_units : 'days',
+            wind_units : 'days',
+            leafwet_units : 'days',
+          };
+        } else {
+          varUnits = {
+            airtemp_units : '°F',
+            rainfall_units : 'inches',
+            soiltemp_units : '°F',
+            soilmoist_units : '%',
+            humidity_units : '%',
+            solarrad_units : 'W/m2',
+            wind_units : 'mph',
+            leafwet_units : 'units',
+          };
+        };
+        return varUnits
+    }
+
+    // climate data saved in this var
+    // - the full request downloaded from ACIS
+    @observable wxgraph_climateData = null;
+    @action wxgraph_setClimateData = (res) => {
+        this.wxgraph_climateData = res
+    }
+    @computed get wxgraph_getClimateData() {
+        return this.wxgraph_climateData
+    }
+
+    // summary for weather grapher daily data saved here
+    // - data includes:
+    //     date : date of observation
+    //     avgt : average temperature for day (F)
+    //     pcpn : accumulated precipitation for day (in)
+    //     soilt : average temperature for day (F)
+    //     soilm : average soil moisture for day (%)
+    //     humid : average humidity for day (%)
+    //     solar : total solar radiation for day (W/m2)
+    //     wind : average wind speed for day (mph)
+    //     leafwet : average leaf wetness for day (units)
+    @observable wxgraph_climateSummary = [{
+                'date': moment().format('YYYY-MM-DD'),
+                'avgt': NaN,
+                'pcpn': NaN,
+                'soilt': NaN,
+                'soilm': NaN,
+                'humid': NaN,
+                'solar': NaN,
+                'wind': NaN,
+                'leafwet': NaN,
+                }];
+    @action wxgraph_setClimateSummary = () => {
+        let data = this.wxgraph_getClimateData
+        let dataObjArray = []
+        data.forEach(function (d) {
+            dataObjArray.push({
+                'date':d[0],
+                'avgt':(d[1]==='M') ? NaN : parseFloat(d[1]),
+                'pcpn':(d[2]==='M') ? NaN : ((d[2]==='T') ? 0.00 : parseFloat(d[2])),
+                'soilt':NaN,
+                'soilm':NaN,
+                'humid':NaN,
+                'solar':NaN,
+                'wind':NaN,
+                'leafwet':NaN,
+            })
+        });
+
+        this.wxgraph_climateSummary = dataObjArray
+    }
+    @computed get wxgraph_getClimateSummary() {
+        return this.wxgraph_climateSummary
+    }
+
+    // time frame to view data
+    // - options are 'por', 'two_years', 'two_months', 'two_days'
+    @observable wxgraph_timeFrame = 'two_months'
+    @action wxgraph_setTimeFrame = (t) => {
+        // has the time frame changed?
+        let changed = (this.wxgraph_getTimeFrame===t) ? false : true
+        // make sure ext switch is off if new time period is not POR
+        if (t!=='por' && this.wxgraph_getExtSwitch) { this.wxgraph_setExtSwitchManual(false) }
+        // only update and download data if time frame has changed
+        if (changed===true) {
+            this.wxgraph_timeFrame = t;
+            this.wxgraph_downloadData()
+        }
+    }
+    @computed get wxgraph_getTimeFrame() {
+        return this.wxgraph_timeFrame;
+    }
+
+
+    // Wx Grapher tool data download - set parameters
+    @computed get wxgraph_getAcisParams() {
+            let elems
+            let numdays
+            if (this.wxgraph_getTimeFrame==='two_months') {
+                elems = [
+                    {"name":"avgt","interval":[0,0,1],"duration":"dly"},
+                    {"name":"pcpn","interval":[0,0,1],"duration":"dly"},
+                ]
+                numdays=-60
+            } else if (this.wxgraph_getTimeFrame==='two_years') {
+                elems = [
+                    {"name":"avgt","interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3},
+                    {"name":"pcpn","interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3},
+                ]
+                numdays=-730
+            } else if (this.wxgraph_getTimeFrame==='por') {
+                elems = [
+                    {"name":"avgt","interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10},
+                    {"name":"pcpn","interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10},
+                ]
+            }
+
+            if (this.wxgraph_getTimeFrame==='por') {
+                return {
+                        "sid":this.getLocation.uid.toString(),
+                        "sdate":"por",
+                        "edate":"por",
+                        "elems":elems
+                    }
+            } else {
+                return {
+                        "sid":this.getLocation.uid.toString(),
+                        "sdate":moment().add(numdays,'days').format("YYYY-MM-DD"),
+                        "edate":moment().format("YYYY-MM-DD"),
+                        "elems":elems
+                    }
+            }
+        }
+
+    // data is loading - boolean - to control the spinner
+    @observable wxgraph_dataIsLoading = false
+    @action wxgraph_setDataIsLoading = (b) => {
+        this.wxgraph_dataIsLoading = b;
+    }
+    @computed get wxgraph_getDataIsLoading() {
+        return this.wxgraph_dataIsLoading;
+    }
+
+    // GDD tool data download - download data using parameters
+    @action wxgraph_downloadData = () => {
+        console.log("Call wxgraph_downloadData")
+        this.wxgraph_setDataIsLoading(true);
+        return axios
+          .post(`${protocol}//data.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
+          .then(res => {
+            console.log('SUCCESS downloading from ACIS');
+            console.log(res);
+            this.wxgraph_setClimateData(res.data.data.slice(0));
+            this.wxgraph_setClimateSummary()
+            this.wxgraph_setDataIsLoading(false);
+          })
+          .catch(err => {
+            console.log(
+              "Request Error: " + (err.response.data || err.response.statusText)
+            );
+          });
+    }
+
 
     // run these on initial load
     constructor() {

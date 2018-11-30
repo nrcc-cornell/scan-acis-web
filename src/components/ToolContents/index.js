@@ -6,6 +6,7 @@ import { inject, observer} from 'mobx-react';
 import { string } from 'prop-types'
 
 // Components
+import LocationSelect from '../../components/LocationSelect';
 import ToolSelect from '../../components/ToolSelect';
 import OutputSelect from '../../components/OutputSelect';
 import GddTool from '../../components/tools/GddTool';
@@ -43,6 +44,7 @@ class ToolContents extends Component {
                 <ToolSelect names={app.toolNameArray} />
                 <OutputSelect />
             </div>
+                <LocationSelect />
                 { this.props.name==='gddtool' && (<GddTool />) }
                 { this.props.name==='waterdef' && (<WaterDefTool />) }
                 { this.props.name==='wxgrapher' && (<WxGraphTool />) }

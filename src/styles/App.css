@@ -19,6 +19,7 @@
         font-family: 'times';
         line-height: 1.0em;
         color: #000000;
+        display: flex;
         //height: 466px;
         //width: 908px;
         //width: 926px;

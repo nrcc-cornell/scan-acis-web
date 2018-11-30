@@ -12,10 +12,10 @@ import 'leaflet/dist/leaflet.css';
 import { Map, GeoJSON, TileLayer } from 'react-leaflet';
 //import LegendControl from '../LegendControl';
 
-import StationPickerSelect from '../StationPickerSelect';
+import StationExplorerTable from '../../components/StationExplorerTable';
 
 // Styles
-import '../../styles/StationPicker.css';
+import '../../styles/StationExplorer.css';
 
 const mapContainer = 'map-container';
 const maxBounds = [
@@ -31,7 +31,7 @@ const maxZoomLevel = 16;
 var app;
 
 @inject('store') @observer
-class StationPicker extends Component {
+class StationExplorer extends Component {
 
     constructor(props) {
         super(props);
@@ -46,7 +46,6 @@ class StationPicker extends Component {
     componentDidMount() {
       this.updateWindowDimensions();
       window.addEventListener('resize', this.updateWindowDimensions);
-      //this.forceUpdate();
     }
 
     componentWillUnmount() {
@@ -60,7 +59,7 @@ class StationPicker extends Component {
     render() {
 
         return (
-            <div className="StationPicker">
+            <div className="StationExplorer">
                     <div className="map-legend">
                         <span className={"color-box blue"}></span><span className="map-legend-label">Traditional SCAN</span>
                         <span className={"color-box green"}></span><span className="map-legend-label">Tribal SCAN</span>
@@ -74,8 +73,8 @@ class StationPicker extends Component {
                         attributionControl={true}
                         className={mapContainer}
                         style={{
-                            height:this.state.height-130,
-                            width:this.state.width-80,
+                            height:(this.state.height>500) ? '60vh' : '300px',
+                            width:(this.state.width>1000) ? '66vw' : '88vw',
                         }}
                     >
                         <TileLayer
@@ -88,12 +87,13 @@ class StationPicker extends Component {
                             pointToLayer={(feature,latlng) => {return L.circleMarker(latlng)}}
                             onEachFeature={app.stationOnEachFeature}
                         />
-                        <StationPickerSelect names={app.getLocations} />
                     </Map>
+
+                    <StationExplorerTable />
 
             </div>
         );
     }
 }
 
-export default StationPicker;
+export default StationExplorer;

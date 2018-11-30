@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 
 // Components
-import StationPicker from '../../components/StationPicker';
+import StationExplorer from '../../components/StationExplorer';
 import ToolLister from '../../components/ToolLister';
 
 // Styles
@@ -18,7 +18,7 @@ class HomeContents extends Component {
 
         return (
             <div className="HomeContents">
-                <StationPicker />
+                <StationExplorer />
                 <ToolLister />
             </div>
         );
