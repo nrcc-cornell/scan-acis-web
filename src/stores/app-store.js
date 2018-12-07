@@ -110,7 +110,7 @@ export class AppStore {
     //////////////////////////////////////////////
     /// StationPicker
     //////////////////////////////////////////////
-    // get currently selected location object
+    // get currently selected location object (for station picker)
     @observable location = {"uid":29861,"state":"NY","ll":[-76.1038,43.1111],"name":"SYRACUSE HANCOCK INTL AP", "sid":"KSYR", "network":1};
     @action setLocation = (l) => {
         this.location = this.getLocations.find(obj => obj.uid === l);
@@ -123,6 +123,13 @@ export class AppStore {
             if (this.getShowModalMap) { this.setShowModalMap(false) };
         };
     @computed get getLocation() { return this.location };
+
+    // get currently selected location object (for station explorer)
+    @observable location_explorer = {"uid":29861,"state":"NY","ll":[-76.1038,43.1111],"name":"SYRACUSE HANCOCK INTL AP", "sid":"KSYR", "network":1};
+    @action setLocation_explorer = (l) => {
+        this.location_explorer = this.getLocations.find(obj => obj.uid === l);
+    }
+    @computed get getLocation_explorer() { return this.location_explorer };
 
     // all locations
     @observable locations = []
@@ -145,6 +152,23 @@ export class AppStore {
             },
             mouseout: () => {
                 layer.closePopup();
+            },
+        });
+    }
+    @action stationOnEachFeature_explorer = (feature, layer) => {
+        //if (feature.properties && feature.properties.name) {
+        //    layer.bindPopup(feature.properties.name);
+        //}
+        layer.on({
+            mouseover: () => {
+                // set to feature currently moused over
+                this.setLocation_explorer(feature.id);
+                //layer.openPopup();
+            },
+            mouseout: () => {
+                // reset to previous tool location selection
+                //this.setLocation_explorer(this.getLocation);
+                //layer.closePopup();
             },
         });
     }

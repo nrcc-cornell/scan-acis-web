@@ -47,17 +47,15 @@ class StationPickerSelect extends Component {
         console.log(selectOptions);
 
         return (
-            <Control position="topright" className="control-top-right">
-                <Select
-                    name="station"
-                    className="station-picker-select"
-                    placeholder={'SELECTED : '+app.getLocation.name}
-                    value={app.getLocation.uid.toString()}
-                    isClearable={false}
-                    options={selectOptions}
-                    onChange={app.setSelectedLocation}
-                /> 
-            </Control>
+            <Select
+                name="station"
+                className="station-picker-select"
+                placeholder={'SELECTED : '+app.getLocation.name}
+                value={app.getLocation.uid.toString()}
+                isClearable={false}
+                options={selectOptions}
+                onChange={app.setSelectedLocation}
+            /> 
         );
     }
 }

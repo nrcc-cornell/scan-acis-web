@@ -19,7 +19,7 @@ class StationExplorerTable extends Component {
 
     render() {
 
-        let loc = app.getLocation
+        let loc = app.getLocation_explorer
 
         return (
             <div id="feature_infos">

@@ -85,7 +85,7 @@ class StationExplorer extends Component {
                             data={app.getStationGeojson}
                             style={app.stationFeatureStyle}
                             pointToLayer={(feature,latlng) => {return L.circleMarker(latlng)}}
-                            onEachFeature={app.stationOnEachFeature}
+                            onEachFeature={app.stationOnEachFeature_explorer}
                         />
                     </Map>
 

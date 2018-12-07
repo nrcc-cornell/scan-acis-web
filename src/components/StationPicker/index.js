@@ -61,10 +61,7 @@ class StationPicker extends Component {
 
         return (
             <div className="StationPicker">
-                    <div className="map-legend">
-                        <span className={"color-box blue"}></span><span className="map-legend-label">Traditional SCAN</span>
-                        <span className={"color-box green"}></span><span className="map-legend-label">Tribal SCAN</span>
-                    </div>
+                    <StationPickerSelect names={app.getLocations} />
                     <Map
                         center={mapCenter}
                         bounds={maxBounds}
@@ -74,7 +71,7 @@ class StationPicker extends Component {
                         attributionControl={true}
                         className={mapContainer}
                         style={{
-                            height:this.state.height-130,
+                            height:this.state.height-160,
                             width:this.state.width-80,
                         }}
                     >
@@ -88,8 +85,11 @@ class StationPicker extends Component {
                             pointToLayer={(feature,latlng) => {return L.circleMarker(latlng)}}
                             onEachFeature={app.stationOnEachFeature}
                         />
-                        <StationPickerSelect names={app.getLocations} />
                     </Map>
+                    <div className="map-legend">
+                        <span className={"color-box blue"}></span><span className="map-legend-label">Traditional SCAN</span>
+                        <span className={"color-box green"}></span><span className="map-legend-label">Tribal SCAN</span>
+                    </div>
 
             </div>
         );
