@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { inject, observer } from 'mobx-react';
+import Select from 'react-select';
+import Typography from '@material-ui/core/Typography';
 
-import '../../styles/OutputSelect.css';
+//import '../../styles/OutputSelect.css';
 
 var app;
 
@@ -14,31 +16,24 @@ class OutputSelect extends Component {
     }
 
     render() {
+
+        let disabled=false
+        let toolOptions = []
+        toolOptions.push({ value: 'chart', label: 'Chart', clearableValue: false, disabled: disabled })
+        toolOptions.push({ value: 'table', label: 'Table', clearableValue: false, disabled: disabled })
+
         return (
-            <div className='output-select'>
-            <div className='radio-div'>
-            <form>
-              <div className="radio">
-                <label>
-                  <input type="radio" value="chart" 
-                        disabled={app.dataIsLoading}
-                        checked={app.getOutputType === 'chart'}
-                        onChange={app.setOutputType} />
-                  Chart
-                </label>
-              </div>
-              <div className="radio">
-                <label>
-                  <input type="radio" value="table" 
-                        disabled={app.dataIsLoading}
-                        checked={app.getOutputType === 'table'}
-                        onChange={app.setOutputType} />
-                  Table
-                </label>
-              </div>
-            </form>
-            </div>
-            </div>
+            <Typography variant="subtitle2">
+                <Select
+                    name="output"
+                    className="output-select"
+                    placeholder={'OUTPUT > '+app.getOutputType}
+                    value={app.getOutputType}
+                    isClearable={false}
+                    options={toolOptions}
+                    onChange={app.setSelectedOutputType}
+                />
+            </Typography>
         )
     }
 

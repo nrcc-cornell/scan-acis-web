@@ -8,7 +8,7 @@ import { inject, observer} from 'mobx-react';
 import PlantingDatePicker from './PlantingDatePicker'
 import GddBaseSelect from './GddBaseSelect'
 //import GddBaseSelect8650 from './GddBaseSelect8650'
-import GddChartTitle from './GddChartTitle'
+//import GddChartTitle from './GddChartTitle'
 import GddChart from './GddChart'
 import GddTable from './GddTable'
 import LoadingOverlay from 'react-loading-overlay';
@@ -39,7 +39,6 @@ class GddTool extends Component {
                     <PlantingDatePicker />
                     <GddBaseSelect />
                 </div>
-                <GddChartTitle />
                 <LoadingOverlay
                     active={app.gddtool_dataIsLoading}
                     spinner

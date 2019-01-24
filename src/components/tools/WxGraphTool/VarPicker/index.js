@@ -10,7 +10,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 //import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
 import 'typeface-roboto';
-import ExtremeSwitch from '../ExtremeSwitch'
+//import ExtremeSwitch from '../ExtremeSwitch'
 
 const styles = theme => ({
   root: {
@@ -22,8 +22,9 @@ const styles = theme => ({
   },
   checked: {},
   formControl: {
-    marginLeft: theme.spacing.unit * 4,
-    width: '160px',
+    marginLeft: theme.spacing.unit,
+    //marginLeft: theme.spacing.unit * 4,
+    //width: '160px',
   },
 });
 
@@ -44,7 +45,6 @@ class VarPicker extends Component {
 
     return (
       <div>
-      <ExtremeSwitch/>
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl}>
           <FormGroup className={classes.formGroup}>

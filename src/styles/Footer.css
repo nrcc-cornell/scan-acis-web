@@ -1,11 +1,25 @@
 .Footer {
-    display: flex;
-    height: 100px;
+    //display: flex;
+    //margin: 0 -9999rem;
+    /* add back negative margin value */
+    //padding: 0.25rem 9999rem;
+    //height: 100px;
     width: 100%;
     color: #FFFFFF;
-    font-size: calc(12px + 0.8vw);
-    background: rgba(34,139,34,1.0);
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
+    //font-size: calc(12px + 0.8vw);
+    background: rgba(34,139,34,0.5);
+    justify-content: left;
+    //flex-direction: column;
+    //text-align: center;
+    overflow-x: hidden;
+}
+
+.subFooter {
+    background: rgba(0, 0, 0, 0.15);
+    padding: 8px 16px 8px 16px;
+    marginTop: 8px
+}
+
+.white {
+    color: '#ffffff'
 }

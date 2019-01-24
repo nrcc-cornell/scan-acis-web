@@ -3,12 +3,23 @@
 
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Grid from "@material-ui/core/Grid";
 
 import ReactModal from 'react-modal';
 import StationPicker from '../../components/StationPicker';
+import StationSelect from '../../components/StationSelect';
 
 // Styles
 import '../../styles/LocationSelect.css';
+
+const styles = theme => ({
+  button: {
+    margin: theme.spacing.unit,
+  },
+});
 
 var app;
 
@@ -23,9 +34,18 @@ class LocationSelect extends Component {
     render() {
 
         return (
-            <div className="LocationSelect">
-                <span className="location-select-label">Current Location: </span>{app.getLocation.name}, {app.getLocation.state}
-                <button className="location-select-change-button" onClick={()=>{app.setShowModalMap(true)}}>Change</button>
+          <div>
+              <Grid container spacing="8">
+                <Grid item xs={9} md={6}>
+                  <StationSelect names={app.getLocations} />
+                </Grid>
+                <Grid item xs={3}>
+                  <Button variant="contained" color="primary" onClick={()=>{app.setShowModalMap(true)}}>
+                    Map
+                  </Button>
+                </Grid>
+              </Grid>
+              <div className="LocationSelect">
                 <ReactModal
                    isOpen={app.getShowModalMap}
                    onRequestClose={()=>{app.setShowModalMap(false)}}
@@ -36,9 +56,10 @@ class LocationSelect extends Component {
                  >
                    <StationPicker/>
                  </ReactModal>
-            </div>
+              </div>
+          </div>
         );
     }
 }
 
-export default LocationSelect;
+export default withStyles(styles)(LocationSelect);

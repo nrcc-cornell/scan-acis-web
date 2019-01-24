@@ -3,7 +3,9 @@
 
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
+import { MuiThemeProvider, createMuiTheme, withStyles, withTheme  } from "@material-ui/core/styles";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import green from '@material-ui/core/colors/green';
 
 // Components
 import Header from '../../components/Header';
@@ -19,6 +21,18 @@ import Footer from '../../components/Footer';
 import '../../styles/react-tabs.css';
 import '../../styles/App.css';
 
+const theme = createMuiTheme({
+  shadows: ["none"],
+  palette: {
+    primary: green,
+    //secondary:
+  },
+});
+
+const styles = theme => ({
+  root: {}
+});
+
 var app;
 
 @inject('store') @observer
@@ -32,33 +46,20 @@ class App extends Component {
     render() {
 
         return (
-            <div className="App">
+            <MuiThemeProvider theme={theme}>
+              <div className="App">
                 <Header />
 
-                <Tabs selectedIndex={this.props.store.app.getActiveTabIndex} onSelect={index => this.props.store.app.setActivePage(index)}>
-                  <TabList>
-                    <Tab>Home</Tab>
-                    <Tab>About</Tab>
-                    <Tab>SCAN 4 STEM</Tab>
-                  </TabList>
-                  <TabPanel>
-                    <HomeContents />
-                  </TabPanel>
-                  <TabPanel>
-                    <AboutContents />
-                  </TabPanel>
-                  <TabPanel>
-                    <StemContents />
-                  </TabPanel>
-                  <TabPanel>
-                    <ToolContents name={app.getToolName}/>
-                  </TabPanel>
-                </Tabs>
+                {app.getActiveTabIndex===0 && <HomeContents /> }
+                {app.getActiveTabIndex===1 && <AboutContents /> }
+                {app.getActiveTabIndex===2 && <StemContents /> }
+                {app.getActiveTabIndex===3 && <ToolContents name={app.getToolName}/> }
 
                 <Footer />
-            </div>
+              </div>
+            </MuiThemeProvider>
         );
     }
 }
 
-export default App;
+export default withStyles(styles)(withTheme()(App));

@@ -8,4 +8,8 @@
 .tool-pre-select {
     font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
     display: flex;
+    margin: 20px;
+}
+.tool-contents {
+    margin: 20px 0px 0px 0px;
 }

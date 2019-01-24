@@ -1,51 +1,102 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
+import IconButton from '@material-ui/core/IconButton';
+import InfoIcon from '@material-ui/icons/Info';
 
-import React, { Component } from 'react';
-import { inject, observer} from 'mobx-react';
-import { string } from 'prop-types'
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    //padding: theme.spacing.unit * 2,
+    margin: 'auto',
+    //maxWidth: 600,
+    height: 300,
+    width: 200,
+    background: '#F5F5F5',
+  },
+  image: {
+    width: 180,
+    height: 90,
+  },
+  img: {
+    margin: 'auto',
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: '100%',
+  },
+  button: {
+    margin: theme.spacing.unit,
+  },
+  input: {
+    display: 'none',
+  },
+  cardTitle: {
+    height: 70,
+  },
+  cardImage: {
+    height: 100,
+  },
+  cardDescription: {
+    height: 70,
+  },
+  cardButtons: {
+    height: 60,
+  },
+});
 
-// Components
+function ComplexGrid(props) {
+  const { classes,name,title,tagline,thumbnail,onclick} = props;
 
-// Styles
-import '../../styles/ToolCard.css';
-
-var app;
-
-@inject('store') @observer
-class ToolCard extends Component {
-
-    static propTypes = {
-      name: string,
-      title: string,
-      tagline: string,
-      thumbnail: string,
-    }
-
-    static defaultProps = {
-      name: "",
-      title: "",
-      tagline: "",
-      thumbnail: "",
-    }
-
-    constructor(props) {
-        super(props);
-        app = this.props.store.app;
-    }
-
-    render() {
-
-        return (
-            <div className="tool-card" onClick={ () => {app.setActivePage(3); app.setToolName(this.props.name)} }>
-                <div id="tool-card-info">{this.props.tagline}</div>
-                <img className="tool-image" src={require(`${this.props.thumbnail}`)} alt="Tool Thumbnail"></img>
-                <div className="tool-name">
-                        <span>{this.props.title}</span>
-                </div>
-            </div>
-        );
-    }
+  return (
+    <div className={classes.root}>
+      <Paper className={classes.paper}>
+        <Grid container justify="center">
+          <Grid item xs={12} className={classes.cardTitle}>
+            <Typography gutterBottom variant="h6">
+              {title}
+            </Typography>
+          </Grid>
+          <Grid item xs={12} className={classes.cardImage}>
+            <ButtonBase className={classes.image} onClick={onclick}>
+              <img className={classes.img} alt="complex" src={require(`${thumbnail}`)} />
+            </ButtonBase>
+          </Grid>
+          <Grid item xs={10} className={classes.cardDescription}>
+            <Typography align="left" color="textSecondary">Short Tool Description. Lorem ipsum dolor sit amet, consectetur sit elit.</Typography>
+          </Grid>
+          <Grid item container justify="space-evenly" className={classes.cardButtons}>
+              <Grid item>
+                <Button variant="contained" color="primary" className={classes.button} onClick={onclick}>
+                  Go
+                </Button>
+              </Grid>
+              <Grid item>
+                <IconButton className={classes.button} aria-label="Info">
+                  <InfoIcon />
+                </IconButton>
+              </Grid>
+          </Grid>
+        </Grid>
+      </Paper>
+    </div>
+  );
 }
 
-export default ToolCard;
+ComplexGrid.propTypes = {
+  classes: PropTypes.object.isRequired,
+  name: PropTypes.string,
+  title: PropTypes.string,
+  tagline: PropTypes.string,
+  thumbnail: PropTypes.string,
+  onclick: PropTypes.func,
+};
+
+export default withStyles(styles)(ComplexGrid);

@@ -5,11 +5,13 @@ import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import Select from 'react-select';
 import { array } from 'prop-types'
+import Typography from '@material-ui/core/Typography';
+import Grid from "@material-ui/core/Grid";
 
 // Components
 
 // Styles
-import '../../styles/ToolSelect.css';
+//import '../../styles/ToolSelect.css';
 
 var app;
 
@@ -39,15 +41,17 @@ class ToolSelect extends Component {
         }
 
         return (
+            <Typography variant="subtitle2">
                 <Select
                     name="tool"
                     className="tool-select"
-                    placeholder={'TOOL : '+app.getToolInfo(app.getToolName).title}
+                    placeholder={'TOOL > '+app.getToolInfo(app.getToolName).title}
                     value={app.getToolName}
                     isClearable={false}
                     options={toolOptions}
                     onChange={app.setSelectedToolName}
                 /> 
+            </Typography>
         );
     }
 }

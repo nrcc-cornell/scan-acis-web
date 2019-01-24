@@ -7,6 +7,7 @@ import moment from 'moment';
 import { ResponsiveContainer, ComposedChart, Line, Area, XAxis, YAxis, Surface, Symbols, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 //Components
+import GddChartTitle from '../GddChartTitle'
 
 // Styles
 import '../../../../styles/GddChart.css';
@@ -135,6 +136,7 @@ class GddChart extends Component {
 
         return (
             <div id="gdd-chart">
+            <GddChartTitle/>
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={app.gddtool_getClimateSummary}>
                 <Area
@@ -152,8 +154,8 @@ class GddChart extends Component {
                   fill="#F0F0F0"
                 />
                 <Line name="Season to date" type="monotone" dataKey="obs" stroke="green" fill="green" dot={true} r={1} />
-                <Line name="15-yr average" type="monotone" dataKey="recent" stroke="blue" dot={false} />
-                <Line name="Period average" type="monotone" dataKey="ave" stroke="purple" dot={false} />
+                <Line name="15-yr ave" type="monotone" dataKey="recent" stroke="blue" dot={false} />
+                <Line name="Period ave" type="monotone" dataKey="ave" stroke="purple" dot={false} />
                 <CartesianGrid stroke="#ccc" />
                 <Tooltip
                     labelFormatter={(name) => moment(name,"YYYY-MM-DD").format("MMM D, YYYY")}

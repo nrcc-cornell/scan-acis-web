@@ -3,6 +3,8 @@
 
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
+import Typography from '@material-ui/core/Typography';
+import Grid from "@material-ui/core/Grid";
 
 // Components
 import ToolCard from '../../components/ToolCard';
@@ -24,11 +26,30 @@ class ToolLister extends Component {
 
         return (
             <div className="tool-lister">
-                <div className='tool-header'>SCAN Decision Tools</div> 
+            <Grid container direction="column" spacing="16">
+             <Grid item container justify="center">
+              <Grid item>
+                <Typography variant="h5">
+                    SCAN Decision Support Tools
+                </Typography> 
+              </Grid>
+             </Grid>
+             <Grid item container justify="center" spacing="24">
+              <Grid item>
                 <ToolCard {...app.getToolInfo('gddtool')} />
+              </Grid>
+              <Grid item>
                 <ToolCard {...app.getToolInfo('waterdef')} />
+              </Grid>
+              <Grid item>
                 <ToolCard {...app.getToolInfo('wxgrapher')} />
+              </Grid>
+              <Grid item>
                 <ToolCard {...app.getToolInfo('livestock')} />
+              </Grid>
+             </Grid>
+            </Grid>
+            <br/>
             </div>
         );
     }

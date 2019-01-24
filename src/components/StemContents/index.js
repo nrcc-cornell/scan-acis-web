@@ -1,31 +1,123 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
+import List from '@material-ui/core/List';
+import NoSsr from '@material-ui/core/NoSsr';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+//import InboxIcon from '@material-ui/icons/Inbox';
+//import DraftsIcon from '@material-ui/icons/Drafts';
+import Grid from '@material-ui/core/Grid';
+import Hidden from '@material-ui/core/Hidden';
+import Typography from '@material-ui/core/Typography';
+import MemoryRouter from 'react-router/MemoryRouter';
+import Route from 'react-router/Route';
+import { Link } from 'react-router-dom';
 
-import React, { Component } from 'react';
-import { inject, observer} from 'mobx-react';
+import StemMain from './StemMain';
+//import '../../styles/StemContents.css';
 
-// Components
-//
+const styles = theme => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    //width: 240,
+  },
+  lists: {
+    backgroundColor: theme.palette.background.paper,
+  },
+  content: {
+  },
+});
 
-// Styles
-import '../../styles/StemContents.css';
+class ListItemLink extends React.Component {
+  renderLink = itemProps => <Link to={this.props.to} {...itemProps} data-next="true" />;
 
-@inject('store') @observer
-class StemContents extends Component {
-
-    render() {
-
-        return (
-            <div className="StemContents">
-                <p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sagittis mauris lectus, vel cursus ipsum auctor sed. Nullam interdum nulla vitae tellus varius facilisis. Etiam dui tortor, pellentesque euismod pretium sed, condimentum quis justo. Aliquam at tristique erat. Phasellus ultricies elit in luctus aliquet. Donec porta commodo consequat. Praesent vitae sapien lacus.
-                </p>
-                <p>
-Nulla augue nulla, auctor id ante sit amet, semper sollicitudin eros. Ut lorem nisl, porta sit amet arcu ac, elementum euismod massa. Duis consequat congue est, et scelerisque nulla rutrum eget. Praesent vel ultricies purus. Integer vestibulum, dolor id pulvinar malesuada, neque risus egestas est, a ultricies nibh nibh sit amet lacus. Praesent non ex lacinia dui bibendum dictum. Sed ex orci, bibendum eu pulvinar nec, molestie quis neque. Mauris laoreet condimentum odio. Donec in vehicula tortor. Fusce laoreet viverra dignissim. Donec pharetra aliquet lorem, non fringilla velit iaculis eu. Fusce efficitur nisl id dui euismod pretium. Vestibulum rutrum, ex eget tincidunt faucibus, justo neque euismod orci, eget feugiat magna enim eget felis.
-                </p>
-            </div>
-        );
-    }
+  render() {
+    const { icon, primary } = this.props;
+    return (
+      <li>
+        <ListItem button component={this.renderLink}>
+          <ListItemIcon>{icon}</ListItemIcon>
+          <ListItemText primary={primary} />
+        </ListItem>
+      </li>
+    );
+  }
 }
 
-export default StemContents;
+ListItemLink.propTypes = {
+  icon: PropTypes.node.isRequired,
+  primary: PropTypes.node.isRequired,
+  to: PropTypes.string.isRequired,
+};
+
+function ListItemLinkShorthand(props) {
+  const { primary, to } = props;
+  return (
+    <li>
+      <ListItem button component={Link} to={to} data-next="true">
+        <ListItemText primary={primary} />
+      </ListItem>
+    </li>
+  );
+}
+
+ListItemLinkShorthand.propTypes = {
+  primary: PropTypes.node.isRequired,
+  to: PropTypes.string.isRequired,
+};
+
+function ComponentProperty(props) {
+  const { classes } = props;
+
+  // Use NoSsr to avoid SEO issues with the documentation website.
+  return (
+    <NoSsr>
+      <MemoryRouter initialEntries={['/instrumentation']} initialIndex={0}>
+          <Grid container direction="row">
+          <Hidden mdDown>
+          <Grid item md={0} lg={3}>
+        <div className={classes.root}>
+          <div className={classes.lists}>
+            <List component="nav">
+              <ListItemLinkShorthand to="/instrumentation" primary="Instrumentation" />
+            </List>
+            <Divider />
+            <List component="nav">
+              <ListItemLinkShorthand to="/gddtool_doc" primary="Tools Documentation" />
+              <ul>
+                  <ListItemLinkShorthand to="/gddtool_doc" primary="Growing Degree Day Calculator" />
+                  <ListItemLinkShorthand to="/waterdef_doc" primary="Water Deficit Calculator" />
+                  <ListItemLinkShorthand to="/wxgraph_doc" primary="Weather Grapher" />
+                  <ListItemLinkShorthand to="/heatidx_doc" primary="Livestock Heat Index" />
+              </ul>
+            </List>
+            <Divider />
+            <List component="nav">
+              <ListItemLinkShorthand to="/resources" primary="Resources" />
+            </List>
+          </div>
+        </div>
+          </Grid>
+          </Hidden>
+          <Grid item md={12} lg={9}>
+            <Route>
+              {({ location }) => (
+                <StemMain loc={location.pathname} />
+              )}
+            </Route>
+          </Grid>
+          </Grid>
+      </MemoryRouter>
+    </NoSsr>
+  );
+}
+
+ComponentProperty.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(ComponentProperty);

@@ -14,6 +14,7 @@ import GddTool from '../../components/tools/GddTool';
 import WaterDefTool from '../../components/tools/WaterDefTool';
 import WxGraphTool from '../../components/tools/WxGraphTool';
 import LivestockIdxTool from '../../components/tools/LivestockIdxTool';
+import Grid from "@material-ui/core/Grid";
 
 // Styles
 import '../../styles/ToolContents.css';
@@ -40,15 +41,23 @@ class ToolContents extends Component {
 
         return (
             <div className='tool-contents'>
-            <div className='tool-pre-select'>
-                <ToolSelect names={app.toolNameArray} />
-                <OutputSelect />
-            </div>
+            <Grid container spacing="8">
+              <Grid item xs={12}>
                 <LocationSelect />
+              </Grid>
+              <Grid item xs={9} sm={6}>
+                <ToolSelect names={app.toolNameArray} />
+              </Grid>
+              <Grid item xs={9} sm={4}>
+                <OutputSelect />
+              </Grid>
+              <Grid item xs={12}>
                 { this.props.name==='gddtool' && (<GddTool />) }
                 { this.props.name==='waterdef' && (<WaterDefTool />) }
                 { this.props.name==='wxgrapher' && (<WxGraphTool />) }
                 { this.props.name==='livestock' && (<LivestockIdxTool />) }
+              </Grid>
+            </Grid>
             </div>
         );
     }

@@ -69,7 +69,7 @@ export class AppStore {
     @computed get getToolName() { return this.toolName };
 
     getToolInfo = (name) => {
-            let title, tagline, thumbnail
+            let title, tagline, thumbnail, onclick
             let pathToImages = './thumbnails/'
             if (name==='gddtool') {
                 title = 'Growing Degree Day Calculator'
@@ -89,7 +89,8 @@ export class AppStore {
                 thumbnail = pathToImages+'GddTool-thumbnail.png'
             } else {
             }
-            return {'name':name, 'title':title, 'tagline':tagline, 'thumbnail':thumbnail}
+            onclick = () => {this.setActivePage(3); this.setToolName(name)}
+            return {'name':name, 'title':title, 'tagline':tagline, 'thumbnail':thumbnail, 'onclick':onclick}
         };
 
     @observable outputType = 'chart';
@@ -97,6 +98,12 @@ export class AppStore {
         console.log('Changing output type to ', changeEvent.target.value)
         this.outputType = changeEvent.target.value
     }
+    // set outputType from select menu
+    @action setSelectedOutputType = (t) => {
+            if (this.getOutputType !== t) {
+                this.outputType = t.value;
+            }
+        };
     @computed get getOutputType() { return this.outputType };
 
     // data is loading - boolean - to control disabling of outputType
@@ -113,12 +120,18 @@ export class AppStore {
     // get currently selected location object (for station picker)
     @observable location = {"uid":29861,"state":"NY","ll":[-76.1038,43.1111],"name":"SYRACUSE HANCOCK INTL AP", "sid":"KSYR", "network":1};
     @action setLocation = (l) => {
-        this.location = this.getLocations.find(obj => obj.uid === l);
+        if (this.getLocation.uid.toString() !== l.toString()) {
+            this.location = this.getLocations.find(obj => obj.uid === l);
+            if (this.getToolName==='gddtool') { this.gddtool_downloadData() }
+            if (this.getToolName==='wxgrapher') { this.wxgraph_downloadData() }
+        };
     }
     // set location from select menu
     @action setSelectedLocation = (t) => {
             if (this.getLocation.uid.toString() !== t.value) {
                 this.location = this.getLocations.find(obj => obj.uid.toString() === t.value);
+                if (this.getToolName==='gddtool') { this.gddtool_downloadData() }
+                if (this.getToolName==='wxgrapher') { this.wxgraph_downloadData() }
             }
             if (this.getShowModalMap) { this.setShowModalMap(false) };
         };
@@ -129,6 +142,12 @@ export class AppStore {
     @action setLocation_explorer = (l) => {
         this.location_explorer = this.getLocations.find(obj => obj.uid === l);
     }
+    // set location from select menu
+    @action setSelectedLocation_explorer = (t) => {
+            if (this.getLocation_explorer.uid.toString() !== t.value) {
+                this.location_explorer = this.getLocations.find(obj => obj.uid.toString() === t.value);
+            }
+        };
     @computed get getLocation_explorer() { return this.location_explorer };
 
     // all locations
@@ -215,10 +234,10 @@ export class AppStore {
     @observable showModalMap=false;
     @action setShowModalMap = (b) => {
             this.showModalMap=b
-            if (!this.getShowModalMap) {
-                if (this.getToolName==='gddtool') { this.gddtool_downloadData() }
-                if (this.getToolName==='wxgrapher') { this.wxgraph_downloadData() }
-            }
+            //if (!this.getShowModalMap) {
+            //    if (this.getToolName==='gddtool') { this.gddtool_downloadData() }
+            //    if (this.getToolName==='wxgrapher') { this.wxgraph_downloadData() }
+            //}
         }
     @computed get getShowModalMap() {
         return this.showModalMap
@@ -273,7 +292,8 @@ export class AppStore {
     // Planting date selection
     // For Components: PlantingDatePicker
     @computed get latestSelectableYear() {
-        let thisYear = moment().year();
+        //let thisYear = moment().year();
+        let thisYear = 2018;
         return thisYear
     };
 
@@ -670,6 +690,18 @@ export class AppStore {
     // - options are 'por', 'two_years', 'two_months', 'two_days'
     @observable wxgraph_timeFrame = 'two_months'
     @action wxgraph_setTimeFrame = (t) => {
+        // has the time frame changed?
+        let changed = (this.wxgraph_getTimeFrame===t) ? false : true
+        // make sure ext switch is off if new time period is not POR
+        if (t!=='por' && this.wxgraph_getExtSwitch) { this.wxgraph_setExtSwitchManual(false) }
+        // only update and download data if time frame has changed
+        if (changed===true) {
+            this.wxgraph_timeFrame = t;
+            this.wxgraph_downloadData()
+        }
+    }
+    @action wxgraph_setTimeFrameFromRadioGroup = (e) => {
+        let t = e.target.value;
         // has the time frame changed?
         let changed = (this.wxgraph_getTimeFrame===t) ? false : true
         // make sure ext switch is off if new time period is not POR
