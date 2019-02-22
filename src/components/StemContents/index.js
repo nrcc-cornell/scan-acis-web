@@ -11,7 +11,7 @@ import Divider from '@material-ui/core/Divider';
 //import DraftsIcon from '@material-ui/icons/Drafts';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
-import Typography from '@material-ui/core/Typography';
+//import Typography from '@material-ui/core/Typography';
 import MemoryRouter from 'react-router/MemoryRouter';
 import Route from 'react-router/Route';
 import { Link } from 'react-router-dom';

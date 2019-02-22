@@ -13,7 +13,7 @@ import Grid from '@material-ui/core/Grid';
 var app;
 
 @inject('store') @observer
-class TimeFrameButtonGroup extends React.Component {
+class LivestockTypeButtonGroup extends React.Component {
   constructor(props) {
       super(props);
       app = this.props.store.app;
@@ -29,36 +29,31 @@ class TimeFrameButtonGroup extends React.Component {
           <Grid item xs={12} md={12}>
       <FormControl component="fieldset">
         <RadioGroup
-          aria-label="timeframe"
-          name="timeframe"
-          value={app.wxgraph_getTimeFrame}
-          onChange={app.wxgraph_setTimeFrameFromRadioGroup}
+          aria-label="livestock"
+          name="livestock"
+          value={app.livestock_livestockType}
+          onChange={app.livestock_setLivestockTypeFromRadioGroup}
           row
         >
           <FormControlLabel
-            value="por"
+            value="cattle"
             control={<Radio color="primary" />}
-            label="Entire Record"
+            label="Cattle"
+            labelPlacement="top"
+          />
+          <FormControlLabel
+            value="poultry"
+            control={<Radio color="primary" />}
+            label="Poultry"
             labelPlacement="top"
             disabled
           />
           <FormControlLabel
-            value="two_years"
+            value="swine"
             control={<Radio color="primary" />}
-            label="2 Years"
+            label="Swine"
             labelPlacement="top"
-          />
-          <FormControlLabel
-            value="two_months"
-            control={<Radio color="primary" />}
-            label="2 Months"
-            labelPlacement="top"
-          />
-          <FormControlLabel
-            value="two_days"
-            control={<Radio color="primary" />}
-            label="2 Days"
-            labelPlacement="top"
+            disabled
           />
         </RadioGroup>
       </FormControl>
@@ -68,4 +63,4 @@ class TimeFrameButtonGroup extends React.Component {
   }
 }
 
-export default TimeFrameButtonGroup;
+export default LivestockTypeButtonGroup;

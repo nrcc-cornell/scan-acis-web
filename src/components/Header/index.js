@@ -49,15 +49,15 @@ const styles = theme => ({
   toolbar: theme.mixins.toolbar,
 });
 
-var app;
+//var app;
 
 @inject('store') @observer
 class FullWidthTabs extends React.Component {
 
-  constructor(props) {
-      super(props);
-      app = this.props.store.app;
-  }
+  //constructor(props) {
+  //    super(props);
+  //    app = this.props.store.app;
+  //}
 
   state = {
     value: 0,

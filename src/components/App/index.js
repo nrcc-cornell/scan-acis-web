@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import { MuiThemeProvider, createMuiTheme, withStyles, withTheme  } from "@material-ui/core/styles";
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+//import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import green from '@material-ui/core/colors/green';
 
 // Components
@@ -26,6 +26,15 @@ const theme = createMuiTheme({
   palette: {
     primary: green,
     //secondary:
+  },
+  overrides: {
+    MUIDataTableBodyRow: {
+      root: {
+        '&:nth-child(odd)': {
+          backgroundColor: '#D3D3D3'
+        }
+      }
+    },
   },
 });
 

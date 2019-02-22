@@ -5,8 +5,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer} from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
-import IconButton from '@material-ui/core/IconButton';
-import MenuIcon from '@material-ui/icons/Menu';
+//import IconButton from '@material-ui/core/IconButton';
+//import MenuIcon from '@material-ui/icons/Menu';
 import Hidden from '@material-ui/core/Hidden';
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 // Components
 import MenuPopover from '../MenuPopover'
 
-import scanstn from '../../../assets/scan-station.png'
+//import scanstn from '../../../assets/scan-station.png'
 
 // Styles
 //import '../../../styles/StemWxgraphDoc.css';
@@ -35,15 +35,15 @@ const styles = theme => ({
   },
 });
 
-var app;
+//var app;
 
 @inject('store') @observer
 class WxgraphDoc extends Component {
 
-    constructor(props) {
-        super(props);
-        app = this.props.store.app;
-    }
+    //constructor(props) {
+    //    super(props);
+    //    app = this.props.store.app;
+    //}
 
     render() {
 

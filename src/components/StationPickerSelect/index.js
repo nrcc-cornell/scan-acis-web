@@ -6,7 +6,7 @@ import { inject, observer} from 'mobx-react';
 import Select from 'react-select';
 import { array } from 'prop-types'
 
-import Control from 'react-leaflet-control';
+//import Control from 'react-leaflet-control';
 
 // Components
 
@@ -43,8 +43,6 @@ class StationPickerSelect extends Component {
             disabled = false
             selectOptions.push({ value: v.uid.toString(), label: v.name, clearableValue: false, disabled: disabled })
         }
-        console.log('selectOptions');
-        console.log(selectOptions);
 
         return (
             <Select

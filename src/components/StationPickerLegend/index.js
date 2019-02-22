@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
-import { array } from 'prop-types'
+//import { array } from 'prop-types'
 
 import Control from 'react-leaflet-control';
 

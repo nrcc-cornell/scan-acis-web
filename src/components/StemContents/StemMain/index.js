@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer} from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
-import Grid from "@material-ui/core/Grid";
+//import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 
 // Components
@@ -28,15 +28,15 @@ const styles = theme => ({
   },
 });
 
-var app;
+//var app;
 
 @inject('store') @observer
 class StemMain extends Component {
 
-    constructor(props) {
-        super(props);
-        app = this.props.store.app;
-    }
+    //constructor(props) {
+    //    super(props);
+    //    app = this.props.store.app;
+    //}
 
     components = {
         instrumentation: Instrumentation,

@@ -7,7 +7,7 @@ import Select from 'react-select';
 import { array } from 'prop-types'
 import Typography from '@material-ui/core/Typography';
 
-import Control from 'react-leaflet-control';
+//import Control from 'react-leaflet-control';
 
 // Components
 
@@ -40,8 +40,6 @@ class StationExplorerSelect extends Component {
             disabled = false
             selectOptions.push({ value: v.uid.toString(), label: v.name, clearableValue: false, disabled: disabled })
         }
-        console.log('selectOptions');
-        console.log(selectOptions);
 
         return (
           <Typography variant="subtitle2">

@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import LoadingOverlay from 'react-loading-overlay';
 import { withStyles } from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+//import Drawer from '@material-ui/core/Drawer';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 

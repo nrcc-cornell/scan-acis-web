@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 
 // Components
-import StationExplorer from '../../components/StationExplorer';
+//import StationExplorer from '../../components/StationExplorer';
 import ToolLister from '../../components/ToolLister';
 
 import scanmap from '../../assets/scan-station-map.png'
@@ -25,15 +25,15 @@ const styles = theme => ({
   },
 });
 
-var app;
+//var app;
 
 @inject('store') @observer
 class AboutContents extends Component {
 
-    constructor(props) {
-        super(props);
-        app = this.props.store.app;
-    }
+    //constructor(props) {
+    //    super(props);
+    //    app = this.props.store.app;
+    //}
 
     render() {
 
@@ -55,9 +55,9 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                     <Typography align="justify" paragraph variant="body1">
                       More information about these networks is available at the NRCS website:
                       <ul>
-                        <li><a href="https://www.wcc.nrcs.usda.gov/scan/" target="_blank">SCAN / Tribal SCAN documentation</a></li>
-                        <li><a href="https://www.wcc.nrcs.usda.gov/scan/scan_brochure.pdf" target="_blank">SCAN brochure</a></li>
-                        <li><a href="https://www.wcc.nrcs.usda.gov/tribalscan/tribalscan_brochure.pdf" target="_blank">Tribal SCAN brochure</a></li>
+                        <li><a href="https://www.wcc.nrcs.usda.gov/scan/" target="_blank" rel="noopener noreferrer">SCAN / Tribal SCAN documentation</a></li>
+                        <li><a href="https://www.wcc.nrcs.usda.gov/scan/scan_brochure.pdf" target="_blank" rel="noopener noreferrer">SCAN brochure</a></li>
+                        <li><a href="https://www.wcc.nrcs.usda.gov/tribalscan/tribalscan_brochure.pdf" target="_blank" rel="noopener noreferrer">Tribal SCAN brochure</a></li>
                       </ul>
                     </Typography>
                     <img className="scan-station-map" src={scanmap} alt="SCAN stations"/>

@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import moment from 'moment';
-import { ResponsiveContainer, ComposedChart, Line, Area, XAxis, YAxis, Surface, Symbols, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, ComposedChart, Brush, Line, Area, XAxis, YAxis, Surface, Symbols, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 //Components
 import GddChartTitle from '../GddChartTitle'
@@ -12,9 +12,9 @@ import GddChartTitle from '../GddChartTitle'
 // Styles
 import '../../../../styles/GddChart.css';
 
-let formatXAxisForDate = (tickItem) => {
-    return moment(tickItem).format('MMM DD')
-}
+//let formatXAxisForDate = (tickItem) => {
+//    return moment(tickItem).format('MMM DD')
+//}
 
 var app;
 
@@ -83,6 +83,10 @@ class GddChart extends Component {
           </div>
       )
     }
+
+        let formatXAxisForDate = (tickItem) => {
+            return moment(tickItem).format('MMM D')
+        }
 
     const renderCustomLegend = (props) => {
       const { payload } = props
@@ -165,8 +169,10 @@ class GddChart extends Component {
                 <Legend verticalAlign="top" align="center" content={renderCustomLegend} />
                 <XAxis dataKey="date" tickFormatter={formatXAxisForDate} />
                 <YAxis />
+                <Brush dataKey="date" tickFormatter={formatXAxisForDate} height={20} />
               </ComposedChart>
             </ResponsiveContainer>
+
             </div>
         );
 
