@@ -284,7 +284,8 @@ export class AppStore {
         //    {"uid":92,"state":"OK","ll":[-97.6006,35.3889],"name":"OKLAHOMA CITY WILL ROGERS WORLD AP", "sid":"KOKC", "network":1},
         //    {"uid":1978,"state":"CA","ll":[-118.3888,33.938],"name":"LOS ANGELES INTL AP", "sid":"KLAX", "network":1}]
         //this.setLocations(locs)
-        fetch("/icao_stations.json")
+        //fetch("/icao_stations.json")
+        fetch(process.env.PUBLIC_URL + "/data/icao_stations.json")
              //.then(res => res.text())          // convert to plain text
              //.then(text => console.log(text))  // then log it out
              .then(r => r.json())
