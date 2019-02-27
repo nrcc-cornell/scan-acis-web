@@ -44,6 +44,7 @@ class LivestockIdxTool extends Component {
         super(props);
         app = this.props.store.app;
         app.livestock_downloadData()
+        app.setToolName('livestock')
     }
 
     render() {

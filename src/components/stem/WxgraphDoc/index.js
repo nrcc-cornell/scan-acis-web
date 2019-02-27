@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
+import StemMenu from '../StemMenu'
 
 // Components
 import MenuPopover from '../MenuPopover'
@@ -17,7 +18,7 @@ import MenuPopover from '../MenuPopover'
 //import scanstn from '../../../assets/scan-station.png'
 
 // Styles
-//import '../../../styles/StemHeatidxDoc.css';
+//import '../../../styles/StemWxgraphDoc.css';
 
 const styles = theme => ({
   root: {
@@ -38,7 +39,7 @@ const styles = theme => ({
 //var app;
 
 @inject('store') @observer
-class HeatidxDoc extends Component {
+class WxgraphDoc extends Component {
 
     //constructor(props) {
     //    super(props);
@@ -50,20 +51,23 @@ class HeatidxDoc extends Component {
         const { classes } = this.props;
 
         return (
-          <Grid container direction="column" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={0}>
-            <Grid item container justify="flex-start" alignItems="flex-start" direction="row">
-              <Hidden lgUp>
+          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={0}>
+            <Grid item container justify="flex-start" alignItems="flex-start" direction="row" xs={2} md={3}>
               <Grid item>
-                <MenuPopover/>
-              </Grid>
-              </Hidden>
-              <Grid item>
-                <Typography variant="h5">
-                  About the Livestock Heat Index
-                </Typography>
+                <Hidden mdUp>
+                  <MenuPopover/>
+                </Hidden>
+                <Hidden smDown>
+                  <StemMenu/>
+                </Hidden>
               </Grid>
             </Grid>
-            <Grid item container className={classes.root} spacing={32}>
+            <Grid item container className={classes.root} spacing={32} xs={10} md={9}>
+              <Grid item>
+                <Typography variant="h5">
+                  About the Weather Grapher
+                </Typography>
+              </Grid>
               <Grid item>
                     <Typography align="left" paragraph variant="h6">
                       What does this tool do?
@@ -86,8 +90,8 @@ Vestibulum eu sociis litora sed mauris, fusce consequat gravida mi dictum cras t
     }
 }
 
-HeatidxDoc.propTypes = {
+WxgraphDoc.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(HeatidxDoc);
+export default withStyles(styles)(WxgraphDoc);

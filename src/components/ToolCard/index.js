@@ -1,4 +1,5 @@
 import React from 'react';
+import { withRouter } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -53,7 +54,7 @@ const styles = theme => ({
 });
 
 function ComplexGrid(props) {
-  const { classes,name,title,tagline,thumbnail,onclick} = props;
+  const { classes,name,title,tagline,thumbnail,url,onclick} = props;
 
   return (
     <div className={classes.root}>
@@ -65,7 +66,7 @@ function ComplexGrid(props) {
             </Typography>
           </Grid>
           <Grid item xs={12} className={classes.cardImage}>
-            <ButtonBase className={classes.image} onClick={onclick}>
+            <ButtonBase className={classes.image} onClick={() => {props.history.push(url)}}>
               <img className={classes.img} alt="complex" src={require(`${thumbnail}`)} />
             </ButtonBase>
           </Grid>
@@ -74,7 +75,7 @@ function ComplexGrid(props) {
           </Grid>
           <Grid item container justify="space-evenly" className={classes.cardButtons}>
               <Grid item>
-                <Button variant="contained" color="primary" className={classes.button} onClick={onclick}>
+                <Button variant="contained" color="primary" className={classes.button} onClick={() => {props.history.push(url)}}>
                   Go
                 </Button>
               </Grid>
@@ -96,7 +97,8 @@ ComplexGrid.propTypes = {
   title: PropTypes.string,
   tagline: PropTypes.string,
   thumbnail: PropTypes.string,
+  url: PropTypes.string,
   onclick: PropTypes.func,
 };
 
-export default withStyles(styles)(ComplexGrid);
+export default withRouter(withStyles(styles)(ComplexGrid));

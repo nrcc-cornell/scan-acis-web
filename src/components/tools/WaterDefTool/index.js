@@ -15,6 +15,7 @@ class WaterDefTool extends Component {
     constructor(props) {
         super(props);
         app = this.props.store.app;
+        app.setToolName('waterdef')
     }
 
     render() {

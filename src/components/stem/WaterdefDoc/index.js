@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
+import StemMenu from '../StemMenu'
 
 // Components
 import MenuPopover from '../MenuPopover'
@@ -50,20 +51,23 @@ class WaterdefDoc extends Component {
         const { classes } = this.props;
 
         return (
-          <Grid container direction="column" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={0}>
-            <Grid item container justify="flex-start" alignItems="flex-start" direction="row">
-              <Hidden lgUp>
+          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={0}>
+            <Grid item container justify="flex-start" alignItems="flex-start" direction="row" xs={2} md={3}>
               <Grid item>
-                <MenuPopover/>
+                <Hidden mdUp>
+                  <MenuPopover/>
+                </Hidden>
+                <Hidden smDown>
+                  <StemMenu/>
+                </Hidden>
               </Grid>
-              </Hidden>
+            </Grid>
+            <Grid item container className={classes.root} spacing={32} xs={10} md={9}>
               <Grid item>
                 <Typography variant="h5">
                   About the Water Deficit Calculator
                 </Typography>
               </Grid>
-            </Grid>
-            <Grid item container className={classes.root} spacing={32}>
               <Grid item>
                     <Typography align="left" paragraph variant="h6">
                       What does this tool do?

@@ -25,6 +25,7 @@ class GddTool extends Component {
         super(props);
         app = this.props.store.app;
         app.gddtool_downloadData()
+        app.setToolName('gddtool')
     }
 
     render() {

@@ -28,15 +28,17 @@ const styles = theme => ({
   },
 });
 
-//var app;
+var app;
 
 @inject('store') @observer
 class StemMain extends Component {
 
-    //constructor(props) {
-    //    super(props);
-    //    app = this.props.store.app;
-    //}
+    constructor(props) {
+        super(props);
+        app = this.props.store.app;
+        // set page
+        app.setActivePage(2);
+    }
 
     components = {
         instrumentation: Instrumentation,
@@ -51,7 +53,7 @@ class StemMain extends Component {
 
         const { classes } = this.props;
 
-        const TagName = this.components[this.props.loc.slice(1)]
+        const TagName = this.components[this.props.loc.slice(6)]
 
         return (
             <div className="about-contents">

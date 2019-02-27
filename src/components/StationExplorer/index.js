@@ -36,14 +36,12 @@ class StationExplorer extends Component {
     render() {
 
         return (
-                  <Grid container spacing="8">
+                  <Grid container spacing={8}>
                       <Grid item xs={12} md={7}>
                         { this.props.store.app.getLocations && (<StationExplorerMap />)}
                       </Grid>
                       <Grid item xs={12} md={4}>
-                        <Typography gutterBottom variant="body1">
                           { this.props.store.app.getLocations && (<StationExplorerTable />)}
-                        </Typography>
                       </Grid>
                   </Grid>
         );

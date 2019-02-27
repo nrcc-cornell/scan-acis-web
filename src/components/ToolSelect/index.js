@@ -2,6 +2,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
 import { inject, observer} from 'mobx-react';
 import Select from 'react-select';
 import { array } from 'prop-types'
@@ -37,8 +38,14 @@ class ToolSelect extends Component {
         let toolOptions = []
         for (var v of this.props.names) {
             disabled = false
-            toolOptions.push({ value: v.toString(), label: app.getToolInfo(v).title, clearableValue: false, disabled: disabled })
+            toolOptions.push({ value: app.getToolInfo(v).url, label: app.getToolInfo(v).title, clearableValue: false, disabled: disabled })
         }
+
+        const setSelectedTool = (t) => {
+          this.props.history.push(t.value)
+        }
+
+        //console.log(this.props);
 
         return (
             <Typography variant="subtitle2">
@@ -49,11 +56,11 @@ class ToolSelect extends Component {
                     value={app.getToolName}
                     isClearable={false}
                     options={toolOptions}
-                    onChange={app.setSelectedToolName}
+                    onChange={setSelectedTool}
                 /> 
             </Typography>
         );
     }
 }
 
-export default ToolSelect;
+export default withRouter(ToolSelect);

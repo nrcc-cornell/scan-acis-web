@@ -35,11 +35,17 @@ class ToolContents extends Component {
     constructor(props) {
         super(props);
         app = this.props.store.app;
+        if (!app.getLocations) {
+            app.downloadStationInfo()
+        }
+        // set tool page active
+        app.setActivePage(3);
     }
 
     render() {
 
-        return (
+        if (app.getLocations) {
+          return (
             <div className='tool-contents'>
             <Grid container spacing="8">
               <Grid item xs={12}>
@@ -60,6 +66,9 @@ class ToolContents extends Component {
             </Grid>
             </div>
         );
+      } else {
+        return (false);
+      }
     }
 }
 

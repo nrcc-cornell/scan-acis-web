@@ -73,28 +73,32 @@ export class AppStore {
     @computed get getToolName() { return this.toolName };
 
     getToolInfo = (name) => {
-            let title, tagline, thumbnail, onclick
+            let title, tagline, thumbnail, url, onclick
             let pathToImages = './thumbnails/'
             if (name==='gddtool') {
                 title = 'Growing Degree Day Calculator'
                 tagline = 'Tagline for GddTool'
                 thumbnail = pathToImages+'GddTool-thumbnail.png'
+                url = '/tools/growing-degree-day'
             } else if (name==='waterdef') {
                 title = 'Water Deficit Calculator'
                 tagline = 'Tagline for WaterDefCalc'
                 thumbnail = pathToImages+'GddTool-thumbnail.png'
+                url = '/tools/water-deficit-calculator'
             } else if (name==='wxgrapher') {
                 title = 'Weather Grapher'
                 tagline = 'Tagline for WxGraphTool'
                 thumbnail = pathToImages+'GddTool-thumbnail.png'
+                url = '/tools/weather-grapher'
             } else if (name==='livestock') {
                 title = 'Livestock Heat Index'
                 tagline = 'Tagline for LivestockHeatIdx'
                 thumbnail = pathToImages+'GddTool-thumbnail.png'
+                url = '/tools/livestock-heat-index'
             } else {
             }
             onclick = () => {this.setActivePage(3); this.setToolName(name)}
-            return {'name':name, 'title':title, 'tagline':tagline, 'thumbnail':thumbnail, 'onclick':onclick}
+            return {'name':name, 'title':title, 'tagline':tagline, 'thumbnail':thumbnail, 'url':url, 'onclick':onclick}
         };
 
     @observable outputType = 'chart';
@@ -171,6 +175,8 @@ export class AppStore {
         if (this.getLocations) { this.locations.clear() };
         this.locations = l
         //this.locations.replace(l)
+        //console.log('setting locations');
+        //console.log(this.getLocations);
     }
     @computed get getLocations() { return this.locations };
 

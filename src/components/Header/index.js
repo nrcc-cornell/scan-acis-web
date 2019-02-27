@@ -2,6 +2,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 import React from 'react';
+import { withRouter } from "react-router-dom";
 import { inject, observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
@@ -65,6 +66,19 @@ class FullWidthTabs extends React.Component {
 
   handleChange = (event, value) => {
     //this.setState({ value });
+    if (value===0) {
+        // go to home page
+        this.props.history.push('/');
+    } else if (value===1) {
+        // go to about page
+        this.props.history.push('/about');
+    } else if (value===2) {
+        // go to stem page
+        this.props.history.push('/stem');
+    } else {
+        // go to tools page
+        this.props.history.push('/tools');
+    }
     this.props.store.app.setActivePage(value);
   };
 
@@ -77,9 +91,9 @@ class FullWidthTabs extends React.Component {
 
     return (
       <div className={classes.root}>
-        <AppBar position="static" color="white">
+        <AppBar position="static" color="inherit">
           <Toolbar>
-            <div className="title">
+            <div className="h6">
                 <Typography variant="title" className={classes.headerText}>
                         SCAN-ACIS Tools
                 </Typography>
@@ -125,4 +139,4 @@ FullWidthTabs.propTypes = {
   theme: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(FullWidthTabs);
+export default withRouter(withStyles(styles)(FullWidthTabs));

@@ -25,15 +25,17 @@ const styles = theme => ({
   },
 });
 
-//var app;
+var app;
 
 @inject('store') @observer
 class AboutContents extends Component {
 
-    //constructor(props) {
-    //    super(props);
-    //    app = this.props.store.app;
-    //}
+    constructor(props) {
+        super(props);
+        app = this.props.store.app;
+        // set site's active page
+        app.setActivePage(1);
+    }
 
     render() {
 

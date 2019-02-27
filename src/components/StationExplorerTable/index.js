@@ -2,6 +2,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 import React, { Component } from 'react';
+import { withRouter } from "react-router-dom";
 import { inject, observer} from 'mobx-react';
 import Typography from '@material-ui/core/Typography';
 import Grid from "@material-ui/core/Grid";
@@ -89,7 +90,7 @@ class StationExplorerTable extends Component {
 
         return (
             <div id="feature_infos">
-              <Grid container spacing="16">
+              <Grid container spacing={16}>
                 <Grid item container>
                   <Grid item>
                     <Typography variant="h6">
@@ -97,13 +98,13 @@ class StationExplorerTable extends Component {
                     </Typography>
                   </Grid>
                 </Grid>
-                <Grid item container spacing="16">
+                <Grid item container spacing={16}>
                   <Grid item>
                     <Typography variant="h6">
                       Station Information
                     </Typography>
                     <Typography variant="body1" gutterBottom>
-                      <ul style={{"padding":0,"margin":0,"list-style-type":"none"}}>
+                      <ul style={{"padding":0,"margin":0,"listStyleType":"none"}}>
                         <li>Latitude, Longitude: {app.getLocation_explorer.ll[1]}, {app.getLocation_explorer.ll[0]}</li>
                         <li>Elevation: {app.getLocation_explorer.elev} feet</li>
                         <li>Period of Record: {app.getLocation_explorer.sdate} to {porEnd}</li>
@@ -116,14 +117,14 @@ class StationExplorerTable extends Component {
                       Climate Summary (as of {app.getDatesForLocations.date})
                     </Typography>
                     <Typography variant="body1" gutterBottom noWrap>
-                      <table cellpadding="6">
+                      <table cellPadding="6"><tbody>
                         <tr><td></td><td>Since</td><td>Temperature</td><td>Precipitation</td></tr>
                         <tr><td>Year-to-date</td><td>{app.getDatesForLocations.ytd_start}</td><td>{this.tempWithUnits(app.getLocation_explorer.t_ytd_o)} ({this.tempWithSign(app.getLocation_explorer.t_ytd_n)})</td><td>{this.precipWithUnits(app.getLocation_explorer.p_ytd_o)} ({this.precipWithSign(app.getLocation_explorer.p_ytd_n)})</td></tr>
                         <tr><td>Season-to-date</td><td>{app.getDatesForLocations.std_start}</td><td>{this.tempWithUnits(app.getLocation_explorer.t_std_o)} ({this.tempWithSign(app.getLocation_explorer.t_std_n)})</td><td>{this.precipWithUnits(app.getLocation_explorer.p_std_o)} ({this.precipWithSign(app.getLocation_explorer.p_std_n)})</td></tr>
                         <tr><td>Month-to-date</td><td>{app.getDatesForLocations.mtd_start}</td><td>{this.tempWithUnits(app.getLocation_explorer.t_mtd_o)} ({this.tempWithSign(app.getLocation_explorer.t_mtd_n)})</td><td>{this.precipWithUnits(app.getLocation_explorer.p_mtd_o)} ({this.precipWithSign(app.getLocation_explorer.p_mtd_n)})</td></tr>
-                      </table>
+                      </tbody></table>
                     </Typography>
-                    <Button variant="outlined" color="primary" onClick={app.getToolInfo('wxgrapher').onclick}>
+                    <Button variant="outlined" color="primary" onClick={() => {this.props.history.push(app.getToolInfo('wxgrapher').url)}}>
                       View Additional Data
                     </Button>
                   </Grid>
@@ -134,4 +135,4 @@ class StationExplorerTable extends Component {
     }
 }
 
-export default StationExplorerTable;
+export default withRouter(StationExplorerTable);

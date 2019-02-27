@@ -47,6 +47,7 @@ class WxGraphTool extends Component {
         super(props);
         app = this.props.store.app;
         app.wxgraph_downloadData()
+        app.setToolName('wxgrapher')
     }
 
     render() {

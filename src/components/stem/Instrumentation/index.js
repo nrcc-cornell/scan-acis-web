@@ -10,6 +10,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Hidden from '@material-ui/core/Hidden';
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
+import StemMenu from '../StemMenu'
 
 // Components
 import MenuPopover from '../MenuPopover'
@@ -50,20 +51,24 @@ class Instrumentation extends Component {
         const { classes } = this.props;
 
         return (
-          <Grid container direction="column" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={0}>
-            <Grid item container justify="flex-start" alignItems="flex-start" direction="row">
-              <Hidden lgUp>
+          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={0}>
+            <Grid item container justify="flex-start" alignItems="flex-start" direction="row" xs={2} sm={1} lg={3}>
               <Grid item>
-                <MenuPopover/>
+                <Hidden lgUp>
+                  <MenuPopover/>
+                </Hidden>
+                <Hidden mdDown>
+                  <StemMenu/>
+                </Hidden>
               </Grid>
-              </Hidden>
+            </Grid>
+            <Grid item container direction="column" className={classes.root} spacing={32} xs={10} lg={9}>
               <Grid item>
                 <Typography variant="h5">
                   Instrumentation
                 </Typography>
               </Grid>
-            </Grid>
-            <Grid item container className={classes.root} spacing={32}>
+            <Grid item container direction="row" className={classes.root} spacing={32}>
               <Grid item>
                     <img className="scan-station-instrument" src={scanstn} alt="SCAN instrumentation"/>
               </Grid>
@@ -79,6 +84,7 @@ class Instrumentation extends Component {
                       </ul>
                     </Typography>
               </Grid>
+            </Grid>
             </Grid>
           </Grid>
         );

@@ -12,7 +12,7 @@ import Divider from '@material-ui/core/Divider';
 import Grid from '@material-ui/core/Grid';
 //import Hidden from '@material-ui/core/Hidden';
 //import Typography from '@material-ui/core/Typography';
-import MemoryRouter from 'react-router/MemoryRouter';
+//import MemoryRouter from 'react-router/MemoryRouter';
 //import Route from 'react-router/Route';
 import { Link } from 'react-router-dom';
 
@@ -31,28 +31,6 @@ const styles = theme => ({
   content: {
   },
 });
-
-class ListItemLink extends React.Component {
-  renderLink = itemProps => <Link to={this.props.to} {...itemProps} data-next="true" />;
-
-  render() {
-    const { icon, primary } = this.props;
-    return (
-      <li>
-        <ListItem button component={this.renderLink}>
-          <ListItemIcon>{icon}</ListItemIcon>
-          <ListItemText primary={primary} />
-        </ListItem>
-      </li>
-    );
-  }
-}
-
-ListItemLink.propTypes = {
-  icon: PropTypes.node.isRequired,
-  primary: PropTypes.node.isRequired,
-  to: PropTypes.string.isRequired,
-};
 
 function ListItemLinkShorthand(props) {
   const { primary, to } = props;
@@ -73,38 +51,32 @@ ListItemLinkShorthand.propTypes = {
 function ComponentProperty(props) {
   const { classes } = props;
 
-  // Use NoSsr to avoid SEO issues with the documentation website.
   return (
-    <NoSsr>
-      <MemoryRouter initialEntries={['/instrumentation']} initialIndex={0}>
-          <Grid container direction="row">
-          <Grid item>
+    <Grid container direction="row">
+      <Grid item>
         <div className={classes.root}>
           <div className={classes.lists}>
-            <font color='red'>(This menu not yet functional)</font>
             <List component="nav">
-              <ListItemLinkShorthand to="/instrumentation" primary="Instrumentation" />
+              <ListItemLinkShorthand to="/stem/instrumentation" primary="Instrumentation" />
             </List>
             <Divider />
             <List component="nav">
-              <ListItemLinkShorthand to="/gddtool_doc" primary="Tools Documentation" />
+              <ListItemLinkShorthand to="/stem/gddtool_doc" primary="Tools Documentation" />
               <ul>
-                  <ListItemLinkShorthand to="/gddtool_doc" primary="Growing Degree Day Calculator" />
-                  <ListItemLinkShorthand to="/waterdef_doc" primary="Water Deficit Calculator" />
-                  <ListItemLinkShorthand to="/wxgraph_doc" primary="Weather Grapher" />
-                  <ListItemLinkShorthand to="/heatidx_doc" primary="Livestock Heat Index" />
+                  <ListItemLinkShorthand to="/stem/gddtool_doc" primary="Growing Degree Day Calculator" />
+                  <ListItemLinkShorthand to="/stem/waterdef_doc" primary="Water Deficit Calculator" />
+                  <ListItemLinkShorthand to="/stem/wxgraph_doc" primary="Weather Grapher" />
+                  <ListItemLinkShorthand to="/stem/heatidx_doc" primary="Livestock Heat Index" />
               </ul>
             </List>
             <Divider />
             <List component="nav">
-              <ListItemLinkShorthand to="/resources" primary="Resources" />
+              <ListItemLinkShorthand to="/stem/resources" primary="Resources" />
             </List>
           </div>
         </div>
-          </Grid>
-          </Grid>
-      </MemoryRouter>
-    </NoSsr>
+      </Grid>
+    </Grid>
   );
 }
 
