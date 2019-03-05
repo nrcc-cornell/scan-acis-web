@@ -40,7 +40,6 @@ class TimeFrameButtonGroup extends React.Component {
             control={<Radio color="primary" />}
             label="Entire Record"
             labelPlacement="top"
-            disabled
           />
           <FormControlLabel
             value="two_years"

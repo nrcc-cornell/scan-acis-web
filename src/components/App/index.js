@@ -85,6 +85,7 @@ class App extends Component {
                   <Route path="/tools/water-deficit-calculator" render={(props) => <ToolContents {...props} name={'waterdef'} />} />
                   <Route path="/tools/weather-grapher" render={(props) => <ToolContents {...props} name={'wxgrapher'} />} />
                   <Route path="/tools/livestock-heat-index" render={(props) => <ToolContents {...props} name={'livestock'} />} />
+                  <Route component={HomeContents} />
                 </Switch>
 
                 <Footer />
@@ -92,6 +93,7 @@ class App extends Component {
             </MuiThemeProvider>
           </Router>
         );
+
     }
 }
 

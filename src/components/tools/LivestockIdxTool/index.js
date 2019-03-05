@@ -43,8 +43,14 @@ class LivestockIdxTool extends Component {
     constructor(props) {
         super(props);
         app = this.props.store.app;
-        app.livestock_downloadData()
         app.setToolName('livestock')
+        if (!app.getLocations || !app.getLocation) {
+            // get all stations, set selected station, and download data for selected tool
+            app.downloadStationInfo
+        } else {
+            // stations are already set, just download data for selected tool
+            app.livestock_downloadData()
+        }
     }
 
     render() {

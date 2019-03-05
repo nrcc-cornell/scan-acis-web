@@ -18,14 +18,17 @@ import { Map, GeoJSON, TileLayer } from 'react-leaflet';
 import StationExplorerLegend from '../../components/StationExplorerLegend';
 
 const mapContainer = 'map-container';
+//const maxBounds = [
+//    [24.9493, -125.0011],
+//    [49.5904, -66.9326]
+//];
 const maxBounds = [
-    [24.9493, -125.0011],
-    [49.5904, -66.9326]
+    [22.50, -172.50],
+    [71.50, -66.9326]
 ];
-//const mapCenter = [42.8, -75.5];
-const mapCenter = [37.0, -95.7];
-//const mapCenter = [37.0, -75.7];
-const zoomLevel = 4;
+//const mapCenter = [37.0, -95.7];
+const mapCenter = [53.04, -113.00];
+const zoomLevel = 3;
 const minZoomLevel = 3;
 const maxZoomLevel = 16;
 var app;
@@ -69,7 +72,7 @@ class StationExplorerMap extends Component {
                         attributionControl={true}
                         className={mapContainer}
                         style={{
-                            height:(this.state.height>500) ? '400px' : '300px',
+                            height:(this.state.height>500) ? '460px' : '300px',
                             width:(this.state.width>=960) ? this.state.width*0.54 : this.state.width*0.86,
                         }}
                     >

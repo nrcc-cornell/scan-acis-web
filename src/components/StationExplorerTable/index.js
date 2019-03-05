@@ -105,6 +105,8 @@ class StationExplorerTable extends Component {
                     </Typography>
                     <Typography variant="body1" gutterBottom>
                       <ul style={{"padding":0,"margin":0,"listStyleType":"none"}}>
+                        <li>Name: {app.getLocation_explorer.name}, {app.getLocation_explorer.state}</li>
+                        <li>Network: {(app.getLocation_explorer.network===17) ? 'SCAN' : 'T-SCAN'}</li>
                         <li>Latitude, Longitude: {app.getLocation_explorer.ll[1]}, {app.getLocation_explorer.ll[0]}</li>
                         <li>Elevation: {app.getLocation_explorer.elev} feet</li>
                         <li>Period of Record: {app.getLocation_explorer.sdate} to {porEnd}</li>

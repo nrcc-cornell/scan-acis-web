@@ -10,6 +10,7 @@ import '../../../../styles/GddBaseSelect.css';
 
 // selectable values: 32 - 50 degrees F
 const selectValues = Array.from(new Array(19), (x,i) => i + 32)
+selectValues.reverse()
 
 var disabled
 var selectOptions = []

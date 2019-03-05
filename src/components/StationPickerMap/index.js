@@ -17,13 +17,12 @@ import StationPickerLegend from '../../components/StationPickerLegend';
 
 const mapContainer = 'map-container';
 const maxBounds = [
-    [24.9493, -125.0011],
-    [49.5904, -66.9326]
+    [22.50, -172.50],
+    [71.50, -66.9326]
 ];
-//const mapCenter = [42.8, -75.5];
-const mapCenter = [37.0, -95.7];
-//const mapCenter = [37.0, -75.7];
-const zoomLevel = 4;
+//const mapCenter = [37.0, -95.7];
+const mapCenter = [53.04, -113.00];
+const zoomLevel = 3;
 const minZoomLevel = 3;
 const maxZoomLevel = 16;
 var app;

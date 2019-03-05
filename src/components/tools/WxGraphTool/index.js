@@ -46,8 +46,14 @@ class WxGraphTool extends Component {
     constructor(props) {
         super(props);
         app = this.props.store.app;
-        app.wxgraph_downloadData()
         app.setToolName('wxgrapher')
+        if (!app.getLocations || !app.getLocation) {
+            // get all stations, set selected station, and download data for selected tool
+            app.downloadStationInfo
+        } else {
+            // stations are already set, just download data for selected tool
+            app.wxgraph_downloadData()
+        }
     }
 
     render() {

@@ -9,8 +9,7 @@ except ImportError :
 	import simplejson as json
 
 def acis_ws(method,params) :
-	#acis_url = 'http://data.rcc-acis.org/'
-	acis_url = 'http://data.nrcc.rcc-acis.org/'
+	acis_url = 'http://data.rcc-acis.org/'
 	req = urllib2.Request(acis_url+method,
 		urllib.urlencode({'params':json.dumps(params)}),
 		{'Accept':'application/json'})
@@ -50,40 +49,25 @@ def getStdStartString(s):
 print 'Find all stations in network ...'
 print datetime.datetime.now()
 
-# filter by network, adjust content
-networks = ['17','19']
-stnListForNetwork = []
-
-### Continental U.S.
+# station meta data
+#pData = {"bbox":"-125,24.3,-66.8,49.4","meta":"uid,name,state,elev,ll,sids,sid_dates","output":"json"}
 pData = {"bbox":"-125,24.3,-66.8,49.4","meta":"sids","output":"json"}
+#pData = {"bbox":"-90,40,-88,41","meta":"sids","output":"json"}
 rData = acis_ws('StnMeta',pData)
 
+# filter by network, adjust content
+network = '5'
+stnListForNetwork = []
 for m in rData['meta']:
-	for network in networks:
-		# bypass station if it is not in network
-		if not np.any([' '+network in s for s in m['sids']]): continue
+	# bypass station if it is not in network
+	if not np.any([' '+network in s for s in m['sids']]): continue
 
-		stn = [s for s in m['sids'] if ' '+network in s][0]
-		stnListForNetwork.append(stn)
-
-### Alaska
-pData = {"state":"AK","meta":"sids","output":"json"}
-rData = acis_ws('StnMeta',pData)
-
-for m in rData['meta']:
-	for network in networks:
-		# bypass station if it is not in network
-		if not np.any([' '+network in s for s in m['sids']]): continue
-
-		stn = [s for s in m['sids'] if ' '+network in s][0]
-		stnListForNetwork.append(stn)
+	stn = [s for s in m['sids'] if ' '+network in s][0]
+	stnListForNetwork.append(stn)
 
 print 'Get climate summaries and metadata for these stations, and write to json file ...'
 print datetime.datetime.now()
-print stnListForNetwork
 
-### using fixed day until data are up-to-date
-#yest = datetime.date(2019,2,18)-datetime.timedelta(1)
 yest = datetime.datetime.now()-datetime.timedelta(1)
 dateString = yest.strftime('%Y-%m-%d')
 
@@ -200,50 +184,48 @@ for item in rData['data']:
 	m = item['meta']
 	d = item['data']
 
-	for network in networks:
+	# bypass station if it is not in network
+	if not np.any([' '+network in s for s in m['sids']]): continue
 
-		# bypass station if it is not in network
-		if not np.any([' '+network in s for s in m['sids']]): continue
+	stn = [s for s in m['sids'] if ' '+network in s][0]
+	sdate = [dList[1] for dList in m['sid_dates'] if stn in dList][0]
+	edate = [dList[2] for dList in m['sid_dates'] if stn in dList][0]
 
-		stn = [s for s in m['sids'] if ' '+network in s][0]
-		sdate = [dList[1] for dList in m['sid_dates'] if stn in dList][0]
-		edate = [dList[2] for dList in m['sid_dates'] if stn in dList][0]
+	stnDict = {}
+	stnDict['uid'] = m['uid']
+	stnDict['sid'] = stn
+	stnDict['ll'] = m['ll']
+	stnDict['name'] = m['name']
+	stnDict['state'] = m['state']
+	stnDict['elev'] = m['elev'] if 'elev' in m.keys() else 'N/A'
+	stnDict['sdate'] = sdate
+	stnDict['edate'] = edate
+	stnDict['network'] = int(network)
+	stnDict['p_ytd_o'] = d[0]
+	stnDict['p_ytd_n'] = d[1]
+	stnDict['p_std_o'] = d[2]
+	stnDict['p_std_n'] = d[3]
+	stnDict['p_mtd_o'] = d[4]
+	stnDict['p_mtd_n'] = d[5]
+	stnDict['t_ytd_o'] = d[6]
+	stnDict['t_ytd_n'] = d[7]
+	stnDict['t_std_o'] = d[8]
+	stnDict['t_std_n'] = d[9]
+	stnDict['t_mtd_o'] = d[10]
+	stnDict['t_mtd_n'] = d[11]
 
-		stnDict = {}
-		stnDict['uid'] = m['uid']
-		stnDict['sid'] = stn
-		stnDict['ll'] = m['ll']
-		stnDict['name'] = m['name']
-		stnDict['state'] = m['state']
-		stnDict['elev'] = m['elev'] if 'elev' in m.keys() else 'N/A'
-		stnDict['sdate'] = sdate
-		stnDict['edate'] = edate
-		stnDict['network'] = int(network)
-		stnDict['p_ytd_o'] = d[0]
-		stnDict['p_ytd_n'] = d[1]
-		stnDict['p_std_o'] = d[2]
-		stnDict['p_std_n'] = d[3]
-		stnDict['p_mtd_o'] = d[4]
-		stnDict['p_mtd_n'] = d[5]
-		stnDict['t_ytd_o'] = d[6]
-		stnDict['t_ytd_n'] = d[7]
-		stnDict['t_std_o'] = d[8]
-		stnDict['t_std_n'] = d[9]
-		stnDict['t_mtd_o'] = d[10]
-		stnDict['t_mtd_n'] = d[11]
-
-		stnDataOut.append(stnDict)
+	stnDataOut.append(stnDict)
 
 dataOut = {
 	'date':dateString,
         'ytd_start': 'Jan 1',
 	'mtd_start':getMtdStartLabel(dateString),
 	'std_start':getStdStartLabel(dateString),
-	'locs':stnDataOut,
+	'locs':stnDataOut[-300:],
 }
 
 #for d in rData['data']: print d
 
-with open('scan_stations.json', 'w') as f:
+with open('icao_stations.json', 'w') as f:
     json.dump(dataOut, f)
 

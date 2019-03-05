@@ -52,7 +52,7 @@ class ExtremeSwitch extends Component {
                   }}
             />
           }
-          label="Extreme Mode"
+          label="View Extreme Thresholds"
         />
     );
   }

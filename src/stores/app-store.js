@@ -126,10 +126,12 @@ export class AppStore {
     /// StationPicker
     //////////////////////////////////////////////
     // get currently selected location object (for station picker)
-    @observable location = {"uid":29861,"state":"NY","ll":[-76.1038,43.1111],"name":"SYRACUSE HANCOCK INTL AP", "sid":"KSYR", "network":5};
+    //@observable location = {"uid":29861,"state":"NY","ll":[-76.1038,43.1111],"name":"SYRACUSE HANCOCK INTL AP", "sid":"KSYR", "network":5};
+    @observable location = null
     @action setLocation = (l) => {
-        if (this.getLocation.uid.toString() !== l.toString()) {
-            this.location = this.getLocations.find(obj => obj.uid === l);
+        let uidString = (this.getLocation) ? this.getLocation.uid.toString() : ''
+        if (uidString !== l.toString()) {
+            this.location = (this.getLocations) ? this.getLocations.find(obj => obj.uid === l) : null
             if (this.getToolName==='gddtool' && this.toolIsSelected) { this.gddtool_downloadData() }
             if (this.getToolName==='wxgrapher' && this.toolIsSelected) { this.wxgraph_downloadData() }
             if (this.getToolName==='livestock' && this.toolIsSelected) { this.livestock_downloadData() }
@@ -152,7 +154,8 @@ export class AppStore {
     @computed get getLocation() { return this.location };
 
     // get currently selected location object (for station explorer)
-    @observable location_explorer = {"uid":29861,"state":"NY","ll":[-76.1038,43.1111],"name":"SYRACUSE HANCOCK INTL AP", "sid":"KSYR", "network":5};
+    //@observable location_explorer = {"uid":29861,"state":"NY","ll":[-76.1038,43.1111],"name":"SYRACUSE HANCOCK INTL AP", "sid":"KSYR", "network":5};
+    @observable location_explorer = null;
     @action setLocation_explorer = (l) => {
         this.location_explorer = this.getLocations.find(obj => obj.uid === l);
     }
@@ -218,12 +221,14 @@ export class AppStore {
     }
 
     stationFeatureStyle = (feature) => {
+        // SCAN network is 17
+        // T-SCAN network is 19
         return {
-            radius: 3,
+            radius: 2,
             weight: 1,
             opacity: 1.0,
-            color: (feature.properties.network===5) ? 'blue' : 'green',
-            fillColor: (feature.properties.network===5) ? 'blue' : 'green',
+            color: (feature.properties.network===17) ? 'blue' : 'green',
+            fillColor: (feature.properties.network===17) ? 'blue' : 'green',
             fillOpacity: 1.0
         };
     }
@@ -291,7 +296,7 @@ export class AppStore {
         //    {"uid":1978,"state":"CA","ll":[-118.3888,33.938],"name":"LOS ANGELES INTL AP", "sid":"KLAX", "network":1}]
         //this.setLocations(locs)
         //fetch("/icao_stations.json")
-        fetch(process.env.PUBLIC_URL + "/data/icao_stations.json")
+        fetch(process.env.PUBLIC_URL + "/data/scan_stations.json")
              //.then(res => res.text())          // convert to plain text
              //.then(text => console.log(text))  // then log it out
              .then(r => r.json())
@@ -301,6 +306,9 @@ export class AppStore {
                this.setLocation(data['locs'][30].uid);
                this.setLocation_explorer(data['locs'][30].uid);
                this.setDatesForLocations({'date':data['date'],'ytd_start':data['ytd_start'],'std_start':data['std_start'],'mtd_start':data['mtd_start']});
+               if (this.getToolName==='gddtool') {this.gddtool_downloadData}
+               if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData}
+               if (this.getToolName==='livestock') {this.livestock_downloadData}
              });
     }
 
@@ -344,7 +352,7 @@ export class AppStore {
         return thisYear
     };
 
-    @observable planting_date = moment('05/15/'+this.latestSelectableYear,'MM-DD-YYYY');
+    @observable planting_date = moment('01/01/'+this.latestSelectableYear,'MM-DD-YYYY');
     @action setPlantingDate = (v) => {
       this.planting_date = v
       //this.gddtool_setChartData()
@@ -576,7 +584,8 @@ export class AppStore {
                 "interval":[0,0,1],
                 "duration":"std",
                 "season_start":[1,1],
-                "reduce":"sum"
+                "reduce":"sum",
+                "maxmissing":1
             }]
             if (this.gddtool_getBase==='50' && this.gddtool_getIsMethod8650) {
                 elems[0]["limit"]=[50,86]
@@ -606,7 +615,8 @@ export class AppStore {
         this.gddtool_setDataIsLoading(true);
         return axios
           //.post(`${protocol}//grid2.rcc-acis.org/GridData`, this.getAcisParams)
-          .post(`${protocol}//data.rcc-acis.org/StnData`, this.getAcisParams)
+          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.getAcisParams)
+          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.getAcisParams)
           .then(res => {
             console.log('SUCCESS downloading from ACIS');
             console.log(res);
@@ -633,6 +643,7 @@ export class AppStore {
     @observable wxgraph_extSwitch=false;
     @action wxgraph_setExtSwitch = event => {
             this.wxgraph_extSwitch = event.target.checked
+            if (this.getToolName==='wxgrapher') { this.wxgraph_downloadData() }
         }
     @action wxgraph_setExtSwitchManual = (b) => {
             this.wxgraph_extSwitch = b
@@ -645,7 +656,7 @@ export class AppStore {
     @observable wxgraph_vars={
             airtemp : true,
             rainfall : true,
-            soiltemp : true,
+            soiltemp : false,
             soilmoist : false,
             humidity : false,
             solarrad : false,
@@ -661,14 +672,13 @@ export class AppStore {
     @computed get wxgraph_getVarLabels() {
         if (this.wxgraph_extSwitch) {
           return {
-            airtemp_label : 'TBD',
-            rainfall_label : 'TBD',
-            soiltemp_label : 'TBD',
-            soilmoist_label : 'TBD',
-            humidity_label : 'TBD',
-            solarrad_label : 'TBD',
-            wind_label : 'TBD',
-            leafwet_label : 'TBD',
+            airtemp_label : 'Temp > 100°F',
+            rainfall_label : 'Temp > 90°F',
+            soiltemp_label : 'Temp > 80°F',
+            soilmoist_label : 'Precip > 4 Inches',
+            humidity_label : 'Precip > 3 Inches',
+            solarrad_label : 'Precip > 2 Inches',
+            wind_label : 'Precip > 1 Inch',
           };
         } else {
           return {
@@ -678,7 +688,7 @@ export class AppStore {
             soilmoist_label : 'Soil Moisture',
             humidity_label : 'Humidity',
             solarrad_label : 'Solar Radiation',
-            wind_label : 'Wind',
+            wind_label : 'Wind Speed',
             leafwet_label : 'Leaf Wetness',
           };
         }
@@ -703,7 +713,7 @@ export class AppStore {
             soiltemp_units : '°F',
             soilmoist_units : '%',
             humidity_units : '%',
-            solarrad_units : 'W/m2',
+            solarrad_units : (this.wxgraph_getTimeFrame==='two_days') ? 'W/m2' : 'langleys',
             wind_units : 'mph',
             leafwet_units : 'units',
           };
@@ -729,7 +739,7 @@ export class AppStore {
     //     soilt : average temperature for day (F)
     //     soilm : average soil moisture for day (%)
     //     humid : average humidity for day (%)
-    //     solar : total solar radiation for day (W/m2)
+    //     solar : total solar radiation for day (W/m2 for hourly inst, langleys for daily sum)
     //     wind : average wind speed for day (mph)
     //     leafwet : average leaf wetness for day (units)
     @observable wxgraph_climateSummary = {'por':[{
@@ -793,67 +803,72 @@ export class AppStore {
         let dataObjArray_days = [];
         let dataObjArray_months = [];
         let dataObjArray_years = [];
+        let dataObjArray_extremes = [];
         let i, dateToday, numHours, numFutureMissingHours;
-        //let timeFrame = this.wxgraph_getTimeFrame
         let formattedHourString
-        // daily data for two months
+        let timeFrame = this.wxgraph_getTimeFrame
+        let extSwitch = this.wxgraph_getExtSwitch
         data.forEach(function (d) {
-              dateToday = d[0]
-              // daily data for two months
-              if (dateToday<moment().add(-2,'months').format('YYYY-MM-DD')) { return }
+            if (timeFrame==='two_months') {
+              // daily data
               dataObjArray_days.push({
-                  'date':d[0],
-                  'avgt':(d[1].includes('M')) ? NaN : arrAvg(d[1].map(Number)).toFixed(1),
-                  //'pcpn':(d[2]==='M') ? NaN : ((d[2]==='T') ? 0.00 : parseFloat(d[2]).toFixed(2)),
-                  'pcpn':(d[2].includes('M')) ? NaN : arrSum(d[2].map(Number)).toFixed(2),
-                  'soilt':(d[3].includes('M')) ? NaN : arrAvg(d[3].map(Number)).toFixed(1),
-                  'soilm':(d[4].includes('M')) ? NaN : arrAvg(d[4].map(Number)).toFixed(1),
-                  'humid':(d[5].includes('M')) ? NaN : arrAvg(d[5].map(Number)).toFixed(1),
-                  'solar':(d[6].includes('M')) ? NaN : arrAvg(d[6].map(Number)).toFixed(1),
-                  'wind':(d[7].includes('M')) ? NaN : arrAvg(d[7].map(Number)).toFixed(1),
-                  'leafwet':(d[8].includes('M')) ? NaN : arrAvg(d[8].map(Number)).toFixed(1),
+                'date':d[0],
+                'avgt':(d[1]==='M') ? NaN : parseFloat(d[1]).toFixed(1),
+                'pcpn':(d[2]==='M') ? NaN : ((d[2]==='T') ? 0.00 : parseFloat(d[2])).toFixed(2),
+                'soilt':(d[3]==='M') ? NaN : parseFloat(d[3]).toFixed(1),
+                'soilm':(d[4]==='M') ? NaN : parseFloat(d[4]).toFixed(1),
+                //'humid':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
+                'humid':NaN,
+                'solar':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
+                'wind':(d[6]==='M') ? NaN : parseFloat(d[6]).toFixed(1),
+                //'leafwet':(d[8]==='M') ? NaN : parseFloat(d[8]).toFixed(1),
+                'leafwet':NaN,
               })
-          })
-        // monthly data for two years
-        let monthToday;
-        let monthTodayOld='00';
-        let dataThisMonth={};
-        data.forEach(function (d) {
-              dateToday = d[0];
-              // start on the first day of the first whole month within the last two years ... skip days if before
-              if (dateToday<moment().subtract(2,'years').add(1,'months').day(1).format('YYYY-MM-DD')) { return }
-              monthToday = d[0].split('-')[1];
-              if (monthToday!==monthTodayOld) {
-                  // new month - perform calcs on saved data for previous month
-                  if (monthTodayOld!=='00') {
-                      dataObjArray_months.push({
-                          'date':moment(d[0],"YYYY-MM-DD").add(-1,'months').format('YYYY-MM-DD'),
-                          'avgt':(dataThisMonth['avgt'].includes(NaN)) ? NaN : arrAvg(dataThisMonth['avgt']).toFixed(1),
-                          'pcpn':(dataThisMonth['pcpn'].includes(NaN)) ? NaN : arrSum(dataThisMonth['pcpn']).toFixed(2),
-                          'soilt':(dataThisMonth['soilt'].includes(NaN)) ? NaN : arrAvg(dataThisMonth['soilt']).toFixed(1),
-                          'soilm':(dataThisMonth['soilm'].includes(NaN)) ? NaN : arrAvg(dataThisMonth['soilm']).toFixed(1),
-                          'humid':(dataThisMonth['humid'].includes(NaN)) ? NaN : arrAvg(dataThisMonth['humid']).toFixed(1),
-                          'solar':(dataThisMonth['solar'].includes(NaN)) ? NaN : arrAvg(dataThisMonth['solar']).toFixed(1),
-                          'wind':(dataThisMonth['wind'].includes(NaN)) ? NaN : arrAvg(dataThisMonth['wind']).toFixed(1),
-                          'leafwet':(dataThisMonth['leafwet'].includes(NaN)) ? NaN : arrAvg(dataThisMonth['leafwet']).toFixed(1),
-                      })
-                  }
-                  // reinit data arrays and start saving data for this month
-                  dataThisMonth = {'avgt':[],'pcpn':[],'soilt':[],'soilm':[],'humid':[],'solar':[],'wind':[],'leafwet':[]}
-                  monthTodayOld=d[0].split('-')[1]
+            } else if (timeFrame==='two_years') {
+              // monthly data
+              dataObjArray_months.push({
+                'date':d[0],
+                'avgt':(d[1]==='M') ? NaN : parseFloat(d[1]).toFixed(1),
+                'pcpn':(d[2]==='M') ? NaN : ((d[2]==='T') ? 0.00 : parseFloat(d[2])).toFixed(2),
+                'soilt':(d[3]==='M') ? NaN : parseFloat(d[3]).toFixed(1),
+                'soilm':(d[4]==='M') ? NaN : parseFloat(d[4]).toFixed(1),
+                //'humid':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
+                'humid':NaN,
+                'solar':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
+                'wind':(d[6]==='M') ? NaN : parseFloat(d[6]).toFixed(1),
+                //'leafwet':(d[8]==='M') ? NaN : parseFloat(d[8]).toFixed(1),
+                'leafwet':NaN,
+              })
+            } else if (timeFrame==='por') {
+              // yearly data
+              if (!extSwitch) {
+                  dataObjArray_years.push({
+                    'date':d[0],
+                    'avgt':(d[1]==='M') ? NaN : parseFloat(d[1]).toFixed(1),
+                    'pcpn':(d[2]==='M') ? NaN : ((d[2]==='T') ? 0.00 : parseFloat(d[2])).toFixed(2),
+                    'soilt':(d[3]==='M') ? NaN : parseFloat(d[3]).toFixed(1),
+                    'soilm':(d[4]==='M') ? NaN : parseFloat(d[4]).toFixed(1),
+                    //'humid':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
+                    'humid':NaN,
+                    'solar':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
+                    'wind':(d[6]==='M') ? NaN : parseFloat(d[6]).toFixed(1),
+                    //'leafwet':(d[8]==='M') ? NaN : parseFloat(d[8]).toFixed(1),
+                    'leafwet':NaN,
+                  })
+              } else {
+                  dataObjArray_extremes.push({
+                    'date':d[0],
+                    'cnt_t_gt_100':(d[1]==='M') ? NaN : parseInt(d[1],10),
+                    'cnt_t_gt_90':(d[2]==='M') ? NaN : parseInt(d[2],10),
+                    'cnt_t_gt_80':(d[3]==='M') ? NaN : parseInt(d[3],10),
+                    'cnt_p_gt_4':(d[4]==='M') ? NaN : parseInt(d[4],10),
+                    'cnt_p_gt_3':(d[5]==='M') ? NaN : parseInt(d[5],10),
+                    'cnt_p_gt_2':(d[6]==='M') ? NaN : parseInt(d[6],10),
+                    'cnt_p_gt_1':(d[7]==='M') ? NaN : parseInt(d[7],10),
+                  })
               }
-              // saving data for this day to current month array
-              dataThisMonth['avgt'].push( (d[1].includes('M')) ? NaN : arrAvg(d[1].map(Number)) );
-              dataThisMonth['pcpn'].push( (d[2].includes('M')) ? NaN : arrSum(d[2].map(Number)) );
-              dataThisMonth['soilt'].push( (d[3].includes('M')) ? NaN : arrAvg(d[3].map(Number)) );
-              dataThisMonth['soilm'].push( (d[4].includes('M')) ? NaN : arrAvg(d[4].map(Number)) );
-              dataThisMonth['humid'].push( (d[5].includes('M')) ? NaN : arrAvg(d[5].map(Number)) );
-              dataThisMonth['solar'].push( (d[6].includes('M')) ? NaN : arrAvg(d[6].map(Number)) );
-              dataThisMonth['wind'].push( (d[7].includes('M')) ? NaN : arrAvg(d[7].map(Number)) );
-              dataThisMonth['leafwet'].push( (d[8].includes('M')) ? NaN : arrAvg(d[8].map(Number)) );
-          })
-        // hourly data for two days
-        data.forEach(function (d) {
+            } else {
+              // hourly data
               dateToday = d[0]
               // hourly data
               if (dateToday<moment().add(-3,'days').format('YYYY-MM-DD')) { return }
@@ -933,9 +948,10 @@ export class AppStore {
                       })
                   }
               }
-          })
+            }
+        })
 
-        this.wxgraph_climateSummary = {'por':dataObjArray_years,'two_years':dataObjArray_months,'two_months':dataObjArray_days,'two_days':dataObjArray_hours}
+        this.wxgraph_climateSummary = {'extremes':dataObjArray_extremes,'por':dataObjArray_years,'two_years':dataObjArray_months,'two_months':dataObjArray_days,'two_days':dataObjArray_hours}
         //this.wxgraph_climateSummary = [dataObjArray_years, dataObjArray_months, dataObjArray_days, dataObjArray_hours]
     }
     @computed get wxgraph_getClimateSummary() {
@@ -954,7 +970,7 @@ export class AppStore {
         // only update and download data if time frame has changed
         if (changed===true) {
             this.wxgraph_timeFrame = t;
-            //if (this.getToolName==='wxgrapher') { this.wxgraph_downloadData() }
+            if (this.getToolName==='wxgrapher') { this.wxgraph_downloadData() }
         }
     }
     @action wxgraph_setTimeFrameFromRadioGroup = (e) => {
@@ -966,7 +982,7 @@ export class AppStore {
         // only update and download data if time frame has changed
         if (changed===true) {
             this.wxgraph_timeFrame = t;
-            //if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
+            if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
         }
     }
     @computed get wxgraph_getTimeFrame() {
@@ -977,28 +993,91 @@ export class AppStore {
     // Wx Grapher tool data download - set parameters
     @computed get wxgraph_getAcisParams() {
             let elems
-            //let numdays
-            elems = [
-                {"vX":23}, //temp
-                {"vX":5}, //pcpn
-                {"vX":120}, //soil temperature
-                {"vX":104}, //soil moisture
-                {"vX":24}, //relative humidity
-                {"vX":132}, //solar radiation
-                {"vX":28}, //wind speed
-                {"vX":118}, //leaf wetness
-            ]
-            //numdays=-3
+            let numdays
+            if (this.wxgraph_getTimeFrame==='two_days') {
+                elems = [
+                    {"vX":23}, //temp
+                    {"vX":5}, //pcpn
+                    {"vX":120}, //soil temperature
+                    {"vX":104}, //soil moisture
+                    {"vX":24}, //relative humidity
+                    {"vX":149}, //solar radiation
+                    {"vX":128}, //wind speed
+                    {"vX":118}, //leaf wetness
+                ]
+                numdays=-3
+            } else if (this.wxgraph_getTimeFrame==='two_months') {
+                elems = [
+                    {"name":"avgt","interval":[0,0,1],"duration":"dly"},
+                    {"name":"pcpn","interval":[0,0,1],"duration":"dly"},
+                    {"vX":69,"interval":[0,0,1],"duration":"dly"},
+                    {"vX":68,"interval":[0,0,1],"duration":"dly"},
+                    //{"vX":71,"interval":[0,0,1],"duration":"dly"},
+                    {"vX":70,"interval":[0,0,1],"duration":"dly"},
+                    {"vX":89,"interval":[0,0,1],"duration":"dly"},
+                    //{"vX":118,"interval":[0,0,1],"duration":"dly"},
+                ]
+                numdays=-60
+            } else if (this.wxgraph_getTimeFrame==='two_years') {
+                elems = [
+                    {"name":"avgt","interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3},
+                    {"name":"pcpn","interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3},
+                    {"vX":69,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3},
+                    {"vX":68,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3},
+                    //{"vX":71,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3},
+                    {"vX":70,"interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3},
+                    {"vX":89,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3},
+                    //{"vX":118,"interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3},
+                ]
+                numdays=-730
+            } else if (this.wxgraph_getTimeFrame==='por') {
+                //if (!this.wxgraph_getExtSwitch) {
+                if (!this.wxgraph_getExtSwitch) {
+                    elems = [
+                        {"name":"avgt","interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10},
+                        {"name":"pcpn","interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10},
+                        {"vX":69,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10},
+                        {"vX":68,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10},
+                        //{"vX":71,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10},
+                        {"vX":70,"interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10},
+                        {"vX":89,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10},
+                        //{"vX":118,"interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10},
+                    ]
+                } else {
+                    elems = [
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_100"},"maxmissing":10},
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_90"},"maxmissing":10},
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_80"},"maxmissing":10},
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_4"},"maxmissing":10},
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_3"},"maxmissing":10},
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_2"},"maxmissing":10},
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_1"},"maxmissing":10},
+                    ]
+                }
+            }
 
-            return {
-                "sid":this.getLocation.sid,
-                //"sdate":"por",
-                //"edate":"por",
-                //"sdate":moment().add(numdays,'days').format("YYYY-MM-DD"),
-                "sdate":moment().add(-2,'years').format("YYYY-MM-DD"),
-                "edate":moment().format("YYYY-MM-DD"),
-                "elems":elems,
-                "meta":""
+            if (this.wxgraph_getTimeFrame==='por') {
+                return {
+                        "sid":this.getLocation.sid,
+                        "sdate":"por",
+                        "edate":"por",
+                        "elems":elems
+                    }
+            } else if (this.wxgraph_getTimeFrame==='two_years' || this.wxgraph_getTimeFrame==="two_months") {
+                return {
+                        "sid":this.getLocation.sid,
+                        "sdate":moment().add(numdays,'days').format("YYYY-MM-DD"),
+                        "edate":moment().format("YYYY-MM-DD"),
+                        "elems":elems
+                    }
+            } else {
+                return {
+                        "sid":this.getLocation.sid,
+                        "sdate":moment().add(numdays,'days').format("YYYY-MM-DD"),
+                        "edate":moment().format("YYYY-MM-DD"),
+                        "elems":elems,
+                        "meta":""
+                    }
             }
         }
 
@@ -1020,7 +1099,7 @@ export class AppStore {
           .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
           .then(res => {
             console.log('SUCCESS downloading from ACIS');
-            //console.log(res);
+            console.log(res);
             if (res.data.hasOwnProperty('error')) {
                 console.log('Error: resetting data to null');
                 this.wxgraph_setClimateData(null);
@@ -1086,7 +1165,7 @@ export class AppStore {
     @action livestock_setLivestockTypeFromRadioGroup = (e) => {
         let t = e.target.value;
         // has the livestock changed?
-        let changed = (this.wxgraph_getLivestockType===t) ? false : true
+        let changed = (this.livestock_getLivestockType===t) ? false : true
         // only update and download data if time frame has changed
         if (changed===true) {
             this.livestock_livestockType = t;
@@ -1103,15 +1182,18 @@ export class AppStore {
             elems = [
                 {"vX":23}, //temp
                 {"vX":24}, //relative humidity
-                {"vX":132}, //solar radiation
-                {"vX":28}, //wind speed
+                {"vX":149}, //solar radiation
+                {"vX":128}, //wind speed
             ]
             numdays=-2
 
             return {
                 "sid":this.getLocation.sid,
-                "sdate":moment().add(numdays,'days').format("YYYY-MM-DD"),
-                "edate":moment().format("YYYY-MM-DD"),
+                //"sdate":moment().add(numdays,'days').format("YYYY-MM-DD"),
+                //"edate":moment().format("YYYY-MM-DD"),
+                // testing until data are up-to-date
+                "sdate":moment('2019-02-17','YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                "edate":moment('2019-02-17','YYYY-MM-DD').format("YYYY-MM-DD"),
                 "elems":elems,
                 "meta":""
             }
@@ -1180,7 +1262,7 @@ export class AppStore {
                   svar = (d[3][23]==='M') ? NaN : parseFloat(d[3][23])
                   wvar = (d[4][23]==='M') ? NaN : parseFloat(d[4][23])
                   // use estimate of solar radiation, if unavailable
-                  if (!svar) { svar = 1000 };
+                  //if (!svar) { svar = 1000 };
                   if (!isNaN(tvar) && !isNaN(hvar) && !isNaN(svar) && !isNaN(wvar)) {
                       //https://www.ars.usda.gov/plains-area/clay-center-ne/marc/docs/heat-stress/forecastingheatstress/
                       cattleIdx = (2.83*tvar) + (0.58*hvar) - (0.76*wvar) + (0.039*svar) - 196.4
@@ -1218,7 +1300,7 @@ export class AppStore {
                       svar = (d[3][i]==='M') ? NaN : parseFloat(d[3][i])
                       wvar = (d[4][i]==='M') ? NaN : parseFloat(d[4][i])
                       // use estimate of solar radiation, if unavailable
-                      if (!svar) { svar = 1000 };
+                      //if (!svar) { svar = 1000 };
                       if (!isNaN(tvar) && !isNaN(hvar) && !isNaN(svar) && !isNaN(wvar)) {
                           //https://www.ars.usda.gov/plains-area/clay-center-ne/marc/docs/heat-stress/forecastingheatstress/
                           cattleIdx = (2.83*tvar) + (0.58*hvar) - (0.76*wvar) + (0.039*svar) - 196.4
@@ -1255,7 +1337,7 @@ export class AppStore {
                       svar = (d[3][i]==='M') ? NaN : parseFloat(d[3][i])
                       wvar = (d[4][i]==='M') ? NaN : parseFloat(d[4][i])
                       // use estimate of solar radiation, if unavailable
-                      if (!svar) { svar = 1000 };
+                      //if (!svar) { svar = 1000 };
                       if (!isNaN(tvar) && !isNaN(hvar) && !isNaN(svar) && !isNaN(wvar)) {
                           //https://www.ars.usda.gov/plains-area/clay-center-ne/marc/docs/heat-stress/forecastingheatstress/
                           cattleIdx = (2.83*tvar) + (0.58*hvar) - (0.76*wvar) + (0.039*svar) - 196.4

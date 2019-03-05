@@ -42,7 +42,7 @@ class StationSelect extends Component {
         let selectOptions = []
         for (var v of this.props.names) {
             disabled = false
-            selectOptions.push({ value: v.uid.toString(), label: v.name, clearableValue: false, disabled: disabled })
+            selectOptions.push({ value: v.uid.toString(), label: v.name+', '+v.state, clearableValue: false, disabled: disabled })
         }
 
         return (

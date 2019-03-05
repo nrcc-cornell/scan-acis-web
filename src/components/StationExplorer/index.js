@@ -41,7 +41,7 @@ class StationExplorer extends Component {
                         { this.props.store.app.getLocations && (<StationExplorerMap />)}
                       </Grid>
                       <Grid item xs={12} md={4}>
-                          { this.props.store.app.getLocations && (<StationExplorerTable />)}
+                          { this.props.store.app.getLocation_explorer && (<StationExplorerTable />)}
                       </Grid>
                   </Grid>
         );

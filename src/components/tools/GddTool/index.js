@@ -24,8 +24,14 @@ class GddTool extends Component {
     constructor(props) {
         super(props);
         app = this.props.store.app;
-        app.gddtool_downloadData()
         app.setToolName('gddtool')
+        if (!app.getLocations || !app.getLocation) {
+            // get all stations, set selected station, and download data for selected tool
+            app.downloadStationInfo
+        } else {
+            // stations are already set, just download data for selected tool
+            app.gddtool_downloadData()
+        }
     }
 
     render() {

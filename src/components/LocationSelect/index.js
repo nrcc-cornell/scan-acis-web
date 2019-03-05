@@ -37,7 +37,7 @@ class LocationSelect extends Component {
           <div>
               <Grid container spacing="8">
                 <Grid item xs={9} md={6}>
-                  <StationSelect names={app.getLocations} />
+                  {app.getLocations && app.getLocation && <StationSelect names={app.getLocations} />}
                 </Grid>
                 <Grid item xs={3}>
                   <Button variant="contained" color="primary" onClick={()=>{app.setShowModalMap(true)}}>
