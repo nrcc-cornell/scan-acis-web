@@ -227,8 +227,8 @@ export class AppStore {
             radius: 2,
             weight: 1,
             opacity: 1.0,
-            color: (feature.properties.network===17) ? 'blue' : 'green',
-            fillColor: (feature.properties.network===17) ? 'blue' : 'green',
+            color: (feature.properties.network===17) ? 'blue' : 'red',
+            fillColor: (feature.properties.network===17) ? 'blue' : 'red',
             fillOpacity: 1.0
         };
     }
@@ -814,14 +814,24 @@ export class AppStore {
               dataObjArray_days.push({
                 'date':d[0],
                 'avgt':(d[1]==='M') ? NaN : parseFloat(d[1]).toFixed(1),
-                'pcpn':(d[2]==='M') ? NaN : ((d[2]==='T') ? 0.00 : parseFloat(d[2])).toFixed(2),
-                'soilt':(d[3]==='M') ? NaN : parseFloat(d[3]).toFixed(1),
-                'soilm':(d[4]==='M') ? NaN : parseFloat(d[4]).toFixed(1),
-                //'humid':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
+                'maxt':(d[2]==='M') ? NaN : parseFloat(d[2]).toFixed(1),
+                'mint':(d[3]==='M') ? NaN : parseFloat(d[3]).toFixed(1),
+                'pcpn':(d[4]==='M') ? NaN : ((d[4]==='T') ? 0.00 : parseFloat(d[4])).toFixed(2),
+                'soilt2in':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
+                'soilt4in':(d[6]==='M') ? NaN : parseFloat(d[6]).toFixed(1),
+                'soilt8in':(d[7]==='M') ? NaN : parseFloat(d[7]).toFixed(1),
+                'soilt20in':(d[8]==='M') ? NaN : parseFloat(d[8]).toFixed(1),
+                'soilt40in':(d[9]==='M') ? NaN : parseFloat(d[9]).toFixed(1),
+                'soilm2in':(d[10]==='M') ? NaN : parseFloat(d[10]).toFixed(1),
+                'soilm4in':(d[11]==='M') ? NaN : parseFloat(d[11]).toFixed(1),
+                'soilm8in':(d[12]==='M') ? NaN : parseFloat(d[12]).toFixed(1),
+                'soilm20in':(d[13]==='M') ? NaN : parseFloat(d[13]).toFixed(1),
+                'soilm40in':(d[14]==='M') ? NaN : parseFloat(d[14]).toFixed(1),
                 'humid':NaN,
-                'solar':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
-                'wind':(d[6]==='M') ? NaN : parseFloat(d[6]).toFixed(1),
-                //'leafwet':(d[8]==='M') ? NaN : parseFloat(d[8]).toFixed(1),
+                'solar':(d[15]==='M') ? NaN : parseFloat(d[15]).toFixed(1),
+                'windspdmax':(d[16]==='M') ? NaN : parseFloat(d[16]).toFixed(1),
+                'windspdave':(d[17]==='M') ? NaN : parseFloat(d[17]).toFixed(1),
+                'winddirave':(d[18]==='M') ? NaN : parseFloat(d[18]).toFixed(1),
                 'leafwet':NaN,
               })
             } else if (timeFrame==='two_years') {
@@ -829,14 +839,24 @@ export class AppStore {
               dataObjArray_months.push({
                 'date':d[0],
                 'avgt':(d[1]==='M') ? NaN : parseFloat(d[1]).toFixed(1),
-                'pcpn':(d[2]==='M') ? NaN : ((d[2]==='T') ? 0.00 : parseFloat(d[2])).toFixed(2),
-                'soilt':(d[3]==='M') ? NaN : parseFloat(d[3]).toFixed(1),
-                'soilm':(d[4]==='M') ? NaN : parseFloat(d[4]).toFixed(1),
-                //'humid':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
+                'maxt':(d[2]==='M') ? NaN : parseFloat(d[2]).toFixed(1),
+                'mint':(d[3]==='M') ? NaN : parseFloat(d[3]).toFixed(1),
+                'pcpn':(d[4]==='M') ? NaN : ((d[4]==='T') ? 0.00 : parseFloat(d[4])).toFixed(2),
+                'soilt2in':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
+                'soilt4in':(d[6]==='M') ? NaN : parseFloat(d[6]).toFixed(1),
+                'soilt8in':(d[7]==='M') ? NaN : parseFloat(d[7]).toFixed(1),
+                'soilt20in':(d[8]==='M') ? NaN : parseFloat(d[8]).toFixed(1),
+                'soilt40in':(d[9]==='M') ? NaN : parseFloat(d[9]).toFixed(1),
+                'soilm2in':(d[10]==='M') ? NaN : parseFloat(d[10]).toFixed(1),
+                'soilm4in':(d[11]==='M') ? NaN : parseFloat(d[11]).toFixed(1),
+                'soilm8in':(d[12]==='M') ? NaN : parseFloat(d[12]).toFixed(1),
+                'soilm20in':(d[13]==='M') ? NaN : parseFloat(d[13]).toFixed(1),
+                'soilm40in':(d[14]==='M') ? NaN : parseFloat(d[14]).toFixed(1),
                 'humid':NaN,
-                'solar':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
-                'wind':(d[6]==='M') ? NaN : parseFloat(d[6]).toFixed(1),
-                //'leafwet':(d[8]==='M') ? NaN : parseFloat(d[8]).toFixed(1),
+                'solar':(d[15]==='M') ? NaN : parseFloat(d[15]).toFixed(1),
+                'windspdmax':(d[16]==='M') ? NaN : parseFloat(d[16]).toFixed(1),
+                'windspdave':(d[17]==='M') ? NaN : parseFloat(d[17]).toFixed(1),
+                'winddirave':(d[18]==='M') ? NaN : parseFloat(d[18]).toFixed(1),
                 'leafwet':NaN,
               })
             } else if (timeFrame==='por') {
@@ -845,14 +865,24 @@ export class AppStore {
                   dataObjArray_years.push({
                     'date':d[0],
                     'avgt':(d[1]==='M') ? NaN : parseFloat(d[1]).toFixed(1),
-                    'pcpn':(d[2]==='M') ? NaN : ((d[2]==='T') ? 0.00 : parseFloat(d[2])).toFixed(2),
-                    'soilt':(d[3]==='M') ? NaN : parseFloat(d[3]).toFixed(1),
-                    'soilm':(d[4]==='M') ? NaN : parseFloat(d[4]).toFixed(1),
-                    //'humid':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
+                    'maxt':(d[2]==='M') ? NaN : parseFloat(d[2]).toFixed(1),
+                    'mint':(d[3]==='M') ? NaN : parseFloat(d[3]).toFixed(1),
+                    'pcpn':(d[4]==='M') ? NaN : ((d[4]==='T') ? 0.00 : parseFloat(d[4])).toFixed(2),
+                    'soilt2in':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
+                    'soilt4in':(d[6]==='M') ? NaN : parseFloat(d[6]).toFixed(1),
+                    'soilt8in':(d[7]==='M') ? NaN : parseFloat(d[7]).toFixed(1),
+                    'soilt20in':(d[8]==='M') ? NaN : parseFloat(d[8]).toFixed(1),
+                    'soilt40in':(d[9]==='M') ? NaN : parseFloat(d[9]).toFixed(1),
+                    'soilm2in':(d[10]==='M') ? NaN : parseFloat(d[10]).toFixed(1),
+                    'soilm4in':(d[11]==='M') ? NaN : parseFloat(d[11]).toFixed(1),
+                    'soilm8in':(d[12]==='M') ? NaN : parseFloat(d[12]).toFixed(1),
+                    'soilm20in':(d[13]==='M') ? NaN : parseFloat(d[13]).toFixed(1),
+                    'soilm40in':(d[14]==='M') ? NaN : parseFloat(d[14]).toFixed(1),
                     'humid':NaN,
-                    'solar':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
-                    'wind':(d[6]==='M') ? NaN : parseFloat(d[6]).toFixed(1),
-                    //'leafwet':(d[8]==='M') ? NaN : parseFloat(d[8]).toFixed(1),
+                    'solar':(d[15]==='M') ? NaN : parseFloat(d[15]).toFixed(1),
+                    'windspdmax':(d[16]==='M') ? NaN : parseFloat(d[16]).toFixed(1),
+                    'windspdave':(d[17]==='M') ? NaN : parseFloat(d[17]).toFixed(1),
+                    'winddirave':(d[18]==='M') ? NaN : parseFloat(d[18]).toFixed(1),
                     'leafwet':NaN,
                   })
               } else {
@@ -878,14 +908,26 @@ export class AppStore {
                   dataObjArray_hours.push({
                       //'date':dateToday+' 24',
                       'date':formattedHourString,
-                      'avgt':(d[1][23]==='M') ? NaN : parseFloat(d[1][23]),
-                      'pcpn':(d[2][23]==='M') ? NaN : ((d[2][23]==='T') ? 0.00 : parseFloat(d[2][23])),
-                      'soilt':d[3][23],
-                      'soilm':d[4][23],
-                      'humid':d[5][23],
-                      'solar':d[6][23],
-                      'wind':d[7][23],
-                      'leafwet':d[8][23],
+                      'avgt':(d[1][23]==='M') ? NaN : parseFloat(d[1][23]).toFixed(1),
+                      'maxt':(d[2][23]==='M') ? NaN : parseFloat(d[2][23]).toFixed(1),
+                      'mint':(d[3][23]==='M') ? NaN : parseFloat(d[3][23]).toFixed(1),
+                      'pcpn':(d[4][23]==='M') ? NaN : ((d[4][23]==='T') ? 0.00 : parseFloat(d[4][23])).toFixed(2),
+                      'soilt2in':(d[5][23]==='M') ? NaN : parseFloat(d[5][23]).toFixed(1),
+                      'soilt4in':(d[6][23]==='M') ? NaN : parseFloat(d[6][23]).toFixed(1),
+                      'soilt8in':(d[7][23]==='M') ? NaN : parseFloat(d[7][23]).toFixed(1),
+                      'soilt20in':(d[8][23]==='M') ? NaN : parseFloat(d[8][23]).toFixed(1),
+                      'soilt40in':(d[9][23]==='M') ? NaN : parseFloat(d[9][23]).toFixed(1),
+                      'soilm2in':(d[10][23]==='M') ? NaN : parseFloat(d[10][23]).toFixed(1),
+                      'soilm4in':(d[11][23]==='M') ? NaN : parseFloat(d[11][23]).toFixed(1),
+                      'soilm8in':(d[12][23]==='M') ? NaN : parseFloat(d[12][23]).toFixed(1),
+                      'soilm20in':(d[13][23]==='M') ? NaN : parseFloat(d[13][23]).toFixed(1),
+                      'soilm40in':(d[14][23]==='M') ? NaN : parseFloat(d[14][23]).toFixed(1),
+                      'humid':(d[15][23]==='M') ? NaN : parseFloat(d[15][23]).toFixed(1),
+                      'solar':(d[16][23]==='M') ? NaN : parseFloat(d[16][23]).toFixed(1),
+                      'windspdmax':(d[17][23]==='M') ? NaN : parseFloat(d[17][23]).toFixed(1),
+                      'windspdave':(d[18][23]==='M') ? NaN : parseFloat(d[18][23]).toFixed(1),
+                      'winddirave':(d[19][23]==='M') ? NaN : parseFloat(d[19][23]).toFixed(1),
+                      'leafwet':NaN,
                   })
               } else if (dateToday===data[data.length-1][0]) {
                   // last day: leave off future hours with missing data
@@ -912,14 +954,26 @@ export class AppStore {
                       dataObjArray_hours.push({
                           //'date':(i+1>=10) ? dateToday+' '+(i+1).toString() : dateToday+' 0'+(i+1).toString(),
                           'date':formattedHourString,
-                          'avgt':(d[1][i]==='M') ? NaN : parseFloat(d[1][i]),
-                          'pcpn':(d[2][i]==='M') ? NaN : ((d[2][i]==='T') ? 0.00 : parseFloat(d[2][i])),
-                          'soilt':d[3][i],
-                          'soilm':d[4][i],
-                          'humid':d[5][i],
-                          'solar':d[6][i],
-                          'wind':d[7][i],
-                          'leafwet':d[8][i],
+                          'avgt':(d[1][i]==='M') ? NaN : parseFloat(d[1][i]).toFixed(1),
+                          'maxt':(d[2][i]==='M') ? NaN : parseFloat(d[2][i]).toFixed(1),
+                          'mint':(d[3][i]==='M') ? NaN : parseFloat(d[3][i]).toFixed(1),
+                          'pcpn':(d[4][i]==='M') ? NaN : ((d[4][i]==='T') ? 0.00 : parseFloat(d[4][i])).toFixed(2),
+                          'soilt2in':(d[5][i]==='M') ? NaN : parseFloat(d[5][i]).toFixed(1),
+                          'soilt4in':(d[6][i]==='M') ? NaN : parseFloat(d[6][i]).toFixed(1),
+                          'soilt8in':(d[7][i]==='M') ? NaN : parseFloat(d[7][i]).toFixed(1),
+                          'soilt20in':(d[8][i]==='M') ? NaN : parseFloat(d[8][i]).toFixed(1),
+                          'soilt40in':(d[9][i]==='M') ? NaN : parseFloat(d[9][i]).toFixed(1),
+                          'soilm2in':(d[10][i]==='M') ? NaN : parseFloat(d[10][i]).toFixed(1),
+                          'soilm4in':(d[11][i]==='M') ? NaN : parseFloat(d[11][i]).toFixed(1),
+                          'soilm8in':(d[12][i]==='M') ? NaN : parseFloat(d[12][i]).toFixed(1),
+                          'soilm20in':(d[13][i]==='M') ? NaN : parseFloat(d[13][i]).toFixed(1),
+                          'soilm40in':(d[14][i]==='M') ? NaN : parseFloat(d[14][i]).toFixed(1),
+                          'humid':(d[15][i]==='M') ? NaN : parseFloat(d[15][i]).toFixed(1),
+                          'solar':(d[16][i]==='M') ? NaN : parseFloat(d[16][i]).toFixed(1),
+                          'windspdmax':(d[17][i]==='M') ? NaN : parseFloat(d[17][i]).toFixed(1),
+                          'windspdave':(d[18][i]==='M') ? NaN : parseFloat(d[18][i]).toFixed(1),
+                          'winddirave':(d[19][i]==='M') ? NaN : parseFloat(d[19][i]).toFixed(1),
+                          'leafwet':NaN,
                       })
                   }
               } else {
@@ -937,14 +991,26 @@ export class AppStore {
                       dataObjArray_hours.push({
                           //'date':(i+1>=10) ? dateToday+' '+(i+1).toString() : dateToday+' 0'+(i+1).toString(),
                           'date':formattedHourString,
-                          'avgt':(d[1][i]==='M') ? NaN : parseFloat(d[1][i]),
-                          'pcpn':(d[2][i]==='M') ? NaN : ((d[2][i]==='T') ? 0.00 : parseFloat(d[2][i])),
-                          'soilt':d[3][i],
-                          'soilm':d[4][i],
-                          'humid':d[5][i],
-                          'solar':d[6][i],
-                          'wind':d[7][i],
-                          'leafwet':d[8][i],
+                          'avgt':(d[1][i]==='M') ? NaN : parseFloat(d[1][i]).toFixed(1),
+                          'maxt':(d[2][i]==='M') ? NaN : parseFloat(d[2][i]).toFixed(1),
+                          'mint':(d[3][i]==='M') ? NaN : parseFloat(d[3][i]).toFixed(1),
+                          'pcpn':(d[4][i]==='M') ? NaN : ((d[4][i]==='T') ? 0.00 : parseFloat(d[4][i])).toFixed(2),
+                          'soilt2in':(d[5][i]==='M') ? NaN : parseFloat(d[5][i]).toFixed(1),
+                          'soilt4in':(d[6][i]==='M') ? NaN : parseFloat(d[6][i]).toFixed(1),
+                          'soilt8in':(d[7][i]==='M') ? NaN : parseFloat(d[7][i]).toFixed(1),
+                          'soilt20in':(d[8][i]==='M') ? NaN : parseFloat(d[8][i]).toFixed(1),
+                          'soilt40in':(d[9][i]==='M') ? NaN : parseFloat(d[9][i]).toFixed(1),
+                          'soilm2in':(d[10][i]==='M') ? NaN : parseFloat(d[10][i]).toFixed(1),
+                          'soilm4in':(d[11][i]==='M') ? NaN : parseFloat(d[11][i]).toFixed(1),
+                          'soilm8in':(d[12][i]==='M') ? NaN : parseFloat(d[12][i]).toFixed(1),
+                          'soilm20in':(d[13][i]==='M') ? NaN : parseFloat(d[13][i]).toFixed(1),
+                          'soilm40in':(d[14][i]==='M') ? NaN : parseFloat(d[14][i]).toFixed(1),
+                          'humid':(d[15][i]==='M') ? NaN : parseFloat(d[15][i]).toFixed(1),
+                          'solar':(d[16][i]==='M') ? NaN : parseFloat(d[16][i]).toFixed(1),
+                          'windspdmax':(d[17][i]==='M') ? NaN : parseFloat(d[17][i]).toFixed(1),
+                          'windspdave':(d[18][i]==='M') ? NaN : parseFloat(d[18][i]).toFixed(1),
+                          'winddirave':(d[19][i]==='M') ? NaN : parseFloat(d[19][i]).toFixed(1),
+                          'leafwet':NaN,
                       })
                   }
               }
@@ -996,38 +1062,71 @@ export class AppStore {
             let numdays
             if (this.wxgraph_getTimeFrame==='two_days') {
                 elems = [
-                    {"vX":23}, //temp
-                    {"vX":5}, //pcpn
-                    {"vX":120}, //soil temperature
-                    {"vX":104}, //soil moisture
-                    {"vX":24}, //relative humidity
-                    {"vX":149}, //solar radiation
-                    {"vX":128}, //wind speed
-                    {"vX":118}, //leaf wetness
+                    {"vX":23}, //hourly temp, inst
+                    {"vX":124}, //hourly temp, max
+                    {"vX":125}, //hourly temp, min
+                    {"vX":5}, //hourly pcpn, sum
+                    {"vX":120,"vN":70}, //hourly soil temperature @ 2", inst
+                    {"vX":120,"vN":102}, //hourly soil temperature @ 4", inst
+                    {"vX":120,"vN":166}, //hourly soil temperature @ 8", inst
+                    {"vX":120,"vN":294}, //hourly soil temperature @ 20", inst
+                    {"vX":120,"vN":326}, //hourly soil temperature @ 40", inst
+                    {"vX":104,"vN":68}, //hourly soil moisture @ 2", ave
+                    {"vX":104,"vN":100}, //hourly soil moisture @ 4", ave
+                    {"vX":104,"vN":164}, //hourly soil moisture @ 8", ave
+                    {"vX":104,"vN":292}, //hourly soil moisture @ 20", ave
+                    {"vX":104,"vN":324}, //hourly soil moisture @ 40", ave
+                    {"vX":24}, //hourly relative humidity, inst
+                    {"vX":149}, //hourly solar radiation, ave
+                    {"vX":42}, //hourly wind speed, peak, max
+                    {"vX":128}, //hourly wind speed, average, ave
+                    {"vX":130}, //hourly wind direction, average, ave
                 ]
                 numdays=-3
             } else if (this.wxgraph_getTimeFrame==='two_months') {
                 elems = [
-                    {"name":"avgt","interval":[0,0,1],"duration":"dly"},
-                    {"name":"pcpn","interval":[0,0,1],"duration":"dly"},
-                    {"vX":69,"interval":[0,0,1],"duration":"dly"},
-                    {"vX":68,"interval":[0,0,1],"duration":"dly"},
-                    //{"vX":71,"interval":[0,0,1],"duration":"dly"},
-                    {"vX":70,"interval":[0,0,1],"duration":"dly"},
-                    {"vX":89,"interval":[0,0,1],"duration":"dly"},
-                    //{"vX":118,"interval":[0,0,1],"duration":"dly"},
+                    {"name":"avgt","interval":[0,0,1],"duration":"dly"}, // daily average temperature, ave
+                    {"vX":1,"interval":[0,0,1],"duration":"dly"}, // daily maximum temperature, max
+                    {"vX":2,"interval":[0,0,1],"duration":"dly"}, // daily minimum temperature, min
+                    {"vX":4,"interval":[0,0,1],"duration":"dly"}, // daily precipitation, sum
+                    {"vX":69,"vN":67,"interval":[0,0,1],"duration":"dly"}, // daily soil temperature @ 2", ave
+                    {"vX":69,"vN":99,"interval":[0,0,1],"duration":"dly"}, // daily soil temperature @ 4", ave
+                    {"vX":69,"vN":163,"interval":[0,0,1],"duration":"dly"}, // daily soil temperature @ 8", ave
+                    {"vX":69,"vN":291,"interval":[0,0,1],"duration":"dly"}, // daily soil temperature @ 20", ave
+                    {"vX":69,"vN":323,"interval":[0,0,1],"duration":"dly"}, // daily soil temperature @ 40", ave
+                    {"vX":68,"vN":65,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 2", ave
+                    {"vX":68,"vN":97,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 4", ave
+                    {"vX":68,"vN":161,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 8", ave
+                    {"vX":68,"vN":289,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 20", ave
+                    {"vX":68,"vN":321,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 40", ave
+                    //{"vX":71,"interval":[0,0,1],"duration":"dly"}, // daily relative humidity, ave
+                    {"vX":70,"interval":[0,0,1],"duration":"dly"}, // daily solar radiation, sum
+                    {"vX":77,"interval":[0,0,1],"duration":"dly"}, // daily wind speed, maximum, max
+                    {"vX":89,"interval":[0,0,1],"duration":"dly"}, // daily wind speed, average, ave
+                    {"vX":101,"interval":[0,0,1],"duration":"dly"}, // daily wind direction, average, ave
                 ]
                 numdays=-60
             } else if (this.wxgraph_getTimeFrame==='two_years') {
                 elems = [
-                    {"name":"avgt","interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3},
-                    {"name":"pcpn","interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3},
-                    {"vX":69,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3},
-                    {"vX":68,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3},
-                    //{"vX":71,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3},
-                    {"vX":70,"interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3},
-                    {"vX":89,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3},
-                    //{"vX":118,"interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3},
+                    {"name":"avgt","interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly average temperature, ave
+                    {"vX":1,"interval":[0,1],"duration":"mly","reduce":{"reduce":"max"},"maxmissing":3}, // monthly maximum temperature, max
+                    {"vX":2,"interval":[0,1],"duration":"mly","reduce":{"reduce":"min"},"maxmissing":3}, // monthly minimum temperature, min
+                    {"vX":4,"interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3}, // monthly precipitation, sum
+                    {"vX":69,"vN":67,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil temperature @ 2", ave
+                    {"vX":69,"vN":99,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil temperature @ 4", ave
+                    {"vX":69,"vN":163,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil temperature @ 8", ave
+                    {"vX":69,"vN":291,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil temperature @ 20", ave
+                    {"vX":69,"vN":323,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil temperature @ 40", ave
+                    {"vX":68,"vN":65,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 2", ave
+                    {"vX":68,"vN":97,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 4", ave
+                    {"vX":68,"vN":161,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 8", ave
+                    {"vX":68,"vN":289,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 20", ave
+                    {"vX":68,"vN":321,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 40", ave
+                    //{"vX":71,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly relative humidity, ave
+                    {"vX":70,"interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3}, // monthly solar radiation, sum
+                    {"vX":77,"interval":[0,1],"duration":"mly","reduce":{"reduce":"max"},"maxmissing":3}, // monthly wind speed, maximum, max
+                    {"vX":89,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly wind speed, average, ave
+                    {"vX":101,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly wind direction, average, ave
                 ]
                 numdays=-730
             } else if (this.wxgraph_getTimeFrame==='por') {
@@ -1035,23 +1134,34 @@ export class AppStore {
                 if (!this.wxgraph_getExtSwitch) {
                     elems = [
                         {"name":"avgt","interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10},
-                        {"name":"pcpn","interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10},
-                        {"vX":69,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10},
-                        {"vX":68,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10},
-                        //{"vX":71,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10},
-                        {"vX":70,"interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10},
-                        {"vX":89,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10},
-                        //{"vX":118,"interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10},
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"max"},"maxmissing":10}, // annual maximum temperature, max
+                        {"vX":2,"interval":[1],"duration":"yly","reduce":{"reduce":"min"},"maxmissing":10}, // annual minimum temperature, min
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10}, // annual precipitation, sum
+                        {"vX":69,"vN":67,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil temperature @ 2", ave
+                        {"vX":69,"vN":99,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil temperature @ 4", ave
+                        {"vX":69,"vN":163,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil temperature @ 8", ave
+                        {"vX":69,"vN":291,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil temperature @ 20", ave
+                        {"vX":69,"vN":323,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil temperature @ 40", ave
+                        {"vX":68,"vN":65,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 2", ave
+                        {"vX":68,"vN":97,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 4", ave
+                        {"vX":68,"vN":161,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 8", ave
+                        {"vX":68,"vN":289,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 20", ave
+                        {"vX":68,"vN":321,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 40", ave
+                        //{"vX":71,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual relative humidity, ave
+                        {"vX":70,"interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10}, // annual solar radiation, sum
+                        {"vX":77,"interval":[1],"duration":"yly","reduce":{"reduce":"max"},"maxmissing":10}, //annual wind speed, maximum, max
+                        {"vX":89,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, //annual wind speed, average, ave
+                        {"vX":101,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, //annual wind direction, average, ave
                     ]
                 } else {
                     elems = [
-                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_100"},"maxmissing":10},
-                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_90"},"maxmissing":10},
-                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_80"},"maxmissing":10},
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_4"},"maxmissing":10},
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_3"},"maxmissing":10},
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_2"},"maxmissing":10},
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_1"},"maxmissing":10},
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_100"},"maxmissing":10}, // number of days > 100F, count
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_90"},"maxmissing":10}, // number of days > 90F, count
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_80"},"maxmissing":10}, // number of days > 80F, count
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_4"},"maxmissing":10}, // number of days > 4", count
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_3"},"maxmissing":10}, // number of days > 3", count
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_2"},"maxmissing":10}, // number of days > 2", count
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_1"},"maxmissing":10}, // number of days > 1", count
                     ]
                 }
             }
@@ -1185,15 +1295,15 @@ export class AppStore {
                 {"vX":149}, //solar radiation
                 {"vX":128}, //wind speed
             ]
-            numdays=-2
+            numdays=-3
 
             return {
                 "sid":this.getLocation.sid,
-                //"sdate":moment().add(numdays,'days').format("YYYY-MM-DD"),
-                //"edate":moment().format("YYYY-MM-DD"),
+                "sdate":moment().add(numdays,'days').format("YYYY-MM-DD"),
+                "edate":moment().format("YYYY-MM-DD"),
                 // testing until data are up-to-date
-                "sdate":moment('2019-02-17','YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
-                "edate":moment('2019-02-17','YYYY-MM-DD').format("YYYY-MM-DD"),
+                //"sdate":moment('2019-02-17','YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                //"edate":moment('2019-02-17','YYYY-MM-DD').format("YYYY-MM-DD"),
                 "elems":elems,
                 "meta":""
             }

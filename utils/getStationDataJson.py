@@ -55,6 +55,7 @@ networks = ['17','19']
 stnListForNetwork = []
 
 ### Continental U.S.
+#pData = {"state":"NY","meta":"sids","output":"json"}
 pData = {"bbox":"-125,24.3,-66.8,49.4","meta":"sids","output":"json"}
 rData = acis_ws('StnMeta',pData)
 
@@ -193,9 +194,12 @@ pData = {
 	"output":"json"
 }
 rData = acis_ws('MultiStnData',pData)
+print len(stnListForNetwork)
+print len(rData['data'])
 print datetime.datetime.now()
 
 stnDataOut = []
+acisStnList = []
 for item in rData['data']:
 	m = item['meta']
 	d = item['data']
@@ -208,6 +212,7 @@ for item in rData['data']:
 		stn = [s for s in m['sids'] if ' '+network in s][0]
 		sdate = [dList[1] for dList in m['sid_dates'] if stn in dList][0]
 		edate = [dList[2] for dList in m['sid_dates'] if stn in dList][0]
+		acisStnList.append(stn)
 
 		stnDict = {}
 		stnDict['uid'] = m['uid']
@@ -234,9 +239,44 @@ for item in rData['data']:
 
 		stnDataOut.append(stnDict)
 
+extraStations = [s for s in stnListForNetwork if s not in acisStnList]
+pData = {"sids":extraStations,"meta":"uid,name,state,ll,elev,sids,sid_dates","output":"json"}
+rData = acis_ws('StnMeta',pData)
+sList = []
+for m in rData['meta']:
+	stn = m['sids'][0]
+	network = stn.split(' ')[1]
+	sdate = [dList[1] for dList in m['sid_dates'] if stn in dList][0]
+	edate = [dList[2] for dList in m['sid_dates'] if stn in dList][0]
+
+	stnDict = {}
+	stnDict['uid'] = m['uid']
+	stnDict['sid'] = stn
+	stnDict['ll'] = m['ll']
+	stnDict['name'] = m['name']
+	stnDict['state'] = m['state']
+	stnDict['elev'] = m['elev'] if 'elev' in m.keys() else 'N/A'
+	stnDict['sdate'] = sdate
+	stnDict['edate'] = edate
+	stnDict['network'] = int(network)
+	stnDict['p_ytd_o'] = 'M'
+	stnDict['p_ytd_n'] = 'M'
+	stnDict['p_std_o'] = 'M'
+	stnDict['p_std_n'] = 'M'
+	stnDict['p_mtd_o'] = 'M'
+	stnDict['p_mtd_n'] = 'M'
+	stnDict['t_ytd_o'] = 'M'
+	stnDict['t_ytd_n'] = 'M'
+	stnDict['t_std_o'] = 'M'
+	stnDict['t_std_n'] = 'M'
+	stnDict['t_mtd_o'] = 'M'
+	stnDict['t_mtd_n'] = 'M'
+
+	stnDataOut.append(stnDict)
+
 dataOut = {
 	'date':dateString,
-        'ytd_start': 'Jan 1',
+	'ytd_start': 'Jan 1',
 	'mtd_start':getMtdStartLabel(dateString),
 	'std_start':getStdStartLabel(dateString),
 	'locs':stnDataOut,

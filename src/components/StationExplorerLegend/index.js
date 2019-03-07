@@ -25,7 +25,7 @@ class StationExplorerLegend extends Component {
             <Control position="topright" className="control-top-right">
                 <div className="explorer-map-legend">
                     <span className={"explorer-map-legend-color-box blue"}></span><span className="explorer-map-legend-label">Traditional SCAN</span>
-                    <span className={"explorer-map-legend-color-box green"}></span><span className="explorer-map-legend-label">Tribal SCAN</span>
+                    <span className={"explorer-map-legend-color-box red"}></span><span className="explorer-map-legend-label">Tribal SCAN</span>
                 </div>
             </Control>
         );

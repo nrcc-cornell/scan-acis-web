@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import moment from 'moment';
 //import { ResponsiveContainer, ComposedChart, AreaChart, LineChart, BarChart, Bar, Line, Area, XAxis, YAxis, Surface, Symbols, CartesianGrid, Tooltip, Legend, Brush, ReferenceLine } from 'recharts';
-import { ResponsiveContainer, AreaChart, LineChart, BarChart, Bar, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { ResponsiveContainer, ComposedChart, AreaChart, LineChart, BarChart, Bar, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 import Grid from '@material-ui/core/Grid';
 
 //Components
@@ -45,12 +45,55 @@ class WxCharts extends Component {
             }
         }
 
+        let calcDomain = (data,keys,apply,buffer) => {
+            // calculate the data extremes, used in recharts domain
+            // data: array of data (array of dictionaries)
+            // keys: keys to determine collective min and max (array of strings)
+            // apply: which extreme should be calculated? [1,1]: both, [0,1]: max only, [1,0]: min only
+            // buffer: should max/min be buffered for better appearance? (boolean)
+            let minValue, maxValue
+            let values = []
+            keys.forEach(function (key) {
+                data.forEach(function (d) {
+                    if (d[key] || d[key]===0.0) { values.push(d[key]) }
+                })
+            })
+            if (apply[0]) {
+                minValue = Math.min(...values)
+                minValue = (minValue || minValue===0.0) ? (buffer) ? minValue-1 : minValue : 'auto'
+            } else {
+                minValue = 'auto'
+            }
+            if (apply[1]) {
+                maxValue = Math.max(...values)
+                maxValue = (maxValue || maxValue===0.0) ? (buffer) ? maxValue+1 : maxValue : 'auto'
+            } else {
+                maxValue = 'auto'
+            }
+            return [minValue, maxValue]
+        }
+
         //let data = app.wxgraph_getClimateSummary
         let dataForChart
         if (app.wxgraph_getTimeFrame==='por' && app.wxgraph_getExtSwitch) {
             dataForChart = app.wxgraph_getClimateSummary['extremes']
         } else {
             dataForChart = app.wxgraph_getClimateSummary[app.wxgraph_getTimeFrame]
+        }
+
+        let createTempRange = (dataSrc) => {
+            // create new data object with 'temprange' dataKey
+            let rangeData = []
+            dataSrc.forEach(function (d) {
+                rangeData.push({
+                    'date':d['date'],
+                    'avgt':d['avgt'],
+                    'maxt':d['maxt'],
+                    'mint':d['mint'],
+                    'temprange':[d['mint'],d['maxt']]
+                })
+            })
+            return rangeData
         }
 
         // regular graphs
@@ -61,20 +104,24 @@ class WxCharts extends Component {
           <Grid container justify="left" alignItems="flexStart">
 
             <Grid item xs={12} md={9}>
-                <ResponsiveContainer width="100%" height={100} className={(app.wxgraph_getVars['airtemp']) ? "" : "isHidden"}>
-                  <LineChart data={dataForChart} syncId="anyId"
+                <ResponsiveContainer width="100%" height={160} className={(app.wxgraph_getVars['airtemp']) ? "" : "isHidden"}>
+                  <ComposedChart data={createTempRange(dataForChart)} syncId="anyId"
                         margin={{top: 10, right: 30, left: 0, bottom: 0}}>
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis
                       dataKey="date"
                       tickFormatter={formatXAxisForDate}
-                      label={{ value: app.wxgraph_getVarLabels['airtemp_label'], angle: 0, position: 'top' }}
+                      label={{ value: 'Air Temperature (range and average)', angle: 0, position: 'top' }}
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
-                    <YAxis label={{ value: app.wxgraph_getVarUnits['airtemp_units'], angle: -90, position:'insideLeft', offset: 20 }} />
+                    <YAxis
+                        label={{ value: app.wxgraph_getVarUnits['airtemp_units'], angle: -90, position:'insideLeft', offset: 20 }}
+                        domain = {calcDomain(dataForChart,['avgt','mint','maxt'],[1,1],1)}
+                    />
                     <Tooltip/>
-                    <Line type='monotone' name={app.wxgraph_getVarLabels['airtemp_label']} dataKey='avgt' stroke='#8884d8' fill='#8884d8' />
-                  </LineChart>
+                    {app.wxgraph_getTimeFrame==='two_months' && <Area type='monotone' name='Air Temp Range' dataKey='temprange' stroke='' fill='#D3D3D3' />}
+                    <Line type='monotone' name='Air Temp Ave' dataKey='avgt' stroke='#8884d8' fill='#8884d8' />
+                  </ComposedChart>
                 </ResponsiveContainer>
             </Grid>
 
@@ -86,20 +133,23 @@ class WxCharts extends Component {
                     <XAxis
                       dataKey="date"
                       tickFormatter={formatXAxisForDate}
-                      label={{ value: app.wxgraph_getVarLabels['rainfall_label'], angle: 0, position: 'top' }}
+                      label={{ value: 'Total Precipitation', angle: 0, position: 'top' }}
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
-                    <YAxis label={{ value: app.wxgraph_getVarUnits['rainfall_units'], angle: -90, position:'insideLeft', offset: 20 }} />
+                    <YAxis
+                        label={{ value: app.wxgraph_getVarUnits['rainfall_units'], angle: -90, position:'insideLeft', offset: 20 }}
+                        domain = {calcDomain(dataForChart,['pcpn'],[0,1],0)}
+                    />
                     <Tooltip/>
-                    <Bar name={app.wxgraph_getVarLabels['rainfall_label']} dataKey="pcpn" fill="#82ca9d" />
+                    <Bar name='Total Precip' dataKey="pcpn" fill="#82ca9d" />
                   </BarChart>
                 </ResponsiveContainer>
             </Grid>
 
             <Grid item xs={12} md={9}>
-                <ResponsiveContainer width="100%" height={100} className={(app.wxgraph_getVars['soiltemp']) ? "" : "isHidden"}>
-                  <AreaChart data={dataForChart} syncId="anyId"
-                        margin={{top: 0, right: 30, left: 0, bottom: 0}}>
+                <ResponsiveContainer width="100%" height={200} className={(app.wxgraph_getVars['soiltemp']) ? "" : "isHidden"}>
+                  <LineChart data={dataForChart} syncId="anyId"
+                        margin={{top: 10, right: 30, left: 0, bottom: 0}}>
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis
                       dataKey="date"
@@ -107,15 +157,23 @@ class WxCharts extends Component {
                       label={{ value: app.wxgraph_getVarLabels['soiltemp_label'], angle: 0, position: 'top' }}
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
-                    <YAxis label={{ value: app.wxgraph_getVarUnits['soiltemp_units'], angle: -90, position:'insideLeft', offset: 20 }} />
+                    <YAxis
+                        label={{ value: app.wxgraph_getVarUnits['soiltemp_units'], angle: -90, position:'insideLeft', offset: 20 }}
+                        domain = {calcDomain(dataForChart,['soilt40in','soilt20in','soilt8in','soilt4in','soilt2in'],[1,1],1)}
+                    />
                     <Tooltip/>
-                    <Area type='monotone' name={app.wxgraph_getVarLabels['soiltemp_label']} dataKey='soilt' stroke='#82ca9d' fill='#82ca9d' />
-                  </AreaChart>
+                    <Legend verticalAlign="top" height={36}/>
+                    <Line type='monotone' name='SoilT @ 40"' dataKey='soilt40in' dot={false} stroke='#581845' />
+                    <Line type='monotone' name='SoilT @ 20"' dataKey='soilt20in' dot={false} stroke='#900C3F' />
+                    <Line type='monotone' name='SoilT @ 8"' dataKey='soilt8in' dot={false} stroke='#C70039' />
+                    <Line type='monotone' name='SoilT @ 4"' dataKey='soilt4in' dot={false} stroke='#FF5733' />
+                    <Line type='monotone' name='SoilT @ 2"' dataKey='soilt2in' dot={false} stroke='#FFC300' />
+                  </LineChart>
                 </ResponsiveContainer>
             </Grid>
 
             <Grid item xs={12} md={9}>
-                <ResponsiveContainer width="100%" height={100} className={(app.wxgraph_getVars['soilmoist']) ? "" : "isHidden"}>
+                <ResponsiveContainer width="100%" height={200} className={(app.wxgraph_getVars['soilmoist']) ? "" : "isHidden"}>
                   <LineChart data={dataForChart} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>
                     <CartesianGrid strokeDasharray="3 3"/>
@@ -125,9 +183,17 @@ class WxCharts extends Component {
                       label={{ value: app.wxgraph_getVarLabels['soilmoist_label'], angle: 0, position: 'top' }}
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
-                    <YAxis label={{ value: app.wxgraph_getVarUnits['soilmoist_units'], angle: -90, position:'insideLeft', offset: 20 }} />
+                    <YAxis
+                        label={{ value: app.wxgraph_getVarUnits['soilmoist_units'], angle: -90, position:'insideLeft', offset: 20 }}
+                        domain = {calcDomain(dataForChart,['soilm40in','soilm20in','soilm8in','soilm4in','soilm2in'],[1,1],1)}
+                    />
                     <Tooltip/>
-                    <Line type='monotone' name={app.wxgraph_getVarLabels['soilmoist_label']} dataKey='soilm' stroke='#8884d8' fill='#8884d8' />
+                    <Legend verticalAlign="top" height={36}/>
+                    <Line type='monotone' name='SoilM @ 40"' dataKey='soilm40in' dot={false} stroke='#134960' />
+                    <Line type='monotone' name='SoilM @ 20"' dataKey='soilm20in' dot={false} stroke='#1A6180' />
+                    <Line type='monotone' name='SoilM @ 8"' dataKey='soilm8in' dot={false} stroke='#2692BF' />
+                    <Line type='monotone' name='SoilM @ 4"' dataKey='soilm4in' dot={false} stroke='#2DAADF' />
+                    <Line type='monotone' name='SoilM @ 2"' dataKey='soilm2in' dot={false} stroke='#33C2FF' />
                   </LineChart>
                 </ResponsiveContainer>
             </Grid>
@@ -143,9 +209,12 @@ class WxCharts extends Component {
                       label={{ value: app.wxgraph_getVarLabels['humidity_label'], angle: 0, position: 'top' }}
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
-                    <YAxis label={{ value: app.wxgraph_getVarUnits['humidity_units'], angle: -90, position:'insideLeft', offset: 20 }} />
+                    <YAxis
+                        label={{ value: app.wxgraph_getVarUnits['humidity_units'], angle: -90, position:'insideLeft', offset: 20 }}
+                        domain = {[0,100]}
+                    />
                     <Tooltip/>
-                    <Line type='monotone' name={app.wxgraph_getVarLabels['humidity_label']} dataKey='humid' stroke='#82ca9d' fill='#82ca9d' />
+                    <Line type='monotone' name='Humidity' dataKey='humid' stroke='#82ca9d' fill='#82ca9d' />
                   </LineChart>
                 </ResponsiveContainer>
             </Grid>
@@ -161,15 +230,18 @@ class WxCharts extends Component {
                       label={{ value: app.wxgraph_getVarLabels['solarrad_label'], angle: 0, position: 'top' }}
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
-                    <YAxis label={{ value: app.wxgraph_getVarUnits['solarrad_units'], angle: -90, position:'insideLeft', offset: 20 }} />
+                    <YAxis
+                        label={{ value: app.wxgraph_getVarUnits['solarrad_units'], angle: -90, position:'insideLeft', offset: 20 }}
+                        domain = {calcDomain(dataForChart,['solar'],[0,1],0)}
+                    />
                     <Tooltip/>
-                    <Area type='monotone' name={app.wxgraph_getVarLabels['solarrad_label']} dataKey='solar' stroke='#82ca9d' fill='#82ca9d' />
+                    <Area type='monotone' name='Solar Radiation' dataKey='solar' stroke='#82ca9d' fill='#82ca9d' />
                   </AreaChart>
                 </ResponsiveContainer>
             </Grid>
 
             <Grid item xs={12} md={9}>
-                <ResponsiveContainer width="100%" height={100} className={(app.wxgraph_getVars['wind']) ? "" : "isHidden"}>
+                <ResponsiveContainer width="100%" height={160} className={(app.wxgraph_getVars['wind']) ? "" : "isHidden"}>
                   <LineChart data={dataForChart} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>
                     <CartesianGrid strokeDasharray="3 3"/>
@@ -179,30 +251,18 @@ class WxCharts extends Component {
                       label={{ value: app.wxgraph_getVarLabels['wind_label'], angle: 0, position: 'top' }}
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
-                    <YAxis label={{ value: app.wxgraph_getVarUnits['wind_units'], angle: -90, position:'insideLeft', offset: 20 }} />
+                    <YAxis
+                        label={{ value: app.wxgraph_getVarUnits['wind_units'], angle: -90, position:'insideLeft', offset: 20 }}
+                        domain = {calcDomain(dataForChart,['windspdave','windspdmax'],[0,1],0)}
+                    />
                     <Tooltip/>
-                    <Line type='monotone' name={app.wxgraph_getVarLabels['wind_label']} dataKey='wind' stroke='#8884d8' fill='#8884d8' />
+                    <Legend verticalAlign="top" height={36}/>
+                    <Line type='monotone' name='Wind Speed (ave)' dataKey='windspdave' stroke='#8884d8' />
+                    <Line type='monotone' name='Wind Speed (max)' dataKey='windspdmax' dot={false} stroke='#000000' />
                   </LineChart>
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item xs={12} md={9}>
-                <ResponsiveContainer width="100%" height={100} className={(app.wxgraph_getVars['leafwet']) ? "" : "isHidden"}>
-                  <LineChart data={dataForChart} syncId="anyId"
-                        margin={{top: 0, right: 30, left: 0, bottom: 0}}>
-                    <CartesianGrid strokeDasharray="3 3"/>
-                    <XAxis
-                      dataKey="date"
-                      tickFormatter={formatXAxisForDate}
-                      label={{ value: app.wxgraph_getVarLabels['leafwet_label'], angle: 0, position: 'top' }}
-                      interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
-                    />
-                    <YAxis label={{ value: app.wxgraph_getVarUnits['leafwet_units'], angle: -90, position:'insideLeft', offset: 20 }} />
-                    <Tooltip/>
-                    <Line type='monotone' name={app.wxgraph_getVarLabels['leafwet_label']} dataKey='leafwet' stroke='#82ca9d' fill='#82ca9d' />
-                  </LineChart>
-                </ResponsiveContainer>
-            </Grid>
           </Grid>
         </div>
 
