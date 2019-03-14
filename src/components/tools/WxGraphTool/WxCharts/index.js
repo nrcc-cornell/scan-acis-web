@@ -138,7 +138,7 @@ class WxCharts extends Component {
                     />
                     <YAxis
                         label={{ value: app.wxgraph_getVarUnits['rainfall_units'], angle: -90, position:'insideLeft', offset: 20 }}
-                        domain = {calcDomain(dataForChart,['pcpn'],[0,1],0)}
+                        domain = {[0,'auto']}
                     />
                     <Tooltip/>
                     <Bar name='Total Precip' dataKey="pcpn" fill="#82ca9d" />
@@ -214,7 +214,7 @@ class WxCharts extends Component {
                         domain = {[0,100]}
                     />
                     <Tooltip/>
-                    <Line type='monotone' name='Humidity' dataKey='humid' stroke='#82ca9d' fill='#82ca9d' />
+                    <Line type='monotone' name='Relative Humidity' dataKey='humid' stroke='#82ca9d' fill='#82ca9d' />
                   </LineChart>
                 </ResponsiveContainer>
             </Grid>
@@ -259,6 +259,27 @@ class WxCharts extends Component {
                     <Legend verticalAlign="top" height={36}/>
                     <Line type='monotone' name='Wind Speed (ave)' dataKey='windspdave' stroke='#8884d8' />
                     <Line type='monotone' name='Wind Speed (max)' dataKey='windspdmax' dot={false} stroke='#000000' />
+                  </LineChart>
+                </ResponsiveContainer>
+            </Grid>
+
+            <Grid item xs={12} md={9}>
+                <ResponsiveContainer width="100%" height={100} className={(app.wxgraph_getVars['leafwet']) ? "" : "isHidden"}>
+                  <LineChart data={dataForChart} syncId="anyId"
+                        margin={{top: 0, right: 30, left: 0, bottom: 0}}>
+                    <CartesianGrid strokeDasharray="3 3"/>
+                    <XAxis
+                      dataKey="date"
+                      tickFormatter={formatXAxisForDate}
+                      label={{ value: app.wxgraph_getVarLabels['leafwet_label'], angle: 0, position: 'top' }}
+                      interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
+                    />
+                    <YAxis
+                        label={{ value: app.wxgraph_getVarUnits['leafwet_units'], angle: -90, position:'insideLeft', offset: 20 }}
+                        domain = {calcDomain(dataForChart,['leafwet'],[0,1],0)}
+                    />
+                    <Tooltip/>
+                    <Line type='monotone' name='Leaf Wetness' dataKey='leafwet' stroke='#8884d8' />
                   </LineChart>
                 </ResponsiveContainer>
             </Grid>

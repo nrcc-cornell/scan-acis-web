@@ -72,7 +72,9 @@ class WxGraphTool extends Component {
         if (app.getOutputType==='chart') { display_VarPopover = <VarPopover /> }
         if (app.getOutputType==='table') { display_VarPopover = null }
 
-        return (
+        if (app.getOutputType==='chart') {
+
+          return (
             <Grid container direction="row" justify="center" alignItems="flex-start">
                 <Hidden smDown>
                     <Grid item container className="nothing" direction="column" md={3}>
@@ -108,7 +110,34 @@ class WxGraphTool extends Component {
                         </Grid>
                     </Grid>
             </Grid>
-        );
+          );
+
+        } else {
+
+          return (
+            <Grid container direction="row" justify="center" alignItems="flex-start">
+                    <Grid item container className="nothing" direction="column" xs={12}>
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing="8">
+                          <Grid item>
+                            <TimeFrameButtonGroup/>
+                          </Grid>
+                        </Grid>
+                        <Grid item>
+                            <LoadingOverlay
+                              active={app.wxgraph_dataIsLoading}
+                              spinner
+                              background={'rgba(255,255,255,1.0)'}
+                              color={'rgba(34,139,34,1.0)'}
+                              spinnerSize={'10vw'}
+                              >
+                                {display}
+                            </LoadingOverlay>
+                        </Grid>
+                    </Grid>
+            </Grid>
+          );
+
+        }
     }
 }
 

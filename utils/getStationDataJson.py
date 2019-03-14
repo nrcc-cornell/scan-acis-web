@@ -43,6 +43,11 @@ def getStdStartString(s):
 	if month in SON: return '9-1'
 	return ''
 
+# use today's date as current date
+#date_current = datetime.datetime.now()
+# use some date in the past as current date
+date_current = datetime.date(2019,3,4)
+
 # grid data
 #pData = {"bbox":"-82.708330,37.166667,-66.875,47.625","grid":"3","elems":"pcpn","meta":"ll","date":"2019-02-07"}
 #rData = acis_ws('GridData',pData)
@@ -79,13 +84,50 @@ for m in rData['meta']:
 		stn = [s for s in m['sids'] if ' '+network in s][0]
 		stnListForNetwork.append(stn)
 
+### Hawaii
+pData = {"state":"HI","meta":"sids","output":"json"}
+rData = acis_ws('StnMeta',pData)
+
+for m in rData['meta']:
+	for network in networks:
+		# bypass station if it is not in network
+		if not np.any([' '+network in s for s in m['sids']]): continue
+
+		stn = [s for s in m['sids'] if ' '+network in s][0]
+		stnListForNetwork.append(stn)
+
+### Puerto Rico
+pData = {"state":"PR","meta":"sids","output":"json"}
+rData = acis_ws('StnMeta',pData)
+
+for m in rData['meta']:
+	for network in networks:
+		# bypass station if it is not in network
+		if not np.any([' '+network in s for s in m['sids']]): continue
+
+		stn = [s for s in m['sids'] if ' '+network in s][0]
+		stnListForNetwork.append(stn)
+
+### Virgin Islands
+pData = {"state":"VI","meta":"sids","output":"json"}
+rData = acis_ws('StnMeta',pData)
+
+for m in rData['meta']:
+	for network in networks:
+		# bypass station if it is not in network
+		if not np.any([' '+network in s for s in m['sids']]): continue
+
+		stn = [s for s in m['sids'] if ' '+network in s][0]
+		stnListForNetwork.append(stn)
+
 print 'Get climate summaries and metadata for these stations, and write to json file ...'
 print datetime.datetime.now()
 print stnListForNetwork
 
 ### using fixed day until data are up-to-date
 #yest = datetime.date(2019,2,18)-datetime.timedelta(1)
-yest = datetime.datetime.now()-datetime.timedelta(1)
+#yest = datetime.datetime.now()-datetime.timedelta(1)
+yest = date_current-datetime.timedelta(1)
 dateString = yest.strftime('%Y-%m-%d')
 
 # station meta data

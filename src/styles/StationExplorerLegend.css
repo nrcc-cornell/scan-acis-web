@@ -10,10 +10,9 @@
     //margin-left: calc(30vw - 80px);
     margin-left: 0px;
     //margin-right: 25vw;
-    //width: 36vw;
-    width: 240px;
-    //width: 94vw;
-    min-width: 280px;
+    //width: 240px;
+    width: 190px;
+    min-width: 190px;
     z-index: 0;
 }
 
@@ -21,7 +20,7 @@
     font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 12px;
     text-align: left;
-    margin: 2px 14px 2px 8px;
+    margin: 2px 4px 2px 8px;
     //margin: 1vw 2vw 1vw 0px;
 }
 

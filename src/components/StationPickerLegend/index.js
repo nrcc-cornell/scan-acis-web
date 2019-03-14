@@ -24,7 +24,7 @@ class StationPickerLegend extends Component {
         return (
             <Control position="topright" className="control-top-right">
                 <div className="picker-map-legend">
-                    <span className={"picker-map-legend-color-box blue"}></span><span className="picker-map-legend-label">Traditional SCAN</span>
+                    <span className={"picker-map-legend-color-box blue"}></span><span className="picker-map-legend-label">SCAN</span>
                     <span className={"picker-map-legend-color-box red"}></span><span className="picker-map-legend-label">Tribal SCAN</span>
                 </div>
             </Control>

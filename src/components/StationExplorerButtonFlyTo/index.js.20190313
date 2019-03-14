@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 //import { array } from 'prop-types'
+import Button from '@material-ui/core/Button';
 
 import Control from 'react-leaflet-control';
 
@@ -13,7 +14,7 @@ import Control from 'react-leaflet-control';
 import '../../styles/StationExplorerLegend.css';
 
 @inject('store') @observer
-class StationExplorerLegend extends Component {
+class StationExplorerButtonFlyTo extends Component {
 
     componentDidMount() {
       this.forceUpdate();
@@ -22,14 +23,13 @@ class StationExplorerLegend extends Component {
     render() {
 
         return (
-            <Control position="topright" className="control-top-right">
-                <div className="explorer-map-legend">
-                    <span className={"explorer-map-legend-color-box blue"}></span><span className="explorer-map-legend-label">SCAN</span>
-                    <span className={"explorer-map-legend-color-box red"}></span><span className="explorer-map-legend-label">Tribal SCAN</span>
-                </div>
+            <Control position={this.props.pos}>
+                <Button variant="contained" color="inherit" size="small" onClick={this.props.onclick}>
+                  {"To "+this.props.loc}
+                </Button>
             </Control>
         );
     }
 }
 
-export default StationExplorerLegend;
+export default StationExplorerButtonFlyTo;

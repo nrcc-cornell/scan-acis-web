@@ -42,10 +42,10 @@ class LivestockIdxTables extends Component {
         let columns = [];
         columns.push({name:'Date/Time', options:{filter:true,sort:true,display:true,download:true}})
         columns.push({name:'Cattle Heat Idx', options:{filter:false,sort:true,display:true,download:true}})
-        columns.push({name:'Air Temp', options:{filter:false,sort:true,display:true,download:true}})
-        columns.push({name:'Humidity', options:{filter:false,sort:true,display:false,download:true}})
-        columns.push({name:'Solar Rad', options:{filter:false,sort:true,display:false,download:true}})
-        columns.push({name:'Wind', options:{filter:false,sort:true,display:false,download:true}})
+        columns.push({name:'Air Temp (°F)', options:{filter:false,sort:true,display:true,download:true}})
+        columns.push({name:'Rel Humidity (%)', options:{filter:false,sort:true,display:false,download:true}})
+        columns.push({name:'Solar Rad (W/m2)', options:{filter:false,sort:true,display:false,download:true}})
+        columns.push({name:'Wind Speed (mph)', options:{filter:false,sort:true,display:false,download:true}})
 
         let data = JSON.parse(JSON.stringify(app.livestock_getClimateSummary));
 

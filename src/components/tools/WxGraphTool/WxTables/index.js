@@ -57,14 +57,26 @@ class WxTables extends Component {
             columns.push({name:'Prcp>1"', options:{filter:false,sort:true,display:false,download:true}})
         } else {
             columns.push({name:'Date/Time', options:{filter:true,sort:true,display:true,download:true}})
-            columns.push({name:'Air Temp', options:{filter:false,sort:true,display:true,download:true}})
-            columns.push({name:'Rainfall', options:{filter:false,sort:true,display:true,download:true}})
-            columns.push({name:'Soil Temp', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Soil Moisture', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Humidity', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Solar Rad', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Wind', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Leaf Wetness', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Ave Air Temp (°F)', options:{filter:false,sort:true,display:true,download:true}})
+            columns.push({name:'Max Air Temp (°F)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'MIn Air Temp (°F)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Rainfall (in)', options:{filter:false,sort:true,display:true,download:true}})
+            columns.push({name:'Soil Temp 2in (°F)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Temp 4in (°F)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Temp 8in (°F)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Temp 20in (°F)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Temp 40in (°F)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Moisture 2in (in)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Moisture 4in (in)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Moisture 8in (in)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Moisture 20in (in)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Moisture 40in (in)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Rel Humidity (%)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Solar Rad ('+app.wxgraph_getVarUnits['solarrad_units']+')', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Wind Speed Max (mph)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Wind Speed Ave (mph)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Wind Dir (deg)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Leaf Wetness (min)', options:{filter:false,sort:true,display:false,download:true}})
         }
 
         let data
@@ -82,7 +94,7 @@ class WxTables extends Component {
           search: false,
           filter: false,
           print: false,
-          page: this.state.page,
+          page: 0,
           rowsPerPage: this.state.pageSize,
           rowsPerPageOptions: [10,50,data.length],
         };
@@ -105,15 +117,28 @@ class WxTables extends Component {
         } else {
             tableData = data.map(row => {
                     row.avgt = !isNaN(row.avgt) ? row.avgt : '--'
+                    row.maxt = !isNaN(row.maxt) ? row.maxt : '--'
+                    row.mint = !isNaN(row.mint) ? row.mint : '--'
                     row.pcpn = !isNaN(row.pcpn) ? row.pcpn : '--'
-                    row.soilt = !isNaN(row.soilt) ? row.soilt : '--'
-                    row.soilm = !isNaN(row.soilm) ? row.soilm : '--'
+                    row.soilt2in = !isNaN(row.soilt2in) ? row.soilt2in : '--'
+                    row.soilt4in = !isNaN(row.soilt4in) ? row.soilt4in : '--'
+                    row.soilt8in = !isNaN(row.soilt8in) ? row.soilt8in : '--'
+                    row.soilt20in = !isNaN(row.soilt20in) ? row.soilt20in : '--'
+                    row.soilt40in = !isNaN(row.soilt40in) ? row.soilt40in : '--'
+                    row.soilm2in = !isNaN(row.soilm2in) ? row.soilm2in : '--'
+                    row.soilm4in = !isNaN(row.soilm4in) ? row.soilm4in : '--'
+                    row.soilm8in = !isNaN(row.soilm8in) ? row.soilm8in : '--'
+                    row.soilm20in = !isNaN(row.soilm20in) ? row.soilm20in : '--'
+                    row.soilm40in = !isNaN(row.soilm40in) ? row.soilm40in : '--'
                     row.humid = !isNaN(row.humid) ? row.humid : '--'
                     row.solar = !isNaN(row.solar) ? row.solar : '--'
-                    row.wind = !isNaN(row.wind) ? row.wind : '--'
-                    //row.leafwet = !isNaN(row.leafwet) ? row.leafwet : '--'
+                    row.windspdmax = !isNaN(row.windspdmax) ? row.windspdmax : '--'
+                    row.windspdave = !isNaN(row.windspdave) ? row.windspdave : '--'
+                    row.winddirave = !isNaN(row.winddirave) ? row.winddirave : '--'
+                    row.leafwet = !isNaN(row.leafwet) ? row.leafwet : '--'
                     //return [row.date,row.avgt,row.pcpn,row.soilt,row.soilm,row.humid,row.solar,row.wind,row.leafwet]
-                    return [row.date,row.avgt,row.pcpn,row.soilt,row.soilm,row.humid,row.solar,row.wind]
+                    //return [row.date,row.avgt,row.pcpn,row.soilt,row.soilm,row.humid,row.solar,row.wind]
+                    return [row.date,row.avgt,row.maxt,row.mint,row.pcpn,row.soilt2in,row.soilt4in,row.soilt8in,row.soilt20in,row.soilt40in,row.soilm2in,row.soilm4in,row.soilm8in,row.soilm20in,row.soilm40in,row.humid,row.solar,row.windspdmax,row.windspdave,row.winddirave,row.leafwet]
                 })
 
             tableTitle = 'Observed Data'

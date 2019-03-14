@@ -12,6 +12,11 @@ const protocol = window.location.protocol;
 const arrSum = arr => arr.reduce((a,b) => a + b, 0)
 const arrAvg = arr => arr.reduce((a,b) => a + b, 0) / arr.length
 
+//current date
+//const date_current = moment().format('YYYY-MM-DD')
+const date_current = "2019-03-04"
+//const date_current = "2018-09-29"
+
 export class AppStore {
     ///////////////////////////////////////////////////////
     /// Pages on the site
@@ -83,17 +88,17 @@ export class AppStore {
             } else if (name==='waterdef') {
                 title = 'Water Deficit Calculator'
                 tagline = 'Tagline for WaterDefCalc'
-                thumbnail = pathToImages+'GddTool-thumbnail.png'
+                thumbnail = pathToImages+'WaterDeficitCalc-thumbnail.png'
                 url = '/tools/water-deficit-calculator'
             } else if (name==='wxgrapher') {
                 title = 'Weather Grapher'
                 tagline = 'Tagline for WxGraphTool'
-                thumbnail = pathToImages+'GddTool-thumbnail.png'
+                thumbnail = pathToImages+'WxGrapher-thumbnail.png'
                 url = '/tools/weather-grapher'
             } else if (name==='livestock') {
                 title = 'Livestock Heat Index'
                 tagline = 'Tagline for LivestockHeatIdx'
-                thumbnail = pathToImages+'GddTool-thumbnail.png'
+                thumbnail = pathToImages+'Livestock-thumbnail.png'
                 url = '/tools/livestock-heat-index'
             } else {
             }
@@ -276,35 +281,17 @@ export class AppStore {
 
     // download list of station info
     @action downloadStationInfo = () => {
-        // just some filler stations until SCAN becomes available in ACIS
-        //kden,kabq,kslc,ksdf,koma,ksyr,kbil,kiah,kric,krno,ksea,kbis,kmke,katl,kokc,klax
-        //let locs = [{"uid":137,"state":"CO","ll":[-104.6575,39.8328],"name":"DENVER INTL AP", "sid":"KDEN", "network":1},
-        //    {"uid":13502,"state":"ND","ll":[-100.7572,46.7825],"name":"BISMARCK MUNICIPAL AP", "sid":"KBIS", "network":2},
-        //    {"uid":34732,"state":"NV","ll":[-119.77112,39.48389],"name":"RENO TAHOE INTL AP", "sid":"KRNO", "network":1},
-        //    {"uid":25550,"state":"VA","ll":[-77.4473,38.9349],"name":"WASHINGTON DULLES INTL AP", "sid":"KIAD", "network":1},
-        //    {"uid":22975,"state":"TX","ll":[-98.4839,29.5443],"name":"SAN ANTONIO INTL AP", "sid":"KSAT", "network":2},
-        //    {"uid":11775,"state":"MT","ll":[-108.5422,45.8069],"name":"BILLINGS INTERNATIONAL AIRPORT", "sid":"KBIL", "network":1},
-        //    {"uid":19376,"state":"NM","ll":[-106.6155,35.0419],"name":"ALBUQUERQUE INTL AP", "sid":"KABQ", "network":1},
-        //    {"uid":29584,"state":"NE","ll":[-95.8991,41.3102],"name":"OMAHA EPPLEY AIRFIELD", "sid":"KOMA", "network":1},
-        //    {"uid":31802,"state":"KY","ll":[-85.7391,38.1811],"name":"LOUISVILLE INTL AP", "sid":"KSDF", "network":1},
-        //    {"uid":24790,"state":"UT","ll":[-111.9694,40.7781],"name":"SALT LAKE CITY INTL ARPT", "sid":"KSLC", "network":1},
-        //    {"uid":29861,"state":"NY","ll":[-76.1038,43.1111],"name":"SYRACUSE HANCOCK INTL AP", "sid":"KSYR", "network":1},
-        //    {"uid":25978,"state":"WA","ll":[-122.3138,47.4444],"name":"SEATTLE TACOMA INTL AP", "sid":"KSEA", "network":1},
-        //    {"uid":29852,"state":"WI","ll":[-87.9044,42.955],"name":"MILWAUKEE MITCHELL INTL AP", "sid":"KMKE", "network":1},
-        //    {"uid":5061,"state":"GA","ll":[-84.4418,33.6301],"name":"ATLANTA HARTSFIELD INTL AP", "sid":"KATL", "network":2},
-        //    {"uid":92,"state":"OK","ll":[-97.6006,35.3889],"name":"OKLAHOMA CITY WILL ROGERS WORLD AP", "sid":"KOKC", "network":1},
-        //    {"uid":1978,"state":"CA","ll":[-118.3888,33.938],"name":"LOS ANGELES INTL AP", "sid":"KLAX", "network":1}]
-        //this.setLocations(locs)
-        //fetch("/icao_stations.json")
         fetch(process.env.PUBLIC_URL + "/data/scan_stations.json")
-             //.then(res => res.text())          // convert to plain text
-             //.then(text => console.log(text))  // then log it out
              .then(r => r.json())
              .then(data => {
                //console.log(locs);
                this.setLocations(data['locs']);
-               this.setLocation(data['locs'][30].uid);
-               this.setLocation_explorer(data['locs'][30].uid);
+               //this.setLocation(data['locs'][30].uid);
+               //this.setLocation_explorer(data['locs'][30].uid);
+               // setting location to Orchard Range Site, ID - the first SCAN site established
+               // 85812 is the UID of this site
+               this.setLocation(85812);
+               this.setLocation_explorer(85812);
                this.setDatesForLocations({'date':data['date'],'ytd_start':data['ytd_start'],'std_start':data['std_start'],'mtd_start':data['mtd_start']});
                if (this.getToolName==='gddtool') {this.gddtool_downloadData}
                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData}
@@ -320,6 +307,27 @@ export class AppStore {
     @computed get getDatesForLocations() {
         return this.datesForLocations
     }
+
+    // action for changing map setting via buttons
+    // - this will center and zoom map on Alaska, Hawaii or PR
+    //@observable mapSettings = {'mapCenter':[37.0, -95.7], 'zoomLevel':4}
+    //@action updateMapSettings = (loc) => {
+    //    if (loc==='puerto_rico') {
+    //        this.mapSettings = {'mapCenter':[18.25, -66.0], 'zoomLevel':6}
+    //    } else if (loc==='alaska') {
+    //        this.mapSettings = {'mapCenter':[64.20, -149.50], 'zoomLevel':4}
+    //    } else if (loc==='hawaii') {
+    //        this.mapSettings = {'mapCenter':[19.90, -155.60], 'zoomLevel':6}
+    //    } else {
+    //        this.mapSettings = {'mapCenter':[37.0, -95.7], 'zoomLevel':4}
+    //    }
+    //}
+    //@action updateMapSettingsManually = (s) => {
+    //    this.mapSettings = s; 
+    //}
+    //@computed get getMapSettings() {
+    //    return this.mapSettings
+    //}
 
     //////////////////////////////////////////////
     /// TOOL: GDD Calculator
@@ -347,7 +355,7 @@ export class AppStore {
     // Planting date selection
     // For Components: PlantingDatePicker
     @computed get latestSelectableYear() {
-        let thisYear = moment().year();
+        let thisYear = moment(date_current,'YYYY-MM-DD').year();
         //let thisYear = '2018';
         return thisYear
     };
@@ -418,7 +426,7 @@ export class AppStore {
     //     5) min observed for POR (min_por)
     //@observable gddtool_climateSummary = null;
     @observable gddtool_climateSummary = [{
-                'date': moment().format('YYYY-MM-DD'),
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
                 'obs': NaN,
                 'ave': NaN,
                 'recent': NaN,
@@ -428,7 +436,7 @@ export class AppStore {
                 }];
     @action gddtool_initClimateSummary = () => {
         let dataObjArray = [{
-                'date': moment().format('YYYY-MM-DD'),
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
                 'obs': NaN,
                 'ave': NaN,
                 'recent': NaN,
@@ -457,7 +465,8 @@ export class AppStore {
             if (month_day===this.getPlantingDate.format('MM')+'-'+this.getPlantingDate.format('DD')) { idxPlantingDate = i };
             if (month_day>=this.getPlantingDate.format('MM')+'-'+this.getPlantingDate.format('DD')) {
                 if (!data_by_date.hasOwnProperty(month_day)) { data_by_date[month_day] = {} };
-                if ((data[i][1] !== -999) && (data[idxPlantingDate][1] !== -999)) {
+                //if ((data[i][1] !== -999) && (data[idxPlantingDate][1] !== -999)) {
+                if ((data[i][1] !== -999) && (data[idxPlantingDate][1] !== -999) && (data[i][1] !== 'M') && (data[idxPlantingDate][1] !=='M')) {
                     data_by_date[month_day][year] = data[i][1] - data[idxPlantingDate][1];
                 } else {
                     data_by_date[month_day][year] = NaN
@@ -595,7 +604,7 @@ export class AppStore {
                     //"sid":this.getLocation.uid.toString(),
                     "sid":this.getLocation.sid,
                     "sdate":"1981-01-01",
-                    "edate":moment().format("YYYY-MM-DD"),
+                    "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
                     "elems":elems
                 }
         }
@@ -686,7 +695,7 @@ export class AppStore {
             rainfall_label : 'Rainfall',
             soiltemp_label : 'Soil Temperature',
             soilmoist_label : 'Soil Moisture',
-            humidity_label : 'Humidity',
+            humidity_label : 'Relative Humidity',
             solarrad_label : 'Solar Radiation',
             wind_label : 'Wind Speed',
             leafwet_label : 'Leaf Wetness',
@@ -715,7 +724,7 @@ export class AppStore {
             humidity_units : '%',
             solarrad_units : (this.wxgraph_getTimeFrame==='two_days') ? 'W/m2' : 'langleys',
             wind_units : 'mph',
-            leafwet_units : 'units',
+            leafwet_units : 'min',
           };
         };
         return varUnits
@@ -741,9 +750,9 @@ export class AppStore {
     //     humid : average humidity for day (%)
     //     solar : total solar radiation for day (W/m2 for hourly inst, langleys for daily sum)
     //     wind : average wind speed for day (mph)
-    //     leafwet : average leaf wetness for day (units)
+    //     leafwet : average leaf wetness for day (minutes)
     @observable wxgraph_climateSummary = {'por':[{
-                'date': moment().format('YYYY-MM-DD'),
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
                 'avgt': NaN,
                 'pcpn': NaN,
                 'soilt': NaN,
@@ -753,7 +762,7 @@ export class AppStore {
                 'wind': NaN,
                 'leafwet': NaN,
                 }],'two_years':[{
-                'date': moment().format('YYYY-MM-DD'),
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
                 'avgt': NaN,
                 'pcpn': NaN,
                 'soilt': NaN,
@@ -763,7 +772,7 @@ export class AppStore {
                 'wind': NaN,
                 'leafwet': NaN,
                 }],'two_months':[{
-                'date': moment().format('YYYY-MM-DD'),
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
                 'avgt': NaN,
                 'pcpn': NaN,
                 'soilt': NaN,
@@ -773,7 +782,7 @@ export class AppStore {
                 'wind': NaN,
                 'leafwet': NaN,
                 }],'two_days':[{
-                'date': moment().format('YYYY-MM-DD'),
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
                 'avgt': NaN,
                 'pcpn': NaN,
                 'soilt': NaN,
@@ -785,7 +794,7 @@ export class AppStore {
                 }]};
     @action wxgraph_initClimateSummary = () => {
         let dataObjArray = [{
-                'date': moment().format('YYYY-MM-DD'),
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
                 'avgt': NaN,
                 'pcpn': NaN,
                 'soilt': NaN,
@@ -816,22 +825,22 @@ export class AppStore {
                 'avgt':(d[1]==='M') ? NaN : parseFloat(d[1]).toFixed(1),
                 'maxt':(d[2]==='M') ? NaN : parseFloat(d[2]).toFixed(1),
                 'mint':(d[3]==='M') ? NaN : parseFloat(d[3]).toFixed(1),
-                'pcpn':(d[4]==='M') ? NaN : ((d[4]==='T') ? 0.00 : parseFloat(d[4])).toFixed(2),
+                'pcpn':(d[4]==='M' || parseFloat(d[4])<0.0) ? NaN : ((d[4]==='T') ? 0.00 : parseFloat(d[4])).toFixed(2),
                 'soilt2in':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
                 'soilt4in':(d[6]==='M') ? NaN : parseFloat(d[6]).toFixed(1),
                 'soilt8in':(d[7]==='M') ? NaN : parseFloat(d[7]).toFixed(1),
                 'soilt20in':(d[8]==='M') ? NaN : parseFloat(d[8]).toFixed(1),
                 'soilt40in':(d[9]==='M') ? NaN : parseFloat(d[9]).toFixed(1),
-                'soilm2in':(d[10]==='M') ? NaN : parseFloat(d[10]).toFixed(1),
-                'soilm4in':(d[11]==='M') ? NaN : parseFloat(d[11]).toFixed(1),
-                'soilm8in':(d[12]==='M') ? NaN : parseFloat(d[12]).toFixed(1),
-                'soilm20in':(d[13]==='M') ? NaN : parseFloat(d[13]).toFixed(1),
-                'soilm40in':(d[14]==='M') ? NaN : parseFloat(d[14]).toFixed(1),
+                'soilm2in':(d[10]==='M' || parseFloat(d[10])<0.0) ? NaN : parseFloat(d[10]).toFixed(1),
+                'soilm4in':(d[11]==='M' || parseFloat(d[11])<0.0) ? NaN : parseFloat(d[11]).toFixed(1),
+                'soilm8in':(d[12]==='M' || parseFloat(d[12])<0.0) ? NaN : parseFloat(d[12]).toFixed(1),
+                'soilm20in':(d[13]==='M' || parseFloat(d[13])<0.0) ? NaN : parseFloat(d[13]).toFixed(1),
+                'soilm40in':(d[14]==='M' || parseFloat(d[14])<0.0) ? NaN : parseFloat(d[14]).toFixed(1),
                 'humid':NaN,
-                'solar':(d[15]==='M') ? NaN : parseFloat(d[15]).toFixed(1),
-                'windspdmax':(d[16]==='M') ? NaN : parseFloat(d[16]).toFixed(1),
-                'windspdave':(d[17]==='M') ? NaN : parseFloat(d[17]).toFixed(1),
-                'winddirave':(d[18]==='M') ? NaN : parseFloat(d[18]).toFixed(1),
+                'solar':(d[15]==='M' || parseFloat(d[15])<0.0) ? NaN : parseFloat(d[15]).toFixed(1),
+                'windspdmax':(d[16]==='M' || parseFloat(d[16])<0.0) ? NaN : parseFloat(d[16]).toFixed(1),
+                'windspdave':(d[17]==='M' || parseFloat(d[17])<0.0) ? NaN : parseFloat(d[17]).toFixed(1),
+                'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
                 'leafwet':NaN,
               })
             } else if (timeFrame==='two_years') {
@@ -841,22 +850,22 @@ export class AppStore {
                 'avgt':(d[1]==='M') ? NaN : parseFloat(d[1]).toFixed(1),
                 'maxt':(d[2]==='M') ? NaN : parseFloat(d[2]).toFixed(1),
                 'mint':(d[3]==='M') ? NaN : parseFloat(d[3]).toFixed(1),
-                'pcpn':(d[4]==='M') ? NaN : ((d[4]==='T') ? 0.00 : parseFloat(d[4])).toFixed(2),
+                'pcpn':(d[4]==='M' || parseFloat(d[4])<0.0) ? NaN : ((d[4]==='T') ? 0.00 : parseFloat(d[4])).toFixed(2),
                 'soilt2in':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
                 'soilt4in':(d[6]==='M') ? NaN : parseFloat(d[6]).toFixed(1),
                 'soilt8in':(d[7]==='M') ? NaN : parseFloat(d[7]).toFixed(1),
                 'soilt20in':(d[8]==='M') ? NaN : parseFloat(d[8]).toFixed(1),
                 'soilt40in':(d[9]==='M') ? NaN : parseFloat(d[9]).toFixed(1),
-                'soilm2in':(d[10]==='M') ? NaN : parseFloat(d[10]).toFixed(1),
-                'soilm4in':(d[11]==='M') ? NaN : parseFloat(d[11]).toFixed(1),
-                'soilm8in':(d[12]==='M') ? NaN : parseFloat(d[12]).toFixed(1),
-                'soilm20in':(d[13]==='M') ? NaN : parseFloat(d[13]).toFixed(1),
-                'soilm40in':(d[14]==='M') ? NaN : parseFloat(d[14]).toFixed(1),
+                'soilm2in':(d[10]==='M' || parseFloat(d[10])<0.0) ? NaN : parseFloat(d[10]).toFixed(1),
+                'soilm4in':(d[11]==='M' || parseFloat(d[11])<0.0) ? NaN : parseFloat(d[11]).toFixed(1),
+                'soilm8in':(d[12]==='M' || parseFloat(d[12])<0.0) ? NaN : parseFloat(d[12]).toFixed(1),
+                'soilm20in':(d[13]==='M' || parseFloat(d[13])<0.0) ? NaN : parseFloat(d[13]).toFixed(1),
+                'soilm40in':(d[14]==='M' || parseFloat(d[14])<0.0) ? NaN : parseFloat(d[14]).toFixed(1),
                 'humid':NaN,
-                'solar':(d[15]==='M') ? NaN : parseFloat(d[15]).toFixed(1),
-                'windspdmax':(d[16]==='M') ? NaN : parseFloat(d[16]).toFixed(1),
-                'windspdave':(d[17]==='M') ? NaN : parseFloat(d[17]).toFixed(1),
-                'winddirave':(d[18]==='M') ? NaN : parseFloat(d[18]).toFixed(1),
+                'solar':(d[15]==='M' || parseFloat(d[15])<0.0) ? NaN : parseFloat(d[15]).toFixed(1),
+                'windspdmax':(d[16]==='M' || parseFloat(d[16])<0.0) ? NaN : parseFloat(d[16]).toFixed(1),
+                'windspdave':(d[17]==='M' || parseFloat(d[17])<0.0) ? NaN : parseFloat(d[17]).toFixed(1),
+                'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
                 'leafwet':NaN,
               })
             } else if (timeFrame==='por') {
@@ -867,22 +876,22 @@ export class AppStore {
                     'avgt':(d[1]==='M') ? NaN : parseFloat(d[1]).toFixed(1),
                     'maxt':(d[2]==='M') ? NaN : parseFloat(d[2]).toFixed(1),
                     'mint':(d[3]==='M') ? NaN : parseFloat(d[3]).toFixed(1),
-                    'pcpn':(d[4]==='M') ? NaN : ((d[4]==='T') ? 0.00 : parseFloat(d[4])).toFixed(2),
+                    'pcpn':(d[4]==='M' || parseFloat(d[4])<0.0) ? NaN : ((d[4]==='T') ? 0.00 : parseFloat(d[4])).toFixed(2),
                     'soilt2in':(d[5]==='M') ? NaN : parseFloat(d[5]).toFixed(1),
                     'soilt4in':(d[6]==='M') ? NaN : parseFloat(d[6]).toFixed(1),
                     'soilt8in':(d[7]==='M') ? NaN : parseFloat(d[7]).toFixed(1),
                     'soilt20in':(d[8]==='M') ? NaN : parseFloat(d[8]).toFixed(1),
                     'soilt40in':(d[9]==='M') ? NaN : parseFloat(d[9]).toFixed(1),
-                    'soilm2in':(d[10]==='M') ? NaN : parseFloat(d[10]).toFixed(1),
-                    'soilm4in':(d[11]==='M') ? NaN : parseFloat(d[11]).toFixed(1),
-                    'soilm8in':(d[12]==='M') ? NaN : parseFloat(d[12]).toFixed(1),
-                    'soilm20in':(d[13]==='M') ? NaN : parseFloat(d[13]).toFixed(1),
-                    'soilm40in':(d[14]==='M') ? NaN : parseFloat(d[14]).toFixed(1),
+                    'soilm2in':(d[10]==='M' || parseFloat(d[10])<0.0) ? NaN : parseFloat(d[10]).toFixed(1),
+                    'soilm4in':(d[11]==='M' || parseFloat(d[11])<0.0) ? NaN : parseFloat(d[11]).toFixed(1),
+                    'soilm8in':(d[12]==='M' || parseFloat(d[12])<0.0) ? NaN : parseFloat(d[12]).toFixed(1),
+                    'soilm20in':(d[13]==='M' || parseFloat(d[13])<0.0) ? NaN : parseFloat(d[13]).toFixed(1),
+                    'soilm40in':(d[14]==='M' || parseFloat(d[14])<0.0) ? NaN : parseFloat(d[14]).toFixed(1),
                     'humid':NaN,
-                    'solar':(d[15]==='M') ? NaN : parseFloat(d[15]).toFixed(1),
-                    'windspdmax':(d[16]==='M') ? NaN : parseFloat(d[16]).toFixed(1),
-                    'windspdave':(d[17]==='M') ? NaN : parseFloat(d[17]).toFixed(1),
-                    'winddirave':(d[18]==='M') ? NaN : parseFloat(d[18]).toFixed(1),
+                    'solar':(d[15]==='M' || parseFloat(d[15])<0.0) ? NaN : parseFloat(d[15]).toFixed(1),
+                    'windspdmax':(d[16]==='M' || parseFloat(d[16])<0.0) ? NaN : parseFloat(d[16]).toFixed(1),
+                    'windspdave':(d[17]==='M' || parseFloat(d[17])<0.0) ? NaN : parseFloat(d[17]).toFixed(1),
+                    'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
                     'leafwet':NaN,
                   })
               } else {
@@ -901,7 +910,7 @@ export class AppStore {
               // hourly data
               dateToday = d[0]
               // hourly data
-              if (dateToday<moment().add(-3,'days').format('YYYY-MM-DD')) { return }
+              if (dateToday<moment(date_current,'YYYY-MM-DD').add(-3,'days').format('YYYY-MM-DD')) { return }
               if (dateToday===data[data.length-4][0]) {
                   // first day: only use last hour (midnight)
                   formattedHourString = moment(dateToday,"YYYY-MM-DD").add(1,'days').format("YYYY-MM-DD")+' 00:00'
@@ -911,22 +920,22 @@ export class AppStore {
                       'avgt':(d[1][23]==='M') ? NaN : parseFloat(d[1][23]).toFixed(1),
                       'maxt':(d[2][23]==='M') ? NaN : parseFloat(d[2][23]).toFixed(1),
                       'mint':(d[3][23]==='M') ? NaN : parseFloat(d[3][23]).toFixed(1),
-                      'pcpn':(d[4][23]==='M') ? NaN : ((d[4][23]==='T') ? 0.00 : parseFloat(d[4][23])).toFixed(2),
+                      'pcpn':(d[4][23]==='M' || parseFloat(d[4][23])<0.0) ? NaN : ((d[4][23]==='T') ? 0.00 : parseFloat(d[4][23])).toFixed(2),
                       'soilt2in':(d[5][23]==='M') ? NaN : parseFloat(d[5][23]).toFixed(1),
                       'soilt4in':(d[6][23]==='M') ? NaN : parseFloat(d[6][23]).toFixed(1),
                       'soilt8in':(d[7][23]==='M') ? NaN : parseFloat(d[7][23]).toFixed(1),
                       'soilt20in':(d[8][23]==='M') ? NaN : parseFloat(d[8][23]).toFixed(1),
                       'soilt40in':(d[9][23]==='M') ? NaN : parseFloat(d[9][23]).toFixed(1),
-                      'soilm2in':(d[10][23]==='M') ? NaN : parseFloat(d[10][23]).toFixed(1),
-                      'soilm4in':(d[11][23]==='M') ? NaN : parseFloat(d[11][23]).toFixed(1),
-                      'soilm8in':(d[12][23]==='M') ? NaN : parseFloat(d[12][23]).toFixed(1),
-                      'soilm20in':(d[13][23]==='M') ? NaN : parseFloat(d[13][23]).toFixed(1),
-                      'soilm40in':(d[14][23]==='M') ? NaN : parseFloat(d[14][23]).toFixed(1),
-                      'humid':(d[15][23]==='M') ? NaN : parseFloat(d[15][23]).toFixed(1),
-                      'solar':(d[16][23]==='M') ? NaN : parseFloat(d[16][23]).toFixed(1),
-                      'windspdmax':(d[17][23]==='M') ? NaN : parseFloat(d[17][23]).toFixed(1),
-                      'windspdave':(d[18][23]==='M') ? NaN : parseFloat(d[18][23]).toFixed(1),
-                      'winddirave':(d[19][23]==='M') ? NaN : parseFloat(d[19][23]).toFixed(1),
+                      'soilm2in':(d[10][23]==='M' || parseFloat(d[10][23])<0.0) ? NaN : parseFloat(d[10][23]).toFixed(1),
+                      'soilm4in':(d[11][23]==='M' || parseFloat(d[11][23])<0.0) ? NaN : parseFloat(d[11][23]).toFixed(1),
+                      'soilm8in':(d[12][23]==='M' || parseFloat(d[12][23])<0.0) ? NaN : parseFloat(d[12][23]).toFixed(1),
+                      'soilm20in':(d[13][23]==='M' || parseFloat(d[13][23])<0.0) ? NaN : parseFloat(d[13][23]).toFixed(1),
+                      'soilm40in':(d[14][23]==='M' || parseFloat(d[14][23])<0.0) ? NaN : parseFloat(d[14][23]).toFixed(1),
+                      'humid':(d[15][23]==='M' || parseFloat(d[15][23])<0.0 || parseFloat(d[15][23])>100.0) ? NaN : parseFloat(d[15][23]).toFixed(1),
+                      'solar':(d[16][23]==='M' || parseFloat(d[16][23])<0.0) ? NaN : parseFloat(d[16][23]).toFixed(1),
+                      'windspdmax':(d[17][23]==='M' || parseFloat(d[17][23])<0.0) ? NaN : parseFloat(d[17][23]).toFixed(1),
+                      'windspdave':(d[18][23]==='M' || parseFloat(d[18][23])<0.0) ? NaN : parseFloat(d[18][23]).toFixed(1),
+                      'winddirave':(d[19][23]==='M' || parseFloat(d[19][23])<0.0 || parseFloat(d[19][23])>360.0) ? NaN : parseFloat(d[19][23]).toFixed(1),
                       'leafwet':NaN,
                   })
               } else if (dateToday===data[data.length-1][0]) {
@@ -957,22 +966,22 @@ export class AppStore {
                           'avgt':(d[1][i]==='M') ? NaN : parseFloat(d[1][i]).toFixed(1),
                           'maxt':(d[2][i]==='M') ? NaN : parseFloat(d[2][i]).toFixed(1),
                           'mint':(d[3][i]==='M') ? NaN : parseFloat(d[3][i]).toFixed(1),
-                          'pcpn':(d[4][i]==='M') ? NaN : ((d[4][i]==='T') ? 0.00 : parseFloat(d[4][i])).toFixed(2),
+                          'pcpn':(d[4][i]==='M' || parseFloat(d[4][i])<0.0) ? NaN : ((d[4][i]==='T') ? 0.00 : parseFloat(d[4][i])).toFixed(2),
                           'soilt2in':(d[5][i]==='M') ? NaN : parseFloat(d[5][i]).toFixed(1),
                           'soilt4in':(d[6][i]==='M') ? NaN : parseFloat(d[6][i]).toFixed(1),
                           'soilt8in':(d[7][i]==='M') ? NaN : parseFloat(d[7][i]).toFixed(1),
                           'soilt20in':(d[8][i]==='M') ? NaN : parseFloat(d[8][i]).toFixed(1),
                           'soilt40in':(d[9][i]==='M') ? NaN : parseFloat(d[9][i]).toFixed(1),
-                          'soilm2in':(d[10][i]==='M') ? NaN : parseFloat(d[10][i]).toFixed(1),
-                          'soilm4in':(d[11][i]==='M') ? NaN : parseFloat(d[11][i]).toFixed(1),
-                          'soilm8in':(d[12][i]==='M') ? NaN : parseFloat(d[12][i]).toFixed(1),
-                          'soilm20in':(d[13][i]==='M') ? NaN : parseFloat(d[13][i]).toFixed(1),
-                          'soilm40in':(d[14][i]==='M') ? NaN : parseFloat(d[14][i]).toFixed(1),
-                          'humid':(d[15][i]==='M') ? NaN : parseFloat(d[15][i]).toFixed(1),
-                          'solar':(d[16][i]==='M') ? NaN : parseFloat(d[16][i]).toFixed(1),
-                          'windspdmax':(d[17][i]==='M') ? NaN : parseFloat(d[17][i]).toFixed(1),
-                          'windspdave':(d[18][i]==='M') ? NaN : parseFloat(d[18][i]).toFixed(1),
-                          'winddirave':(d[19][i]==='M') ? NaN : parseFloat(d[19][i]).toFixed(1),
+                          'soilm2in':(d[10][i]==='M' || parseFloat(d[10][i])<0.0) ? NaN : parseFloat(d[10][i]).toFixed(1),
+                          'soilm4in':(d[11][i]==='M' || parseFloat(d[11][i])<0.0) ? NaN : parseFloat(d[11][i]).toFixed(1),
+                          'soilm8in':(d[12][i]==='M' || parseFloat(d[12][i])<0.0) ? NaN : parseFloat(d[12][i]).toFixed(1),
+                          'soilm20in':(d[13][i]==='M' || parseFloat(d[13][i])<0.0) ? NaN : parseFloat(d[13][i]).toFixed(1),
+                          'soilm40in':(d[14][i]==='M' || parseFloat(d[14][i])<0.0) ? NaN : parseFloat(d[14][i]).toFixed(1),
+                          'humid':(d[15][i]==='M' || parseFloat(d[15][i])<0.0 || parseFloat(d[15][i])>100.0) ? NaN : parseFloat(d[15][i]).toFixed(1),
+                          'solar':(d[16][i]==='M' || parseFloat(d[16][i])<0.0) ? NaN : parseFloat(d[16][i]).toFixed(1),
+                          'windspdmax':(d[17][i]==='M' || parseFloat(d[17][i])<0.0) ? NaN : parseFloat(d[17][i]).toFixed(1),
+                          'windspdave':(d[18][i]==='M' || parseFloat(d[18][i])<0.0) ? NaN : parseFloat(d[18][i]).toFixed(1),
+                          'winddirave':(d[19][i]==='M' || parseFloat(d[19][i])<0.0 || parseFloat(d[4][i])>360.0) ? NaN : parseFloat(d[19][i]).toFixed(1),
                           'leafwet':NaN,
                       })
                   }
@@ -994,22 +1003,22 @@ export class AppStore {
                           'avgt':(d[1][i]==='M') ? NaN : parseFloat(d[1][i]).toFixed(1),
                           'maxt':(d[2][i]==='M') ? NaN : parseFloat(d[2][i]).toFixed(1),
                           'mint':(d[3][i]==='M') ? NaN : parseFloat(d[3][i]).toFixed(1),
-                          'pcpn':(d[4][i]==='M') ? NaN : ((d[4][i]==='T') ? 0.00 : parseFloat(d[4][i])).toFixed(2),
+                          'pcpn':(d[4][i]==='M' || parseFloat(d[4][i])<0.0) ? NaN : ((d[4][i]==='T') ? 0.00 : parseFloat(d[4][i])).toFixed(2),
                           'soilt2in':(d[5][i]==='M') ? NaN : parseFloat(d[5][i]).toFixed(1),
                           'soilt4in':(d[6][i]==='M') ? NaN : parseFloat(d[6][i]).toFixed(1),
                           'soilt8in':(d[7][i]==='M') ? NaN : parseFloat(d[7][i]).toFixed(1),
                           'soilt20in':(d[8][i]==='M') ? NaN : parseFloat(d[8][i]).toFixed(1),
                           'soilt40in':(d[9][i]==='M') ? NaN : parseFloat(d[9][i]).toFixed(1),
-                          'soilm2in':(d[10][i]==='M') ? NaN : parseFloat(d[10][i]).toFixed(1),
-                          'soilm4in':(d[11][i]==='M') ? NaN : parseFloat(d[11][i]).toFixed(1),
-                          'soilm8in':(d[12][i]==='M') ? NaN : parseFloat(d[12][i]).toFixed(1),
-                          'soilm20in':(d[13][i]==='M') ? NaN : parseFloat(d[13][i]).toFixed(1),
-                          'soilm40in':(d[14][i]==='M') ? NaN : parseFloat(d[14][i]).toFixed(1),
-                          'humid':(d[15][i]==='M') ? NaN : parseFloat(d[15][i]).toFixed(1),
-                          'solar':(d[16][i]==='M') ? NaN : parseFloat(d[16][i]).toFixed(1),
-                          'windspdmax':(d[17][i]==='M') ? NaN : parseFloat(d[17][i]).toFixed(1),
-                          'windspdave':(d[18][i]==='M') ? NaN : parseFloat(d[18][i]).toFixed(1),
-                          'winddirave':(d[19][i]==='M') ? NaN : parseFloat(d[19][i]).toFixed(1),
+                          'soilm2in':(d[10][i]==='M' || parseFloat(d[10][i])<0.0) ? NaN : parseFloat(d[10][i]).toFixed(1),
+                          'soilm4in':(d[11][i]==='M' || parseFloat(d[11][i])<0.0) ? NaN : parseFloat(d[11][i]).toFixed(1),
+                          'soilm8in':(d[12][i]==='M' || parseFloat(d[12][i])<0.0) ? NaN : parseFloat(d[12][i]).toFixed(1),
+                          'soilm20in':(d[13][i]==='M' || parseFloat(d[13][i])<0.0) ? NaN : parseFloat(d[13][i]).toFixed(1),
+                          'soilm40in':(d[14][i]==='M' || parseFloat(d[14][i])<0.0) ? NaN : parseFloat(d[14][i]).toFixed(1),
+                          'humid':(d[15][i]==='M' || parseFloat(d[15][i])<0.0 || parseFloat(d[15][i])>100.0) ? NaN : parseFloat(d[15][i]).toFixed(1),
+                          'solar':(d[16][i]==='M' || parseFloat(d[16][i])<0.0) ? NaN : parseFloat(d[16][i]).toFixed(1),
+                          'windspdmax':(d[17][i]==='M' || parseFloat(d[17][i])<0.0) ? NaN : parseFloat(d[17][i]).toFixed(1),
+                          'windspdave':(d[18][i]==='M' || parseFloat(d[18][i])<0.0) ? NaN : parseFloat(d[18][i]).toFixed(1),
+                          'winddirave':(d[19][i]==='M' || parseFloat(d[19][i])<0.0 || parseFloat(d[4][i])>360.0) ? NaN : parseFloat(d[19][i]).toFixed(1),
                           'leafwet':NaN,
                       })
                   }
@@ -1176,15 +1185,15 @@ export class AppStore {
             } else if (this.wxgraph_getTimeFrame==='two_years' || this.wxgraph_getTimeFrame==="two_months") {
                 return {
                         "sid":this.getLocation.sid,
-                        "sdate":moment().add(numdays,'days').format("YYYY-MM-DD"),
-                        "edate":moment().format("YYYY-MM-DD"),
+                        "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                        "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
                         "elems":elems
                     }
             } else {
                 return {
                         "sid":this.getLocation.sid,
-                        "sdate":moment().add(numdays,'days').format("YYYY-MM-DD"),
-                        "edate":moment().format("YYYY-MM-DD"),
+                        "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                        "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
                         "elems":elems,
                         "meta":""
                     }
@@ -1245,7 +1254,7 @@ export class AppStore {
     @computed get livestock_getVarLabels() {
           return {
             airtemp_label : 'Air Temperature',
-            humidity_label : 'Humidity',
+            humidity_label : 'Relative Humidity',
             solarrad_label : 'Solar Radiation',
             wind_label : 'Wind',
           };
@@ -1289,18 +1298,22 @@ export class AppStore {
     @computed get livestock_getAcisParams() {
             let elems
             let numdays
+            let dateToday
             elems = [
                 {"vX":23}, //temp
                 {"vX":24}, //relative humidity
                 {"vX":149}, //solar radiation
                 {"vX":128}, //wind speed
             ]
-            numdays=-3
+            numdays=-2
 
             return {
                 "sid":this.getLocation.sid,
-                "sdate":moment().add(numdays,'days').format("YYYY-MM-DD"),
-                "edate":moment().format("YYYY-MM-DD"),
+                "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                // former live
+                //"sdate":moment().add(numdays,'days').format("YYYY-MM-DD"),
+                //"edate":moment().format("YYYY-MM-DD"),
                 // testing until data are up-to-date
                 //"sdate":moment('2019-02-17','YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
                 //"edate":moment('2019-02-17','YYYY-MM-DD').format("YYYY-MM-DD"),
@@ -1336,7 +1349,7 @@ export class AppStore {
     //     solar : total solar radiation for hour (W/m2)
     //     wind : wind speed for hour (mph)
     @observable livestock_climateSummary = [{
-                'date': moment().format('YYYY-MM-DD'),
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
                 'avgt': NaN,
                 'humid': NaN,
                 'solar': NaN,
@@ -1344,7 +1357,7 @@ export class AppStore {
                 }]
     @action livestock_initClimateSummary = () => {
         let dataObjArray = [{
-                'date': moment().format('YYYY-MM-DD'),
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
                 'avgt': NaN,
                 'humid': NaN,
                 'solar': NaN,
@@ -1368,9 +1381,9 @@ export class AppStore {
               if (dateToday===data[0][0]) {
                   // first day: only use last hour (midnight)
                   tvar = (d[1][23]==='M') ? NaN : parseFloat(d[1][23])
-                  hvar = (d[2][23]==='M') ? NaN : parseFloat(d[2][23])
-                  svar = (d[3][23]==='M') ? NaN : parseFloat(d[3][23])
-                  wvar = (d[4][23]==='M') ? NaN : parseFloat(d[4][23])
+                  hvar = (d[2][23]==='M' || parseFloat(d[2][23])<0.0 || parseFloat(d[2][23])>100.0) ? NaN : parseFloat(d[2][23])
+                  svar = (d[3][23]==='M' || parseFloat(d[3][23])<0.0) ? NaN : parseFloat(d[3][23])
+                  wvar = (d[4][23]==='M' || parseFloat(d[4][23])<0.0) ? NaN : parseFloat(d[4][23])
                   // use estimate of solar radiation, if unavailable
                   //if (!svar) { svar = 1000 };
                   if (!isNaN(tvar) && !isNaN(hvar) && !isNaN(svar) && !isNaN(wvar)) {
@@ -1406,9 +1419,9 @@ export class AppStore {
                   numHours -= numFutureMissingHours
                   for (i = 0; i < numHours; i++) { 
                       tvar = (d[1][i]==='M') ? NaN : parseFloat(d[1][i])
-                      hvar = (d[2][i]==='M') ? NaN : parseFloat(d[2][i])
-                      svar = (d[3][i]==='M') ? NaN : parseFloat(d[3][i])
-                      wvar = (d[4][i]==='M') ? NaN : parseFloat(d[4][i])
+                      hvar = (d[2][i]==='M' || parseFloat(d[2][i])<0.0 || parseFloat(d[2][i])>100.0) ? NaN : parseFloat(d[2][i])
+                      svar = (d[3][i]==='M' || parseFloat(d[3][i])<0.0) ? NaN : parseFloat(d[3][i])
+                      wvar = (d[4][i]==='M' || parseFloat(d[4][i])<0.0) ? NaN : parseFloat(d[4][i])
                       // use estimate of solar radiation, if unavailable
                       //if (!svar) { svar = 1000 };
                       if (!isNaN(tvar) && !isNaN(hvar) && !isNaN(svar) && !isNaN(wvar)) {
@@ -1443,9 +1456,9 @@ export class AppStore {
                   numHours = d[1].length
                   for (i = 0; i < numHours; i++) { 
                       tvar = (d[1][i]==='M') ? NaN : parseFloat(d[1][i])
-                      hvar = (d[2][i]==='M') ? NaN : parseFloat(d[2][i])
-                      svar = (d[3][i]==='M') ? NaN : parseFloat(d[3][i])
-                      wvar = (d[4][i]==='M') ? NaN : parseFloat(d[4][i])
+                      hvar = (d[2][i]==='M' || parseFloat(d[2][i])<0.0 || parseFloat(d[2][i])>100.0) ? NaN : parseFloat(d[2][i])
+                      svar = (d[3][i]==='M' || parseFloat(d[3][i])<0.0) ? NaN : parseFloat(d[3][i])
+                      wvar = (d[4][i]==='M' || parseFloat(d[4][i])<0.0) ? NaN : parseFloat(d[4][i])
                       // use estimate of solar radiation, if unavailable
                       //if (!svar) { svar = 1000 };
                       if (!isNaN(tvar) && !isNaN(hvar) && !isNaN(svar) && !isNaN(wvar)) {
@@ -1467,7 +1480,6 @@ export class AppStore {
                       } else {
                       }
                       dataObjArray_hours.push({
-                          //'date':(i+1>=10) ? dateToday+' '+(i+1).toString()+':00' : dateToday+' 0'+(i+1).toString()+':00',
                           'date':formattedHourString,
                           'avgt':tvar,
                           'humid':hvar,

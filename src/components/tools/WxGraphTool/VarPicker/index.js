@@ -153,6 +153,21 @@ class VarPicker extends Component {
               }
               label={wind_label}
             />
+            <FormControlLabel
+              className={classes.formControlLabel}
+              control={
+                <Checkbox
+                  checked={leafwet}
+                  onChange={app.wxgraph_setVars('leafwet')}
+                  value="leafwet"
+                  classes={{
+                    root: classes.root,
+                    checked: classes.checked,
+                  }}
+                />
+              }
+              label={leafwet_label}
+            />
           </FormGroup>
         </FormControl>
       </div>

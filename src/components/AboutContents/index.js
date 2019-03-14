@@ -2,16 +2,17 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 import { inject, observer} from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 
 // Components
-//import StationExplorer from '../../components/StationExplorer';
+import StationAboutMap from '../../components/StationAboutMap';
 import ToolLister from '../../components/ToolLister';
 
-import scanmap from '../../assets/scan-station-map.png'
+//import scanmap from '../../assets/scan-station-map.png'
 
 // Styles
 import '../../styles/AboutContents.css';
@@ -62,7 +63,7 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                         <li><a href="https://www.wcc.nrcs.usda.gov/tribalscan/tribalscan_brochure.pdf" target="_blank" rel="noopener noreferrer">Tribal SCAN brochure</a></li>
                       </ul>
                     </Typography>
-                    <img className="scan-station-map" src={scanmap} alt="SCAN stations"/>
+                    { this.props.store.app.getLocations && (<StationAboutMap />)}
               </Grid>
               <Grid item sm={12} md={6}>
                     <Typography align="left" paragraph variant="h5">
@@ -72,7 +73,7 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                       These decision tools use SCAN data to address a variety of agricultural applications. Each tool utilizes the Applied Climate Information System (ACIS) web service for fast, easy and reliable access to SCAN data. Together, SCAN and ACIS provide the means to produce efficient, powerful, and user-friendly tools using data observed at both traditional and tribal SCAN stations.
                     </Typography>
                     <Typography align="justify" paragraph variant="body1">
-                      Each tool allows for station selection from either a map or dropdown list, and data can be viewed in either chart or table form. To learn more about these tools and how to use them, please visit <a href="">SCAN 4 STEM</a>.
+                      Each tool allows for station selection from either a map or dropdown list, and data can be viewed in either chart or table form. To learn more about these tools and how to use them, please visit <Link to={'/stem'}>SCAN 4 STEM</Link>.
                     </Typography>
                     <ToolLister />
               </Grid>
