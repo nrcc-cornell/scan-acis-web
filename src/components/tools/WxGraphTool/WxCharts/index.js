@@ -116,7 +116,7 @@ class WxCharts extends Component {
                     />
                     <YAxis
                         label={{ value: app.wxgraph_getVarUnits['airtemp_units'], angle: -90, position:'insideLeft', offset: 20 }}
-                        domain = {calcDomain(dataForChart,['avgt','mint','maxt'],[1,1],1)}
+                        domain = {(app.wxgraph_getTimeFrame==='two_months') ? calcDomain(dataForChart,['avgt','mint','maxt'],[1,1],1) : calcDomain(dataForChart,['avgt'],[1,1],1)}
                     />
                     <Tooltip/>
                     {app.wxgraph_getTimeFrame==='two_months' && <Area type='monotone' name='Air Temp Range' dataKey='temprange' stroke='' fill='#D3D3D3' />}
