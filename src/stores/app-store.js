@@ -13,9 +13,8 @@ const arrSum = arr => arr.reduce((a,b) => a + b, 0)
 const arrAvg = arr => arr.reduce((a,b) => a + b, 0) / arr.length
 
 //current date
-//const date_current = moment().format('YYYY-MM-DD')
-const date_current = "2019-03-04"
-//const date_current = "2018-09-29"
+const date_current = moment().format('YYYY-MM-DD')
+//const date_current = "2019-03-15"
 
 export class AppStore {
     ///////////////////////////////////////////////////////

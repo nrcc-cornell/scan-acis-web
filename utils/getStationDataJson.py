@@ -46,7 +46,8 @@ def getStdStartString(s):
 # use today's date as current date
 #date_current = datetime.datetime.now()
 # use some date in the past as current date
-date_current = datetime.date(2019,3,4)
+#date_current = datetime.date(2019,3,4)
+date_current = datetime.date(2019,3,17)
 
 # grid data
 #pData = {"bbox":"-82.708330,37.166667,-66.875,47.625","grid":"3","elems":"pcpn","meta":"ll","date":"2019-02-07"}
