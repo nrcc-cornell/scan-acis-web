@@ -63,9 +63,11 @@ class StationExplorerSelect extends Component {
         let disabled
         let selectOptions = []
         let sortedNames = this.props.names.sort(this.compareValues('state'))
+        let network
         for (var v of sortedNames) {
             disabled = false
-            selectOptions.push({ value: v.uid.toString(), label: v.name+', '+v.state, clearableValue: false, disabled: disabled })
+            network = v.network=='17' ? 'SCAN' : 'Tribal SCAN'
+            selectOptions.push({ value: v.uid.toString(), label: v.name+', '+v.state+' ('+network+')', clearableValue: false, disabled: disabled })
         }
 
         return (

@@ -36,15 +36,9 @@ class TimeFrameButtonGroup extends React.Component {
           row
         >
           <FormControlLabel
-            value="por"
+            value="two_days"
             control={<Radio color="primary" />}
-            label="Entire Record"
-            labelPlacement="top"
-          />
-          <FormControlLabel
-            value="two_years"
-            control={<Radio color="primary" />}
-            label="2 Years"
+            label="2 Days"
             labelPlacement="top"
           />
           <FormControlLabel
@@ -54,9 +48,15 @@ class TimeFrameButtonGroup extends React.Component {
             labelPlacement="top"
           />
           <FormControlLabel
-            value="two_days"
+            value="two_years"
             control={<Radio color="primary" />}
-            label="2 Days"
+            label="2 Years"
+            labelPlacement="top"
+          />
+          <FormControlLabel
+            value="por"
+            control={<Radio color="primary" />}
+            label="Entire Record"
             labelPlacement="top"
           />
         </RadioGroup>

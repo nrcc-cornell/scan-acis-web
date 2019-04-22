@@ -264,6 +264,27 @@ class WxCharts extends Component {
             </Grid>
 
             <Grid item xs={12} md={9}>
+                <ResponsiveContainer width="100%" height={160} className={(app.wxgraph_getVars['wind']) ? "" : "isHidden"}>
+                  <LineChart data={dataForChart} syncId="anyId"
+                        margin={{top: 0, right: 30, left: 0, bottom: 0}}>
+                    <CartesianGrid strokeDasharray="3 3"/>
+                    <XAxis
+                      dataKey="date"
+                      tickFormatter={formatXAxisForDate}
+                      label={{ value: app.wxgraph_getVarLabels['winddir_label'], angle: 0, position: 'top' }}
+                      interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
+                    />
+                    <YAxis
+                        label={{ value: app.wxgraph_getVarUnits['winddir_units'], angle: -90, position:'insideLeft', offset: 20 }}
+                        domain = {calcDomain(dataForChart,['winddirave'],[0,1],0)}
+                    />
+                    <Tooltip/>
+                    <Line type='monotone' name='Wind Direction' dataKey='winddirave' stroke='#8884d8' fill='#8884d8' />
+                  </LineChart>
+                </ResponsiveContainer>
+            </Grid>
+
+            <Grid item xs={12} md={9}>
                 <ResponsiveContainer width="100%" height={100} className={(app.wxgraph_getVars['leafwet']) ? "" : "isHidden"}>
                   <LineChart data={dataForChart} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>

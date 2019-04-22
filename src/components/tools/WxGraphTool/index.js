@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 
 // Components
+import GrapherDatePicker from './GrapherDatePicker'
 import TimeFrameButtonGroup from './TimeFrameButtonGroup'
 //import ExtremeSwitch from './ExtremeSwitch'
 import VarPopover from './VarPopover'
@@ -94,6 +95,9 @@ class WxGraphTool extends Component {
                             </Grid>
                           </Hidden>
                           <Grid item>
+                            <GrapherDatePicker/>
+                          </Grid>
+                          <Grid item>
                             <TimeFrameButtonGroup/>
                           </Grid>
                         </Grid>
@@ -118,6 +122,9 @@ class WxGraphTool extends Component {
             <Grid container direction="row" justify="center" alignItems="flex-start">
                     <Grid item container className="nothing" direction="column" xs={12}>
                         <Grid item container direction="row" justify="center" alignItems="center" spacing="8">
+                          <Grid item>
+                            <GrapherDatePicker/>
+                          </Grid>
                           <Grid item>
                             <TimeFrameButtonGroup/>
                           </Grid>

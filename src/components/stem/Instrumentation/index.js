@@ -5,8 +5,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer} from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
-//import IconButton from '@material-ui/core/IconButton';
-//import MenuIcon from '@material-ui/icons/Menu';
+import imageMapResize from 'image-map-resizer';
 import Hidden from '@material-ui/core/Hidden';
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
@@ -36,15 +35,24 @@ const styles = theme => ({
   },
 });
 
-//var app;
+var app;
 
 @inject('store') @observer
 class Instrumentation extends Component {
 
-    //constructor(props) {
-    //    super(props);
-    //    app = this.props.store.app;
-    //}
+    constructor(props) {
+        super(props);
+        app = this.props.store.app;
+    }
+
+    componentDidMount() {
+        imageMapResize();
+    }
+
+    updateInstrument = (e,i) => {
+        e.preventDefault();
+        app.stem_setInstrument(i);
+    }
 
     render() {
 
@@ -70,11 +78,18 @@ class Instrumentation extends Component {
               </Grid>
             <Grid item container direction="row" className={classes.root} spacing={32}>
               <Grid item>
-                    <img className="scan-station-instrument" src={scanstn} alt="SCAN instrumentation"/>
+                    <img className="scan-station-instrument" src={scanstn} alt="SCAN instrumentation" usemap="#instrumentmap" />
+                    <map name="instrumentmap">
+                        <area onClick={(e) => {this.updateInstrument(e,'wind')}} shape="rect" coords="16,181,180,327" href="#" />
+                        <area onClick={(e) => {this.updateInstrument(e,'solarrad')}} shape="rect" coords="350,267,547,327" href="#" />
+                        <area onClick={(e) => {this.updateInstrument(e,'precip')}} shape="rect" coords="9,347,220,417" href="#" />
+                        <area onClick={(e) => {this.updateInstrument(e,'rh_and_temp')}} shape="rect" coords="300,348,565,417" href="#" />
+                        <area onClick={(e) => {this.updateInstrument(e,'soil')}} shape="rect" coords="9,496,176,606" href="#" />
+                    </map>
               </Grid>
               <Grid item>
                     <Typography align="left" paragraph variant="h6">
-                      (Name of selected instrument here)
+                      {app.stem_getInstrumentName}
                     </Typography>
                     <Typography align="justify" paragraph variant="body1">
                       <ul>

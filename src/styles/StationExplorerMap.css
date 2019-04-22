@@ -50,8 +50,6 @@ button:focus {outline:0;}
     background-color: #FFFFFF;
     margin: 0;
     padding: 0;
-    //display: inline-block;
-    //text-align: center;
     cursor: pointer;
 }
 

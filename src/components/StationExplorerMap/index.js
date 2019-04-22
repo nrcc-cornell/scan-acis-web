@@ -9,7 +9,7 @@ import 'leaflet/dist/leaflet.css';
 //import Control from 'react-leaflet-control';
 //import { Map, GeoJSON, LayersControl, TileLayer } from 'react-leaflet';
 //import { Map, GeoJSON, TileLayer } from 'react-leaflet';
-import { Map, GeoJSON, TileLayer, ZoomControl } from 'react-leaflet';
+import { Map, GeoJSON, Marker, Popup, TileLayer, ZoomControl } from 'react-leaflet';
 //import LegendControl from '../LegendControl';
 
 // Styles
@@ -17,6 +17,16 @@ import { Map, GeoJSON, TileLayer, ZoomControl } from 'react-leaflet';
 
 import StationExplorerLegend from '../../components/StationExplorerLegend';
 import StationExplorerButtonFlyTo from '../../components/StationExplorerButtonFlyTo';
+
+// start: added code to work with markers
+delete L.Icon.Default.prototype._getIconUrl;
+
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
+    iconUrl: require('leaflet/dist/images/marker-icon.png'),
+    shadowUrl: require('leaflet/dist/images/marker-shadow.png')
+});
+// end: added code to work with markers
 
 const mapContainer = 'map-container';
 const zoomLevel = 4;
@@ -53,6 +63,7 @@ class StationExplorerMap extends Component {
     componentDidMount() {
       this.updateWindowDimensions();
       window.addEventListener('resize', this.updateWindowDimensions);
+      //if (this.mapInstance) {this.map = this.mapInstance.leafletElement}
       this.map = this.mapInstance.leafletElement
     }
 
@@ -82,6 +93,9 @@ class StationExplorerMap extends Component {
 
     render() {
 
+        let markerLat = (app.getLocation_explorer) ? app.getLocation_explorer.ll[1] : 0.0
+        let markerLon = (app.getLocation_explorer) ? app.getLocation_explorer.ll[0] : 0.0
+
         return (
             <div className="StationExplorerMap">
                     <Map
@@ -109,15 +123,17 @@ class StationExplorerMap extends Component {
                             pointToLayer={(feature,latlng) => {return L.circleMarker(latlng)}}
                             onEachFeature={app.stationOnEachFeature_explorer}
                         />
+                        <Marker key={'marker-select'} position={[markerLat,markerLon]} />
                         <StationExplorerButtonFlyTo pos="bottomleft" loc="Hawaii" onclick={this.onClickHawaii} />
-                        <StationExplorerButtonFlyTo pos="bottomright" loc="Puerto Rico & Virgin Isles" onclick={this.onClickPR} />
-                        <StationExplorerButtonFlyTo pos="topleft" loc="Alaska" onclick={this.onClickAlaska} />
+                        <StationExplorerButtonFlyTo pos="bottomleft" loc="Alaska" onclick={this.onClickAlaska} />
+                        <StationExplorerButtonFlyTo pos="bottomright" loc="PR & VI" onclick={this.onClickPR} />
+                        <StationExplorerButtonFlyTo pos="bottomright" loc="CONUS" onclick={this.onClickCONUS} />
                         <ZoomControl position="topleft" />
-                        <StationExplorerButtonFlyTo pos="topleft" loc="Home" onclick={this.onClickCONUS} />
                         <StationExplorerLegend/>
                     </Map>
             </div>
         );
+
     }
 }
 

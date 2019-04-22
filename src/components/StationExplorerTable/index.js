@@ -9,6 +9,10 @@ import Grid from "@material-ui/core/Grid";
 import Button from '@material-ui/core/Button';
 
 import StationExplorerSelect from '../../components/StationExplorerSelect';
+import StationExplorerInfo from '../../components/StationExplorerInfo';
+import StationExplorerClimateSummary from '../../components/StationExplorerClimateSummary';
+import StationExplorerLatestConditions from '../../components/StationExplorerLatestConditions';
+import StationExplorerData from '../../components/StationExplorerData';
 
 // Styles
 //import '../../styles/StationExplorerTable.css';
@@ -21,66 +25,6 @@ class StationExplorerTable extends Component {
     constructor(props) {
         super(props);
         app = this.props.store.app;
-    }
-
-    tempWithSign = (n) => {
-        if (n===undefined ) {
-            // no value
-            return ''
-        } else if (n==='M' ) {
-            // missing
-            return n
-        } else if (parseFloat(n)<=0.0) {
-            // already has minus sign
-            return parseFloat(n).toFixed(1)
-        } else {
-            // add plus sign
-            return '+'+parseFloat(n).toFixed(1)
-        }
-    }
-
-    precipWithSign = (n) => {
-        if (n===undefined ) {
-            // no value
-            return ''
-        } else if (n==='M' ) {
-            // missing
-            return n
-        } else if (parseFloat(n)<=0.0) {
-            // already has minus sign
-            return parseFloat(n).toFixed(2)
-        } else {
-            // add plus sign
-            return '+'+parseFloat(n).toFixed(2)
-        }
-    }
-
-    tempWithUnits = (n) => {
-        if (n===undefined ) {
-            // no value
-            return ''
-        } else if (n==='M' ) {
-            // missing
-            return n
-        } else {
-            // add plus sign
-            //return parseFloat(n).toPrecision(1).toString()+String.fromCharCode(176)+'F'
-            return parseFloat(n).toFixed(1)+String.fromCharCode(176)+'F'
-        }
-    }
-
-    precipWithUnits = (n) => {
-        if (n===undefined ) {
-            // no value
-            return ''
-        } else if (n==='M' ) {
-            // missing
-            return n
-        } else {
-            // add plus sign
-            //return n+'"'
-            return parseFloat(n).toFixed(2)+'"'
-        }
     }
 
     render() {
@@ -100,35 +44,10 @@ class StationExplorerTable extends Component {
                 </Grid>
                 <Grid item container spacing={16}>
                   <Grid item>
-                    <Typography variant="h6">
-                      Station Information
-                    </Typography>
-                    <Typography variant="body1" gutterBottom>
-                      <ul style={{"padding":0,"margin":0,"listStyleType":"none"}}>
-                        <li>Name: {app.getLocation_explorer.name}, {app.getLocation_explorer.state}</li>
-                        <li>Network: {(app.getLocation_explorer.network===17) ? 'SCAN' : 'T-SCAN'}</li>
-                        <li>Latitude, Longitude: {app.getLocation_explorer.ll[1]}, {app.getLocation_explorer.ll[0]}</li>
-                        <li>Elevation: {app.getLocation_explorer.elev} feet</li>
-                        <li>Period of Record: {app.getLocation_explorer.sdate} to {porEnd}</li>
-                        <li>Soil Characteristics: --</li>
-                      </ul>
-                    </Typography>
+                      <StationExplorerInfo />
                   </Grid>
                   <Grid item>
-                    <Typography variant="h6" noWrap>
-                      Climate Summary (as of {app.getDatesForLocations.date})
-                    </Typography>
-                    <Typography variant="body1" gutterBottom noWrap>
-                      <table cellPadding="6"><tbody>
-                        <tr><td></td><td>Since</td><td>Temperature</td><td>Precipitation</td></tr>
-                        <tr><td>Year-to-date</td><td>{app.getDatesForLocations.ytd_start}</td><td>{this.tempWithUnits(app.getLocation_explorer.t_ytd_o)} ({this.tempWithSign(app.getLocation_explorer.t_ytd_n)})</td><td>{this.precipWithUnits(app.getLocation_explorer.p_ytd_o)} ({this.precipWithSign(app.getLocation_explorer.p_ytd_n)})</td></tr>
-                        <tr><td>Season-to-date</td><td>{app.getDatesForLocations.std_start}</td><td>{this.tempWithUnits(app.getLocation_explorer.t_std_o)} ({this.tempWithSign(app.getLocation_explorer.t_std_n)})</td><td>{this.precipWithUnits(app.getLocation_explorer.p_std_o)} ({this.precipWithSign(app.getLocation_explorer.p_std_n)})</td></tr>
-                        <tr><td>Month-to-date</td><td>{app.getDatesForLocations.mtd_start}</td><td>{this.tempWithUnits(app.getLocation_explorer.t_mtd_o)} ({this.tempWithSign(app.getLocation_explorer.t_mtd_n)})</td><td>{this.precipWithUnits(app.getLocation_explorer.p_mtd_o)} ({this.precipWithSign(app.getLocation_explorer.p_mtd_n)})</td></tr>
-                      </tbody></table>
-                    </Typography>
-                    <Button variant="outlined" color="primary" onClick={() => {this.props.history.push(app.getToolInfo('wxgrapher').url)}}>
-                      View Additional Data
-                    </Button>
+                      <StationExplorerData />
                   </Grid>
                 </Grid>
               </Grid>

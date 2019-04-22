@@ -172,6 +172,8 @@ export class AppStore {
             if (this.getLocation.uid.toString() !== t.value) {
                 this.setSelectedLocation(t);
             }
+            // update data view for station explorer
+            this.setDataView_explorer('climate');
         };
     @computed get getLocation_explorer() { return this.location_explorer };
 
@@ -195,6 +197,7 @@ export class AppStore {
             click: () => {
                 this.setLocation(feature.id);
                 this.setLocation_explorer(feature.id);
+                this.setDataView_explorer('climate');
                 if (this.getShowModalMap) { this.setShowModalMap(false) };
             },
             mouseover: () => {
@@ -206,20 +209,21 @@ export class AppStore {
         });
     }
     @action stationOnEachFeature_explorer = (feature, layer) => {
-        //if (feature.properties && feature.properties.name) {
-        //    layer.bindPopup(feature.properties.name);
-        //}
+        if (feature.properties && feature.properties.name) {
+            layer.bindPopup(feature.properties.name);
+        }
         layer.on({
             mouseover: () => {
                 // set to feature currently moused over
                 this.setLocation(feature.id);
                 this.setLocation_explorer(feature.id);
-                //layer.openPopup();
+                this.setDataView_explorer('climate');
+                layer.openPopup();
             },
             mouseout: () => {
                 // reset to previous tool location selection
                 //this.setLocation_explorer(this.getLocation);
-                //layer.closePopup();
+                layer.closePopup();
             },
         });
     }
@@ -228,12 +232,13 @@ export class AppStore {
         // SCAN network is 17
         // T-SCAN network is 19
         return {
-            radius: 2,
+            radius: 4,
             weight: 1,
             opacity: 1.0,
-            color: (feature.properties.network===17) ? 'blue' : 'red',
+            //color: (feature.properties.network===17) ? 'blue' : 'red',
+            color: 'white',
             fillColor: (feature.properties.network===17) ? 'blue' : 'red',
-            fillOpacity: 1.0
+            fillOpacity: 1.0,
         };
     }
 
@@ -291,6 +296,7 @@ export class AppStore {
                // 85812 is the UID of this site
                this.setLocation(85812);
                this.setLocation_explorer(85812);
+               this.setDataView_explorer('climate');
                this.setDatesForLocations({'date':data['date'],'ytd_start':data['ytd_start'],'std_start':data['std_start'],'mtd_start':data['mtd_start']});
                if (this.getToolName==='gddtool') {this.gddtool_downloadData}
                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData}
@@ -306,6 +312,18 @@ export class AppStore {
     @computed get getDatesForLocations() {
         return this.datesForLocations
     }
+
+    // station explorer data view
+    // 'climate': show climate summary
+    // 'weather': show latest conditions
+    @observable dataView_explorer = 'climate';
+    @action setDataView_explorer = (d) => {
+            this.dataView_explorer=d
+        }
+    @computed get getDataView_explorer() {
+        return this.dataView_explorer
+    }
+
 
     // action for changing map setting via buttons
     // - this will center and zoom map on Alaska, Hawaii or PR
@@ -660,6 +678,18 @@ export class AppStore {
         return this.wxgraph_extSwitch
     }
 
+    @observable grapher_date = moment(date_current,'YYYY-MM-DD');
+    @action setGrapherDate = (v) => {
+      this.grapher_date = v
+      if (this.getToolName==='wxgrapher') { this.wxgraph_downloadData() }
+    };
+    @computed get getGrapherDate() {
+      return this.grapher_date
+    };
+    @computed get getGrapherYear() {
+      return this.getGrapherDate.format('YYYY')
+    };
+
     // for component: VarPicker
     @observable wxgraph_vars={
             airtemp : true,
@@ -697,6 +727,7 @@ export class AppStore {
             humidity_label : 'Relative Humidity',
             solarrad_label : 'Solar Radiation',
             wind_label : 'Wind Speed',
+            winddir_label : 'Wind Direction',
             leafwet_label : 'Leaf Wetness',
           };
         }
@@ -723,6 +754,7 @@ export class AppStore {
             humidity_units : '%',
             solarrad_units : (this.wxgraph_getTimeFrame==='two_days') ? 'W/m2' : 'langleys',
             wind_units : 'mph',
+            winddir_units : 'deg',
             leafwet_units : 'min',
           };
         };
@@ -909,7 +941,7 @@ export class AppStore {
               // hourly data
               dateToday = d[0]
               // hourly data
-              if (dateToday<moment(date_current,'YYYY-MM-DD').add(-3,'days').format('YYYY-MM-DD')) { return }
+              //if (dateToday<moment(date_current,'YYYY-MM-DD').add(-3,'days').format('YYYY-MM-DD')) { return }
               if (dateToday===data[data.length-4][0]) {
                   // first day: only use last hour (midnight)
                   formattedHourString = moment(dateToday,"YYYY-MM-DD").add(1,'days').format("YYYY-MM-DD")+' 00:00'
@@ -1184,15 +1216,19 @@ export class AppStore {
             } else if (this.wxgraph_getTimeFrame==='two_years' || this.wxgraph_getTimeFrame==="two_months") {
                 return {
                         "sid":this.getLocation.sid,
-                        "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
-                        "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                        //"sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                        //"edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                        "sdate":moment(this.getGrapherDate.format('YYYY-MM-DD'),'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                        "edate":moment(this.getGrapherDate.format('YYYY-MM-DD'),'YYYY-MM-DD').format("YYYY-MM-DD"),
                         "elems":elems
                     }
             } else {
                 return {
                         "sid":this.getLocation.sid,
-                        "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
-                        "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                        //"sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                        //"edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                        "sdate":moment(this.getGrapherDate.format('YYYY-MM-DD'),'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                        "edate":moment(this.getGrapherDate.format('YYYY-MM-DD'),'YYYY-MM-DD').format("YYYY-MM-DD"),
                         "elems":elems,
                         "meta":""
                     }
@@ -1234,6 +1270,218 @@ export class AppStore {
             );
           });
     }
+
+    ////////////////////////////////////
+    // Station Explorer: download data, assign climate data
+    ////////////////////////////////////
+
+    // climate data saved
+    // - the full hourly request downloaded from ACIS
+    @observable explorer_climateData = null;
+    @action explorer_setClimateData = (res) => {
+        this.explorer_climateData = res
+    }
+    @computed get explorer_getClimateData() {
+        return this.explorer_climateData
+    }
+
+    // latest hourly data saved here: to be used in station explorer table
+    // - data includes:
+    //     date : date of observation
+    //     avgt : average temperature for day (F)
+    //     pcpn : accumulated precipitation for day (in)
+    //     soilt : average temperature for day (F)
+    //     soilm : average soil moisture for day (%)
+    //     humid : average humidity for day (%)
+    //     solar : total solar radiation for day (W/m2 for hourly inst, langleys for daily sum)
+    //     wind : average wind speed for day (mph)
+    //     leafwet : average leaf wetness for day (minutes)
+    @observable explorer_latestConditions = {
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+                'avgt':NaN,
+                'maxt':NaN,
+                'mint':NaN,
+                'pcpn':NaN,
+                'soilt2in':NaN,
+                'soilt4in':NaN,
+                'soilt8in':NaN,
+                'soilt20in':NaN,
+                'soilt40in':NaN,
+                'soilm2in':NaN,
+                'soilm4in':NaN,
+                'soilm8in':NaN,
+                'soilm20in':NaN,
+                'soilm40in':NaN,
+                'humid':NaN,
+                'solar':NaN,
+                'windspdmax':NaN,
+                'windspdave':NaN,
+                'winddirave':NaN,
+                'leafwet':NaN,
+        };
+
+    @action explorer_initLatestConditions = () => {
+        let dataObjOut = {
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+                'avgt':NaN,
+                'maxt':NaN,
+                'mint':NaN,
+                'pcpn':NaN,
+                'soilt2in':NaN,
+                'soilt4in':NaN,
+                'soilt8in':NaN,
+                'soilt20in':NaN,
+                'soilt40in':NaN,
+                'soilm2in':NaN,
+                'soilm4in':NaN,
+                'soilm8in':NaN,
+                'soilm20in':NaN,
+                'soilm40in':NaN,
+                'humid':NaN,
+                'solar':NaN,
+                'windspdmax':NaN,
+                'windspdave':NaN,
+                'winddirave':NaN,
+                'leafwet':NaN,
+            };
+        this.explorer_latestConditions = dataObjOut
+    }
+
+    @action explorer_setLatestConditions = () => {
+        let data = this.explorer_getClimateData;
+        let dataObjOut = {};
+        let i, dateToday, numHours, numFutureMissingHours;
+        let formattedHourString
+        data.forEach(function (d) {
+              dateToday = d[0]
+              numHours = d[1].length
+              numFutureMissingHours = 0
+              for (i = numHours-1; i >= 0; i--) { 
+                  if (d[1][i]==='M') {
+                      numFutureMissingHours += 1;
+                  } else {
+                      break;
+                  }
+              }
+              if (numHours===numFutureMissingHours) {return};
+              // continue below, if today has some valid hours
+              numHours -= numFutureMissingHours
+              for (i = 0; i < numHours; i++) { 
+                  // format hour
+                  if (i<=8) {
+                      formattedHourString = dateToday+' 0'+(i+1).toString()+':00'
+                  } else if (i>8 && i<23) {
+                      formattedHourString = dateToday+' '+(i+1).toString()+':00'
+                  } else if (i===23) {
+                      formattedHourString = moment(dateToday,"YYYY-MM-DD").add(1,'days').format("YYYY-MM-DD")+' 00:00'
+                  } else {
+                  }
+                  // assign this hour to dataObjOut
+                  // We'll keep overwriting this object. The last hour written to this object is the last hour of available data.
+                  dataObjOut = {
+                      'date':formattedHourString,
+                      'avgt':(d[1][i]==='M') ? 'M' : parseFloat(d[1][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+                      'maxt':(d[2][i]==='M') ? 'M' : parseFloat(d[2][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+                      'mint':(d[3][i]==='M') ? 'M' : parseFloat(d[3][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+                      'pcpn':(d[4][i]==='M' || parseFloat(d[4][i])<0.0) ? 'M' : ((d[4][i]==='T') ? 'T' : parseFloat(d[4][i])).toFixed(2).toString()+'"',
+                      'soilt2in':(d[5][i]==='M') ? 'M' : parseFloat(d[5][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+                      'soilt4in':(d[6][i]==='M') ? 'M' : parseFloat(d[6][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+                      'soilt8in':(d[7][i]==='M') ? 'M' : parseFloat(d[7][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+                      'soilt20in':(d[8][i]==='M') ? 'M' : parseFloat(d[8][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+                      'soilt40in':(d[9][i]==='M') ? 'M' : parseFloat(d[9][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+                      'soilm2in':(d[10][i]==='M' || parseFloat(d[10][i])<0.0) ? 'M' : parseFloat(d[10][i]).toFixed(0).toString()+'%',
+                      'soilm4in':(d[11][i]==='M' || parseFloat(d[11][i])<0.0) ? 'M' : parseFloat(d[11][i]).toFixed(0).toString()+'%',
+                      'soilm8in':(d[12][i]==='M' || parseFloat(d[12][i])<0.0) ? 'M' : parseFloat(d[12][i]).toFixed(0).toString()+'%',
+                      'soilm20in':(d[13][i]==='M' || parseFloat(d[13][i])<0.0) ? 'M' : parseFloat(d[13][i]).toFixed(0).toString()+'%',
+                      'soilm40in':(d[14][i]==='M' || parseFloat(d[14][i])<0.0) ? 'M' : parseFloat(d[14][i]).toFixed(0).toString()+'%',
+                      'humid':(d[15][i]==='M' || parseFloat(d[15][i])<0.0 || parseFloat(d[15][i])>100.0) ? 'M' : parseFloat(d[15][i]).toFixed(0).toString()+'%',
+                      'solar':(d[16][i]==='M' || parseFloat(d[16][i])<0.0) ? 'M' : parseFloat(d[16][i]).toFixed(1).toString()+' W/m2',
+                      'windspdmax':(d[17][i]==='M' || parseFloat(d[17][i])<0.0) ? 'M' : parseFloat(d[17][i]).toFixed(1).toString()+' mph',
+                      'windspdave':(d[18][i]==='M' || parseFloat(d[18][i])<0.0) ? 'M' : parseFloat(d[18][i]).toFixed(1).toString()+' mph',
+                      'winddirave':(d[19][i]==='M' || parseFloat(d[19][i])<0.0 || parseFloat(d[4][i])>360.0) ? 'M' : parseFloat(d[19][i]).toFixed(0).toString()+String.fromCharCode(176),
+                      'leafwet':'M',
+                  }
+              }
+        })
+        this.explorer_latestConditions = dataObjOut
+    }
+
+    @computed get explorer_getLatestConditions() {
+        return this.explorer_latestConditions
+    }
+
+    // ACIS parameters: hourly call for last few days
+    @computed get explorer_getAcisParams() {
+            let elems
+            let numdays
+            elems = [
+                {"vX":23}, //hourly temp, inst
+                {"vX":124}, //hourly temp, max
+                {"vX":125}, //hourly temp, min
+                {"vX":5}, //hourly pcpn, sum
+                {"vX":120,"vN":70}, //hourly soil temperature @ 2", inst
+                {"vX":120,"vN":102}, //hourly soil temperature @ 4", inst
+                {"vX":120,"vN":166}, //hourly soil temperature @ 8", inst
+                {"vX":120,"vN":294}, //hourly soil temperature @ 20", inst
+                {"vX":120,"vN":326}, //hourly soil temperature @ 40", inst
+                {"vX":104,"vN":68}, //hourly soil moisture @ 2", ave
+                {"vX":104,"vN":100}, //hourly soil moisture @ 4", ave
+                {"vX":104,"vN":164}, //hourly soil moisture @ 8", ave
+                {"vX":104,"vN":292}, //hourly soil moisture @ 20", ave
+                {"vX":104,"vN":324}, //hourly soil moisture @ 40", ave
+                {"vX":24}, //hourly relative humidity, inst
+                {"vX":149}, //hourly solar radiation, ave
+                {"vX":42}, //hourly wind speed, peak, max
+                {"vX":128}, //hourly wind speed, average, ave
+                {"vX":130}, //hourly wind direction, average, ave
+            ]
+            numdays=-60
+            return {
+                "sid":this.getLocation.sid,
+                "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                "elems":elems,
+                "meta":""
+            }
+    }
+
+    // data is loading - boolean - to control the spinner
+    @observable explorer_dataIsLoading = false
+    @action explorer_setDataIsLoading = (b) => {
+        this.explorer_dataIsLoading = b;
+    }
+    @computed get explorer_getDataIsLoading() {
+        return this.explorer_dataIsLoading;
+    }
+
+    // Station explorer hourly data (latest conditions) download
+    @action explorer_downloadData = () => {
+        console.log("Call explorer_downloadData")
+        this.explorer_initLatestConditions();
+        this.explorer_setDataIsLoading(true);
+        return axios
+          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.explorer_getAcisParams)
+          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.explorer_getAcisParams)
+          .then(res => {
+            console.log('SUCCESS downloading from ACIS');
+            console.log(res);
+            if (res.data.hasOwnProperty('error')) {
+                console.log('Error: resetting data to null');
+                this.explorer_setClimateData(null);
+                this.explorer_initLatestConditions()
+            } else {
+                this.explorer_setClimateData(res.data.data.slice(0));
+                this.explorer_setLatestConditions()
+            }
+            this.explorer_setDataIsLoading(false);
+          })
+          .catch(err => {
+            console.log(
+              "Request Error: " + (err.response.data || err.response.statusText)
+            );
+          });
+    }
+
 
     ////////////////////////////////////
     /// TOOL: LIVESTOCK HEAT INDEX
@@ -1521,6 +1769,28 @@ export class AppStore {
               "Request Error: " + (err.response.data || err.response.statusText)
             );
           });
+    }
+
+    ////////////////////////////////////
+    /// STEM: Instrumentation info
+    ////////////////////////////////////
+    // instrument options are:
+    //   - 'wind', 'solarrad', 'precip', 'rh_and_temp', 'soil'
+    @observable stem_instrument = 'wind';
+    @action stem_setInstrument = (i) => {
+        this.stem_instrument = i
+    }
+    @computed get stem_getInstrument() {
+        return this.stem_instrument
+    }
+    @computed get stem_getInstrumentName() {
+        let name = null;
+        if (this.stem_getInstrument==='wind') { name = 'Wind Speed & Direction' }
+        if (this.stem_getInstrument==='solarrad') { name = 'Solar Radiation' }
+        if (this.stem_getInstrument==='precip') { name = 'Precipitation' }
+        if (this.stem_getInstrument==='rh_and_temp') { name = 'Relative Humidity & Air Temperature' }
+        if (this.stem_getInstrument==='soil') { name = 'Soil Moisture & Temperature' }
+        return name
     }
 
     // run these on initial load
