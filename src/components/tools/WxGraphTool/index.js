@@ -12,7 +12,9 @@ import Hidden from '@material-ui/core/Hidden';
 // Components
 import GrapherDatePicker from './GrapherDatePicker'
 import TimeFrameButtonGroup from './TimeFrameButtonGroup'
+//import DownloadCharts from './DownloadCharts'
 //import ExtremeSwitch from './ExtremeSwitch'
+import UnitsPopover from './UnitsPopover'
 import VarPopover from './VarPopover'
 import VarPicker from './VarPicker'
 import WxCharts from './WxCharts'
@@ -20,7 +22,7 @@ import WxTables from './WxTables'
 import ExtremeSwitch from './ExtremeSwitch'
 
 // Styles
-import '../../../styles/WxGraphTool.css';
+//import '../../../styles/WxGraphTool.css';
 
 const drawerWidth = 240;
 
@@ -76,7 +78,7 @@ class WxGraphTool extends Component {
         if (app.getOutputType==='chart') {
 
           return (
-            <Grid container direction="row" justify="center" alignItems="flex-start">
+            <Grid container direction="row" justify="center" alignItems="flex-start" xs={12}>
                 <Hidden smDown>
                     <Grid item container className="nothing" direction="column" md={3}>
                         <Grid item>
@@ -94,6 +96,9 @@ class WxGraphTool extends Component {
                               {display_VarPopover}
                             </Grid>
                           </Hidden>
+                          <Grid item>
+                            <UnitsPopover/>
+                          </Grid>
                           <Grid item>
                             <GrapherDatePicker/>
                           </Grid>
@@ -122,6 +127,9 @@ class WxGraphTool extends Component {
             <Grid container direction="row" justify="center" alignItems="flex-start">
                     <Grid item container className="nothing" direction="column" xs={12}>
                         <Grid item container direction="row" justify="center" alignItems="center" spacing="8">
+                          <Grid item>
+                            <UnitsPopover/>
+                          </Grid>
                           <Grid item>
                             <GrapherDatePicker/>
                           </Grid>

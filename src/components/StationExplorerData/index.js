@@ -34,15 +34,15 @@ class StationExplorerData extends Component {
         return (
             <div id="station_data">
                 <div className="dataButtons">
+                  <Button variant={variantWeather} color="primary" onClick={() => {app.setDataView_explorer('weather')}}>
+                    Latest Conditions 
+                  </Button>
                   <Button variant={variantClimate} color="primary" onClick={() => {app.setDataView_explorer('climate')}}>
                     Climate Summary
                   </Button>
-                  <Button variant={variantWeather} color="primary" onClick={() => {app.setDataView_explorer('weather'); app.explorer_downloadData();}}>
-                    Latest Conditions 
-                  </Button>
                 </div>
-                { app.getDataView_explorer==='climate' && (<StationExplorerClimateSummary/>)}
                 { app.getDataView_explorer==='weather' && (<StationExplorerLatestConditions/>)}
+                { app.getDataView_explorer==='climate' && (<StationExplorerClimateSummary/>)}
             </div>
         );
     }

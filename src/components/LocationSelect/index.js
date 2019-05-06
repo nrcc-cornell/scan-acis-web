@@ -9,7 +9,10 @@ import Button from '@material-ui/core/Button';
 import Grid from "@material-ui/core/Grid";
 
 import ReactModal from 'react-modal';
-import StationPicker from '../../components/StationPicker';
+//import StationPicker from '../../components/StationPicker';
+//import StationExplorer from '../../components/StationExplorer';
+import StationExplorerMap from '../../components/StationExplorerMap';
+import StationExplorerSelect from '../../components/StationExplorerSelect';
 import StationSelect from '../../components/StationSelect';
 
 // Styles
@@ -54,7 +57,17 @@ class LocationSelect extends Component {
                    className="Modal"
                    overlayClassName="Overlay"
                  >
-                   <StationPicker/>
+                   <Grid container spacing="8" direction="column">
+                     <Grid container item direction="row" justify="space-around">
+                       <StationExplorerSelect names={app.getLocations} />
+                       <Button variant="contained" onClick={()=>{app.setShowModalMap(false)}}>
+                           Close Map
+                       </Button>
+                     </Grid>
+                     <Grid container item>
+                       <StationExplorerMap />
+                     </Grid>
+                   </Grid>
                  </ReactModal>
               </div>
           </div>

@@ -8,6 +8,7 @@ import DatePicker from 'react-datepicker';
 import { withBaseIcon } from 'react-icons-kit';
 import { calendar } from 'react-icons-kit/fa/calendar';
 import moment from 'moment';
+import Typography from '@material-ui/core/Typography';
 
 import 'react-datepicker/dist/react-datepicker.css';
 import '../../../../styles/GrapherDatePicker.css';
@@ -45,6 +46,11 @@ class GrapherDatePicker extends Component {
   render() {
         return (
             <div className='grapher-datepicker-input-div'>
+            <div className='grapher-datepicker-input-label'>
+              <Typography variant="subtitle2">
+                Ending Date
+              </Typography>
+            </div>
             <div className='grapher-datepicker-div'>
               <DatePicker
                   ref='grapher_datepicker'
@@ -64,7 +70,7 @@ class GrapherDatePicker extends Component {
                   scrollableYearDropdown
                   dropdownMode="select"
                   //filterDate={this.isMonthInGrowingSeason}
-                  //popperPlacement="right"
+                  popperPlacement="center"
                   popperModifiers={{
                     offset: {
                       enabled: true,

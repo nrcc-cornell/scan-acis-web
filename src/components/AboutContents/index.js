@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 
 // Components
 import StationAboutMap from '../../components/StationAboutMap';
-import ToolLister from '../../components/ToolLister';
+//import ToolLister from '../../components/ToolLister';
 
 //import scanmap from '../../assets/scan-station-map.png'
 
@@ -50,7 +50,7 @@ class AboutContents extends Component {
                       Station Networks
                     </Typography>
                     <Typography align="justify" paragraph variant="body1">
-The Natural Resources Conservation Service (NRCS) operates a comprehensive, nationwide soil moisture and climate information network. The Soil Climate Analysis Network, also known as SCAN, supports natural resource assessments and conservation activities through its network of automated climate monitoring and data collection sites. SCAN focuses primarily on agricultural areas of the U.S., Puerto Rico and the Virgin Islands. The network consists of over 200 stations in almost every state, and is growing every year.
+The U.S. Department of Agriculture's Natural Resources Conservation Service (USDA NRCS) operates a comprehensive, nationwide soil moisture and climate information network. The Soil Climate Analysis Network, also known as SCAN, supports natural resource assessments and conservation activities through its network of automated climate monitoring and data collection sites. SCAN focuses primarily on agricultural areas of the U.S., Puerto Rico and the Virgin Islands. The network consists of over 200 stations in almost every state, and is growing every year.
                     </Typography>
                     <Typography align="justify" paragraph variant="body1">
 In addition to the original SCAN project, NRCS also operates a soil moisture and climate information network on Tribal lands. The Tribal Soil Climate Analysis Network (known as Tribal SCAN) focuses on agricultural areas which are situated on Tribal lands in the United States.
@@ -75,7 +75,6 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                     <Typography align="justify" paragraph variant="body1">
                       Each tool allows for station selection from either a map or dropdown list, and data can be viewed in either chart or table form. To learn more about these tools and how to use them, please visit <Link to={'/stem'}>SCAN 4 STEM</Link>.
                     </Typography>
-                    <ToolLister />
               </Grid>
             </Grid>
             <br/>

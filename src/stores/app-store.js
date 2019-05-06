@@ -11,10 +11,35 @@ const protocol = window.location.protocol;
 //utils
 const arrSum = arr => arr.reduce((a,b) => a + b, 0)
 const arrAvg = arr => arr.reduce((a,b) => a + b, 0) / arr.length
+const getMtdStartLabel = (s) => { return moment(s,"YYYY-MM-DD").format("MMM")+' 1' }
+const getStdStartLabel = (s) => {
+        let month = moment(s,'YYYY-MM-DD').month() + 1
+        let DJF = [12,1,2]
+        let MAM = [3,4,5]
+        let JJA = [6,7,8]
+        let SON = [9,10,11]
+        if (DJF.includes(month)) { return 'Dec 1' }
+        if (MAM.includes(month)) { return 'Mar 1' }
+        if (JJA.includes(month)) { return 'Jun 1' }
+        if (SON.includes(month)) { return 'Sep 1' }
+        return '';
+    }
+const getStdStartString = (s) => {
+        let month = moment(s,'YYYY-MM-DD').month() + 1
+        let DJF = [12,1,2]
+        let MAM = [3,4,5]
+        let JJA = [6,7,8]
+        let SON = [9,10,11]
+        if (DJF.includes(month)) { return '12-1' }
+        if (MAM.includes(month)) { return '3-1' }
+        if (JJA.includes(month)) { return '6-1' }
+        if (SON.includes(month)) { return '9-1' }
+        return '';
+    }
 
 //current date
-const date_current = moment().format('YYYY-MM-DD')
-//const date_current = "2019-03-15"
+//const date_current = moment().format('YYYY-MM-DD')
+const date_current = "2019-03-15"
 
 export class AppStore {
     ///////////////////////////////////////////////////////
@@ -162,6 +187,9 @@ export class AppStore {
     @observable location_explorer = null;
     @action setLocation_explorer = (l) => {
         this.location_explorer = this.getLocations.find(obj => obj.uid === l);
+        // download data for table
+        this.explorerClimateSummary_downloadData()
+        this.explorer_downloadData()
     }
     // set location from select menu
     @action setSelectedLocation_explorer = (t) => {
@@ -172,8 +200,11 @@ export class AppStore {
             if (this.getLocation.uid.toString() !== t.value) {
                 this.setSelectedLocation(t);
             }
+            // download data for table
+            this.explorerClimateSummary_downloadData()
+            this.explorer_downloadData()
             // update data view for station explorer
-            this.setDataView_explorer('climate');
+            //this.setDataView_explorer('climate');
         };
     @computed get getLocation_explorer() { return this.location_explorer };
 
@@ -197,7 +228,7 @@ export class AppStore {
             click: () => {
                 this.setLocation(feature.id);
                 this.setLocation_explorer(feature.id);
-                this.setDataView_explorer('climate');
+                //this.setDataView_explorer('climate');
                 if (this.getShowModalMap) { this.setShowModalMap(false) };
             },
             mouseover: () => {
@@ -209,15 +240,31 @@ export class AppStore {
         });
     }
     @action stationOnEachFeature_explorer = (feature, layer) => {
+        //console.log(feature);
+        let porStart,porEnd
         if (feature.properties && feature.properties.name) {
-            layer.bindPopup(feature.properties.name);
+            porStart = feature.properties.sdate;
+            porEnd = (feature.properties.edate && feature.properties.edate.slice(0,4)==='9999') ? 'present' : feature.properties.edate;
+            layer.bindPopup(feature.properties.name+', '+feature.properties.state+'<br/>'+porStart+' to '+porEnd);
         }
         layer.on({
-            mouseover: () => {
+            preclick: () => {
+                layer.closePopup();
+            },
+            click: () => {
                 // set to feature currently moused over
                 this.setLocation(feature.id);
                 this.setLocation_explorer(feature.id);
-                this.setDataView_explorer('climate');
+                //this.setDataView_explorer('climate');
+                layer.openPopup();
+                //if in modal, close
+                if (this.getShowModalMap) { this.setShowModalMap(false) };
+            },
+            mouseover: () => {
+                // set to feature currently moused over
+                //this.setLocation(feature.id);
+                //this.setLocation_explorer(feature.id);
+                //this.setDataView_explorer('climate');
                 layer.openPopup();
             },
             mouseout: () => {
@@ -235,10 +282,23 @@ export class AppStore {
             radius: 4,
             weight: 1,
             opacity: 1.0,
-            //color: (feature.properties.network===17) ? 'blue' : 'red',
             color: 'white',
             fillColor: (feature.properties.network===17) ? 'blue' : 'red',
             fillOpacity: 1.0,
+        };
+    }
+
+    about_stationFeatureStyle = (feature) => {
+        // SCAN network is 17
+        // T-SCAN network is 19
+        return {
+            radius: 2,
+            weight: 1,
+            opacity: 1.0,
+            color: 'white',
+            fillColor: (feature.properties.network===17) ? 'blue' : 'red',
+            fillOpacity: 1.0,
+            interactive: false,
         };
     }
 
@@ -257,7 +317,9 @@ export class AppStore {
                 "properties": {
                     "name": loc.name,
                     "state": loc.state,
-                    "network": loc.network
+                    "network": loc.network,
+                    "sdate": loc.sdate,
+                    "edate": loc.edate,
                 }
             }
             featuresList.push(loc)
@@ -292,11 +354,11 @@ export class AppStore {
                this.setLocations(data['locs']);
                //this.setLocation(data['locs'][30].uid);
                //this.setLocation_explorer(data['locs'][30].uid);
-               // setting location to Orchard Range Site, ID - the first SCAN site established
-               // 85812 is the UID of this site
-               this.setLocation(85812);
-               this.setLocation_explorer(85812);
-               this.setDataView_explorer('climate');
+               // setting location to Centralia Lake, KS - center of the U.S.
+               // 85677 is the UID of this site
+               this.setLocation(85677);
+               this.setLocation_explorer(85677);
+               this.setDataView_explorer('weather');
                this.setDatesForLocations({'date':data['date'],'ytd_start':data['ytd_start'],'std_start':data['std_start'],'mtd_start':data['mtd_start']});
                if (this.getToolName==='gddtool') {this.gddtool_downloadData}
                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData}
@@ -316,7 +378,7 @@ export class AppStore {
     // station explorer data view
     // 'climate': show climate summary
     // 'weather': show latest conditions
-    @observable dataView_explorer = 'climate';
+    @observable dataView_explorer = 'weather';
     @action setDataView_explorer = (d) => {
             this.dataView_explorer=d
         }
@@ -694,8 +756,8 @@ export class AppStore {
     @observable wxgraph_vars={
             airtemp : true,
             rainfall : true,
-            soiltemp : false,
-            soilmoist : false,
+            soiltemp : true,
+            soilmoist : true,
             humidity : false,
             solarrad : false,
             wind : false,
@@ -747,9 +809,9 @@ export class AppStore {
           };
         } else {
           varUnits = {
-            airtemp_units : '°F',
-            rainfall_units : 'inches',
-            soiltemp_units : '°F',
+            airtemp_units : (this.wxgraph_getUnitsTemp==='degreeF') ? '°F' : '°C',
+            rainfall_units : this.wxgraph_getUnitsPrcp,
+            soiltemp_units : (this.wxgraph_getUnitsTemp==='degreeF') ? '°F' : '°C',
             soilmoist_units : '%',
             humidity_units : '%',
             solarrad_units : (this.wxgraph_getTimeFrame==='two_days') ? 'W/m2' : 'langleys',
@@ -1066,8 +1128,8 @@ export class AppStore {
 
     // time frame to view data
     // - options are 'por', 'two_years', 'two_months', 'two_days'
-    //@observable wxgraph_timeFrame = 'two_months'
-    @observable wxgraph_timeFrame = 'two_days'
+    @observable wxgraph_timeFrame = 'two_months'
+    //@observable wxgraph_timeFrame = 'two_days'
     @action wxgraph_setTimeFrame = (t) => {
         // has the time frame changed?
         let changed = (this.wxgraph_getTimeFrame===t) ? false : true
@@ -1095,22 +1157,73 @@ export class AppStore {
         return this.wxgraph_timeFrame;
     }
 
+    // temperature units (as defined in ACIS: 'degreeC' or 'degreeF')
+    @observable wxgraph_unitsTemp = 'degreeF'
+    @action wxgraph_setUnitsTemp = (u) => {
+        this.wxgraph_unitsTemp = u
+    }
+    @action wxgraph_setSelectedUnitsTemp = (u) => {
+            if (this.wxgraph_getUnitsTemp !== u) {
+                this.wxgraph_unitsTemp = u.value;
+                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
+            }
+        };
+    @action wxgraph_setUnitsTempFromRadioGroup = (e) => {
+        let t = e.target.value;
+        // have the units changed?
+        let changed = (this.wxgraph_getUnitsTemp===t) ? false : true
+        // only update and download data if time frame has changed
+        if (changed===true) {
+            this.wxgraph_unitsTemp = t;
+            if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
+        }
+    }
+    @computed get wxgraph_getUnitsTemp() {
+        return this.wxgraph_unitsTemp;
+    }
+
+    // precipitation units (as defined in ACIS: 'inches', 'cm' or 'mm')
+    @observable wxgraph_unitsPrcp = 'inches'
+    @action wxgraph_setUnitsPrcp = (u) => {
+        this.wxgraph_unitsPrcp = u
+    }
+    @action wxgraph_setSelectedUnitsPrcp = (u) => {
+            if (this.wxgraph_getUnitsPrcp !== u) {
+                this.wxgraph_unitsPrcp = u.value;
+                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
+            }
+        };
+    @action wxgraph_setUnitsPrcpFromRadioGroup = (e) => {
+        let u = e.target.value;
+        // have the units changed?
+        let changed = (this.wxgraph_getUnitsPrcp===u) ? false : true
+        // only update and download data if time frame has changed
+        if (changed===true) {
+            this.wxgraph_unitsPrcp = u;
+            if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
+        }
+    }
+    @computed get wxgraph_getUnitsPrcp() {
+        return this.wxgraph_unitsPrcp;
+    }
 
     // Wx Grapher tool data download - set parameters
     @computed get wxgraph_getAcisParams() {
             let elems
             let numdays
+            let unitsTemp = this.wxgraph_getUnitsTemp
+            let unitsPrcp = this.wxgraph_getUnitsPrcp
             if (this.wxgraph_getTimeFrame==='two_days') {
                 elems = [
-                    {"vX":23}, //hourly temp, inst
-                    {"vX":124}, //hourly temp, max
-                    {"vX":125}, //hourly temp, min
-                    {"vX":5}, //hourly pcpn, sum
-                    {"vX":120,"vN":70}, //hourly soil temperature @ 2", inst
-                    {"vX":120,"vN":102}, //hourly soil temperature @ 4", inst
-                    {"vX":120,"vN":166}, //hourly soil temperature @ 8", inst
-                    {"vX":120,"vN":294}, //hourly soil temperature @ 20", inst
-                    {"vX":120,"vN":326}, //hourly soil temperature @ 40", inst
+                    {"vX":23, "units":unitsTemp}, //hourly temp, inst
+                    {"vX":124, "units":unitsTemp}, //hourly temp, max
+                    {"vX":125, "units":unitsTemp}, //hourly temp, min
+                    {"vX":5, "units":unitsPrcp}, //hourly pcpn, sum
+                    {"vX":120,"vN":70, "units":unitsTemp}, //hourly soil temperature @ 2", inst
+                    {"vX":120,"vN":102, "units":unitsTemp}, //hourly soil temperature @ 4", inst
+                    {"vX":120,"vN":166, "units":unitsTemp}, //hourly soil temperature @ 8", inst
+                    {"vX":120,"vN":294, "units":unitsTemp}, //hourly soil temperature @ 20", inst
+                    {"vX":120,"vN":326, "units":unitsTemp}, //hourly soil temperature @ 40", inst
                     {"vX":104,"vN":68}, //hourly soil moisture @ 2", ave
                     {"vX":104,"vN":100}, //hourly soil moisture @ 4", ave
                     {"vX":104,"vN":164}, //hourly soil moisture @ 8", ave
@@ -1125,15 +1238,15 @@ export class AppStore {
                 numdays=-3
             } else if (this.wxgraph_getTimeFrame==='two_months') {
                 elems = [
-                    {"name":"avgt","interval":[0,0,1],"duration":"dly"}, // daily average temperature, ave
-                    {"vX":1,"interval":[0,0,1],"duration":"dly"}, // daily maximum temperature, max
-                    {"vX":2,"interval":[0,0,1],"duration":"dly"}, // daily minimum temperature, min
-                    {"vX":4,"interval":[0,0,1],"duration":"dly"}, // daily precipitation, sum
-                    {"vX":69,"vN":67,"interval":[0,0,1],"duration":"dly"}, // daily soil temperature @ 2", ave
-                    {"vX":69,"vN":99,"interval":[0,0,1],"duration":"dly"}, // daily soil temperature @ 4", ave
-                    {"vX":69,"vN":163,"interval":[0,0,1],"duration":"dly"}, // daily soil temperature @ 8", ave
-                    {"vX":69,"vN":291,"interval":[0,0,1],"duration":"dly"}, // daily soil temperature @ 20", ave
-                    {"vX":69,"vN":323,"interval":[0,0,1],"duration":"dly"}, // daily soil temperature @ 40", ave
+                    {"name":"avgt","interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily average temperature, ave
+                    {"vX":1,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily maximum temperature, max
+                    {"vX":2,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily minimum temperature, min
+                    {"vX":4,"interval":[0,0,1],"duration":"dly","units":unitsPrcp}, // daily precipitation, sum
+                    {"vX":69,"vN":67,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily soil temperature @ 2", ave
+                    {"vX":69,"vN":99,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily soil temperature @ 4", ave
+                    {"vX":69,"vN":163,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily soil temperature @ 8", ave
+                    {"vX":69,"vN":291,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily soil temperature @ 20", ave
+                    {"vX":69,"vN":323,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily soil temperature @ 40", ave
                     {"vX":68,"vN":65,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 2", ave
                     {"vX":68,"vN":97,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 4", ave
                     {"vX":68,"vN":161,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 8", ave
@@ -1148,15 +1261,15 @@ export class AppStore {
                 numdays=-60
             } else if (this.wxgraph_getTimeFrame==='two_years') {
                 elems = [
-                    {"name":"avgt","interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly average temperature, ave
-                    {"vX":1,"interval":[0,1],"duration":"mly","reduce":{"reduce":"max"},"maxmissing":3}, // monthly maximum temperature, max
-                    {"vX":2,"interval":[0,1],"duration":"mly","reduce":{"reduce":"min"},"maxmissing":3}, // monthly minimum temperature, min
-                    {"vX":4,"interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3}, // monthly precipitation, sum
-                    {"vX":69,"vN":67,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil temperature @ 2", ave
-                    {"vX":69,"vN":99,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil temperature @ 4", ave
-                    {"vX":69,"vN":163,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil temperature @ 8", ave
-                    {"vX":69,"vN":291,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil temperature @ 20", ave
-                    {"vX":69,"vN":323,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil temperature @ 40", ave
+                    {"name":"avgt","interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3,"units":unitsTemp}, // monthly average temperature, ave
+                    {"vX":1,"interval":[0,1],"duration":"mly","reduce":{"reduce":"max"},"maxmissing":3,"units":unitsTemp}, // monthly maximum temperature, max
+                    {"vX":2,"interval":[0,1],"duration":"mly","reduce":{"reduce":"min"},"maxmissing":3,"units":unitsTemp}, // monthly minimum temperature, min
+                    {"vX":4,"interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3,"units":unitsPrcp}, // monthly precipitation, sum
+                    {"vX":69,"vN":67,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3,"units":unitsTemp}, // monthly soil temperature @ 2", ave
+                    {"vX":69,"vN":99,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3,"units":unitsTemp}, // monthly soil temperature @ 4", ave
+                    {"vX":69,"vN":163,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3,"units":unitsTemp}, // monthly soil temperature @ 8", ave
+                    {"vX":69,"vN":291,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3,"units":unitsTemp}, // monthly soil temperature @ 20", ave
+                    {"vX":69,"vN":323,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3,"units":unitsTemp}, // monthly soil temperature @ 40", ave
                     {"vX":68,"vN":65,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 2", ave
                     {"vX":68,"vN":97,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 4", ave
                     {"vX":68,"vN":161,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 8", ave
@@ -1173,15 +1286,15 @@ export class AppStore {
                 //if (!this.wxgraph_getExtSwitch) {
                 if (!this.wxgraph_getExtSwitch) {
                     elems = [
-                        {"name":"avgt","interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10},
-                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"max"},"maxmissing":10}, // annual maximum temperature, max
-                        {"vX":2,"interval":[1],"duration":"yly","reduce":{"reduce":"min"},"maxmissing":10}, // annual minimum temperature, min
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10}, // annual precipitation, sum
-                        {"vX":69,"vN":67,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil temperature @ 2", ave
-                        {"vX":69,"vN":99,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil temperature @ 4", ave
-                        {"vX":69,"vN":163,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil temperature @ 8", ave
-                        {"vX":69,"vN":291,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil temperature @ 20", ave
-                        {"vX":69,"vN":323,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil temperature @ 40", ave
+                        {"name":"avgt","interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10,"units":unitsTemp},
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"max"},"maxmissing":10,"units":unitsTemp}, // annual maximum temperature, max
+                        {"vX":2,"interval":[1],"duration":"yly","reduce":{"reduce":"min"},"maxmissing":10,"units":unitsTemp}, // annual minimum temperature, min
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10,"units":unitsPrcp}, // annual precipitation, sum
+                        {"vX":69,"vN":67,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10,"units":unitsTemp}, // annual soil temperature @ 2", ave
+                        {"vX":69,"vN":99,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10,"units":unitsTemp}, // annual soil temperature @ 4", ave
+                        {"vX":69,"vN":163,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10,"units":unitsTemp}, // annual soil temperature @ 8", ave
+                        {"vX":69,"vN":291,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10,"units":unitsTemp}, // annual soil temperature @ 20", ave
+                        {"vX":69,"vN":323,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10,"units":unitsTemp}, // annual soil temperature @ 40", ave
                         {"vX":68,"vN":65,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 2", ave
                         {"vX":68,"vN":97,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 4", ave
                         {"vX":68,"vN":161,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 8", ave
@@ -1285,6 +1398,16 @@ export class AppStore {
         return this.explorer_climateData
     }
 
+    // climate data saved
+    // - the full climate summary request downloaded from ACIS
+    @observable explorerClimateSummary_climateData = null;
+    @action explorerClimateSummary_setClimateData = (res) => {
+        this.explorerClimateSummary_climateData = res
+    }
+    @computed get explorerClimateSummary_getClimateData() {
+        return this.explorerClimateSummary_climateData
+    }
+
     // latest hourly data saved here: to be used in station explorer table
     // - data includes:
     //     date : date of observation
@@ -1384,11 +1507,11 @@ export class AppStore {
                       'maxt':(d[2][i]==='M') ? 'M' : parseFloat(d[2][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
                       'mint':(d[3][i]==='M') ? 'M' : parseFloat(d[3][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
                       'pcpn':(d[4][i]==='M' || parseFloat(d[4][i])<0.0) ? 'M' : ((d[4][i]==='T') ? 'T' : parseFloat(d[4][i])).toFixed(2).toString()+'"',
-                      'soilt2in':(d[5][i]==='M') ? 'M' : parseFloat(d[5][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
-                      'soilt4in':(d[6][i]==='M') ? 'M' : parseFloat(d[6][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
-                      'soilt8in':(d[7][i]==='M') ? 'M' : parseFloat(d[7][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
-                      'soilt20in':(d[8][i]==='M') ? 'M' : parseFloat(d[8][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
-                      'soilt40in':(d[9][i]==='M') ? 'M' : parseFloat(d[9][i]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+                      'soilt2in':(d[5][i]==='M') ? 'M' : parseFloat(d[5][i]).toFixed(0).toString()+String.fromCharCode(176)+'F',
+                      'soilt4in':(d[6][i]==='M') ? 'M' : parseFloat(d[6][i]).toFixed(0).toString()+String.fromCharCode(176)+'F',
+                      'soilt8in':(d[7][i]==='M') ? 'M' : parseFloat(d[7][i]).toFixed(0).toString()+String.fromCharCode(176)+'F',
+                      'soilt20in':(d[8][i]==='M') ? 'M' : parseFloat(d[8][i]).toFixed(0).toString()+String.fromCharCode(176)+'F',
+                      'soilt40in':(d[9][i]==='M') ? 'M' : parseFloat(d[9][i]).toFixed(0).toString()+String.fromCharCode(176)+'F',
                       'soilm2in':(d[10][i]==='M' || parseFloat(d[10][i])<0.0) ? 'M' : parseFloat(d[10][i]).toFixed(0).toString()+'%',
                       'soilm4in':(d[11][i]==='M' || parseFloat(d[11][i])<0.0) ? 'M' : parseFloat(d[11][i]).toFixed(0).toString()+'%',
                       'soilm8in':(d[12][i]==='M' || parseFloat(d[12][i])<0.0) ? 'M' : parseFloat(d[12][i]).toFixed(0).toString()+'%',
@@ -1408,6 +1531,71 @@ export class AppStore {
 
     @computed get explorer_getLatestConditions() {
         return this.explorer_latestConditions
+    }
+
+    // station climate summary saved here: to be used in station explorer table
+    // - data includes:
+    @observable explorer_climateSummary = {
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+                'p_ytd_o':'M',
+                'p_ytd_n':'M',
+                'p_std_o':'M',
+                'p_std_n':'M',
+                'p_mtd_o':'M',
+                'p_mtd_n':'M',
+                't_ytd_o':'M',
+                't_ytd_n':'M',
+                't_std_o':'M',
+                't_std_n':'M',
+                't_mtd_o':'M',
+                't_mtd_n':'M',
+        };
+
+    @action explorer_initClimateSummary = () => {
+        let dataObjOut = {
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+                'p_ytd_o':'M',
+                'p_ytd_n':'M',
+                'p_std_o':'M',
+                'p_std_n':'M',
+                'p_mtd_o':'M',
+                'p_mtd_n':'M',
+                't_ytd_o':'M',
+                't_ytd_n':'M',
+                't_std_o':'M',
+                't_std_n':'M',
+                't_mtd_o':'M',
+                't_mtd_n':'M',
+            };
+        this.explorer_climateSummary = dataObjOut
+    }
+
+    @action explorer_setClimateSummary = () => {
+        let d = this.explorerClimateSummary_getClimateData;
+        let dataObjOut = {};
+        dataObjOut = {
+            'ytd_start':'Jan 1',
+            'std_start':getStdStartLabel(d[0]),
+            'mtd_start':getMtdStartLabel(d[0]),
+            'date':d[0],
+            'p_ytd_o':(d[1]==='M' || parseFloat(d[1])<0.0) ? 'M' : ((d[1]==='T') ? 'T' : parseFloat(d[1])).toFixed(2).toString()+'"',
+            'p_ytd_n':(d[2]==='M' || parseFloat(d[2])<0.0) ? 'M' : ((d[2]==='T') ? 'T' : parseFloat(d[2])).toFixed(2).toString()+'"',
+            'p_std_o':(d[3]==='M' || parseFloat(d[3])<0.0) ? 'M' : ((d[3]==='T') ? 'T' : parseFloat(d[3])).toFixed(2).toString()+'"',
+            'p_std_n':(d[4]==='M' || parseFloat(d[4])<0.0) ? 'M' : ((d[4]==='T') ? 'T' : parseFloat(d[4])).toFixed(2).toString()+'"',
+            'p_mtd_o':(d[5]==='M' || parseFloat(d[5])<0.0) ? 'M' : ((d[5]==='T') ? 'T' : parseFloat(d[5])).toFixed(2).toString()+'"',
+            'p_mtd_n':(d[6]==='M' || parseFloat(d[6])<0.0) ? 'M' : ((d[6]==='T') ? 'T' : parseFloat(d[6])).toFixed(2).toString()+'"',
+            't_ytd_o':(d[7]==='M') ? 'M' : parseFloat(d[7]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+            't_ytd_n':(d[8]==='M') ? 'M' : parseFloat(d[8]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+            't_std_o':(d[9]==='M') ? 'M' : parseFloat(d[9]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+            't_std_n':(d[10]==='M') ? 'M' : parseFloat(d[10]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+            't_mtd_o':(d[11]==='M') ? 'M' : parseFloat(d[11]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+            't_mtd_n':(d[12]==='M') ? 'M' : parseFloat(d[12]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+        }
+        this.explorer_climateSummary = dataObjOut
+    }
+
+    @computed get explorer_getClimateSummary() {
+        return this.explorer_climateSummary
     }
 
     // ACIS parameters: hourly call for last few days
@@ -1445,6 +1633,32 @@ export class AppStore {
             }
     }
 
+    // ACIS parameters: climate summary call
+    @computed get explorerClimateSummary_getAcisParams() {
+            let elems
+            elems=[
+                {"name":"pcpn","duration":"ytd","reduce":"sum","prec":2,"maxmissing":"0"},
+                {"name":"pcpn","duration":"ytd","reduce":"sum","prec":2,"maxmissing":"0","normal":"departure"},
+                {"name":"pcpn","duration":"std","reduce":"sum","season_start":getStdStartString(date_current),"prec":2,"maxmissing":"0"},
+                {"name":"pcpn","duration":"std","reduce":"sum","season_start":getStdStartString(date_current),"prec":2,"maxmissing":"0","normal":"departure"},
+                {"name":"pcpn","duration":"mtd","reduce":"sum","prec":2,"maxmissing":"0"},
+                {"name":"pcpn","duration":"mtd","reduce":"sum","prec":2,"maxmissing":"0","normal":"departure"},
+                {"name":"avgt","duration":"ytd","reduce":"mean","prec":1,"maxmissing":"0"},
+                {"name":"avgt","duration":"ytd","reduce":"mean","prec":1,"maxmissing":"0","normal":"departure"},
+                {"name":"avgt","duration":"std","reduce":"mean","season_start":getStdStartString(date_current),"prec":1,"maxmissing":"0"},
+                {"name":"avgt","duration":"std","reduce":"mean","season_start":getStdStartString(date_current),"prec":1,"maxmissing":"0","normal":"departure"},
+                {"name":"avgt","duration":"mtd","reduce":"mean","prec":1,"maxmissing":"0"},
+                {"name":"avgt","duration":"mtd","reduce":"mean","prec":1,"maxmissing":"0","normal":"departure"},
+            ]
+            return {
+                "sid":this.getLocation.sid,
+                "sdate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                "elems":elems,
+                "meta":""
+            }
+    }
+
     // data is loading - boolean - to control the spinner
     @observable explorer_dataIsLoading = false
     @action explorer_setDataIsLoading = (b) => {
@@ -1452,6 +1666,15 @@ export class AppStore {
     }
     @computed get explorer_getDataIsLoading() {
         return this.explorer_dataIsLoading;
+    }
+
+    // data is loading - boolean - to control the spinner
+    @observable explorerClimateSummary_dataIsLoading = false
+    @action explorerClimateSummary_setDataIsLoading = (b) => {
+        this.explorerClimateSummary_dataIsLoading = b;
+    }
+    @computed get explorerClimateSummary_getDataIsLoading() {
+        return this.explorerClimateSummary_dataIsLoading;
     }
 
     // Station explorer hourly data (latest conditions) download
@@ -1482,6 +1705,34 @@ export class AppStore {
           });
     }
 
+    // Station explorer hourly data (latest conditions) download
+    @action explorerClimateSummary_downloadData = () => {
+        console.log("Call explorerClimateSummary_downloadData")
+        this.explorer_initClimateSummary();
+        this.explorerClimateSummary_setDataIsLoading(true);
+        return axios
+          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.explorer_getAcisParams)
+          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.explorerClimateSummary_getAcisParams)
+          .then(res => {
+            console.log('SUCCESS downloading climate summary from ACIS');
+            console.log(res);
+            if (res.data.hasOwnProperty('error')) {
+                console.log('Error: resetting data to null');
+                this.explorerClimateSummary_setClimateData(null);
+                this.explorer_initClimateSummary()
+            } else {
+                //this.explorerClimateSummary_setClimateData(res.data.data.slice(0));
+                this.explorerClimateSummary_setClimateData(res.data.data[0]);
+                this.explorer_setClimateSummary()
+            }
+            this.explorerClimateSummary_setDataIsLoading(false);
+          })
+          .catch(err => {
+            console.log(
+              "Request Error: " + (err.response.data || err.response.statusText)
+            );
+          });
+    }
 
     ////////////////////////////////////
     /// TOOL: LIVESTOCK HEAT INDEX

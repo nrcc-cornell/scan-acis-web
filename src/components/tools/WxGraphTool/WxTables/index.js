@@ -46,6 +46,8 @@ class WxTables extends Component {
     render() {
 
         let columns = [];
+        let unitsTemp = (app.wxgraph_getUnitsTemp==='degreeF') ? '°F' : '°C'
+        let unitsPrcp = (app.wxgraph_getUnitsPrcp==='inches') ? 'in' : 'mm'
         if (app.wxgraph_getExtSwitch) {
             columns.push({name:'Date/Time', options:{filter:true,sort:true,display:true,download:true}})
             columns.push({name:'Temp>100°F', options:{filter:false,sort:true,display:true,download:true}})
@@ -57,20 +59,20 @@ class WxTables extends Component {
             columns.push({name:'Prcp>1"', options:{filter:false,sort:true,display:false,download:true}})
         } else {
             columns.push({name:'Date/Time', options:{filter:true,sort:true,display:true,download:true}})
-            columns.push({name:'Ave Air Temp (°F)', options:{filter:false,sort:true,display:true,download:true}})
-            columns.push({name:'Max Air Temp (°F)', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'MIn Air Temp (°F)', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Rainfall (in)', options:{filter:false,sort:true,display:true,download:true}})
-            columns.push({name:'Soil Temp 2in (°F)', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Soil Temp 4in (°F)', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Soil Temp 8in (°F)', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Soil Temp 20in (°F)', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Soil Temp 40in (°F)', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Soil Moisture 2in (in)', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Soil Moisture 4in (in)', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Soil Moisture 8in (in)', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Soil Moisture 20in (in)', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Soil Moisture 40in (in)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Ave Air Temp ('+unitsTemp+')', options:{filter:false,sort:true,display:true,download:true}})
+            columns.push({name:'Max Air Temp ('+unitsTemp+')', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'MIn Air Temp ('+unitsTemp+')', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Rainfall ('+unitsPrcp+')', options:{filter:false,sort:true,display:true,download:true}})
+            columns.push({name:'Soil Temp 2in ('+unitsTemp+')', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Temp 4in ('+unitsTemp+')', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Temp 8in ('+unitsTemp+')', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Temp 20in ('+unitsTemp+')', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Temp 40in ('+unitsTemp+')', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Moisture 2in (%)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Moisture 4in (%)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Moisture 8in (%)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Moisture 20in (%)', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Soil Moisture 40in (%)', options:{filter:false,sort:true,display:false,download:true}})
             columns.push({name:'Rel Humidity (%)', options:{filter:false,sort:true,display:false,download:true}})
             columns.push({name:'Solar Rad ('+app.wxgraph_getVarUnits['solarrad_units']+')', options:{filter:false,sort:true,display:false,download:true}})
             columns.push({name:'Wind Speed Max (mph)', options:{filter:false,sort:true,display:false,download:true}})
@@ -113,7 +115,7 @@ class WxTables extends Component {
                     return [row.date,row.cnt_t_gt_100,row.cnt_t_gt_90,row.cnt_t_gt_80,row.cnt_p_gt_4,row.cnt_p_gt_3,row.cnt_p_gt_2,row.cnt_p_gt_1]
                 })
 
-            tableTitle = 'Number of days exceeding thresholds'
+            tableTitle = 'Number of exceedences @ '+app.getLocation_explorer.name+', '+app.getLocation_explorer.state
         } else {
             tableData = data.map(row => {
                     row.avgt = !isNaN(row.avgt) ? row.avgt : '--'
@@ -141,7 +143,7 @@ class WxTables extends Component {
                     return [row.date,row.avgt,row.maxt,row.mint,row.pcpn,row.soilt2in,row.soilt4in,row.soilt8in,row.soilt20in,row.soilt40in,row.soilm2in,row.soilm4in,row.soilm8in,row.soilm20in,row.soilm40in,row.humid,row.solar,row.windspdmax,row.windspdave,row.winddirave,row.leafwet]
                 })
 
-            tableTitle = 'Observed Data'
+            tableTitle = 'Data @ '+app.getLocation_explorer.name+', '+app.getLocation_explorer.state
         }
 
         return (

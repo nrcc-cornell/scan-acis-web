@@ -97,7 +97,7 @@ class StationExplorerLatestConditions extends Component {
                   spinnerSize={'10vw'}
                 >
                     <Typography variant="h6" noWrap>
-                      Latest conditions @ {app.getLocation_explorer.name}
+                      Latest conditions
                     </Typography>
                     <Typography variant="body1" gutterBottom noWrap>
                       <ul style={{"padding":0,"margin":0,"listStyleType":"none"}}>

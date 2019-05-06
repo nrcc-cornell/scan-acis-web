@@ -25,8 +25,11 @@ class StationExplorerInfo extends Component {
 
     render() {
 
-        let loc = app.getLocation_explorer
-        let porEnd = (app.getLocation_explorer.edate && app.getLocation_explorer.edate.slice(0,4)==='9999') ? 'present' : app.getLocation_explorer.edate
+        let loc = app.getLocation_explorer;
+        let porEnd = (app.getLocation_explorer.edate && app.getLocation_explorer.edate.slice(0,4)==='9999') ? 'present' : app.getLocation_explorer.edate;
+        let sid_and_network = app.getLocation_explorer.sid;
+        let sid = sid_and_network.split(" ")[0];
+        let pedonURL = "https://wcc.sc.egov.usda.gov/nwcc/pedon?sitenum="+sid
 
         return (
             <div id="station_info">
@@ -40,7 +43,7 @@ class StationExplorerInfo extends Component {
                     <li><b>Latitude, Longitude:</b> {app.getLocation_explorer.ll[1]}, {app.getLocation_explorer.ll[0]}</li>
                     <li><b>Elevation:</b> {app.getLocation_explorer.elev} feet</li>
                     <li><b>Period of Record:</b> {app.getLocation_explorer.sdate} to {porEnd}</li>
-                    <li><b>Soil Characteristics:</b> --</li>
+                    <li><b>Soil Characterization:</b> <a href={pedonURL} target="_blank" rel="noopener noreferrer">View reports from the NSSC</a></li>
                   </ul>
                 </Typography>
             </div>

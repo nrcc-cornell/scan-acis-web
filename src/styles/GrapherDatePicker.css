@@ -84,8 +84,8 @@
 
     .grapher-datepicker-input-label {
         //margin: 2px 0px 2px 1vw;
-        margin: 0px 0px 0px 10px;
-        font-size: 14px;
+        margin: 6px 0px 0px 8px;
+        //font-size: 14px;
     }
 
     .grapher-datepicker-div {
@@ -123,7 +123,7 @@
         border-color: rgba(34,139,34,0.4);
         border-width: 1px;
         border-radius: 4px;
-        margin: 1.0vw;
+        //margin: 1.0vw;
     }
 
     .grapher-date-picker-button:hover {

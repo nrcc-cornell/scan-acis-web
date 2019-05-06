@@ -5,8 +5,10 @@ import { makeStyles } from '@material-ui/core/styles';
 //import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
-import ExtremeSwitch from '../ExtremeSwitch'
-import VarPicker from '../VarPicker'
+//import ExtremeSwitch from '../ExtremeSwitch'
+//import VarPicker from '../VarPicker'
+import UnitsTempSelect from '../UnitsTempSelect'
+import UnitsPrcpSelect from '../UnitsPrcpSelect'
 //import { unstable_Box as Box } from '@material-ui/core/Box';
 
 const styles = theme => ({
@@ -19,7 +21,7 @@ const styles = theme => ({
   },
 });
 
-class VarPopover extends React.Component {
+class UnitsPopover extends React.Component {
   state = {
     anchorEl: null,
   };
@@ -51,7 +53,7 @@ class VarPopover extends React.Component {
           className={classes.buttonTest}
           onClick={this.handleClick}
         >
-          Select Variables
+          Select Units
         </Button>
         <Popover
           id="simple-popper"
@@ -67,16 +69,16 @@ class VarPopover extends React.Component {
             horizontal: 'left',
           }}
         >
-          <ExtremeSwitch />
-          <VarPicker/>
+          <UnitsTempSelect />
+          <UnitsPrcpSelect/>
         </Popover>
       </div>
     );
   }
 }
 
-VarPopover.propTypes = {
+UnitsPopover.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(VarPopover);
+export default withStyles(styles)(UnitsPopover);

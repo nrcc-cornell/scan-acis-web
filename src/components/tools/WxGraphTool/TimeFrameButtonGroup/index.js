@@ -9,6 +9,7 @@ import FormControl from '@material-ui/core/FormControl';
 //import FormLabel from '@material-ui/core/FormLabel';
 import { inject, observer} from 'mobx-react';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 var app;
 
@@ -19,14 +20,15 @@ class TimeFrameButtonGroup extends React.Component {
       app = this.props.store.app;
   }
 
-  handleChange = event => {
-    this.setState({ value: event.target.value });
-  };
-
   render() {
     return (
       <Grid container>
-          <Grid item xs={12} md={12}>
+          <Grid container item justify="center">
+             <Typography variant="subtitle2">
+               Length of data period
+             </Typography>
+          </Grid>
+          <Grid container item justify="center">
       <FormControl component="fieldset">
         <RadioGroup
           aria-label="timeframe"

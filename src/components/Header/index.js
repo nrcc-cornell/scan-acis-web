@@ -47,6 +47,18 @@ const styles = theme => ({
       display: 'none',
     },
   },
+  titleLong: {
+    cursor: 'pointer',
+    [theme.breakpoints.down('xs')]: {
+      display: 'none',
+    },
+  },
+  titleShort: {
+    cursor: 'pointer',
+    [theme.breakpoints.up('sm')]: {
+      display: 'none',
+    },
+  },
   toolbar: theme.mixins.toolbar,
 });
 
@@ -93,25 +105,32 @@ class FullWidthTabs extends React.Component {
       <div className={classes.root}>
         <AppBar position="static" color="inherit">
           <Toolbar>
-            <div className="h6">
-                <Typography variant="title" className={classes.headerText}>
-                        SCAN-ACIS Tools
-                </Typography>
-                <Typography variant="subtitle2" className={classes.headerText}>
+            <div className={classes.titleLong} onClick={() => {this.props.history.push('/')}}>
+                <Typography variant="h5" className={classes.headerText}>
                         Decision Tools for the Soil Climate Analysis Network
+                </Typography>
+                <Typography variant="subtitle1" className={classes.headerText}>
+                        Powered by ACIS, the Applied Climate Information System
+                </Typography>
+            </div>
+            <div className={classes.titleShort} onClick={() => {this.props.history.push('/')}}>
+                <Typography variant="h5" className={classes.headerText}>
+                        SCAN Decision Tools
+                </Typography>
+                <Typography variant="subtitle1" className={classes.headerText}>
+                        Powered by ACIS
                 </Typography>
             </div>
             <section className={classes.rightToolbar}>
               <Tabs
                 value={this.props.store.app.getActiveTabIndex}
                 onChange={this.handleChange}
-                indicatorColor="secondary"
-                textColor="secondary"
-                variant="fullWidth"
+                indicatorColor="primary"
+                textColor="primary"
+                variant="standard"
               >
-                <Tab label="HOME" />
-                <Tab label="ABOUT" />
-                <Tab label="SCAN 4 STEM" />
+                <Tab label="ABOUT" value={1} />
+                <Tab label="SCAN 4 STEM" value={2} />
               </Tabs>
             </section>
           </Toolbar>
@@ -119,13 +138,12 @@ class FullWidthTabs extends React.Component {
               <Tabs
                 value={this.props.store.app.getActiveTabIndex}
                 onChange={this.handleChange}
-                indicatorColor="secondary"
-                textColor="secondary"
-                variant="fullWidth"
+                indicatorColor="primary"
+                textColor="primary"
+                variant="standard"
               >
-                <Tab label="HOME" />
-                <Tab label="ABOUT" />
-                <Tab label="SCAN 4 STEM" />
+                <Tab label="ABOUT" value={1} />
+                <Tab label="SCAN 4 STEM" value={2} />
               </Tabs>
           </div>
         </AppBar>

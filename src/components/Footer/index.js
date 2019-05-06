@@ -43,11 +43,11 @@ class Footer extends Component {
             </ul>
           </Grid>
           <Grid item xs={12} sm={6}>
-                        <a href="http://www.rcc-acis.org" target="_blank" rel="noopener noreferrer"><img src={acislogo} alt="RCC ACIS" /></a>
+                        <a href="https://www.usda.gov" target="_blank" rel="noopener noreferrer"><img src={usdalogo} alt="USDA" /></a>
                         {' '}
                         <a href="https://www.nrcs.usda.gov/wps/portal/nrcs/site/national/home/" target="_blank" rel="noopener noreferrer"><img src={nrcslogo} alt="NRCS" /></a>
                         {' '}
-                        <a href="https://www.usda.gov" target="_blank" rel="noopener noreferrer"><img src={usdalogo} alt="USDA" /></a>
+                        <a href="http://www.rcc-acis.org" target="_blank" rel="noopener noreferrer"><img src={acislogo} alt="RCC ACIS" /></a>
           </Grid>
         </Grid>
         <Grid className={classes.subFooter} item xs={12}>

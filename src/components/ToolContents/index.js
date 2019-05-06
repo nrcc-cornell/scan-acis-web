@@ -48,14 +48,14 @@ class ToolContents extends Component {
           return (
             <div className='tool-contents'>
             <Grid container spacing="8">
-              <Grid item xs={12}>
-                <LocationSelect />
-              </Grid>
               <Grid item xs={9} sm={6}>
                 <ToolSelect names={app.toolNameArray} />
               </Grid>
               <Grid item xs={9} sm={4}>
                 <OutputSelect />
+              </Grid>
+              <Grid item xs={12}>
+                <LocationSelect />
               </Grid>
               <Grid item xs={12}>
                 { this.props.name==='gddtool' && (<GddTool />) }

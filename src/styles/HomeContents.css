@@ -2,5 +2,6 @@
 .HomeContents {
     //display: flex;
     margin: 40px 2vw 10px 2vw;
-    width: 100%;
+    //width: 100%;
+    width: 99%;
 }

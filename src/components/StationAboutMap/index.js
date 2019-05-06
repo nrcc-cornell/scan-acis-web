@@ -34,14 +34,12 @@ class StationAboutMap extends Component {
         ];
         this.mapCenter = [47.05818, -109.95082];
         this.zoomLevel = 2;
-        this.minZoomLevel = 2;
-        this.maxZoomLevel = 16;
     }
 
     componentDidMount() {
       this.updateWindowDimensions();
       window.addEventListener('resize', this.updateWindowDimensions);
-      this.map = this.mapInstance.leafletElement
+      this.map = this.mapInstance.leafletElement;
     }
 
     componentWillUnmount() {
@@ -58,12 +56,16 @@ class StationAboutMap extends Component {
             <div className="StationAboutMap">
                     <Map
                         ref={e => { this.mapInstance = e }}
+                        dragging={false}
+                        touchZoom={false}
+                        boxZoom={false}
+                        doubleClickZoom={false}
+                        scrollWheelZoom={false}
+                        keyboard={false}
                         center={this.mapCenter}
                         bounds={this.maxBounds}
-                        zoomControl={true}
+                        zoomControl={false}
                         zoom={this.zoomLevel}
-                        minZoom={this.minZoomLevel}
-                        maxZoom={this.maxZoomLevel}
                         attributionControl={false}
                         className={mapContainer}
                         style={{
@@ -77,7 +79,7 @@ class StationAboutMap extends Component {
                         />
                         <GeoJSON
                             data={app.getStationGeojson}
-                            style={app.stationFeatureStyle}
+                            style={app.about_stationFeatureStyle}
                             pointToLayer={(feature,latlng) => {return L.circleMarker(latlng)}}
                         />
                         <StationExplorerLegend/>

@@ -100,7 +100,7 @@ class StationExplorerMap extends Component {
             <div className="StationExplorerMap">
                     <Map
                         ref={e => { this.mapInstance = e }}
-                        center={this.mapCenter}
+                        center={[markerLat,markerLon]}
                         bounds={this.maxBounds}
                         zoomControl={false}
                         zoom={this.zoomLevel}
@@ -109,8 +109,8 @@ class StationExplorerMap extends Component {
                         attributionControl={false}
                         className={mapContainer}
                         style={{
-                            height:(this.state.height>500) ? '460px' : '300px',
-                            width:(this.state.width>=960) ? this.state.width*0.54 : this.state.width*0.86,
+                            height:(app.getActivePage==='home') ? ((this.state.height>500) ? '460px' : '300px') : this.state.height*0.80,
+                            width:(app.getActivePage==='home') ? ((this.state.width>=960) ? this.state.width*0.54 : this.state.width*0.86) : this.state.width*0.90,
                         }}
                     >
                         <TileLayer

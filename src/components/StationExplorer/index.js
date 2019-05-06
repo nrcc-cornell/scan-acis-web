@@ -31,12 +31,12 @@ const styles = theme => ({
 @inject("store") @observer
 //function StationExplorer(props) {
 class StationExplorer extends Component {
-        //const { classes } = props;
+    //const { classes } = props;
 
     render() {
 
         return (
-                  <Grid container spacing={8}>
+                  <Grid container justify="space-evenly" spacing={8}>
                       <Grid item xs={12} md={7}>
                         { this.props.store.app.getLocations && (<StationExplorerMap />)}
                       </Grid>
