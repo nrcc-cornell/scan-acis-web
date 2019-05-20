@@ -34,6 +34,13 @@ const styles = theme => ({
   },
   headerText: {
     color: 'green',
+    fontSize: '26px',
+    fontWeight: 'bold',
+    marginBottom: '4px'
+  },
+  subHeaderText: {
+    color: 'green',
+    fontSize: '16px'
   },
   rightToolbar: {
     marginLeft: 'auto',
@@ -106,18 +113,18 @@ class FullWidthTabs extends React.Component {
         <AppBar position="static" color="inherit">
           <Toolbar>
             <div className={classes.titleLong} onClick={() => {this.props.history.push('/')}}>
-                <Typography variant="h5" className={classes.headerText}>
+                <Typography variant="h1" className={classes.headerText}>
                         Decision Tools for the Soil Climate Analysis Network
                 </Typography>
-                <Typography variant="subtitle1" className={classes.headerText}>
+                <Typography variant="h2" className={classes.subHeaderText}>
                         Powered by ACIS, the Applied Climate Information System
                 </Typography>
             </div>
             <div className={classes.titleShort} onClick={() => {this.props.history.push('/')}}>
-                <Typography variant="h5" className={classes.headerText}>
+                <Typography variant="h1" className={classes.headerText}>
                         SCAN Decision Tools
                 </Typography>
-                <Typography variant="subtitle1" className={classes.headerText}>
+                <Typography variant="h2" className={classes.subHeaderText}>
                         Powered by ACIS
                 </Typography>
             </div>

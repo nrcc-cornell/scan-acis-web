@@ -933,7 +933,9 @@ export class AppStore {
                 'solar':(d[15]==='M' || parseFloat(d[15])<0.0) ? NaN : parseFloat(d[15]).toFixed(1),
                 'windspdmax':(d[16]==='M' || parseFloat(d[16])<0.0) ? NaN : parseFloat(d[16]).toFixed(1),
                 'windspdave':(d[17]==='M' || parseFloat(d[17])<0.0) ? NaN : parseFloat(d[17]).toFixed(1),
-                'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
+                // not using wind speed from daily+, looks to be averaged incorrectly
+                //'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
+                'winddirave':NaN,
                 'leafwet':NaN,
               })
             } else if (timeFrame==='two_years') {
@@ -958,7 +960,9 @@ export class AppStore {
                 'solar':(d[15]==='M' || parseFloat(d[15])<0.0) ? NaN : parseFloat(d[15]).toFixed(1),
                 'windspdmax':(d[16]==='M' || parseFloat(d[16])<0.0) ? NaN : parseFloat(d[16]).toFixed(1),
                 'windspdave':(d[17]==='M' || parseFloat(d[17])<0.0) ? NaN : parseFloat(d[17]).toFixed(1),
-                'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
+                // not using wind speed from daily+, looks to be averaged incorrectly
+                //'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
+                'winddirave':NaN,
                 'leafwet':NaN,
               })
             } else if (timeFrame==='por') {
@@ -984,7 +988,9 @@ export class AppStore {
                     'solar':(d[15]==='M' || parseFloat(d[15])<0.0) ? NaN : parseFloat(d[15]).toFixed(1),
                     'windspdmax':(d[16]==='M' || parseFloat(d[16])<0.0) ? NaN : parseFloat(d[16]).toFixed(1),
                     'windspdave':(d[17]==='M' || parseFloat(d[17])<0.0) ? NaN : parseFloat(d[17]).toFixed(1),
-                    'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
+                    // not using wind speed from daily+, looks to be averaged incorrectly
+                    //'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
+                    'winddirave':NaN,
                     'leafwet':NaN,
                   })
               } else {

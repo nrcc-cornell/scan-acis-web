@@ -15,6 +15,8 @@ import WaterDefTool from '../../components/tools/WaterDefTool';
 import WxGraphTool from '../../components/tools/WxGraphTool';
 import LivestockIdxTool from '../../components/tools/LivestockIdxTool';
 import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+import { spacing } from '@material-ui/system';
 
 // Styles
 import '../../styles/ToolContents.css';
@@ -47,6 +49,7 @@ class ToolContents extends Component {
         if (app.getLocations) {
           return (
             <div className='tool-contents'>
+            <div style={{ padding: 10 }}>
             <Grid container spacing="8">
               <Grid item xs={9} sm={6}>
                 <ToolSelect names={app.toolNameArray} />
@@ -57,6 +60,19 @@ class ToolContents extends Component {
               <Grid item xs={12}>
                 <LocationSelect />
               </Grid>
+            </Grid>
+            </div>
+            <div style={{ marginTop:30, marginBottom:10 }}>
+            <Grid container spacing="8">
+              <Grid item xs={12}>
+                <Typography align="center" variant="h3" className="tool-title">
+                  {app.getToolInfo(this.props.name).title}
+                </Typography>
+              </Grid>
+            </Grid>
+            </div>
+            <div>
+            <Grid container spacing="8">
               <Grid item xs={12}>
                 { this.props.name==='gddtool' && (<GddTool />) }
                 { this.props.name==='waterdef' && (<WaterDefTool />) }
@@ -64,6 +80,7 @@ class ToolContents extends Component {
                 { this.props.name==='livestock' && (<LivestockIdxTool />) }
               </Grid>
             </Grid>
+            </div>
             </div>
         );
       } else {

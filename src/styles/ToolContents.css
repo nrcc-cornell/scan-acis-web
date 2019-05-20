@@ -13,3 +13,6 @@
 .tool-contents {
     margin: 20px 0px 0px 0px;
 }
+.tool-contents .tool-title {
+    font-size: 28px;
+}
