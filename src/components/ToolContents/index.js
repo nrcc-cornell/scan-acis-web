@@ -51,13 +51,13 @@ class ToolContents extends Component {
             <div className='tool-contents'>
             <div style={{ padding: 10 }}>
             <Grid container spacing="8">
-              <Grid item xs={9} sm={6}>
+              <Grid item xs={9} sm={6} md={3}>
                 <ToolSelect names={app.toolNameArray} />
               </Grid>
-              <Grid item xs={9} sm={4}>
+              <Grid item xs={9} sm={6} md={3}>
                 <OutputSelect />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} sm={8} md={6}>
                 <LocationSelect />
               </Grid>
             </Grid>
