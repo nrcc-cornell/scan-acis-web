@@ -38,8 +38,8 @@ const getStdStartString = (s) => {
     }
 
 //current date
-//const date_current = moment().format('YYYY-MM-DD')
-const date_current = "2019-03-15"
+const date_current = moment().format('YYYY-MM-DD')
+//const date_current = "2019-03-15"
 
 export class AppStore {
     ///////////////////////////////////////////////////////
@@ -1643,18 +1643,18 @@ export class AppStore {
     @computed get explorerClimateSummary_getAcisParams() {
             let elems
             elems=[
-                {"name":"pcpn","duration":"ytd","reduce":"sum","prec":2,"maxmissing":"0"},
-                {"name":"pcpn","duration":"ytd","reduce":"sum","prec":2,"maxmissing":"0","normal":"departure"},
-                {"name":"pcpn","duration":"std","reduce":"sum","season_start":getStdStartString(date_current),"prec":2,"maxmissing":"0"},
-                {"name":"pcpn","duration":"std","reduce":"sum","season_start":getStdStartString(date_current),"prec":2,"maxmissing":"0","normal":"departure"},
-                {"name":"pcpn","duration":"mtd","reduce":"sum","prec":2,"maxmissing":"0"},
-                {"name":"pcpn","duration":"mtd","reduce":"sum","prec":2,"maxmissing":"0","normal":"departure"},
-                {"name":"avgt","duration":"ytd","reduce":"mean","prec":1,"maxmissing":"0"},
-                {"name":"avgt","duration":"ytd","reduce":"mean","prec":1,"maxmissing":"0","normal":"departure"},
-                {"name":"avgt","duration":"std","reduce":"mean","season_start":getStdStartString(date_current),"prec":1,"maxmissing":"0"},
-                {"name":"avgt","duration":"std","reduce":"mean","season_start":getStdStartString(date_current),"prec":1,"maxmissing":"0","normal":"departure"},
-                {"name":"avgt","duration":"mtd","reduce":"mean","prec":1,"maxmissing":"0"},
-                {"name":"avgt","duration":"mtd","reduce":"mean","prec":1,"maxmissing":"0","normal":"departure"},
+                {"name":"pcpn","duration":"ytd","reduce":"sum","prec":2,"maxmissing":"1"},
+                {"name":"pcpn","duration":"ytd","reduce":"sum","prec":2,"maxmissing":"1","normal":"departure"},
+                {"name":"pcpn","duration":"std","reduce":"sum","season_start":getStdStartString(date_current),"prec":2,"maxmissing":"1"},
+                {"name":"pcpn","duration":"std","reduce":"sum","season_start":getStdStartString(date_current),"prec":2,"maxmissing":"1","normal":"departure"},
+                {"name":"pcpn","duration":"mtd","reduce":"sum","prec":2,"maxmissing":"1"},
+                {"name":"pcpn","duration":"mtd","reduce":"sum","prec":2,"maxmissing":"1","normal":"departure"},
+                {"name":"avgt","duration":"ytd","reduce":"mean","prec":1,"maxmissing":"1"},
+                {"name":"avgt","duration":"ytd","reduce":"mean","prec":1,"maxmissing":"1","normal":"departure"},
+                {"name":"avgt","duration":"std","reduce":"mean","season_start":getStdStartString(date_current),"prec":1,"maxmissing":"1"},
+                {"name":"avgt","duration":"std","reduce":"mean","season_start":getStdStartString(date_current),"prec":1,"maxmissing":"1","normal":"departure"},
+                {"name":"avgt","duration":"mtd","reduce":"mean","prec":1,"maxmissing":"1"},
+                {"name":"avgt","duration":"mtd","reduce":"mean","prec":1,"maxmissing":"1","normal":"departure"},
             ]
             return {
                 "sid":this.getLocation.sid,
