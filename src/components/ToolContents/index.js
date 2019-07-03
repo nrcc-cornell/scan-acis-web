@@ -75,7 +75,7 @@ class ToolContents extends Component {
             <Grid container spacing="8">
               <Grid item xs={12}>
                 { this.props.name==='gddtool' && (<GddTool />) }
-                { this.props.name==='waterdef' && (<WaterDefTool />) }
+                { this.props.name==='waterdef' && app.getLocation && (<WaterDefTool station={app.getLocation.sid} />) }
                 { this.props.name==='wxgrapher' && (<WxGraphTool />) }
                 { this.props.name==='livestock' && (<LivestockIdxTool />) }
               </Grid>
