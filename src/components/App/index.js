@@ -3,6 +3,7 @@
 
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
+//import { MuiThemeProvider, createMuiTheme, withStyles, withTheme  } from "@material-ui/core/styles";
 import { MuiThemeProvider, createMuiTheme, withStyles, withTheme  } from "@material-ui/core/styles";
 //import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import green from '@material-ui/core/colors/green';
@@ -97,4 +98,4 @@ class App extends Component {
     }
 }
 
-export default withStyles(styles)(withTheme()(App));
+export default withStyles(styles)(withTheme(App));

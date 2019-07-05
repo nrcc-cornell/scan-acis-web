@@ -4,14 +4,15 @@
 //import React from 'react';
 import PropTypes from 'prop-types';
 
-const WaterDeficitModel = ({soilm,depthLimit}) => {
-        // soilm: array of dates and soil moisture observed (5 depths, 2",4",8",20",40")
-        // depthLimit: depth of interest - water deficit is calculated from surface to this depth
-        // waterret: array of water retention parameters
-        // output: array of dates and water deficit
+const WaterDeficitModel = ({soilm,depthRangeTop,depthRangeBottom,unitsOutput}) => {
+        // soilm: array of dates and soil moisture (volumetric, %) observed (5 depths, 2",4",8",20",40")
+        // depthRangeTop: top of soil depth range (cm) - water deficit is calculated from depthRangeTop to depthRangeBottom
+        // depthRangeBottom: bottom of soil depth range (cm) - water deficit is calculated from depthRangeTop to depthRangeBottom
+        // waterret: array of water retention parameters (qr and qs units: cm^3/cm^3)
+        // output: array of dates and water deficit, value of field capacity, value of wilting point
         //console.log('WaterDeficitModel params');
         //console.log(soilm);
-        //console.log(depthLimit);
+        //console.log(depthRangeTop,depthRangeBottom);
 
         // hard-coding water retention parameters for development
         let waterret = [
@@ -24,13 +25,21 @@ const WaterDeficitModel = ({soilm,depthLimit}) => {
           {'depthTop':159.0, 'depthBottom':200.0, 'qr':0.0753, 'qs':0.4703, 'log10a':-2.0402, 'log10n':0.0912},
         ]
 
+        // units conversions
+        let in_to_cm = (v) => { return v*2.54 }
+        let cm_to_in = (v) => { return v/2.54 }
+
+        // depth of observation soil depth, in cm
+        //let depthObs = [ 2.*2.54, 4.*2.54, 8.*2.54, 20.*2.54, 40.*2.54 ]
+        let depthObs = [ in_to_cm(2.), in_to_cm(4.), in_to_cm(8.), in_to_cm(20.), in_to_cm(40.) ]
+
         // calculate Field Capacity (FC) for each cm^3, to 1-meter depth
         // calculate Permanent Wilting Point (PWP) for each cm^3, to 1-meter depth
         // calculate Available Water Capacity (AWC) for each cm^3, to 1-meter depth
         let a,n,h,qr,qs,log10a,log10n
         let fc,pwp,awc,fawc
         let soilInfo = []
-        for (let d=0; d<110; d++) {
+        for (let d=0; d<parseInt(depthObs.slice(-1)[0],10)+1; d++) {
             // reset values of equation (make sure we don't use values from previous depth)
             a=null; n=null; h=null; qr=null; qs=null; log10a=null; log10n=null;
             fc=null; pwp=null; awc=null; fawc=null;
@@ -71,13 +80,10 @@ const WaterDeficitModel = ({soilm,depthLimit}) => {
         // calculate field capacity and permanent wilting point for sfc -> depth
         let fc_sfc_to_depth=0
         let pwp_sfc_to_depth=0
-        for (let k=0; k<depthLimit; k++) {
+        for (let k=depthRangeTop; k<depthRangeBottom; k++) {
             fc_sfc_to_depth += soilInfo[k].fc
             pwp_sfc_to_depth += soilInfo[k].pwp
         }
-
-        // depth of observation soil depth, in cm
-        let depthObs = [ 2.*2.54, 4.*2.54, 8.*2.54, 20.*2.54, 40.*2.54 ]
 
         // calculate fraction of Available Water Capacity observed (fawc) at each observation depth
         // fawc = (OBS-PWP)/AWC)
@@ -104,15 +110,13 @@ const WaterDeficitModel = ({soilm,depthLimit}) => {
                     });
                 }
             });
-            //console.log(soilInfoObs);
 
             // calculate fawc and water deficit for each cm^3, to 1-meter depth
             // if only one observed depth, assume fawc is constant from surface to 1-meter depth.
             // if more then one observed depth, interpolate fawc from observed depths to each cm^3 in profile
 
             wdTotal = 0;
-            //for (let k=0; k<soilInfo.length-100; k++) {
-            for (let k=0; k<depthLimit; k++) {
+            for (let k=depthRangeTop; k<depthRangeBottom; k++) {
                 // depth we are interpolating to (cm)
                 depth = k+0.5
 
@@ -136,7 +140,8 @@ const WaterDeficitModel = ({soilm,depthLimit}) => {
                         for (let j=0; j<soilInfoObs.length; j++) {
                             if (depth>soilInfoObs[j].depth) {
                                 // linear interpolation between two closest observations
-                                fawc = ( soilInfoObs[j].fawc*(soilInfoObs[j+1].depth-depth) + soilInfoObs[j+1].fawc*(depth-soilInfoObs[j].depth) ) / (soilInfoObs[j+1].depth - soilInfoObs[j].depth)
+                                //fawc = ( soilInfoObs[j].fawc*(soilInfoObs[j+1].depth-depth) + soilInfoObs[j+1].fawc*(depth-soilInfoObs[j].depth) ) / (soilInfoObs[j+1].depth - soilInfoObs[j].depth)
+                                fawc = soilInfoObs[j].fawc + ( soilInfoObs[j].fawc*(soilInfoObs[j].depth-depth) + soilInfoObs[j+1].fawc*(depth-soilInfoObs[j].depth) ) / (soilInfoObs[j+1].depth - soilInfoObs[j].depth)
                                 break;
                             }
                         }
@@ -150,15 +155,21 @@ const WaterDeficitModel = ({soilm,depthLimit}) => {
             }
 
             // array to be returned. An array of arrays [date, water deficit]
+            if (wdTotal && unitsOutput==='inches') { wdTotal = cm_to_in(wdTotal) }
             output.push([values[0],wdTotal])
 
         });
 
+        if (unitsOutput==='inches') { fc_sfc_to_depth = cm_to_in(fc_sfc_to_depth) }
+        if (unitsOutput==='inches') { pwp_sfc_to_depth = cm_to_in(pwp_sfc_to_depth) }
         return {data_series:output, fc_ref:fc_sfc_to_depth, pwp_ref:pwp_sfc_to_depth}
 }
 
 WaterDeficitModel.propTypes = {
   soilm: PropTypes.array.isRequired,
+  depthRangeTop: PropTypes.number.isRequired,
+  depthRangeBottom: PropTypes.number.isRequired,
+  unitsOutput: PropTypes.string.isRequired,
 };
 
 export default WaterDeficitModel;

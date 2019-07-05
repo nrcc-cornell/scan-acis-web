@@ -8,7 +8,8 @@ import Grid from '@material-ui/core/Grid';
 
 import LoadStationData from './LoadStationData';
 import YearSelect from './YearSelect';
-import DepthSelect from './DepthSelect';
+//import DepthSelect from './DepthSelect';
+import DepthRangeSelect from './DepthRangeSelect';
 import WaterDeficitModel from './WaterDeficitModel';
 import DisplayWaterDeficitChart from './DisplayWaterDeficitChart';
 import DisplaySoilMoistureChart from './DisplaySoilMoistureChart';
@@ -26,17 +27,17 @@ class WaterDefTool extends Component {
         super(props);
         app = this.props.store.app;
         app.setToolName('waterdef')
-        this.depths = [20,50,100]
         this.state = {
           //years: null,
           //year: null,
           years: [2016,2017,2018,2019],
           year: moment().year(),
-          //depth: this.depths.slice(-1)[0],
-          depth: this.depths[0],
+          depth_top: 0, // inches
+          depth_bottom: 12, // inches
           data_precip: null,
           data_soil_moisture: null,
           data_water_deficit: null,
+          units: 'inches', //cm or inches
         }
     }
 
@@ -78,11 +79,11 @@ class WaterDefTool extends Component {
             };
         } else if (v==='soilm') {
             for (i=0; i<d.length; i++) {
-                sm2 = (d[i][1]==='M' || parseFloat(d[i][1])<0.0) ? null : parseFloat(d[i][1]).toFixed(1)
-                sm4 = (d[i][2]==='M' || parseFloat(d[i][2])<0.0) ? null : parseFloat(d[i][2]).toFixed(1)
-                sm8 = (d[i][3]==='M' || parseFloat(d[i][3])<0.0) ? null : parseFloat(d[i][3]).toFixed(1)
-                sm20 = (d[i][4]==='M' || parseFloat(d[i][4])<0.0) ? null : parseFloat(d[i][4]).toFixed(1)
-                sm40 = (d[i][5]==='M' || parseFloat(d[i][5])<0.0) ? null : parseFloat(d[i][5]).toFixed(1)
+                sm2 = (d[i][2]==='M' || parseFloat(d[i][2])<0.0) ? null : parseFloat(d[i][2]).toFixed(1)
+                sm4 = (d[i][3]==='M' || parseFloat(d[i][3])<0.0) ? null : parseFloat(d[i][3]).toFixed(1)
+                sm8 = (d[i][4]==='M' || parseFloat(d[i][4])<0.0) ? null : parseFloat(d[i][4]).toFixed(1)
+                sm20 = (d[i][5]==='M' || parseFloat(d[i][5])<0.0) ? null : parseFloat(d[i][5]).toFixed(1)
+                sm40 = (d[i][6]==='M' || parseFloat(d[i][6])<0.0) ? null : parseFloat(d[i][6]).toFixed(1)
                 oseries.push([moment.utc(d[i][0],'YYYY-MM-DD').valueOf(),sm2,sm4,sm8,sm20,sm40])
             };
         } else {
@@ -97,17 +98,28 @@ class WaterDefTool extends Component {
         })
     }
 
-    handleDepthChange = (e) => {
+    handleDepthChange = (e,newValue) => {
         this.setState({
-          depth: e.target.value,
+          depth_top: newValue[0],
+          depth_bottom: newValue[1],
         })
     }
+
+    convert_in_to_cm = (v) => { return v*2.54 }
 
     render() {
 
         return (
           <div>
-            <Grid item container direction="row" justify="flex-start" alignItems="flex-start">
+            <Grid item container direction="row" justify="space-evenly" alignItems="flex-start">
+              <Grid item>
+              {this.state.depth_top!==null && this.state.depth_bottom!==null &&
+                <DepthRangeSelect
+                  value={[this.state.depth_top,this.state.depth_bottom]}
+                  onchange={this.handleDepthChange}
+                />
+              }
+              </Grid>
               <Grid item>
               {this.state.year && this.state.years &&
                 <YearSelect
@@ -117,21 +129,21 @@ class WaterDefTool extends Component {
                 />
               }
               </Grid>
-              <Grid item>
-              {this.state.depth && this.depths &&
-                <DepthSelect
-                  value={this.state.depth}
-                  values={this.depths}
-                  onchange={this.handleDepthChange}
-                />
-              }
-              </Grid>
             </Grid>
             <Grid item>
-              {this.state.data_soil_moisture && this.state.depth &&
+              {this.state.data_soil_moisture && this.state.depth_top!==null && this.state.depth_bottom!==null &&
                 <DisplayWaterDeficitChart
-                  data={WaterDeficitModel({soilm:this.state.data_soil_moisture,depthLimit:this.state.depth})}
-                  depth={this.state.depth}
+                  data={
+                      WaterDeficitModel({
+                          soilm:this.state.data_soil_moisture,
+                          depthRangeTop:Math.floor(parseInt(this.convert_in_to_cm(this.state.depth_top),10)),
+                          depthRangeBottom:Math.ceil(parseInt(this.convert_in_to_cm(this.state.depth_bottom),10)),
+                          unitsOutput:this.state.units
+                      })
+                  }
+                  depthRangeTop={this.state.depth_top}
+                  depthRangeBottom={this.state.depth_bottom}
+                  units={this.state.units}
                 />
               }
             </Grid>

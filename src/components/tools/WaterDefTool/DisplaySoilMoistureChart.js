@@ -42,22 +42,27 @@ const DisplaySoilMoistureChart = ({data}) => {
           series: [{
             name:'Soil Moisture (2in)',
             type: 'line',
+            color: '#134960',
             data: createSeries(data,1),
           },{
             name:'Soil Moisture (4in)',
             type: 'line',
+            color: '#1A6180',
             data: createSeries(data,2),
           },{
             name:'Soil Moisture (8in)',
             type: 'line',
+            color: '#2692BF',
             data: createSeries(data,3),
           },{
             name:'Soil Moisture (20in)',
             type: 'line',
+            color: '#2DAADF',
             data: createSeries(data,4),
           },{
             name:'Soil Moisture (40in)',
             type: 'line',
+            color: '#33C2FF',
             data: createSeries(data,5),
           }]
         }
@@ -66,6 +71,7 @@ const DisplaySoilMoistureChart = ({data}) => {
             <HighchartsReact
               highcharts={Highcharts}
               constructorType={"chart"}
+              containerProps = {{ className: 'chartContainer' }}
               options={options}
             />
         );

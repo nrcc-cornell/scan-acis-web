@@ -38,6 +38,7 @@ const DisplayPrecipChart = ({data}) => {
             <HighchartsReact
               highcharts={Highcharts}
               constructorType={"chart"}
+              containerProps = {{ className: 'chartContainer' }}
               options={options}
             />
         );
