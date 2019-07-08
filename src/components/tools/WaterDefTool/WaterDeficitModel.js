@@ -3,8 +3,9 @@
 
 //import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 
-const WaterDeficitModel = ({soilm,depthRangeTop,depthRangeBottom,unitsOutput}) => {
+const WaterDeficitModel = ({soilm,soilp,depthRangeTop,depthRangeBottom,unitsOutput}) => {
         // soilm: array of dates and soil moisture (volumetric, %) observed (5 depths, 2",4",8",20",40")
         // depthRangeTop: top of soil depth range (cm) - water deficit is calculated from depthRangeTop to depthRangeBottom
         // depthRangeBottom: bottom of soil depth range (cm) - water deficit is calculated from depthRangeTop to depthRangeBottom
@@ -13,17 +14,6 @@ const WaterDeficitModel = ({soilm,depthRangeTop,depthRangeBottom,unitsOutput}) =
         //console.log('WaterDeficitModel params');
         //console.log(soilm);
         //console.log(depthRangeTop,depthRangeBottom);
-
-        // hard-coding water retention parameters for development
-        let waterret = [
-          {'depthTop':  0.0, 'depthBottom': 17.0, 'qr':0.0874, 'qs':0.4826, 'log10a':-1.9055, 'log10n':0.0966},
-          {'depthTop': 17.0, 'depthBottom': 28.0, 'qr':0.0948, 'qs':0.5276, 'log10a':-2.0169, 'log10n':0.1089},
-          {'depthTop': 28.0, 'depthBottom': 71.0, 'qr':0.0891, 'qs':0.4793, 'log10a':-1.8175, 'log10n':0.0967},
-          {'depthTop': 71.0, 'depthBottom': 93.0, 'qr':0.0823, 'qs':0.4628, 'log10a':-1.8920, 'log10n':0.0995},
-          {'depthTop': 93.0, 'depthBottom':123.0, 'qr':0.0789, 'qs':0.4566, 'log10a':-1.9479, 'log10n':0.1027},
-          {'depthTop':123.0, 'depthBottom':159.0, 'qr':0.0765, 'qs':0.4718, 'log10a':-2.1872, 'log10n':0.1024},
-          {'depthTop':159.0, 'depthBottom':200.0, 'qr':0.0753, 'qs':0.4703, 'log10a':-2.0402, 'log10n':0.0912},
-        ]
 
         // units conversions
         let in_to_cm = (v) => { return v*2.54 }
@@ -45,7 +35,7 @@ const WaterDeficitModel = ({soilm,depthRangeTop,depthRangeBottom,unitsOutput}) =
             fc=null; pwp=null; awc=null; fawc=null;
 
             // find parameters for this depth
-            for (let horizon of waterret) {
+            for (let horizon of soilp) {
                 if (d>=horizon.depthTop && d<horizon.depthBottom) {
                   qr=horizon.qr;
                   qs=horizon.qs;
@@ -56,6 +46,18 @@ const WaterDeficitModel = ({soilm,depthRangeTop,depthRangeBottom,unitsOutput}) =
                   break;
                 }
             };
+
+            // If soil parameters are not set after looping through horizons, then available parameters
+            // do not extend to this depth (nor to the full depth of observations).
+            // In this case, just assign parameters for this depth from the deepest available horizon.
+            if (!qr && !qs && !log10a && !log10n && !a && !n) {
+                qr=soilp.slice(-1)[0].qr
+                qs=soilp.slice(-1)[0].qs
+                log10a=soilp.slice(-1)[0].log10a
+                log10n=soilp.slice(-1)[0].log10n
+                a = Math.pow(10,log10a);
+                n = Math.pow(10,log10n);
+            }
 
             // calculate FC from parameters. For Field Capacity, we must use a soil matric potential of 33kPa.
             h = 33.*10.197162129779 //soil matric potential converted from kPa to cm of water
@@ -111,6 +113,10 @@ const WaterDeficitModel = ({soilm,depthRangeTop,depthRangeBottom,unitsOutput}) =
                 }
             });
 
+            //if (moment.utc(values[0]).format('YYYYMMDD')==='20190429') {
+            //  console.log(soilInfoObs);
+            //}
+
             // calculate fawc and water deficit for each cm^3, to 1-meter depth
             // if only one observed depth, assume fawc is constant from surface to 1-meter depth.
             // if more then one observed depth, interpolate fawc from observed depths to each cm^3 in profile
@@ -131,16 +137,28 @@ const WaterDeficitModel = ({soilm,depthRangeTop,depthRangeBottom,unitsOutput}) =
                 } else {
                     // if depth is less than first observation depth, set to same value as shallowest observation depth
                     if (depth<soilInfoObs[0].depth) {
+                        //if (moment.utc(values[0]).format('YYYYMMDD')==='20190429') {
+                        //  console.log('fawc method 1');
+                        //  console.log(fawc);
+                        //}
                         fawc = soilInfoObs[0].fawc
                     // if depth is more than last observation depth, set to same value as deepest observation depth
                     } else if (depth>soilInfoObs[soilInfoObs.length-1].depth) {
+                        //if (moment.utc(values[0]).format('YYYYMMDD')==='20190429') {
+                        //  console.log('fawc method 2');
+                        //  console.log(fawc);
+                        //}
                         fawc = soilInfoObs[soilInfoObs.length-1].fawc
                     // between observation points, we will interpolate
                     } else {
-                        for (let j=0; j<soilInfoObs.length; j++) {
-                            if (depth>soilInfoObs[j].depth) {
+                        for (let j=0; j<soilInfoObs.length-1; j++) {
+                            if (depth>soilInfoObs[j].depth && depth<=soilInfoObs[j+1].depth) {
                                 // linear interpolation between two closest observations
                                 //fawc = ( soilInfoObs[j].fawc*(soilInfoObs[j+1].depth-depth) + soilInfoObs[j+1].fawc*(depth-soilInfoObs[j].depth) ) / (soilInfoObs[j+1].depth - soilInfoObs[j].depth)
+                                //if (moment.utc(values[0]).format('YYYYMMDD')==='20190429') {
+                                //  console.log('fawc method 3');
+                                //  console.log(fawc);
+                                //}
                                 fawc = soilInfoObs[j].fawc + ( soilInfoObs[j].fawc*(soilInfoObs[j].depth-depth) + soilInfoObs[j+1].fawc*(depth-soilInfoObs[j].depth) ) / (soilInfoObs[j+1].depth - soilInfoObs[j].depth)
                                 break;
                             }
@@ -151,7 +169,9 @@ const WaterDeficitModel = ({soilm,depthRangeTop,depthRangeBottom,unitsOutput}) =
                 // Calculate total water deficit from surface to selected depth by integrating through profile.
                 // We do so by calculating water deficit for this depth and adding it to the total.
                 wdTotal = wdTotal + (1.-fawc)*(soilInfo[k].fc-soilInfo[k].pwp)
-                //console.log(depth,wdTotal);
+                //if (moment.utc(values[0]).format('YYYYMMDD')==='20190429') {
+                //  console.log(moment.utc(values[0]).format('YYYYMMDD'),depth,soilInfo[k].fc,soilInfo[k].pwp,fawc,(1.-fawc)*(soilInfo[k].fc-soilInfo[k].pwp),wdTotal);
+                //}
             }
 
             // array to be returned. An array of arrays [date, water deficit]
@@ -167,6 +187,7 @@ const WaterDeficitModel = ({soilm,depthRangeTop,depthRangeBottom,unitsOutput}) =
 
 WaterDeficitModel.propTypes = {
   soilm: PropTypes.array.isRequired,
+  soilp: PropTypes.array.isRequired,
   depthRangeTop: PropTypes.number.isRequired,
   depthRangeBottom: PropTypes.number.isRequired,
   unitsOutput: PropTypes.string.isRequired,

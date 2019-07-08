@@ -18,7 +18,7 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units}) =
 
         const options = {
           title: {
-            text: 'Soil Water Deficit (Depth: '+depthRangeTop.toString()+' - '+depthRangeBottom.toString()+' '+units+')'
+            text: 'Field Capacity Water Deficit (Depth: '+depthRangeTop.toString()+' - '+depthRangeBottom.toString()+' '+units+')'
           },
           tooltip: { useHtml:true, shared:true, borderColor:"#000000", borderWidth:2, borderRadius:8, shadow:false, backgroundColor:"#ffffff",
               xDateFormat:"%b %d, %Y", shape: 'rect',valueDecimals:2,

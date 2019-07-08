@@ -5,8 +5,10 @@ import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 import LoadStationData from './LoadStationData';
+import LoadSoilParameters from './LoadSoilParameters';
 import YearSelect from './YearSelect';
 //import DepthSelect from './DepthSelect';
 import DepthRangeSelect from './DepthRangeSelect';
@@ -36,6 +38,7 @@ class WaterDefTool extends Component {
           depth_bottom: 12, // inches
           data_precip: null,
           data_soil_moisture: null,
+          data_soil_parameters: null,
           data_water_deficit: null,
           units: 'inches', //cm or inches
         }
@@ -49,12 +52,17 @@ class WaterDefTool extends Component {
               data_precip: this.formatDataForHighcharts(response,'precip'),
             })
           });
+        LoadSoilParameters({sid:this.props.station})
+          .then(response => {
+            this.setState({
+              data_soil_parameters: response,
+            })
+          });
     }
 
     componentDidUpdate(prevProps,prevState) {
       if (prevState.year!==this.state.year ||
           prevProps.station!==this.props.station) {
-
         LoadStationData({sid:this.props.station, period:[this.state.year.toString()+'-01-01',this.state.year.toString()+'-12-31']})
           .then(response => {
             this.setState({
@@ -62,7 +70,14 @@ class WaterDefTool extends Component {
               data_precip: this.formatDataForHighcharts(response,'precip'),
             })
           });
-
+      }
+      if (prevProps.station!==this.props.station) {
+        LoadSoilParameters({sid:this.props.station})
+          .then(response => {
+            this.setState({
+              data_soil_parameters: response,
+            })
+          });
       }
     }
 
@@ -131,16 +146,25 @@ class WaterDefTool extends Component {
               </Grid>
             </Grid>
             <Grid item>
-              {this.state.data_soil_moisture && this.state.depth_top!==null && this.state.depth_bottom!==null &&
+              {this.state.data_soil_parameters && this.state.data_soil_moisture && this.state.depth_top!==null && this.state.depth_bottom!==null &&
                 <DisplayWaterDeficitChart
                   data={
                       WaterDeficitModel({
                           soilm:this.state.data_soil_moisture,
+                          soilp:this.state.data_soil_parameters,
                           depthRangeTop:Math.floor(parseInt(this.convert_in_to_cm(this.state.depth_top),10)),
                           depthRangeBottom:Math.ceil(parseInt(this.convert_in_to_cm(this.state.depth_bottom),10)),
                           unitsOutput:this.state.units
                       })
                   }
+                  depthRangeTop={this.state.depth_top}
+                  depthRangeBottom={this.state.depth_bottom}
+                  units={this.state.units}
+                />
+              }
+              {(!this.state.data_soil_parameters || !this.state.data_soil_moisture || this.state.depth_top===null || this.state.depth_bottom===null) &&
+                <DisplayWaterDeficitChart
+                  data={[]}
                   depthRangeTop={this.state.depth_top}
                   depthRangeBottom={this.state.depth_bottom}
                   units={this.state.units}
