@@ -26,8 +26,8 @@ class ToolLister extends Component {
 
         return (
             <div className="tool-lister">
-            <Grid container direction="column" spacing={16}>
-             <Grid item container justify="space-evenly" spacing={24}>
+            <Grid container direction="column" spacing={2}>
+             <Grid item container justify="space-evenly" spacing={3}>
               <Grid item>
                 <ToolCard {...app.getToolInfo('gddtool')} />
               </Grid>

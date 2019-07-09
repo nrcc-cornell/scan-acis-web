@@ -55,7 +55,7 @@ class LivestockIdxCharts extends Component {
         return (
           <div id="wx-charts">
 
-          <Grid item container justify="center" alignItems="center" spacing="8">
+          <Grid item container justify="center" alignItems="center" spacing="1">
               <Grid item>
                  <Typography variant="h6">
                      Cattle Heat Index (Breathing Rate in Breaths/Min)
@@ -86,7 +86,7 @@ class LivestockIdxCharts extends Component {
       </ResponsiveContainer>
             </Grid>
 
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="8">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
                           <Grid item>
                             <Typography variant="subtitle2">
                               Air Temperature
@@ -111,7 +111,7 @@ class LivestockIdxCharts extends Component {
         </LineChart>
       </ResponsiveContainer>
             </Grid>
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="8">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
                           <Grid item>
                             <Typography variant="subtitle2">
                               Humidity
@@ -135,7 +135,7 @@ class LivestockIdxCharts extends Component {
         </LineChart>
       </ResponsiveContainer>
             </Grid>
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="8">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
                           <Grid item>
                             <Typography variant="subtitle2">
                               Solar Radiation
@@ -159,7 +159,7 @@ class LivestockIdxCharts extends Component {
         </AreaChart>
       </ResponsiveContainer>
             </Grid>
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="8">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
                           <Grid item>
                             <Typography variant="subtitle2">
                               Wind Speed

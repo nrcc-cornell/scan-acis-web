@@ -12,6 +12,16 @@ require("highcharts/modules/exporting")(Highcharts);
 
 const DisplayPrecipChart = ({data}) => {
 
+        const afterRender = (chart) => {
+            let textX = chart.plotLeft + (chart.plotWidth  * 0.5);
+            let textY = chart.plotTop  + (chart.plotHeight * 0.5);
+            if (Array.isArray(data)) {
+                if (data.length===0) {
+                    chart.renderer.text('No data to display', chart.plotLeft+40, textY).css({ color:"#ff0000", fontSize:"16px"}).add()
+                }
+            }
+        };
+
         const options = {
           title: {
             text: 'Precipitation'
@@ -40,6 +50,7 @@ const DisplayPrecipChart = ({data}) => {
               constructorType={"chart"}
               containerProps = {{ className: 'chartContainer' }}
               options={options}
+              callback={afterRender}
             />
         );
 

@@ -70,13 +70,13 @@ class Instrumentation extends Component {
                 </Hidden>
               </Grid>
             </Grid>
-            <Grid item container direction="column" className={classes.root} spacing={32} xs={10} lg={9}>
+            <Grid item container direction="column" className={classes.root} spacing={4} xs={10} lg={9}>
               <Grid item>
                 <Typography variant="h5">
                   Instrumentation
                 </Typography>
               </Grid>
-            <Grid item container direction="row" className={classes.root} spacing={32}>
+            <Grid item container direction="row" className={classes.root} spacing={4}>
               <Grid item>
                     <img className="scan-station-instrument" src={scanstn} alt="SCAN instrumentation" usemap="#instrumentmap" />
                     <map name="instrumentmap">

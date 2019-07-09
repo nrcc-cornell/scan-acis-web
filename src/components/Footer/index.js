@@ -25,7 +25,7 @@ class Footer extends Component {
           className={classNames(classes.footerText, classes.footerSections)}
         >
           <Grid item xs={12} sm={3}>
-                        <Typography className={classes.white} gutterBottom variant="body1">
+                        <Typography className={classes.white} gutterBottom variant="body2">
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis enim lobortis scelerisque fermentum.
                         </Typography>
           </Grid>

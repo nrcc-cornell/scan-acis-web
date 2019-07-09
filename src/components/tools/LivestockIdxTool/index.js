@@ -63,7 +63,7 @@ class LivestockIdxTool extends Component {
         return (
             <Grid container direction="row" justify="center" alignItems="flex-start">
                     <Grid item container className="nothing" direction="column" xs={12}>
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="8">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
                           <Grid item>
                             <LivestockTypeButtonGroup/>
                           </Grid>

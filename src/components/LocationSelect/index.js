@@ -38,7 +38,7 @@ class LocationSelect extends Component {
 
         return (
           <div>
-              <Grid container spacing="8">
+              <Grid container spacing="1">
                 <Grid item xs={9}>
                   {app.getLocations && app.getLocation && <StationSelect names={app.getLocations} />}
                 </Grid>
@@ -57,7 +57,7 @@ class LocationSelect extends Component {
                    className="Modal"
                    overlayClassName="Overlay"
                  >
-                   <Grid container spacing="8" direction="column">
+                   <Grid container spacing="1" direction="column">
                      <Grid container item direction="row" justify="space-around">
                        <StationExplorerSelect names={app.getLocations} />
                        <Button variant="contained" onClick={()=>{app.setShowModalMap(false)}}>

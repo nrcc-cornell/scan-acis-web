@@ -90,7 +90,7 @@ class WxGraphTool extends Component {
                     </Grid>
                 </Hidden>
                     <Grid item container className="nothing" direction="column" xs={12} md={9}>
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="8">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
                           <Hidden mdUp>
                             <Grid item>
                               {display_VarPopover}
@@ -126,7 +126,7 @@ class WxGraphTool extends Component {
           return (
             <Grid container direction="row" justify="center" alignItems="flex-start">
                     <Grid item container className="nothing" direction="column" xs={12}>
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="8">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
                           <Grid item>
                             <UnitsPopover/>
                           </Grid>

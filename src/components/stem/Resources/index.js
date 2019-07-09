@@ -62,7 +62,7 @@ class Resources extends Component {
                 </Hidden>
               </Grid>
             </Grid>
-            <Grid item container direction="column" className={classes.root} spacing={32} xs={10} md={9}>
+            <Grid item container direction="column" className={classes.root} spacing={4} xs={10} md={9}>
               <Grid item>
                 <Typography variant="h5">
                   Resources

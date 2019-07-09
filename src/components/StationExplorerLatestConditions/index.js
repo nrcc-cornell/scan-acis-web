@@ -99,7 +99,7 @@ class StationExplorerLatestConditions extends Component {
                     <Typography variant="h6" noWrap>
                       Latest conditions
                     </Typography>
-                    <Typography variant="body1" gutterBottom noWrap>
+                    <Typography variant="body2" gutterBottom noWrap>
                       <ul style={{"padding":0,"margin":0,"listStyleType":"none"}}>
                         <li><b>Date/Time:</b> {app.explorer_getLatestConditions.date}</li>
                         <li><b>Air Temp:</b> {app.explorer_getLatestConditions.avgt}</li>

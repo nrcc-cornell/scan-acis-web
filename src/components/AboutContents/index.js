@@ -44,18 +44,18 @@ class AboutContents extends Component {
 
         return (
             <div className="about-contents">
-            <Grid container className={classes.root} spacing={32}>
+            <Grid container className={classes.root} spacing={4}>
               <Grid item sm={12} md={6}>
                     <Typography align="left" paragraph variant="h5">
                       Station Networks
                     </Typography>
-                    <Typography align="justify" paragraph variant="body1">
+                    <Typography align="justify" paragraph variant="body2">
 The U.S. Department of Agriculture's Natural Resources Conservation Service (USDA NRCS) operates a comprehensive, nationwide soil moisture and climate information network. The Soil Climate Analysis Network, also known as SCAN, supports natural resource assessments and conservation activities through its network of automated climate monitoring and data collection sites. SCAN focuses primarily on agricultural areas of the U.S., Puerto Rico and the Virgin Islands. The network consists of over 200 stations in almost every state, and is growing every year.
                     </Typography>
-                    <Typography align="justify" paragraph variant="body1">
+                    <Typography align="justify" paragraph variant="body2">
 In addition to the original SCAN project, NRCS also operates a soil moisture and climate information network on Tribal lands. The Tribal Soil Climate Analysis Network (known as Tribal SCAN) focuses on agricultural areas which are situated on Tribal lands in the United States.
                     </Typography>
-                    <Typography align="justify" paragraph variant="body1">
+                    <Typography align="justify" paragraph variant="body2">
                       More information about these networks is available at the NRCS website:
                       <ul>
                         <li><a href="https://www.wcc.nrcs.usda.gov/scan/" target="_blank" rel="noopener noreferrer">SCAN / Tribal SCAN documentation</a></li>
@@ -69,10 +69,10 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                     <Typography align="left" paragraph variant="h5">
                       About the decision tools
                     </Typography>
-                    <Typography align="justify" paragraph variant="body1">
+                    <Typography align="justify" paragraph variant="body2">
                       These decision tools use SCAN data to address a variety of agricultural applications. Each tool utilizes the Applied Climate Information System (ACIS) web service for fast, easy and reliable access to SCAN data. Together, SCAN and ACIS provide the means to produce efficient, powerful, and user-friendly tools using data observed at both traditional and tribal SCAN stations.
                     </Typography>
-                    <Typography align="justify" paragraph variant="body1">
+                    <Typography align="justify" paragraph variant="body2">
                       Each tool allows for station selection from either a map or dropdown list, and data can be viewed in either chart or table form. To learn more about these tools and how to use them, please visit <Link to={'/stem'}>SCAN 4 STEM</Link>.
                     </Typography>
               </Grid>

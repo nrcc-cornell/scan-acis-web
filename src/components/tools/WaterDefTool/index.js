@@ -3,9 +3,12 @@
 
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
+import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import green from '@material-ui/core/colors/green';
 
 import LoadStationData from './LoadStationData';
 import LoadSoilParameters from './LoadSoilParameters';
@@ -20,6 +23,22 @@ import DisplayPrecipChart from './DisplayPrecipChart';
 // Styles
 //import '../../../styles/WaterDefTool.css';
 
+const styles = theme => ({
+  wrapper: {
+    //margin: theme.spacing(1),
+    position: 'relative',
+  },
+  mapProgress: {
+    color: green[500],
+    position: 'absolute',
+    zIndex: 1000,
+    top: '50%',
+    left: '50%',
+    marginTop: -30,
+    marginLeft: -30,
+  },
+});
+
 var app;
 
 @inject('store') @observer
@@ -32,50 +51,88 @@ class WaterDefTool extends Component {
         this.state = {
           //years: null,
           //year: null,
-          years: [2016,2017,2018,2019],
+          years: [moment().year()],
           year: moment().year(),
           depth_top: 0, // inches
           depth_bottom: 12, // inches
           data_precip: null,
+          precip_is_loading: false,
           data_soil_moisture: null,
+          soilm_is_loading: false,
           data_soil_parameters: null,
+          soilp_is_loading: false,
           data_water_deficit: null,
           units: 'inches', //cm or inches
         }
     }
 
     componentDidMount() {
+        this.initStateForLoading()
         LoadStationData({sid:this.props.station, period:[this.state.year.toString()+'-01-01',this.state.year.toString()+'-12-31']})
           .then(response => {
+            console.log(response);
+            let yearStart = (response.data.meta && response.data.meta.valid_daterange && response.data.meta.valid_daterange[1][0]) ? parseInt(response.data.meta.valid_daterange[1][0].split('-')[0],10) : moment().year()
+            let yearEnd = (response.data.meta && response.data.meta.valid_daterange && response.data.meta.valid_daterange[1][1]) ? parseInt(response.data.meta.valid_daterange[1][1].split('-')[0],10) : moment().year()
+            let yearArr = Array.from({length: yearEnd-yearStart+1}, (v, k) => k+yearStart)
             this.setState({
-              data_soil_moisture: this.formatDataForHighcharts(response,'soilm'),
-              data_precip: this.formatDataForHighcharts(response,'precip'),
+              years: yearArr,
+              year: yearEnd,
+              data_precip: this.formatDataForHighcharts(response.data.data,'precip'),
+              data_soil_moisture: this.formatDataForHighcharts(response.data.data,'soilm'),
+              precip_is_loading: false,
+              soilm_is_loading: false,
             })
           });
         LoadSoilParameters({sid:this.props.station})
           .then(response => {
             this.setState({
               data_soil_parameters: response,
+              soilp_is_loading: false,
             })
           });
     }
 
     componentDidUpdate(prevProps,prevState) {
-      if (prevState.year!==this.state.year ||
-          prevProps.station!==this.props.station) {
+      if (prevProps.station!==this.props.station) {
+        this.initStateForLoading()
         LoadStationData({sid:this.props.station, period:[this.state.year.toString()+'-01-01',this.state.year.toString()+'-12-31']})
           .then(response => {
+            let yearStart = (response.data.meta && response.data.meta.valid_daterange && response.data.meta.valid_daterange[1][0]) ? parseInt(response.data.meta.valid_daterange[1][0].split('-')[0],10) : moment().year()
+            let yearEnd = (response.data.meta && response.data.meta.valid_daterange && response.data.meta.valid_daterange[1][1]) ? parseInt(response.data.meta.valid_daterange[1][1].split('-')[0],10) : moment().year()
+            let yearArr = Array.from({length: yearEnd-yearStart+1}, (v, k) => k+yearStart)
             this.setState({
-              data_soil_moisture: this.formatDataForHighcharts(response,'soilm'),
-              data_precip: this.formatDataForHighcharts(response,'precip'),
+              years: yearArr,
+              year: yearArr.includes(this.state.year) ? this.state.year : yearEnd,
+              data_precip: this.formatDataForHighcharts(response.data.data,'precip'),
+              data_soil_moisture: this.formatDataForHighcharts(response.data.data,'soilm'),
+              precip_is_loading: false,
+              soilm_is_loading: false,
             })
           });
-      }
-      if (prevProps.station!==this.props.station) {
         LoadSoilParameters({sid:this.props.station})
           .then(response => {
             this.setState({
               data_soil_parameters: response,
+              soilp_is_loading: false,
+            })
+          });
+      }
+      if (prevState.year!==this.state.year) {
+        this.initStateForLoading()
+        LoadStationData({sid:this.props.station, period:[this.state.year.toString()+'-01-01',this.state.year.toString()+'-12-31']})
+          .then(response => {
+            this.setState({
+              data_precip: this.formatDataForHighcharts(response.data.data,'precip'),
+              data_soil_moisture: this.formatDataForHighcharts(response.data.data,'soilm'),
+              precip_is_loading: false,
+              soilm_is_loading: false,
+            })
+          });
+        LoadSoilParameters({sid:this.props.station})
+          .then(response => {
+            this.setState({
+              data_soil_parameters: response,
+              soilp_is_loading: false,
             })
           });
       }
@@ -87,6 +144,7 @@ class WaterDefTool extends Component {
         let i
         let prcp,sm2,sm4,sm8,sm20,sm40
         let oseries=[]
+        if (!d) {return oseries}
         if (v==='precip') {
             for (i=0; i<d.length; i++) {
                 prcp = (d[i][1]==='M' || parseFloat(d[i][1])<0.0) ? null : ((d[i][1]==='T') ? 0.00 : parseFloat(d[i][1])).toFixed(2)
@@ -120,9 +178,26 @@ class WaterDefTool extends Component {
         })
     }
 
+    initStateForLoading = () => {
+        this.setState({
+          precip_is_loading: true,
+          soilm_is_loading: true,
+          soilp_is_loading: true,
+          data_precip: null,
+          data_soil_moisture: null,
+          data_soil_parameters: null
+        })
+    }
+
+    dataIsLoading = () => {
+        return this.state.precip_is_loading && this.state.soilm_is_loading && this.state.soilp_is_loading
+    }
+
     convert_in_to_cm = (v) => { return v*2.54 }
 
     render() {
+
+        const { classes } = this.props;
 
         return (
           <div>
@@ -146,6 +221,7 @@ class WaterDefTool extends Component {
               </Grid>
             </Grid>
             <Grid item>
+              <div className={classes.wrapper}>
               {this.state.data_soil_parameters && this.state.data_soil_moisture && this.state.depth_top!==null && this.state.depth_bottom!==null &&
                 <DisplayWaterDeficitChart
                   data={
@@ -160,34 +236,64 @@ class WaterDefTool extends Component {
                   depthRangeTop={this.state.depth_top}
                   depthRangeBottom={this.state.depth_bottom}
                   units={this.state.units}
+                  loading={this.state.soilp_is_loading || this.state.soilm_is_loading}
                 />
               }
-              {(!this.state.data_soil_parameters || !this.state.data_soil_moisture || this.state.depth_top===null || this.state.depth_bottom===null) &&
+              {(!this.state.data_soil_parameters || !this.state.data_soil_moisture) &&
                 <DisplayWaterDeficitChart
                   data={[]}
                   depthRangeTop={this.state.depth_top}
                   depthRangeBottom={this.state.depth_bottom}
                   units={this.state.units}
+                  loading={this.dataIsLoading()}
                 />
               }
+              {(this.state.soilp_is_loading || this.state.soilm_is_loading) &&
+                <CircularProgress size={64} className={classes.mapProgress} />
+              }
+              </div>
             </Grid>
             <Grid item>
+              <div className={classes.wrapper}>
               {this.state.data_soil_moisture &&
                 <DisplaySoilMoistureChart
                   data={this.state.data_soil_moisture}
+                  loading={this.state.soilm_is_loading}
                 />
               }
+              {!this.state.data_soil_moisture &&
+                <DisplaySoilMoistureChart
+                  data={[]}
+                  loading={this.state.soilm_is_loading}
+                />
+              }
+              {this.state.soilm_is_loading &&
+                <CircularProgress size={64} className={classes.mapProgress} />
+              }
+              </div>
             </Grid>
             <Grid item>
+              <div className={classes.wrapper}>
               {this.state.data_precip &&
                 <DisplayPrecipChart
                   data={this.state.data_precip}
+                  loading={this.state.precip_is_loading}
                 />
               }
+              {!this.state.data_precip &&
+                <DisplayPrecipChart
+                  data={[]}
+                  loading={this.state.precip_is_loading}
+                />
+              }
+              {this.state.precip_is_loading &&
+                <CircularProgress size={64} className={classes.mapProgress} />
+              }
+              </div>
             </Grid>
           </div>
         );
     }
 }
 
-export default WaterDefTool;
+export default withStyles(styles)(WaterDefTool);

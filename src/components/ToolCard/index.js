@@ -54,7 +54,7 @@ const styles = theme => ({
 });
 
 function ComplexGrid(props) {
-  const { classes,name,title,tagline,thumbnail,url,onclick} = props;
+  const { classes,name,title,description,thumbnail,url,onclick} = props;
 
   return (
     <div className={classes.root}>
@@ -71,7 +71,9 @@ function ComplexGrid(props) {
             </ButtonBase>
           </Grid>
           <Grid item xs={10} className={classes.cardDescription}>
-            <Typography align="left" color="textSecondary">Short Tool Description. Lorem ipsum dolor sit amet, consectetur sit elit.</Typography>
+            <Typography variant="body2" align="left" color="textSecondary">
+              {description}
+            </Typography>
           </Grid>
           <Grid item container justify="space-evenly" className={classes.cardButtons}>
               <Grid item>
@@ -95,7 +97,7 @@ ComplexGrid.propTypes = {
   classes: PropTypes.object.isRequired,
   name: PropTypes.string,
   title: PropTypes.string,
-  tagline: PropTypes.string,
+  description: PropTypes.string,
   thumbnail: PropTypes.string,
   url: PropTypes.string,
   onclick: PropTypes.func,

@@ -84,7 +84,7 @@ export class AppStore {
     /// - toolName (e.g. gddtool)
     /// - getToolInfo, an object containing these keys:
     /// -     title (e.g. Growing Degree Day Calculator)
-    /// -     tagline (one sentence description of tool)
+    /// -     description (one sentence description of tool)
     /// -     thumbnail (thumbnail image for tool card)
     //////////////////////////////////////////////
     toolNameArray = ['gddtool','waterdef','wxgrapher','livestock']
@@ -102,32 +102,32 @@ export class AppStore {
     @computed get getToolName() { return this.toolName };
 
     getToolInfo = (name) => {
-            let title, tagline, thumbnail, url, onclick
+            let title, description, thumbnail, url, onclick
             let pathToImages = './thumbnails/'
             if (name==='gddtool') {
                 title = 'Growing Degree Day Calculator'
-                tagline = 'Tagline for GddTool'
+                description = 'Monitor heat accumulation throughout the growing season.'
                 thumbnail = pathToImages+'GddTool-thumbnail.png'
                 url = '/tools/growing-degree-day'
             } else if (name==='waterdef') {
                 title = 'Water Deficit Calculator'
-                tagline = 'Tagline for WaterDefCalc'
+                description = 'Track changes in the available soil water content.'
                 thumbnail = pathToImages+'WaterDeficitCalc-thumbnail.png'
                 url = '/tools/water-deficit-calculator'
             } else if (name==='wxgrapher') {
                 title = 'Weather Grapher'
-                tagline = 'Tagline for WxGraphTool'
+                description = 'View data for multiple variables and timescales.'
                 thumbnail = pathToImages+'WxGrapher-thumbnail.png'
                 url = '/tools/weather-grapher'
             } else if (name==='livestock') {
                 title = 'Livestock Heat Index'
-                tagline = 'Tagline for LivestockHeatIdx'
+                description = 'Assess dangerous conditions for livestock by the hour.'
                 thumbnail = pathToImages+'Livestock-thumbnail.png'
                 url = '/tools/livestock-heat-index'
             } else {
             }
             onclick = () => {this.setActivePage(3); this.setToolName(name)}
-            return {'name':name, 'title':title, 'tagline':tagline, 'thumbnail':thumbnail, 'url':url, 'onclick':onclick}
+            return {'name':name, 'title':title, 'description':description, 'thumbnail':thumbnail, 'url':url, 'onclick':onclick}
         };
 
     @observable outputType = 'chart';

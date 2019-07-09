@@ -50,7 +50,7 @@ class ToolContents extends Component {
           return (
             <div className='tool-contents'>
             <div style={{ padding: 10 }}>
-            <Grid container spacing="8">
+            <Grid container spacing="1">
               <Grid item xs={9} sm={6} md={3}>
                 <ToolSelect names={app.toolNameArray} />
               </Grid>
@@ -63,7 +63,7 @@ class ToolContents extends Component {
             </Grid>
             </div>
             <div style={{ marginTop:30, marginBottom:10 }}>
-            <Grid container spacing="8">
+            <Grid container spacing="1">
               <Grid item xs={12}>
                 <Typography align="center" variant="h3" className="tool-title">
                   {app.getToolInfo(this.props.name).title}
@@ -72,7 +72,7 @@ class ToolContents extends Component {
             </Grid>
             </div>
             <div>
-            <Grid container spacing="8">
+            <Grid container spacing="1">
               <Grid item xs={12}>
                 { this.props.name==='gddtool' && (<GddTool />) }
                 { this.props.name==='waterdef' && app.getLocation && (<WaterDefTool station={app.getLocation.sid} />) }

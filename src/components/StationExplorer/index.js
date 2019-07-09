@@ -36,7 +36,7 @@ class StationExplorer extends Component {
     render() {
 
         return (
-                  <Grid container justify="space-evenly" spacing={8}>
+                  <Grid container justify="space-evenly" spacing={1}>
                       <Grid item xs={12} md={7}>
                         { this.props.store.app.getLocations && (<StationExplorerMap />)}
                       </Grid>

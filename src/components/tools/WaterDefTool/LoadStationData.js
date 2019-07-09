@@ -12,7 +12,7 @@ const LoadStationData = ({sid,period}) => {
         console.log(sid,period);
         let params = {
             "sid": sid,
-            "meta":"name,state",
+            "meta":"name,state,valid_daterange",
             "sdate":period[0],
             "edate":period[1],
             "elems":[
@@ -27,7 +27,7 @@ const LoadStationData = ({sid,period}) => {
         return axios
           .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
           .then(res => {
-            return res.data.data
+            return res
           })
           .catch(err => {
             console.log(

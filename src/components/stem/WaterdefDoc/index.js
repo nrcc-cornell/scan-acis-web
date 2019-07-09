@@ -62,7 +62,7 @@ class WaterdefDoc extends Component {
                 </Hidden>
               </Grid>
             </Grid>
-            <Grid item container className={classes.root} spacing={32} xs={10} md={9}>
+            <Grid item container className={classes.root} spacing={4} xs={10} md={9}>
               <Grid item>
                 <Typography variant="h5">
                   About the Water Deficit Calculator

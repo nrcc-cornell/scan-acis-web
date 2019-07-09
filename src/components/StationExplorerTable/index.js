@@ -34,7 +34,7 @@ class StationExplorerTable extends Component {
 
         return (
             <div id="feature_infos">
-              <Grid container spacing={16}>
+              <Grid container spacing={2}>
                 <Grid item container>
                   <Grid item>
                     <Typography variant="h6">
@@ -42,7 +42,7 @@ class StationExplorerTable extends Component {
                     </Typography>
                   </Grid>
                 </Grid>
-                <Grid item container spacing={16}>
+                <Grid item container spacing={2}>
                   <Grid item>
                       <StationExplorerInfo />
                   </Grid>
