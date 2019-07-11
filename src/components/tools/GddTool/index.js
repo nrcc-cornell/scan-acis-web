@@ -27,7 +27,7 @@ class GddTool extends Component {
         app.setToolName('gddtool')
         if (!app.getLocations || !app.getLocation) {
             // get all stations, set selected station, and download data for selected tool
-            app.downloadStationInfo
+            app.downloadStationInfo()
         } else {
             // stations are already set, just download data for selected tool
             app.gddtool_downloadData()

@@ -6,12 +6,12 @@ import { withRouter } from "react-router-dom";
 import { inject, observer} from 'mobx-react';
 import Typography from '@material-ui/core/Typography';
 import Grid from "@material-ui/core/Grid";
-import Button from '@material-ui/core/Button';
+//import Button from '@material-ui/core/Button';
 
 import StationExplorerSelect from '../../components/StationExplorerSelect';
 import StationExplorerInfo from '../../components/StationExplorerInfo';
-import StationExplorerClimateSummary from '../../components/StationExplorerClimateSummary';
-import StationExplorerLatestConditions from '../../components/StationExplorerLatestConditions';
+//import StationExplorerClimateSummary from '../../components/StationExplorerClimateSummary';
+//import StationExplorerLatestConditions from '../../components/StationExplorerLatestConditions';
 import StationExplorerData from '../../components/StationExplorerData';
 
 // Styles
@@ -29,8 +29,8 @@ class StationExplorerTable extends Component {
 
     render() {
 
-        let loc = app.getLocation_explorer
-        let porEnd = (app.getLocation_explorer.edate && app.getLocation_explorer.edate.slice(0,4)==='9999') ? 'present' : app.getLocation_explorer.edate
+        //let loc = app.getLocation_explorer
+        //let porEnd = (app.getLocation_explorer.edate && app.getLocation_explorer.edate.slice(0,4)==='9999') ? 'present' : app.getLocation_explorer.edate
 
         return (
             <div id="feature_infos">

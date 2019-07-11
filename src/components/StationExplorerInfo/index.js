@@ -8,7 +8,7 @@ import Typography from '@material-ui/core/Typography';
 //import Grid from "@material-ui/core/Grid";
 //import Button from '@material-ui/core/Button';
 
-import StationExplorerSelect from '../../components/StationExplorerSelect';
+//import StationExplorerSelect from '../../components/StationExplorerSelect';
 
 // Styles
 //import '../../styles/StationExplorerInfo.css';
@@ -25,7 +25,7 @@ class StationExplorerInfo extends Component {
 
     render() {
 
-        let loc = app.getLocation_explorer;
+        //let loc = app.getLocation_explorer;
         let porEnd = (app.getLocation_explorer.edate && app.getLocation_explorer.edate.slice(0,4)==='9999') ? 'present' : app.getLocation_explorer.edate;
         let sid_and_network = app.getLocation_explorer.sid;
         let sid = sid_and_network.split(" ")[0];

@@ -26,8 +26,8 @@ class StationExplorerData extends Component {
 
     render() {
 
-        let loc = app.getLocation_explorer
-        let porEnd = (app.getLocation_explorer.edate && app.getLocation_explorer.edate.slice(0,4)==='9999') ? 'present' : app.getLocation_explorer.edate
+        //let loc = app.getLocation_explorer
+        //let porEnd = (app.getLocation_explorer.edate && app.getLocation_explorer.edate.slice(0,4)==='9999') ? 'present' : app.getLocation_explorer.edate
         let variantClimate = (app.getDataView_explorer==='climate') ? 'contained' : 'outlined'
         let variantWeather = (app.getDataView_explorer==='weather') ? 'contained' : 'outlined'
 

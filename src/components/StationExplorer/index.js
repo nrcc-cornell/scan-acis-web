@@ -13,7 +13,7 @@ import 'leaflet/dist/leaflet.css';
 //import LegendControl from '../LegendControl';
 import Grid from '@material-ui/core/Grid';
 //import Hidden from "@material-ui/core/Hidden";
-import Typography from '@material-ui/core/Typography';
+//import Typography from '@material-ui/core/Typography';
 //import LoadingOverlay from 'react-loading-overlay';
 
 import StationExplorerMap from '../../components/StationExplorerMap';

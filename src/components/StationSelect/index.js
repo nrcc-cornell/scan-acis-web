@@ -56,7 +56,7 @@ class StationSelect extends Component {
           comparison = -1;
         }
         return (
-          (order == 'desc') ? (comparison * -1) : comparison
+          (order === 'desc') ? (comparison * -1) : comparison
         );
       };
     }

@@ -6,7 +6,7 @@ import { inject, observer} from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+//import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
 
@@ -148,7 +148,7 @@ class WaterDefTool extends Component {
         if (v==='precip') {
             for (i=0; i<d.length; i++) {
                 prcp = (d[i][1]==='M' || parseFloat(d[i][1])<0.0) ? null : ((d[i][1]==='T') ? 0.00 : parseFloat(d[i][1])).toFixed(2)
-                oseries.push([moment.utc(d[i][0],'YYYY-MM-DD').valueOf(),parseFloat(d[i][1])])
+                oseries.push([moment.utc(d[i][0],'YYYY-MM-DD').valueOf(),prcp])
             };
         } else if (v==='soilm') {
             for (i=0; i<d.length; i++) {

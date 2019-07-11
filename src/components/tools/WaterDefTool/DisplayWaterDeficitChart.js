@@ -17,7 +17,7 @@ require("highcharts/modules/exporting")(Highcharts);
 const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units}) => {
 
         const afterRender = (chart) => {
-            let textX = chart.plotLeft + (chart.plotWidth  * 0.5);
+            //let textX = chart.plotLeft + (chart.plotWidth  * 0.5);
             let textY = chart.plotTop  + (chart.plotHeight * 0.5);
             if (Array.isArray(data)) {
                 if (data.length===0) {

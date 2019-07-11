@@ -9,8 +9,8 @@ import moment from 'moment';
 const protocol = window.location.protocol;
 
 //utils
-const arrSum = arr => arr.reduce((a,b) => a + b, 0)
-const arrAvg = arr => arr.reduce((a,b) => a + b, 0) / arr.length
+//const arrSum = arr => arr.reduce((a,b) => a + b, 0)
+//const arrAvg = arr => arr.reduce((a,b) => a + b, 0) / arr.length
 const getMtdStartLabel = (s) => { return moment(s,"YYYY-MM-DD").format("MMM")+' 1' }
 const getStdStartLabel = (s) => {
         let month = moment(s,'YYYY-MM-DD').month() + 1
@@ -360,9 +360,9 @@ export class AppStore {
                this.setLocation_explorer(85677);
                this.setDataView_explorer('weather');
                this.setDatesForLocations({'date':data['date'],'ytd_start':data['ytd_start'],'std_start':data['std_start'],'mtd_start':data['mtd_start']});
-               if (this.getToolName==='gddtool') {this.gddtool_downloadData}
-               if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData}
-               if (this.getToolName==='livestock') {this.livestock_downloadData}
+               if (this.getToolName==='gddtool') {this.gddtool_downloadData()}
+               if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
+               if (this.getToolName==='livestock') {this.livestock_downloadData()}
              });
     }
 
@@ -1802,7 +1802,7 @@ export class AppStore {
     @computed get livestock_getAcisParams() {
             let elems
             let numdays
-            let dateToday
+            //let dateToday
             elems = [
                 {"vX":23}, //temp
                 {"vX":24}, //relative humidity

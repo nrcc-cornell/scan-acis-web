@@ -46,7 +46,7 @@ class LivestockIdxTool extends Component {
         app.setToolName('livestock')
         if (!app.getLocations || !app.getLocation) {
             // get all stations, set selected station, and download data for selected tool
-            app.downloadStationInfo
+            app.downloadStationInfo()
         } else {
             // stations are already set, just download data for selected tool
             app.livestock_downloadData()
@@ -54,7 +54,7 @@ class LivestockIdxTool extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        //const { classes } = this.props;
 
         let display;
         if (app.getOutputType==='chart') { display = <LivestockIdxCharts /> }

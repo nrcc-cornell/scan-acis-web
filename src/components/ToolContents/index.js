@@ -16,7 +16,7 @@ import WxGraphTool from '../../components/tools/WxGraphTool';
 import LivestockIdxTool from '../../components/tools/LivestockIdxTool';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import { spacing } from '@material-ui/system';
+//import { spacing } from '@material-ui/system';
 
 // Styles
 import '../../styles/ToolContents.css';

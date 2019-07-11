@@ -13,7 +13,7 @@ require("highcharts/modules/exporting")(Highcharts);
 const DisplayPrecipChart = ({data}) => {
 
         const afterRender = (chart) => {
-            let textX = chart.plotLeft + (chart.plotWidth  * 0.5);
+            //let textX = chart.plotLeft + (chart.plotWidth  * 0.5);
             let textY = chart.plotTop  + (chart.plotHeight * 0.5);
             if (Array.isArray(data)) {
                 if (data.length===0) {
@@ -21,6 +21,19 @@ const DisplayPrecipChart = ({data}) => {
                 }
             }
         };
+
+        let createSeries = (d,col) => {
+            //d: 2-d array, with date in first column
+            //col: column number to use
+            let i
+            let oseries = [];
+            if (d) {
+                for (i=0; i<d.length; i++) {
+                    oseries.push([d[i][0],parseFloat(d[i][col])])
+                };
+            }
+            return oseries;
+        }
 
         const options = {
           title: {
@@ -40,7 +53,7 @@ const DisplayPrecipChart = ({data}) => {
             name:'Precipitation',
             type: 'column',
             color: 'green',
-            data: data,
+            data: createSeries(data,1),
           }]
         }
 

@@ -84,8 +84,8 @@ class StationExplorerClimateSummary extends Component {
 
     render() {
 
-        let loc = app.explorer_getClimateSummary
-        let porEnd = (app.explorer_getClimateSummary.edate && app.explorer_getClimateSummary.edate.slice(0,4)==='9999') ? 'present' : app.explorer_getClimateSummary.edate
+        //let loc = app.explorer_getClimateSummary
+        //let porEnd = (app.explorer_getClimateSummary.edate && app.explorer_getClimateSummary.edate.slice(0,4)==='9999') ? 'present' : app.explorer_getClimateSummary.edate
 
         return (
             <div className="climateSummary">

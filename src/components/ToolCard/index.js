@@ -19,13 +19,16 @@ const styles = theme => ({
     //padding: theme.spacing.unit * 2,
     margin: 'auto',
     //maxWidth: 600,
-    height: 300,
-    width: 200,
-    background: '#F5F5F5',
+    height: 320,
+    width: 240,
+    background: '#F1F1F1',
+    borderRadius: 16,
   },
   image: {
-    width: 180,
-    height: 90,
+    //width: 180,
+    //height: 90,
+    width: 220,
+    height: 110,
   },
   img: {
     margin: 'auto',
@@ -43,7 +46,7 @@ const styles = theme => ({
     height: 70,
   },
   cardImage: {
-    height: 100,
+    height: 120,
   },
   cardDescription: {
     height: 70,
@@ -54,7 +57,7 @@ const styles = theme => ({
 });
 
 function ComplexGrid(props) {
-  const { classes,name,title,description,thumbnail,url,onclick} = props;
+  const { classes,title,description,thumbnail,url} = props;
 
   return (
     <div className={classes.root}>
@@ -95,12 +98,10 @@ function ComplexGrid(props) {
 
 ComplexGrid.propTypes = {
   classes: PropTypes.object.isRequired,
-  name: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
   thumbnail: PropTypes.string,
   url: PropTypes.string,
-  onclick: PropTypes.func,
 };
 
 export default withRouter(withStyles(styles)(ComplexGrid));

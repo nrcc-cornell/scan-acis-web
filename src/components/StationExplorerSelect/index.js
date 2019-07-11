@@ -15,7 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import '../../styles/StationExplorerSelect.css';
 
 var app;
-let compareValues;
+//let compareValues;
 
 @inject('store') @observer
 class StationExplorerSelect extends Component {
@@ -53,7 +53,7 @@ class StationExplorerSelect extends Component {
           comparison = -1;
         }
         return (
-          (order == 'desc') ? (comparison * -1) : comparison
+          (order === 'desc') ? (comparison * -1) : comparison
         );
       };
     }
@@ -66,7 +66,7 @@ class StationExplorerSelect extends Component {
         let network
         for (var v of sortedNames) {
             disabled = false
-            network = v.network=='17' ? 'SCAN' : 'Tribal SCAN'
+            network = v.network==='17' ? 'SCAN' : 'Tribal SCAN'
             selectOptions.push({ value: v.uid.toString(), label: v.name+', '+v.state+' ('+network+')', clearableValue: false, disabled: disabled })
         }
 

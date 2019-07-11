@@ -3,7 +3,7 @@
 
 //import React from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
+//import moment from 'moment';
 
 const WaterDeficitModel = ({soilm,soilp,depthRangeTop,depthRangeBottom,unitsOutput}) => {
         // soilm: array of dates and soil moisture (volumetric, %) observed (5 depths, 2",4",8",20",40")

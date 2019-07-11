@@ -2,7 +2,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 //import React from 'react';
-import axios from 'axios';
+//import axios from 'axios';
 import PropTypes from 'prop-types';
 
 let public_url = process.env.PUBLIC_URL

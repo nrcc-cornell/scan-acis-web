@@ -12,7 +12,7 @@ import green from '@material-ui/core/colors/green';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
+  //Link,
   Switch,
   Redirect
 } from 'react-router-dom'
@@ -22,7 +22,7 @@ import Header from '../../components/Header';
 import HomeContents from '../../components/HomeContents';
 import AboutContents from '../../components/AboutContents';
 import StemMain from '../../components/stem/StemMain';
-import LocationSelect from '../../components/LocationSelect';
+//import LocationSelect from '../../components/LocationSelect';
 import ToolContents from '../../components/ToolContents';
 import Footer from '../../components/Footer';
 
@@ -53,15 +53,15 @@ const styles = theme => ({
   root: {}
 });
 
-var app;
+//var app;
 
 @inject('store') @observer
 class App extends Component {
 
-    constructor(props) {
-        super(props);
-        app = this.props.store.app;
-    }
+    //constructor(props) {
+    //    super(props);
+    //    app = this.props.store.app;
+    //}
 
     render() {
 

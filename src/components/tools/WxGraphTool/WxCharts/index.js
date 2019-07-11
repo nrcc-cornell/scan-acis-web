@@ -9,9 +9,9 @@ import { ResponsiveContainer, ComposedChart, AreaChart, LineChart, BarChart, Bar
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 // to save charts in specific id
-import Button from '@material-ui/core/Button';
-import domtoimage from 'dom-to-image';
-import { saveAs } from 'file-saver';
+//import Button from '@material-ui/core/Button';
+//import domtoimage from 'dom-to-image';
+//import { saveAs } from 'file-saver';
 
 //Components
 //import TimeFrameButtonGroup from '../TimeFrameButtonGroup'

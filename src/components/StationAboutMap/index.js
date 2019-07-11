@@ -28,7 +28,8 @@ class StationAboutMap extends Component {
         };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
         // CONUS, AK, HI and PR/VI
-        const maxBounds = [
+        //const maxBounds = [
+        this.maxBounds = [
             [10.50, -172.50],
             [67, -66.9326]
         ];

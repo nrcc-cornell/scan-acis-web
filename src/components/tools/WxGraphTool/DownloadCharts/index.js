@@ -3,7 +3,7 @@
 
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
-import moment from 'moment';
+//import moment from 'moment';
 // to save charts in specific id
 import IconButton from '@material-ui/core/IconButton';
 import CloudDownloadIcon from '@material-ui/icons/CloudDownload';
@@ -16,15 +16,15 @@ import { saveAs } from 'file-saver';
 // Styles
 //import '../../../../styles/WxCharts.css';
 
-var app;
+//var app;
 
 @inject('store') @observer
 class DownloadCharts extends Component {
 
-    constructor(props) {
-        super(props);
-        app = this.props.store.app;
-    }
+    //constructor(props) {
+    //    super(props);
+    //    app = this.props.store.app;
+    //}
 
     render() {
 
@@ -34,7 +34,7 @@ class DownloadCharts extends Component {
         let downloadGraphs = (node) => {
             domtoimage.toBlob(document.getElementById(node))
                 .then(function (blob) {
-                    window.saveAs(blob, filenameToSave);
+                    saveAs(blob, filenameToSave);
                 });
         }
 

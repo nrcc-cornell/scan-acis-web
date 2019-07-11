@@ -80,11 +80,11 @@ class Instrumentation extends Component {
               <Grid item>
                     <img className="scan-station-instrument" src={scanstn} alt="SCAN instrumentation" usemap="#instrumentmap" />
                     <map name="instrumentmap">
-                        <area onClick={(e) => {this.updateInstrument(e,'wind')}} shape="rect" coords="16,181,180,327" href="#" />
-                        <area onClick={(e) => {this.updateInstrument(e,'solarrad')}} shape="rect" coords="350,267,547,327" href="#" />
-                        <area onClick={(e) => {this.updateInstrument(e,'precip')}} shape="rect" coords="9,347,220,417" href="#" />
-                        <area onClick={(e) => {this.updateInstrument(e,'rh_and_temp')}} shape="rect" coords="300,348,565,417" href="#" />
-                        <area onClick={(e) => {this.updateInstrument(e,'soil')}} shape="rect" coords="9,496,176,606" href="#" />
+                        <area onClick={(e) => {this.updateInstrument(e,'wind')}} shape="rect" coords="16,181,180,327" alt="wind instrument" href="#" />
+                        <area onClick={(e) => {this.updateInstrument(e,'solarrad')}} shape="rect" coords="350,267,547,327" alt="solar radiation instrument" href="#" />
+                        <area onClick={(e) => {this.updateInstrument(e,'precip')}} shape="rect" coords="9,347,220,417" alt="precipitation instrument" href="#" />
+                        <area onClick={(e) => {this.updateInstrument(e,'rh_and_temp')}} shape="rect" coords="300,348,565,417" alt="temperature and relative humidity instrument" href="#" />
+                        <area onClick={(e) => {this.updateInstrument(e,'soil')}} shape="rect" coords="9,496,176,606" alt="soil temperature and soil moisture instrument" href="#" />
                     </map>
               </Grid>
               <Grid item>

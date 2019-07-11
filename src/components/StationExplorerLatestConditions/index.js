@@ -84,8 +84,8 @@ class StationExplorerLatestConditions extends Component {
 
     render() {
 
-        let loc = app.getLocation_explorer
-        let porEnd = (app.getLocation_explorer.edate && app.getLocation_explorer.edate.slice(0,4)==='9999') ? 'present' : app.getLocation_explorer.edate
+        //let loc = app.getLocation_explorer
+        //let porEnd = (app.getLocation_explorer.edate && app.getLocation_explorer.edate.slice(0,4)==='9999') ? 'present' : app.getLocation_explorer.edate
 
         return (
             <div className="latestConditions">
@@ -107,8 +107,8 @@ class StationExplorerLatestConditions extends Component {
                         <li><b>Precipitation (last hour):</b> {app.explorer_getLatestConditions.pcpn}</li>
                         <li><b>Solar Radiation:</b> {app.explorer_getLatestConditions.solar}</li>
                         <li><b>Wind Speed / Direction:</b> {app.explorer_getLatestConditions.windspdave} / {app.explorer_getLatestConditions.winddirave}</li>
-                        <li><b>Soil Temp:</b> {app.explorer_getLatestConditions.soilt2in}(2in), {app.explorer_getLatestConditions.soilt4in}(4in), {app.explorer_getLatestConditions.soilt8in}(8in), {app.explorer_getLatestConditions.soilt20in}(20in), {app.explorer_getLatestConditions.soilt40in}(40in)</li>
-                        <li><b>Soil Moist:</b> {app.explorer_getLatestConditions.soilm2in}(2in), {app.explorer_getLatestConditions.soilm4in}(4in), {app.explorer_getLatestConditions.soilm8in}(8in), {app.explorer_getLatestConditions.soilm20in}(20in), {app.explorer_getLatestConditions.soilm40in}(40in)</li>
+                        <li><b>Soil Temp:</b> {app.explorer_getLatestConditions.soilt2in}(2"), {app.explorer_getLatestConditions.soilt4in}(4"), {app.explorer_getLatestConditions.soilt8in}(8"), {app.explorer_getLatestConditions.soilt20in}(20"), {app.explorer_getLatestConditions.soilt40in}(40")</li>
+                        <li><b>Soil Moist:</b> {app.explorer_getLatestConditions.soilm2in}(2"), {app.explorer_getLatestConditions.soilm4in}(4"), {app.explorer_getLatestConditions.soilm8in}(8"), {app.explorer_getLatestConditions.soilm20in}(20"), {app.explorer_getLatestConditions.soilm40in}(40")</li>
                       </ul>
                     </Typography>
               </LoadingOverlay>

@@ -51,7 +51,7 @@ class StemMain extends Component {
 
     render() {
 
-        const { classes } = this.props;
+        //const { classes } = this.props;
 
         const TagName = this.components[this.props.loc.slice(6)]
 

@@ -52,7 +52,7 @@ class WxGraphTool extends Component {
         app.setToolName('wxgrapher')
         if (!app.getLocations || !app.getLocation) {
             // get all stations, set selected station, and download data for selected tool
-            app.downloadStationInfo
+            app.downloadStationInfo()
         } else {
             // stations are already set, just download data for selected tool
             app.wxgraph_downloadData()
@@ -60,7 +60,7 @@ class WxGraphTool extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        //const { classes } = this.props;
 
         let display;
         if (app.getOutputType==='chart') { display = <WxCharts /> }
