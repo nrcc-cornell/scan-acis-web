@@ -66,7 +66,7 @@ class StationExplorerSelect extends Component {
         let network
         for (var v of sortedNames) {
             disabled = false
-            network = v.network==='17' ? 'SCAN' : 'Tribal SCAN'
+            network = v.network===17 ? 'SCAN' : 'Tribal SCAN'
             selectOptions.push({ value: v.uid.toString(), label: v.name+', '+v.state+' ('+network+')', clearableValue: false, disabled: disabled })
         }
 
