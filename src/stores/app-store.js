@@ -2049,6 +2049,25 @@ export class AppStore {
         if (this.stem_getInstrument==='soil') { name = 'Soil Moisture & Temperature' }
         return name
     }
+    @computed get stem_getInstrumentDesc() {
+        let desc = null;
+        if (this.stem_getInstrument==='wind') {
+            desc = "An <b>anemometer</b> is a device for measuring wind speed, and is one instrument used in a weather station. The term is derived from the Greek word, anemos, meaning wind.<p/>A <b>wind vane</b> is a device that measures the direction of the wind. The wind vane is usually combined with the anemometer. Wind direction is the direction from which the wind is blowing."
+        }
+        if (this.stem_getInstrument==='solarrad') {
+            desc = "A <b>solar radiation</b> sensor measures solar energy from the sun.<p/>Solar radiation is radiant energy emitted by the sun from a nuclear fusion reaction that creates electromagnetic energy. The spectrum of solar radiation is close to that of a black body with a temperature of about 5800 K. About half of the radiation is in the visible short-wave part of the electromagnetic spectrum. The other half is mostly in the near-infrared part, with some in the ultraviolet part of the spectrum.<p/>The units of measure are Watts per square meter.<p/>The device is typically used in agricultural applications, and is used in the calculation of Evapotranspiration, is the potential for evaporation of moisture from the soil (or the reverse of rainfall) and is a function solar energy, wind and temperature."
+        }
+        if (this.stem_getInstrument==='precip') {
+            desc = "A <b>rain gauge</b> is a device that measures liquid precipitation (rain), as opposed to solid precipitation (snow gauge) over a set period of time.<p/>All digital rain gauges are self emptying or self dumping (also referred to as tipping rain gauge). The precision of the rain gauge is based on the volume of rain per emptying cycle.<p/>Data from this device are utilized in our Weather Grapher and Water Deficit Calculator."
+        }
+        if (this.stem_getInstrument==='rh_and_temp') {
+            desc = "A <b>thermometer</b> is a device that measures temperature. Most digital thermometers are resistive thermal devices (RTD). RTDs predict change in temperature as a function of electrical resistance.<p/>A <b>hygrometer</b> is a device that measures relative humidity. Relative humidity is a term used to describe the amount or percentage of water vapor that exists in air.<p/>The <b>dew point</b> is the temperature at which a given parcel of humid air must be cooled, at constant barometric pressure, for water vapor to condense into water. The condensed water is called dew. The dew point is a saturation temperature.<p/>The dew point is associated with relative humidity. A high relative humidity indicates that the dew point is closer to the current air temperature. Relative humidity of 100% indicates the dew point is equal to the current temperature and the air is maximally saturated with water. When the dew point remains constant and temperature increases, relative humidity will decrease.<p/>Data from these sensors are utilized in our Weather Grapher, Growing Degree Day Calculator, and Livestock Heat Index."
+        }
+        if (this.stem_getInstrument==='soil') {
+            desc = "A <b>soil moisture</b> sensor measures the quantity of water contained in a material, such as soil, on a volumetric or gravimetric basis. These sensors are paired with <b>soil temperature</b> sensors at specific depths below the ground surface. To obtain an accurate measurement, the soil temperature sensor is required for calibration.<p/>Data from these sensors are used in our Water Deficit Calculator."
+        }
+        return desc
+    }
 
     // run these on initial load
     constructor() {

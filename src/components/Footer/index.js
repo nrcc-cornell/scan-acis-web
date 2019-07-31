@@ -8,6 +8,7 @@ import classNames from 'classnames'
 //import Link from 'next/link'
 import React, { Component } from 'react'
 //import InvertedButton from './InvertedButton'
+import Button from '@material-ui/core/Button';
 
 import acislogo from '../../assets/acis-transparent.png'
 import nrcslogo from '../../assets/NRCS-Logo.png'
@@ -21,26 +22,30 @@ class Footer extends Component {
       <div className={classes.root}>
         <Grid
           container
-          spacing={0}
+          spacing={2}
           className={classNames(classes.footerText, classes.footerSections)}
         >
           <Grid item xs={12} sm={3}>
                         <Typography className={classes.white} gutterBottom variant="body2">
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Quis enim lobortis scelerisque fermentum.
+                            This site provides decision tools and resources using data from weather stations in the SCAN and Tribal SCAN Networks. This project is a collaboration between the following partners:.
                         </Typography>
           </Grid>
-          <Grid item xs={12} sm={3}>
-            <ul style={{ listStyle: 'none', margin: 0 }}>
-              <li>
-                            <a href="https://www.wcc.nrcs.usda.gov/about/mon_scan.html" target="_blank" rel="noopener noreferrer">About SCAN</a>
-              </li>
-              <li>
-                            <a href="https://www.wcc.nrcs.usda.gov/scan/scan_brochure.pdf" target="_blank" rel="noopener noreferrer">SCAN Brochure</a>
-              </li>
-              <li>
-                            <a href="https://www.wcc.nrcs.usda.gov/tribalscan/tribalscan_brochure.pdf" target="_blank" rel="noopener noreferrer">Tribal SCAN Brochure</a>
-              </li>
-            </ul>
+          <Grid container item direction="column" spacing="1" xs={12} sm={3}>
+              <Grid item>
+                    <Button variant="contained" color="white" size="small" href="https://www.wcc.nrcs.usda.gov/about/mon_scan.html">
+                      {"About SCAN"}
+                    </Button>
+              </Grid>
+              <Grid item>
+                    <Button variant="contained" color="white" size="small" href="https://www.wcc.nrcs.usda.gov/scan/scan_brochure.pdf">
+                      {"SCAN Brochure"}
+                    </Button>
+              </Grid>
+              <Grid item>
+                    <Button variant="contained" color="white" size="small" href="https://www.wcc.nrcs.usda.gov/tribalscan/tribalscan_brochure.pdf">
+                      {"Tribal SCAN Brochure"}
+                    </Button>
+              </Grid>
           </Grid>
           <Grid item xs={12} sm={6}>
                         <a href="https://www.usda.gov" target="_blank" rel="noopener noreferrer"><img src={usdalogo} alt="USDA" /></a>

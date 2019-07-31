@@ -10,6 +10,7 @@ import Hidden from '@material-ui/core/Hidden';
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 import StemMenu from '../StemMenu'
+import ReactHtmlParser, { processNodes, convertNodeToElement, htmlparser2 } from 'react-html-parser';
 
 // Components
 import MenuPopover from '../MenuPopover'
@@ -92,11 +93,7 @@ class Instrumentation extends Component {
                       {app.stem_getInstrumentName}
                     </Typography>
                     <Typography align="justify" paragraph variant="body1">
-                      <ul>
-                        <li>What is it?</li>
-                        <li>What it measures.</li>
-                        <li>Why we measure.</li>
-                      </ul>
+                      { ReactHtmlParser(app.stem_getInstrumentDesc)}
                     </Typography>
               </Grid>
             </Grid>

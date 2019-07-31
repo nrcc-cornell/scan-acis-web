@@ -8,6 +8,7 @@ import { ResponsiveContainer, ComposedChart, Brush, Line, Area, XAxis, YAxis, Su
 
 //Components
 import GddChartTitle from '../GddChartTitle'
+import MessageMissing from '../MessageMissing'
 
 // Styles
 import '../../../../styles/GddChart.css';
@@ -141,6 +142,7 @@ class GddChart extends Component {
         return (
             <div id="gdd-chart">
             <GddChartTitle/>
+            <MessageMissing/>
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={app.gddtool_getClimateSummary}>
                 <Area
@@ -157,9 +159,9 @@ class GddChart extends Component {
                   stroke="#342E37"
                   fill="#F0F0F0"
                 />
-                <Line name="Season to date" type="monotone" dataKey="obs" stroke="green" fill="green" dot={true} r={1} />
-                <Line name="15-yr ave" type="monotone" dataKey="recent" stroke="blue" dot={false} />
-                <Line name="Period ave" type="monotone" dataKey="ave" stroke="purple" dot={false} />
+                <Line name="Season to date" type="monotone" dataKey="obs" stroke="green" fill="green" dot={true} r={1} isAnimationActive={false}/>
+                <Line name="15-yr ave" type="monotone" dataKey="recent" stroke="blue" dot={false} isAnimationActive={false} />
+                <Line name="Period ave" type="monotone" dataKey="ave" stroke="purple" dot={false} isAnimationActive={false} />
                 <CartesianGrid stroke="#ccc" />
                 <Tooltip
                     labelFormatter={(name) => moment(name,"YYYY-MM-DD").format("MMM D, YYYY")}
@@ -169,7 +171,6 @@ class GddChart extends Component {
                 <Legend verticalAlign="top" align="center" content={renderCustomLegend} />
                 <XAxis dataKey="date" tickFormatter={formatXAxisForDate} />
                 <YAxis />
-                <Brush dataKey="date" tickFormatter={formatXAxisForDate} height={20} />
               </ComposedChart>
             </ResponsiveContainer>
 

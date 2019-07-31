@@ -47,12 +47,12 @@ class GddBaseSelect extends Component {
                         onChange={app.gddtool_setBase}
                     />
 
-              <div className={(app.gddtool_getBase==='50') ? "gdd-base-select-8650" : "hide-gdd-base-select-8650"}>
+              <div className="hide-gdd-base-select-8650">
                 <form>
                   <div className="checkbox">
                     <label>
                       <input type="checkbox" value="8650"
-                          disabled
+                          disabled={false}
                           checked={app.gddtool_getIsMethod8650}
                           onChange={app.gddtool_setIsMethod8650} />
                       <span>use 86/50</span>

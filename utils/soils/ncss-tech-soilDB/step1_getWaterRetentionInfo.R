@@ -31,9 +31,15 @@ print('Getting water retention parameters ...')
 outfile = "scan_water_retention_info.csv"
 if (file.exists(outfile)) { file.remove(outfile) }
 
+# remove old output file if it exists, otherwise we would be appending to it
+# this file holds scan ids that don't have water retention info
+outfile_miss = "scan_water_retention_missing.csv"
+if (file.exists(outfile_miss)) { file.remove(outfile_miss) }
+
 # input and output files
 input_file <- read.csv(file = "scan_pedon_info.csv", header = TRUE, stringsAsFactors=FALSE)
 output_file <- outfile
+output_missing <- outfile_miss
 
 # create csv header and write to file
 header_list <- list('site','upedonid','pedlabsampnum','pedon_key','labsampnum','hzn_top', 'hzn_bot', 'theta_r', 'theta_s', 'alpha', 'npar', 'w3cld', 'w15I2', 'ds_13b')
@@ -59,9 +65,13 @@ for (row in 1:nrow(input_file)) {
             }
         } else {
             print(paste('*** NO DATA AVAILABLE FOR',sid,name,state,'*** NULL DATA FETCH ***'))
+            miss_site <- list(sid,name,state)
+            cat(paste(miss_site,collapse=','),file=output_missing,sep="\n",append=TRUE)
         }
     } else {
         print(paste('*** NO DATA AVAILABLE FOR',sid,name,state,'*** MISSING PEDON ID ***'))
+        miss_site <- list(sid,name,state)
+        cat(paste(miss_site,collapse=','),file=output_missing,sep="\n",append=TRUE)
     }
 }
 
