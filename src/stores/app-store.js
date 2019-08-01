@@ -1775,7 +1775,7 @@ export class AppStore {
     }
 
     // livestock to view data
-    // - options are 'cattle', 'poultry', 'swine'
+    // - options are 'cattle', 'cow', 'biganimal', 'smallanimal'
     @observable livestock_livestockType = 'cattle'
     @action livestock_setLivestockType = (t) => {
         // has the livestock changed?
@@ -1876,7 +1876,7 @@ export class AppStore {
         //let livestockType = this.livestock_getLivestockType;
         let formattedHourString
         let tvar,hvar,svar,wvar
-        let cattleIdx
+        let cattleIdx,cowIdx,bigAnimalIdx,smallAnimalIdx
 
         // hourly data for two days
         data.forEach(function (d) {
@@ -1894,10 +1894,18 @@ export class AppStore {
                       //https://www.ars.usda.gov/plains-area/clay-center-ne/marc/docs/heat-stress/forecastingheatstress/
                       cattleIdx = (2.83*tvar) + (0.58*hvar) - (0.76*wvar) + (0.039*svar) - 196.4
                       cattleIdx = (cattleIdx<40) ? 40 : parseInt(cattleIdx,10)
-                      // THI from https://www.progressivedairy.com/topics/herd-health/how-do-i-determine-how-do-i-calculate-temperature-humidity-index-thi
-                      //cattleIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                   } else {
                       cattleIdx = NaN
+                  }
+                  if (!isNaN(tvar) && !isNaN(hvar)) {
+                      //THI from https://www.progressivedairy.com/topics/herd-health/how-do-i-determine-how-do-i-calculate-temperature-humidity-index-thi
+                      cowIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
+                      bigAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
+                      smallAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
+                  } else {
+                      cowIdx = NaN
+                      bigAnimalIdx = NaN
+                      smallAnimalIdx = NaN
                   }
                   //format hour
                   formattedHourString = moment(dateToday,"YYYY-MM-DD").add(1,'days').format("YYYY-MM-DD")+' 00:00'
@@ -1908,6 +1916,9 @@ export class AppStore {
                       'solar':svar,
                       'wind':wvar,
                       'cattle':cattleIdx,
+                      'cow':cowIdx,
+                      'biganimal':bigAnimalIdx,
+                      'smallanimal':smallAnimalIdx
                   })
               } else if (dateToday===data[data.length-1][0]) {
                   // last day: leave off future hours with missing data
@@ -1937,6 +1948,16 @@ export class AppStore {
                       } else {
                           cattleIdx = NaN
                       }
+                      if (!isNaN(tvar) && !isNaN(hvar)) {
+                          //THI from https://www.progressivedairy.com/topics/herd-health/how-do-i-determine-how-do-i-calculate-temperature-humidity-index-thi
+                          cowIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
+                          bigAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
+                          smallAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
+                      } else {
+                          cowIdx = NaN
+                          bigAnimalIdx = NaN
+                          smallAnimalIdx = NaN
+                      }
                       // format hour
                       if (i<=8) {
                           formattedHourString = dateToday+' 0'+(i+1).toString()+':00'
@@ -1954,6 +1975,9 @@ export class AppStore {
                           'solar':svar,
                           'wind':wvar,
                           'cattle':cattleIdx,
+                          'cow':cowIdx,
+                          'biganimal':bigAnimalIdx,
+                          'smallanimal':smallAnimalIdx,
                       })
                   }
               } else {
@@ -1974,6 +1998,16 @@ export class AppStore {
                       } else {
                           cattleIdx = NaN
                       }
+                      if (!isNaN(tvar) && !isNaN(hvar)) {
+                          //THI from https://www.progressivedairy.com/topics/herd-health/how-do-i-determine-how-do-i-calculate-temperature-humidity-index-thi
+                          cowIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
+                          bigAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
+                          smallAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
+                      } else {
+                          cowIdx = NaN
+                          bigAnimalIdx = NaN
+                          smallAnimalIdx = NaN
+                      }
                       // format hour
                       if (i<=8) {
                           formattedHourString = dateToday+' 0'+(i+1).toString()+':00'
@@ -1990,6 +2024,9 @@ export class AppStore {
                           'solar':svar,
                           'wind':wvar,
                           'cattle':cattleIdx,
+                          'cow':cowIdx,
+                          'biganimal':bigAnimalIdx,
+                          'smallanimal':smallAnimalIdx,
                       })
                   }
               }

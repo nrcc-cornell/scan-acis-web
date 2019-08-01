@@ -42,18 +42,22 @@ class LivestockTypeButtonGroup extends React.Component {
             labelPlacement="top"
           />
           <FormControlLabel
-            value="poultry"
+            value="cow"
             control={<Radio color="primary" />}
-            label="Poultry"
+            label="Dairy Cow"
             labelPlacement="top"
-            disabled
           />
           <FormControlLabel
-            value="swine"
+            value="biganimal"
             control={<Radio color="primary" />}
-            label="Swine"
+            label="Big Animal"
             labelPlacement="top"
-            disabled
+          />
+          <FormControlLabel
+            value="smallanimal"
+            control={<Radio color="primary" />}
+            label="Small Animal"
+            labelPlacement="top"
           />
         </RadioGroup>
       </FormControl>
