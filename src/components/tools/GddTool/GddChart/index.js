@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import moment from 'moment';
-import { ResponsiveContainer, ComposedChart, Brush, Line, Area, XAxis, YAxis, Surface, Symbols, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, ComposedChart, Line, Area, XAxis, YAxis, Surface, Symbols, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 //Components
 import GddChartTitle from '../GddChartTitle'
