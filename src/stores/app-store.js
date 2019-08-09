@@ -1354,6 +1354,147 @@ export class AppStore {
             }
         }
 
+    // Wx Grapher tool data download - set parameters
+    @computed get wxgraph_getAcisParams_tscan() {
+            let elems
+            let numdays
+            let unitsTemp = this.wxgraph_getUnitsTemp
+            let unitsPrcp = this.wxgraph_getUnitsPrcp
+            if (this.wxgraph_getTimeFrame==='two_days') {
+                elems = [
+                    {"vX":23, "units":unitsTemp}, //hourly temp, inst
+                    {"vX":124, "units":unitsTemp}, //hourly temp, max
+                    {"vX":125, "units":unitsTemp}, //hourly temp, min
+                    {"vX":5, "units":unitsPrcp}, //hourly pcpn, sum
+                    {"vX":120,"vN":71, "units":unitsTemp}, //hourly soil temperature @ 2", inst
+                    {"vX":120,"vN":103, "units":unitsTemp}, //hourly soil temperature @ 4", inst
+                    {"vX":120,"vN":167, "units":unitsTemp}, //hourly soil temperature @ 8", inst
+                    {"vX":120,"vN":295, "units":unitsTemp}, //hourly soil temperature @ 20", inst
+                    {"vX":120,"vN":327, "units":unitsTemp}, //hourly soil temperature @ 40", inst
+                    {"vX":104,"vN":69}, //hourly soil moisture @ 2", ave
+                    {"vX":104,"vN":101}, //hourly soil moisture @ 4", ave
+                    {"vX":104,"vN":165}, //hourly soil moisture @ 8", ave
+                    {"vX":104,"vN":293}, //hourly soil moisture @ 20", ave
+                    {"vX":104,"vN":325}, //hourly soil moisture @ 40", ave
+                    {"vX":24}, //hourly relative humidity, inst
+                    {"vX":149}, //hourly solar radiation, ave
+                    {"vX":42}, //hourly wind speed, peak, max
+                    {"vX":128}, //hourly wind speed, average, ave
+                    {"vX":130}, //hourly wind direction, average, ave
+                ]
+                numdays=-3
+            } else if (this.wxgraph_getTimeFrame==='two_months') {
+                elems = [
+                    {"name":"avgt","interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily average temperature, ave
+                    {"vX":1,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily maximum temperature, max
+                    {"vX":2,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily minimum temperature, min
+                    {"vX":4,"interval":[0,0,1],"duration":"dly","units":unitsPrcp}, // daily precipitation, sum
+                    {"vX":69,"vN":68,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily soil temperature @ 2", ave
+                    {"vX":69,"vN":100,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily soil temperature @ 4", ave
+                    {"vX":69,"vN":164,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily soil temperature @ 8", ave
+                    {"vX":69,"vN":292,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily soil temperature @ 20", ave
+                    {"vX":69,"vN":324,"interval":[0,0,1],"duration":"dly","units":unitsTemp}, // daily soil temperature @ 40", ave
+                    {"vX":68,"vN":66,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 2", ave
+                    {"vX":68,"vN":98,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 4", ave
+                    {"vX":68,"vN":162,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 8", ave
+                    {"vX":68,"vN":290,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 20", ave
+                    {"vX":68,"vN":322,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 40", ave
+                    //{"vX":71,"interval":[0,0,1],"duration":"dly"}, // daily relative humidity, ave
+                    {"vX":70,"interval":[0,0,1],"duration":"dly"}, // daily solar radiation, sum
+                    {"vX":77,"interval":[0,0,1],"duration":"dly"}, // daily wind speed, maximum, max
+                    {"vX":89,"interval":[0,0,1],"duration":"dly"}, // daily wind speed, average, ave
+                    {"vX":101,"interval":[0,0,1],"duration":"dly"}, // daily wind direction, average, ave
+                ]
+                numdays=-60
+            } else if (this.wxgraph_getTimeFrame==='two_years') {
+                elems = [
+                    {"name":"avgt","interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3,"units":unitsTemp}, // monthly average temperature, ave
+                    {"vX":1,"interval":[0,1],"duration":"mly","reduce":{"reduce":"max"},"maxmissing":3,"units":unitsTemp}, // monthly maximum temperature, max
+                    {"vX":2,"interval":[0,1],"duration":"mly","reduce":{"reduce":"min"},"maxmissing":3,"units":unitsTemp}, // monthly minimum temperature, min
+                    {"vX":4,"interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3,"units":unitsPrcp}, // monthly precipitation, sum
+                    {"vX":69,"vN":68,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3,"units":unitsTemp}, // monthly soil temperature @ 2", ave
+                    {"vX":69,"vN":100,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3,"units":unitsTemp}, // monthly soil temperature @ 4", ave
+                    {"vX":69,"vN":164,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3,"units":unitsTemp}, // monthly soil temperature @ 8", ave
+                    {"vX":69,"vN":292,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3,"units":unitsTemp}, // monthly soil temperature @ 20", ave
+                    {"vX":69,"vN":324,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3,"units":unitsTemp}, // monthly soil temperature @ 40", ave
+                    {"vX":68,"vN":66,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 2", ave
+                    {"vX":68,"vN":98,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 4", ave
+                    {"vX":68,"vN":162,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 8", ave
+                    {"vX":68,"vN":290,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 20", ave
+                    {"vX":68,"vN":322,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly soil moisture @ 40", ave
+                    //{"vX":71,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly relative humidity, ave
+                    {"vX":70,"interval":[0,1],"duration":"mly","reduce":{"reduce":"sum"},"maxmissing":3}, // monthly solar radiation, sum
+                    {"vX":77,"interval":[0,1],"duration":"mly","reduce":{"reduce":"max"},"maxmissing":3}, // monthly wind speed, maximum, max
+                    {"vX":89,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly wind speed, average, ave
+                    {"vX":101,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly wind direction, average, ave
+                ]
+                numdays=-730
+            } else if (this.wxgraph_getTimeFrame==='por') {
+                //if (!this.wxgraph_getExtSwitch) {
+                if (!this.wxgraph_getExtSwitch) {
+                    elems = [
+                        {"name":"avgt","interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10,"units":unitsTemp},
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"max"},"maxmissing":10,"units":unitsTemp}, // annual maximum temperature, max
+                        {"vX":2,"interval":[1],"duration":"yly","reduce":{"reduce":"min"},"maxmissing":10,"units":unitsTemp}, // annual minimum temperature, min
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10,"units":unitsPrcp}, // annual precipitation, sum
+                        {"vX":69,"vN":68,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10,"units":unitsTemp}, // annual soil temperature @ 2", ave
+                        {"vX":69,"vN":100,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10,"units":unitsTemp}, // annual soil temperature @ 4", ave
+                        {"vX":69,"vN":164,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10,"units":unitsTemp}, // annual soil temperature @ 8", ave
+                        {"vX":69,"vN":292,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10,"units":unitsTemp}, // annual soil temperature @ 20", ave
+                        {"vX":69,"vN":324,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10,"units":unitsTemp}, // annual soil temperature @ 40", ave
+                        {"vX":68,"vN":66,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 2", ave
+                        {"vX":68,"vN":98,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 4", ave
+                        {"vX":68,"vN":162,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 8", ave
+                        {"vX":68,"vN":290,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 20", ave
+                        {"vX":68,"vN":322,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual soil moisture @ 40", ave
+                        //{"vX":71,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, // annual relative humidity, ave
+                        {"vX":70,"interval":[1],"duration":"yly","reduce":{"reduce":"sum"},"maxmissing":10}, // annual solar radiation, sum
+                        {"vX":77,"interval":[1],"duration":"yly","reduce":{"reduce":"max"},"maxmissing":10}, //annual wind speed, maximum, max
+                        {"vX":89,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, //annual wind speed, average, ave
+                        {"vX":101,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, //annual wind direction, average, ave
+                    ]
+                } else {
+                    elems = [
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_100"},"maxmissing":10}, // number of days > 100F, count
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_90"},"maxmissing":10}, // number of days > 90F, count
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_80"},"maxmissing":10}, // number of days > 80F, count
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_4"},"maxmissing":10}, // number of days > 4", count
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_3"},"maxmissing":10}, // number of days > 3", count
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_2"},"maxmissing":10}, // number of days > 2", count
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_1"},"maxmissing":10}, // number of days > 1", count
+                    ]
+                }
+            }
+
+            if (this.wxgraph_getTimeFrame==='por') {
+                return {
+                        "sid":this.getLocation.sid,
+                        "sdate":"por",
+                        "edate":"por",
+                        "elems":elems
+                    }
+            } else if (this.wxgraph_getTimeFrame==='two_years' || this.wxgraph_getTimeFrame==="two_months") {
+                return {
+                        "sid":this.getLocation.sid,
+                        //"sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                        //"edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                        "sdate":moment(this.getGrapherDate.format('YYYY-MM-DD'),'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                        "edate":moment(this.getGrapherDate.format('YYYY-MM-DD'),'YYYY-MM-DD').format("YYYY-MM-DD"),
+                        "elems":elems
+                    }
+            } else {
+                return {
+                        "sid":this.getLocation.sid,
+                        //"sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                        //"edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                        "sdate":moment(this.getGrapherDate.format('YYYY-MM-DD'),'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                        "edate":moment(this.getGrapherDate.format('YYYY-MM-DD'),'YYYY-MM-DD').format("YYYY-MM-DD"),
+                        "elems":elems,
+                        "meta":""
+                    }
+            }
+        }
+
     // data is loading - boolean - to control the spinner
     @observable wxgraph_dataIsLoading = false
     @action wxgraph_setDataIsLoading = (b) => {
@@ -1366,10 +1507,13 @@ export class AppStore {
     // Wx Grapher tool daily data download - download data using parameters
     @action wxgraph_downloadData = () => {
         console.log("Call wxgraph_downloadData")
+        console.log(this.getLocation.sid.split(' ')[1]);
+        let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.wxgraph_getAcisParams : this.wxgraph_getAcisParams_tscan
         this.wxgraph_setDataIsLoading(true);
         return axios
           //.post(`${protocol}//data.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
+          //.post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
+          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
           .then(res => {
             console.log('SUCCESS downloading from ACIS');
             console.log(res);
@@ -1639,6 +1783,41 @@ export class AppStore {
             }
     }
 
+    // ACIS parameters: hourly call for last few days
+    @computed get explorer_getAcisParams_tscan() {
+            let elems
+            let numdays
+            elems = [
+                {"vX":23}, //hourly temp, inst
+                {"vX":124}, //hourly temp, max
+                {"vX":125}, //hourly temp, min
+                {"vX":5}, //hourly pcpn, sum
+                {"vX":120,"vN":71}, //hourly soil temperature @ 2", inst
+                {"vX":120,"vN":103}, //hourly soil temperature @ 4", inst
+                {"vX":120,"vN":167}, //hourly soil temperature @ 8", inst
+                {"vX":120,"vN":295}, //hourly soil temperature @ 20", inst
+                {"vX":120,"vN":327}, //hourly soil temperature @ 40", inst
+                {"vX":104,"vN":69}, //hourly soil moisture @ 2", ave
+                {"vX":104,"vN":101}, //hourly soil moisture @ 4", ave
+                {"vX":104,"vN":165}, //hourly soil moisture @ 8", ave
+                {"vX":104,"vN":293}, //hourly soil moisture @ 20", ave
+                {"vX":104,"vN":325}, //hourly soil moisture @ 40", ave
+                {"vX":24}, //hourly relative humidity, inst
+                {"vX":149}, //hourly solar radiation, ave
+                {"vX":42}, //hourly wind speed, peak, max
+                {"vX":128}, //hourly wind speed, average, ave
+                {"vX":130}, //hourly wind direction, average, ave
+            ]
+            numdays=-60
+            return {
+                "sid":this.getLocation.sid,
+                "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                "elems":elems,
+                "meta":""
+            }
+    }
+
     // ACIS parameters: climate summary call
     @computed get explorerClimateSummary_getAcisParams() {
             let elems
@@ -1686,11 +1865,13 @@ export class AppStore {
     // Station explorer hourly data (latest conditions) download
     @action explorer_downloadData = () => {
         console.log("Call explorer_downloadData")
+        let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.explorer_getAcisParams : this.explorer_getAcisParams_tscan
         this.explorer_initLatestConditions();
         this.explorer_setDataIsLoading(true);
         return axios
           //.post(`${protocol}//data.rcc-acis.org/StnData`, this.explorer_getAcisParams)
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.explorer_getAcisParams)
+          //.post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.explorer_getAcisParams)
+          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
           .then(res => {
             console.log('SUCCESS downloading from ACIS');
             console.log(res);
