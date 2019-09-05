@@ -236,6 +236,7 @@ class WaterDefTool extends Component {
                   depthRangeTop={this.state.depth_top}
                   depthRangeBottom={this.state.depth_bottom}
                   units={this.state.units}
+                  stnName={this.props.stnname}
                   loading={this.state.soilp_is_loading || this.state.soilm_is_loading}
                 />
               }
@@ -245,6 +246,7 @@ class WaterDefTool extends Component {
                   depthRangeTop={this.state.depth_top}
                   depthRangeBottom={this.state.depth_bottom}
                   units={this.state.units}
+                  stnName={this.props.stnname}
                   loading={this.dataIsLoading()}
                 />
               }
@@ -258,12 +260,14 @@ class WaterDefTool extends Component {
               {this.state.data_soil_moisture &&
                 <DisplaySoilMoistureChart
                   data={this.state.data_soil_moisture}
+                  stnName={this.props.stnname}
                   loading={this.state.soilm_is_loading}
                 />
               }
               {!this.state.data_soil_moisture &&
                 <DisplaySoilMoistureChart
                   data={[]}
+                  stnName={this.props.stnname}
                   loading={this.state.soilm_is_loading}
                 />
               }
@@ -277,12 +281,14 @@ class WaterDefTool extends Component {
               {this.state.data_precip &&
                 <DisplayPrecipChart
                   data={this.state.data_precip}
+                  stnName={this.props.stnname}
                   loading={this.state.precip_is_loading}
                 />
               }
               {!this.state.data_precip &&
                 <DisplayPrecipChart
                   data={[]}
+                  stnName={this.props.stnname}
                   loading={this.state.precip_is_loading}
                 />
               }

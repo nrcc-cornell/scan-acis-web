@@ -102,32 +102,36 @@ export class AppStore {
     @computed get getToolName() { return this.toolName };
 
     getToolInfo = (name) => {
-            let title, description, thumbnail, url, onclick
+            let title, description, thumbnail, url, url_doc, onclick
             let pathToImages = './thumbnails/'
             if (name==='gddtool') {
                 title = 'Growing Degree Day Calculator'
                 description = 'Monitor heat accumulation throughout the growing season.'
                 thumbnail = pathToImages+'GddTool-thumbnail.png'
                 url = '/tools/growing-degree-day'
+                url_doc = '/stem/gddtool_doc'
             } else if (name==='waterdef') {
                 title = 'Water Deficit Calculator'
                 description = 'Track changes in the available soil water content.'
                 thumbnail = pathToImages+'WaterDeficitCalc-thumbnail.png'
                 url = '/tools/water-deficit-calculator'
+                url_doc = '/stem/waterdef_doc'
             } else if (name==='wxgrapher') {
                 title = 'Weather Grapher'
                 description = 'View data for multiple variables and timescales.'
                 thumbnail = pathToImages+'WxGrapher-thumbnail.png'
                 url = '/tools/weather-grapher'
+                url_doc = '/stem/wxgraph_doc'
             } else if (name==='livestock') {
                 title = 'Livestock Heat Index'
                 description = 'Assess dangerous conditions for livestock by the hour.'
                 thumbnail = pathToImages+'Livestock-thumbnail.png'
                 url = '/tools/livestock-heat-index'
+                url_doc = '/stem/heatidx_doc'
             } else {
             }
             onclick = () => {this.setActivePage(3); this.setToolName(name)}
-            return {'name':name, 'title':title, 'description':description, 'thumbnail':thumbnail, 'url':url, 'onclick':onclick}
+            return {'name':name, 'title':title, 'description':description, 'thumbnail':thumbnail, 'url':url, 'url_doc':url_doc, 'onclick':onclick}
         };
 
     @observable outputType = 'chart';

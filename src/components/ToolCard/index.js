@@ -57,7 +57,7 @@ const styles = theme => ({
 });
 
 function ComplexGrid(props) {
-  const { classes,title,description,thumbnail,url} = props;
+  const { classes,title,description,thumbnail,url,url_doc} = props;
 
   return (
     <div className={classes.root}>
@@ -85,9 +85,9 @@ function ComplexGrid(props) {
                 </Button>
               </Grid>
               <Grid item>
-                <IconButton className={classes.button} aria-label="Info">
-                  <InfoIcon />
-                </IconButton>
+                <Button variant="outlined" color="primary" className={classes.button} onClick={() => {props.history.push(url_doc)}}>
+                  Docs
+                </Button>
               </Grid>
           </Grid>
         </Grid>

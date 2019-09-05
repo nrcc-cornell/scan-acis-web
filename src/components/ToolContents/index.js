@@ -3,7 +3,9 @@
 
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
+import { withRouter } from "react-router-dom";
 import { string } from 'prop-types'
+import Button from '@material-ui/core/Button';
 
 // Components
 import LocationSelect from '../../components/LocationSelect';
@@ -22,6 +24,7 @@ import Typography from "@material-ui/core/Typography";
 import '../../styles/ToolContents.css';
 
 var app;
+var history;
 
 @inject('store') @observer
 class ToolContents extends Component {
@@ -37,6 +40,7 @@ class ToolContents extends Component {
     constructor(props) {
         super(props);
         app = this.props.store.app;
+        history = this.props.history;
         if (!app.getLocations) {
             app.downloadStationInfo()
         }
@@ -45,6 +49,8 @@ class ToolContents extends Component {
     }
 
     render() {
+
+        let url_doc = app.getToolInfo(this.props.name).url_doc
 
         if (app.getLocations) {
           return (
@@ -68,6 +74,11 @@ class ToolContents extends Component {
                 <Typography align="center" variant="h3" className="tool-title">
                   {app.getToolInfo(this.props.name).title}
                 </Typography>
+                <Typography align="center" variant="h3">
+                  <Button variant="text" color="primary" onClick={()=>{history.push(url_doc)}}>
+                    View Documentation
+                  </Button>
+                </Typography>
               </Grid>
             </Grid>
             </div>
@@ -75,7 +86,7 @@ class ToolContents extends Component {
             <Grid container spacing="1">
               <Grid item xs={12}>
                 { this.props.name==='gddtool' && (<GddTool />) }
-                { this.props.name==='waterdef' && app.getLocation && (<WaterDefTool station={app.getLocation.sid} />) }
+                { this.props.name==='waterdef' && app.getLocation && (<WaterDefTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} />) }
                 { this.props.name==='wxgrapher' && (<WxGraphTool />) }
                 { this.props.name==='livestock' && (<LivestockIdxTool />) }
               </Grid>
@@ -89,5 +100,5 @@ class ToolContents extends Component {
     }
 }
 
-export default ToolContents;
+export default withRouter(ToolContents);
 

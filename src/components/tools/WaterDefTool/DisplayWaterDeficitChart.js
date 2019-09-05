@@ -14,7 +14,7 @@ var HighchartsMore = require('highcharts-more');
 HighchartsMore(Highcharts);
 require("highcharts/modules/exporting")(Highcharts);
 
-const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units}) => {
+const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stnName}) => {
 
         const afterRender = (chart) => {
             //let textX = chart.plotLeft + (chart.plotWidth  * 0.5);
@@ -29,6 +29,9 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units}) =
         const options = {
           title: {
             text: 'Available Water Deficit (Depth: '+depthRangeTop.toString()+' - '+depthRangeBottom.toString()+' '+units+')'
+          },
+          subtitle: {
+            text: 'Station: '+stnName
           },
           tooltip: { useHtml:true, shared:true, borderColor:"#000000", borderWidth:2, borderRadius:8, shadow:false, backgroundColor:"#ffffff",
               xDateFormat:"%b %d, %Y", shape: 'rect',valueDecimals:2,
@@ -119,6 +122,7 @@ DisplayWaterDeficitChart.propTypes = {
   depthRangeTop: PropTypes.number.isRequired,
   depthRangeBottom: PropTypes.number.isRequired,
   units: PropTypes.string.isRequired,
+  stnName: PropTypes.string.isRequired,
 };
 
 export default DisplayWaterDeficitChart;
