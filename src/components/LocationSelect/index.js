@@ -38,7 +38,7 @@ class LocationSelect extends Component {
 
         return (
           <div>
-              <Grid container spacing="1">
+              <Grid container spacing={1}>
                 <Grid item xs={9}>
                   {app.getLocations && app.getLocation && <StationSelect names={app.getLocations} />}
                 </Grid>

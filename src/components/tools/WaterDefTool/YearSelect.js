@@ -35,7 +35,7 @@ const YearSelect = (props) => {
               >
                 {props.values &&
                   props.values.map((v,i) => (
-                    <MenuItem value={v}>{v.toString()}</MenuItem>
+                    <MenuItem key={i} value={v}>{v.toString()}</MenuItem>
                   ))
                 }
               </Select>

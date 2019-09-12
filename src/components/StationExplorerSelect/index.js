@@ -71,7 +71,7 @@ class StationExplorerSelect extends Component {
         }
 
         return (
-          <Typography variant="subtitle2">
+          <Typography component="span" variant="subtitle2">
             <Select
                 name="station"
                 className="station-explorer-select"

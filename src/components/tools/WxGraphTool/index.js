@@ -69,7 +69,7 @@ class WxGraphTool extends Component {
         if (app.getOutputType==='chart') { display_VarPicker = <VarPicker /> }
         if (app.getOutputType==='table') { display_VarPicker = null }
         let display_ExtremeSwitch;
-        if (app.getOutputType==='chart') { display_ExtremeSwitch = <ExtremeSwitch /> }
+        if (app.getOutputType==='chart' && app.wxgraph_getTimeFrame==='por') { display_ExtremeSwitch = <ExtremeSwitch /> }
         if (app.getOutputType==='table') { display_ExtremeSwitch = null }
         let display_VarPopover;
         if (app.getOutputType==='chart') { display_VarPopover = <VarPopover /> }

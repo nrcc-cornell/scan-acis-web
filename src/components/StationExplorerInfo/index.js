@@ -36,7 +36,7 @@ class StationExplorerInfo extends Component {
                 <Typography variant="h6">
                   Station Information
                 </Typography>
-                <Typography variant="body2" gutterBottom>
+                <Typography component="span" variant="body2" gutterBottom>
                   <ul style={{"padding":0,"margin":0,"listStyleType":"none"}}>
                     <li><b>Name:</b> {app.getLocation_explorer.name}, {app.getLocation_explorer.state}</li>
                     <li><b>Network:</b> {(app.getLocation_explorer.network===17) ? 'SCAN' : 'Tribal SCAN'}</li>

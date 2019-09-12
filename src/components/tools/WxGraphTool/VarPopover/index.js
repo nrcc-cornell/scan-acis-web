@@ -1,4 +1,5 @@
 import React from 'react';
+import { inject, observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 //import { makeStyles } from '@material-ui/core/styles';
@@ -19,7 +20,16 @@ const styles = theme => ({
   },
 });
 
+var app;
+
+@inject('store') @observer
 class VarPopover extends React.Component {
+
+  constructor(props) {
+      super(props);
+      app = this.props.store.app;
+  }
+
   state = {
     anchorEl: null,
   };
@@ -67,7 +77,7 @@ class VarPopover extends React.Component {
             horizontal: 'left',
           }}
         >
-          <ExtremeSwitch />
+          {app.wxgraph_getTimeFrame==='por' && <ExtremeSwitch />}
           <VarPicker/>
         </Popover>
       </div>

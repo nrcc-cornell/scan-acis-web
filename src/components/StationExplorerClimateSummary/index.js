@@ -99,7 +99,7 @@ class StationExplorerClimateSummary extends Component {
                   <Typography variant="h6" noWrap>
                     Climate Summary (as of {app.explorer_getClimateSummary.date})
                   </Typography>
-                  <Typography variant="body2" gutterBottom noWrap>
+                  <Typography component="span" variant="body2" gutterBottom noWrap>
                     <table cellPadding="6"><tbody>
                       <tr><td></td><td>Since</td><td>Temperature</td><td>Precipitation</td></tr>
                       <tr><td>Year-to-date</td><td>{app.explorer_getClimateSummary.ytd_start}</td><td>{this.tempWithUnits(app.explorer_getClimateSummary.t_ytd_o)} ({this.tempWithSign(app.explorer_getClimateSummary.t_ytd_n)})</td><td>{this.precipWithUnits(app.explorer_getClimateSummary.p_ytd_o)} ({this.precipWithSign(app.explorer_getClimateSummary.p_ytd_n)})</td></tr>

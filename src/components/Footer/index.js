@@ -27,32 +27,32 @@ class Footer extends Component {
         >
           <Grid item xs={12} sm={3}>
                         <Typography className={classes.white} gutterBottom variant="body2">
-                            This site provides decision tools and resources using data from weather stations in the SCAN and Tribal SCAN Networks. This project is a collaboration between the following partners:.
+                            This site provides decision tools and resources using data from weather stations in the SCAN and Tribal SCAN Networks. This project is a collaboration between the following partners.
                         </Typography>
           </Grid>
-          <Grid container item direction="column" spacing="1" xs={12} sm={3}>
-              <Grid item>
-                    <Button variant="contained" color="white" size="small" href="https://www.wcc.nrcs.usda.gov/about/mon_scan.html">
-                      {"About SCAN"}
-                    </Button>
-              </Grid>
-              <Grid item>
-                    <Button variant="contained" color="white" size="small" href="https://www.wcc.nrcs.usda.gov/scan/scan_brochure.pdf">
-                      {"SCAN Brochure"}
-                    </Button>
-              </Grid>
-              <Grid item>
-                    <Button variant="contained" color="white" size="small" href="https://www.wcc.nrcs.usda.gov/tribalscan/tribalscan_brochure.pdf">
-                      {"Tribal SCAN Brochure"}
-                    </Button>
-              </Grid>
-          </Grid>
-          <Grid item xs={12} sm={6}>
+          <Grid item xs={12} sm={5}>
                         <a href="https://www.usda.gov" target="_blank" rel="noopener noreferrer"><img src={usdalogo} alt="USDA" /></a>
                         {' '}
                         <a href="https://www.nrcs.usda.gov/wps/portal/nrcs/site/national/home/" target="_blank" rel="noopener noreferrer"><img src={nrcslogo} alt="NRCS" /></a>
                         {' '}
                         <a href="http://www.rcc-acis.org" target="_blank" rel="noopener noreferrer"><img src={acislogo} alt="RCC ACIS" /></a>
+          </Grid>
+          <Grid container item direction="column" spacing={1} xs={12} sm={4}>
+              <Grid item>
+                    <Button variant="contained" size="small" href="https://www.wcc.nrcs.usda.gov/about/mon_scan.html">
+                      {"About SCAN"}
+                    </Button>
+              </Grid>
+              <Grid item>
+                    <Button variant="contained" size="small" href="https://www.wcc.nrcs.usda.gov/scan/scan_brochure.pdf">
+                      {"SCAN Brochure"}
+                    </Button>
+              </Grid>
+              <Grid item>
+                    <Button variant="contained" size="small" href="https://www.wcc.nrcs.usda.gov/tribalscan/tribalscan_brochure.pdf">
+                      {"Tribal SCAN Brochure"}
+                    </Button>
+              </Grid>
           </Grid>
         </Grid>
         <Grid className={classes.subFooter} item xs={12}>

@@ -42,6 +42,9 @@ class LivestockIdxTables extends Component {
         let columns = [];
         columns.push({name:'Date/Time', options:{filter:true,sort:true,display:true,download:true}})
         columns.push({name:'Cattle Heat Idx', options:{filter:false,sort:true,display:true,download:true}})
+        columns.push({name:'Dairy Cow Heat Idx', options:{filter:false,sort:true,display:true,download:true}})
+        columns.push({name:'Big Animal Heat Idx', options:{filter:false,sort:true,display:true,download:true}})
+        columns.push({name:'Small Animal Heat Idx', options:{filter:false,sort:true,display:true,download:true}})
         columns.push({name:'Air Temp (°F)', options:{filter:false,sort:true,display:true,download:true}})
         columns.push({name:'Rel Humidity (%)', options:{filter:false,sort:true,display:false,download:true}})
         columns.push({name:'Solar Rad (W/m2)', options:{filter:false,sort:true,display:false,download:true}})
@@ -64,11 +67,14 @@ class LivestockIdxTables extends Component {
 
         let tableData = data.map(row => {
                     row.cattle = !isNaN(row.cattle) ? row.cattle : '--'
+                    row.cow = !isNaN(row.cow) ? row.cow : '--'
+                    row.biganimal = !isNaN(row.biganimal) ? row.biganimal : '--'
+                    row.smallanimal = !isNaN(row.smallanimal) ? row.smallanimal : '--'
                     row.avgt = !isNaN(row.avgt) ? row.avgt : '--'
                     row.humid = !isNaN(row.humid) ? row.humid : '--'
                     row.solar = !isNaN(row.solar) ? row.solar : '--'
                     row.wind = !isNaN(row.wind) ? row.wind : '--'
-                    return [row.date,row.cattle,row.avgt,row.humid,row.solar,row.wind]
+                    return [row.date,row.cattle,row.cow,row.biganimal,row.smallanimal,row.avgt,row.humid,row.solar,row.wind]
                 })
 
         const tableTitle = 'Livestock Heat Stress'

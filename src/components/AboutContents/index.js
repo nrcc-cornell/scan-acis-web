@@ -2,11 +2,12 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 import React, { Component } from 'react';
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
 import { inject, observer} from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 // Components
 import StationAboutMap from '../../components/StationAboutMap';
@@ -23,6 +24,9 @@ const styles = theme => ({
   },
   control: {
     padding: theme.spacing.unit * 2,
+  },
+  button: {
+    margin: theme.spacing.unit,
   },
 });
 
@@ -73,7 +77,47 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                       These decision tools use SCAN data to address a variety of agricultural applications. Each tool utilizes the Applied Climate Information System (ACIS) web service for fast, easy and reliable access to SCAN data. Together, SCAN and ACIS provide the means to produce efficient, powerful, and user-friendly tools using data observed at both traditional and tribal SCAN stations.
                     </Typography>
                     <Typography align="justify" paragraph variant="body2">
-                      Each tool allows for station selection from either a map or dropdown list, and data can be viewed in either chart or table form. To learn more about these tools and how to use them, please visit <Link to={'/stem'}>SCAN 4 STEM</Link>.
+                      Each tool allows for station selection from either a map or dropdown list, and data can be viewed in either chart or table form. To learn more about these tools and how to use them, please visit the links below:
+                    </Typography>
+                    <Typography component="span" align="justify" paragraph variant="button">
+                            Weather Grapher
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/weather-grapher")}}>
+                              Tool
+                            </Button>
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/wxgraph_doc")}}>
+                              Docs
+                            </Button>
+                            <br/>
+                    </Typography>
+                    <Typography component="span" align="justify" paragraph variant="button">
+                            Growing Degree Day Calculator
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/growing-degree-day")}}>
+                              Tool
+                            </Button>
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/gddtool_doc")}}>
+                              Docs
+                            </Button>
+                            <br/>
+                    </Typography>
+                    <Typography component="span" align="justify" paragraph variant="button">
+                            Water Deficit Calculator
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/water-deficit-calculator")}}>
+                              Tool
+                            </Button>
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/waterdef_doc")}}>
+                              Docs
+                            </Button>
+                            <br/>
+                    </Typography>
+                    <Typography component="span" align="justify" paragraph variant="button">
+                            Livestock Heat Index
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/livestock-heat-index")}}>
+                              Tool
+                            </Button>
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/heatidx_doc")}}>
+                              Docs
+                            </Button>
+                            <br/>
                     </Typography>
               </Grid>
             </Grid>

@@ -19,6 +19,7 @@ import WaterDeficitModel from './WaterDeficitModel';
 import DisplayWaterDeficitChart from './DisplayWaterDeficitChart';
 import DisplaySoilMoistureChart from './DisplaySoilMoistureChart';
 import DisplayPrecipChart from './DisplayPrecipChart';
+import DisplayTables from './DisplayTables';
 
 // Styles
 //import '../../../styles/WaterDefTool.css';
@@ -220,6 +221,11 @@ class WaterDefTool extends Component {
               }
               </Grid>
             </Grid>
+
+            {/* begin charts */}
+            {app.getOutputType==='chart' &&
+            <div>
+
             <Grid item>
               <div className={classes.wrapper}>
               {this.state.data_soil_parameters && this.state.data_soil_moisture && this.state.depth_top!==null && this.state.depth_bottom!==null &&
@@ -297,6 +303,27 @@ class WaterDefTool extends Component {
               }
               </div>
             </Grid>
+
+            </div>
+            }
+            {/* end charts */}
+
+            {/* begin tables */}
+            {app.getOutputType==='table' && this.state.data_soil_parameters && this.state.data_soil_moisture && this.state.depth_top!==null && this.state.depth_bottom!==null &&
+              <DisplayTables
+                data_wd = {
+                    WaterDeficitModel({
+                        soilm:this.state.data_soil_moisture,
+                        soilp:this.state.data_soil_parameters,
+                        depthRangeTop:Math.floor(parseInt(this.convert_in_to_cm(this.state.depth_top),10)),
+                        depthRangeBottom:Math.ceil(parseInt(this.convert_in_to_cm(this.state.depth_bottom),10)),
+                        unitsOutput:this.state.units
+                    })
+                }
+              />
+            }
+            {/* end tables */}
+
           </div>
         );
     }
