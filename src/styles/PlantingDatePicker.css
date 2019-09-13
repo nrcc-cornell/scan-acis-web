@@ -15,6 +15,10 @@
 ///////////////////////////////////////////////////////////////////////////////
 */
 
+    .date-text-input {
+        width: 170px;
+    }
+
     .react-datepicker.calendar-pdate {
         background: #dbecca;
     }

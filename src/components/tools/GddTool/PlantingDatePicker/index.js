@@ -5,8 +5,11 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer } from 'mobx-react';
 import DatePicker from 'react-datepicker';
-import { withBaseIcon } from 'react-icons-kit';
-import { calendar } from 'react-icons-kit/fa/calendar';
+//import { calendar } from 'react-icons-kit/fa/calendar';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import TextField from '@material-ui/core/TextField';
+import CalendarToday from '@material-ui/icons/CalendarToday';
 import moment from 'moment';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -19,18 +22,29 @@ class DatePickerButton extends Component {
     };
     render() {
         const {value, onClick} = this.props;
-        //const IconGreen14 = withBaseIcon({ size: 14, style: {color:'#4ca20b'}});
-        const IconGreen14 = withBaseIcon({ size: 14, style: {color:'#006600'}});
 
         return (
-            <div className="date-picker-button-group">
-                <button
-                  className="date-picker-button"
-                  onClick={onClick}>
-                  {value}
-                  <IconGreen14 icon={calendar} className="cal-icon" onClick={onClick} />
-                </button>
-            </div>
+      <TextField
+        className="date-text-input"
+        id="date-text-input"
+        variant="outlined"
+        type={'string'}
+        label="Planting/Budbreak"
+        value={value}
+        InputProps={{
+          endAdornment: (
+            <InputAdornment position="end">
+              <IconButton
+                edge="end"
+                aria-label="planting or budbreak date"
+                onClick={onClick}
+              >
+                <CalendarToday color="primary" />
+              </IconButton>
+            </InputAdornment>
+          ),
+        }}
+      />
         );
     }
 }
@@ -50,11 +64,6 @@ class PlantingDatePicker extends Component {
 
   render() {
         return (
-            <div className='planting-datepicker-input-div'>
-            <div className='planting-datepicker-input-label'>
-              <label><b>Planting/Budbreak</b></label>
-            </div>
-            <div className='planting-datepicker-div'>
               <DatePicker
                   ref='planting_datepicker'
                   customInput={<DatePickerButton />}
@@ -85,8 +94,6 @@ class PlantingDatePicker extends Component {
                   Select Planting/Budbreak Date
                 </div>
               </DatePicker>
-            </div>
-            </div>
         )
   }
 

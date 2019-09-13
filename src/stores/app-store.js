@@ -418,8 +418,12 @@ export class AppStore {
     // Gdd base selection
     // For Components: GddBaseSelect
     @observable gddtool_base='50';
-    @action gddtool_setBase = (v) => {
-            this.gddtool_base = v.value
+    @action gddtool_setBase = (e) => {
+            this.gddtool_base = e.target.value
+            this.gddtool_downloadData()
+        }
+    @action gddtool_setBaseManually = (v) => {
+            this.gddtool_base = v
             this.gddtool_downloadData()
         }
     @computed get gddtool_getBase() {
@@ -672,7 +676,9 @@ export class AppStore {
     // GDD tool data download - set parameters
     @computed get getAcisParams() {
             let elems = [{
-                "name":"gdd"+this.gddtool_getBase,
+                //"name":"gdd"+this.gddtool_getBase,
+                "name":"gdd",
+                "base":parseInt(this.gddtool_getBase,10),
                 "interval":[0,0,1],
                 "duration":"std",
                 "season_start":[1,1],
