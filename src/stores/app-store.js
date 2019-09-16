@@ -168,6 +168,8 @@ export class AppStore {
             if (this.getToolName==='gddtool' && this.toolIsSelected) { this.gddtool_downloadData() }
             if (this.getToolName==='wxgrapher' && this.toolIsSelected) { this.wxgraph_downloadData() }
             if (this.getToolName==='livestock' && this.toolIsSelected) { this.livestock_downloadData() }
+            // save location to local storage
+            localStorage.setItem("SCAN-ACIS-TOOLS.uid",l.toString())
         };
     }
     // set location from select menu
@@ -177,6 +179,8 @@ export class AppStore {
                 if (this.getToolName==='gddtool' && this.toolIsSelected) { this.gddtool_downloadData() }
                 if (this.getToolName==='wxgrapher' && this.toolIsSelected) { this.wxgraph_downloadData() }
                 if (this.getToolName==='livestock' && this.toolIsSelected) { this.livestock_downloadData() }
+                // save location to local storage
+                localStorage.setItem("SCAN-ACIS-TOOLS.uid",t.value)
             }
             if (this.getShowModalMap) { this.setShowModalMap(false) };
             // update location for front page explorer also
@@ -356,14 +360,22 @@ export class AppStore {
              .then(data => {
                //console.log(locs);
                this.setLocations(data['locs']);
-               //this.setLocation(data['locs'][30].uid);
-               //this.setLocation_explorer(data['locs'][30].uid);
-               // setting location to Centralia Lake, KS - center of the U.S.
-               // 85677 is the UID of this site
-               this.setLocation(85677);
-               this.setLocation_explorer(85677);
+
+               // set saved location from local storage if it exists, otherwise set default station
+               if (localStorage.getItem("SCAN-ACIS-TOOLS.uid")) {
+                   this.setLocation(parseInt(localStorage.getItem("SCAN-ACIS-TOOLS.uid"),10))
+                   this.setLocation_explorer(parseInt(localStorage.getItem("SCAN-ACIS-TOOLS.uid"),10))
+               } else {
+                   // if location is not saved, set initial location to Centralia Lake, KS - center of the U.S.
+                   // 85677 is the UID of this site
+                   this.setLocation(85677);
+                   this.setLocation_explorer(85677);
+               }
+
                this.setDataView_explorer('weather');
                this.setDatesForLocations({'date':data['date'],'ytd_start':data['ytd_start'],'std_start':data['std_start'],'mtd_start':data['mtd_start']});
+               // download of data for water deficit calculator is done within tool
+               // here are initial downloads for others:
                if (this.getToolName==='gddtool') {this.gddtool_downloadData()}
                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
                if (this.getToolName==='livestock') {this.livestock_downloadData()}

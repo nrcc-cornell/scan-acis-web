@@ -10,6 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
 //Components
+import DownloadCharts from '../DownloadCharts'
 
 // Styles
 import '../../../../styles/WxCharts.css';
@@ -49,38 +50,54 @@ class LivestockIdxCharts extends Component {
         const yMax = parseInt(Math.max(dataMax,150),10)
         const yMin = parseInt(Math.min(dataMin,30),10)
 
+        let downloadFilename = (app.getLocation) ?
+            app.getLocation.name+'_'+typeToDisplay+'.png' :
+            'scan_data.png'
+        downloadFilename = downloadFilename.replace(' ','-');
+
         return (
           <div id="wx-charts">
 
-          <Grid item container justify="center" alignItems="center" spacing="1">
+          <Grid item container justify="center" alignItems="center" spacing={1}>
             {typeToDisplay==='cattle' &&
               <Grid item>
-                 <Typography variant="h6">
+                 <Typography variant="h5">
                      Cattle Heat Index (Breathing Rate in Breaths/Min)
                  </Typography>
               </Grid>
             }
             {typeToDisplay==='cow' &&
               <Grid item>
-                 <Typography variant="h6">
+                 <Typography variant="h5">
                      Dairy Cow Heat Index (THI)
                  </Typography>
               </Grid>
             }
             {typeToDisplay==='biganimal' &&
               <Grid item>
-                 <Typography variant="h6">
+                 <Typography variant="h5">
                      Big Animal Heat Index (cattle, bison, sheep, goats, etc)
                  </Typography>
               </Grid>
             }
             {typeToDisplay==='smallanimal' &&
               <Grid item>
-                 <Typography variant="h6">
+                 <Typography variant="h5">
                      Small Animal Heat Index (rabbits, poultry, etc)
                  </Typography>
               </Grid>
             }
+            <Grid item>
+              <DownloadCharts fname={downloadFilename} />
+            </Grid>
+          </Grid>
+
+          <Grid item container justify="center" alignItems="center">
+              <Grid item>
+                 <Typography variant="subtitle1">
+                     {(app.getLocation) ? app.getLocation.name+', '+app.getLocation.state : ''}
+                 </Typography>
+              </Grid>
           </Grid>
 
           <Grid container justify="left" alignItems="flexStart">

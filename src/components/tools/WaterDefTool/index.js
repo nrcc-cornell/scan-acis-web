@@ -20,6 +20,7 @@ import DisplayWaterDeficitChart from './DisplayWaterDeficitChart';
 import DisplaySoilMoistureChart from './DisplaySoilMoistureChart';
 import DisplayPrecipChart from './DisplayPrecipChart';
 import DisplayTables from './DisplayTables';
+import DownloadCharts from './DownloadCharts'
 
 // Styles
 //import '../../../styles/WaterDefTool.css';
@@ -200,6 +201,11 @@ class WaterDefTool extends Component {
 
         const { classes } = this.props;
 
+        let downloadFilename = (app.getLocation) ?
+            app.getLocation.name+'_WaterDeficit.png' :
+            'scan_data.png'
+        downloadFilename = downloadFilename.replace(' ','-');
+
         return (
           <div>
             <Grid item container direction="row" justify="space-evenly" alignItems="flex-start">
@@ -220,11 +226,16 @@ class WaterDefTool extends Component {
                 />
               }
               </Grid>
+              <Grid item>
+                {app.getOutputType==='chart' &&
+                  <DownloadCharts fname={downloadFilename} />
+                }
+              </Grid>
             </Grid>
 
             {/* begin charts */}
             {app.getOutputType==='chart' &&
-            <div>
+            <div id="waterdef-charts">
 
             <Grid item>
               <div className={classes.wrapper}>

@@ -3,10 +3,11 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   margin-top: 0.5vw;
+  margin-bottom: 16vw;
   //width: 94vw;
   width: 92vw;
   //min-width: 400px;
-  height: 40vw;
+  height: 44vw;
   background-color: #fff;
 }
 

@@ -43,8 +43,8 @@ class GddTool extends Component {
         if (app.getOutputType==='table') { display = <GddTable /> }
 
         return (
-            <div className="gdd-tool">
-              <Grid container justify="center" alignItems="center" spacing={3}>
+            <Grid container justify="center" alignItems="center" direction="column" spacing={3}>
+              <Grid item container justify="center" alignItems="center" spacing={3}>
                 <Grid item>
                     <PlantingDatePicker />
                 </Grid>
@@ -52,7 +52,8 @@ class GddTool extends Component {
                     <GddBaseInput />
                 </Grid>
               </Grid>
-              <LoadingOverlay
+              <Grid item>
+                <LoadingOverlay
                   active={app.gddtool_dataIsLoading}
                   spinner
                   background={'rgba(255,255,255,1.0)'}
@@ -60,8 +61,9 @@ class GddTool extends Component {
                   spinnerSize={'10vw'}
                 >
                   {display}
-              </LoadingOverlay>
-            </div>
+                </LoadingOverlay>
+              </Grid>
+            </Grid>
         );
     }
 }

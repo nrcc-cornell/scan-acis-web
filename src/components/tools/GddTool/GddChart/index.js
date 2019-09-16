@@ -5,6 +5,7 @@ import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import moment from 'moment';
 import { ResponsiveContainer, ComposedChart, Line, Area, XAxis, YAxis, Surface, Symbols, CartesianGrid, Tooltip, Legend } from 'recharts';
+import Grid from '@material-ui/core/Grid';
 
 //Components
 import GddChartTitle from '../GddChartTitle'
@@ -169,8 +170,8 @@ class GddChart extends Component {
                     cursor={{ stroke: 'red', strokeWidth: 1 }}
                 />
                 <Legend verticalAlign="top" align="center" content={renderCustomLegend} />
-                <XAxis dataKey="date" tickFormatter={formatXAxisForDate} />
-                <YAxis />
+                <XAxis dataKey="date" tickFormatter={formatXAxisForDate} label={{ value: "Date in "+app.getPlantingYear, position: "insideBottom", dy: 10}} />
+                <YAxis label={{ value: 'Acc GDD (base '+app.gddtool_getBase+'°F)', angle: -90, position:'insideLeft', dy: 60, offset: 10 }} />
               </ComposedChart>
             </ResponsiveContainer>
 
