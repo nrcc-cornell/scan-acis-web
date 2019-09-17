@@ -8,6 +8,7 @@ import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
 import ExtremeSwitch from '../ExtremeSwitch'
 import VarPicker from '../VarPicker'
+import VarPickerExtreme from '../VarPickerExtreme'
 //import { unstable_Box as Box } from '@material-ui/core/Box';
 
 const styles = theme => ({
@@ -78,7 +79,8 @@ class VarPopover extends React.Component {
           }}
         >
           {app.wxgraph_getTimeFrame==='por' && <ExtremeSwitch />}
-          <VarPicker/>
+          {!app.wxgraph_getExtSwitch && <VarPicker/>}
+          {app.wxgraph_getExtSwitch && <VarPickerExtreme/>}
         </Popover>
       </div>
     );

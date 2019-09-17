@@ -21,6 +21,9 @@ const styles = theme => ({
     '&$checked': {
       color: green[500],
     },
+    '&&:hover': {
+      backgroundColor: "transparent",
+    }
   },
   checked: {},
   formControl: {

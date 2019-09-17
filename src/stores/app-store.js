@@ -762,6 +762,28 @@ export class AppStore {
         return this.wxgraph_extSwitch
     }
 
+    @observable wxgraph_tempThreshold='90';
+    @action wxgraph_setTempThreshold = (v) => {
+            if (this.wxgraph_getTempThreshold!==v) {
+                this.wxgraph_tempThreshold = v
+                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
+            }
+        }
+    @computed get wxgraph_getTempThreshold() {
+        return this.wxgraph_tempThreshold
+    }
+
+    @observable wxgraph_precipThreshold='2';
+    @action wxgraph_setPrecipThreshold = (v) => {
+            if (this.wxgraph_getPrecipThreshold!==v) {
+                this.wxgraph_precipThreshold = v
+                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
+            }
+        }
+    @computed get wxgraph_getPrecipThreshold() {
+        return this.wxgraph_precipThreshold
+    }
+
     @observable grapher_date = moment(date_current,'YYYY-MM-DD');
     @action setGrapherDate = (v) => {
       this.grapher_date = v
@@ -1018,13 +1040,8 @@ export class AppStore {
               } else {
                   dataObjArray_extremes.push({
                     'date':d[0],
-                    'cnt_t_gt_100':(d[1]==='M') ? NaN : parseInt(d[1],10),
-                    'cnt_t_gt_90':(d[2]==='M') ? NaN : parseInt(d[2],10),
-                    'cnt_t_gt_80':(d[3]==='M') ? NaN : parseInt(d[3],10),
-                    'cnt_p_gt_4':(d[4]==='M') ? NaN : parseInt(d[4],10),
-                    'cnt_p_gt_3':(d[5]==='M') ? NaN : parseInt(d[5],10),
-                    'cnt_p_gt_2':(d[6]==='M') ? NaN : parseInt(d[6],10),
-                    'cnt_p_gt_1':(d[7]==='M') ? NaN : parseInt(d[7],10),
+                    'cnt_t':(d[1]==='M') ? NaN : parseInt(d[1],10),
+                    'cnt_p':(d[2]==='M') ? NaN : parseInt(d[2],10),
                   })
               }
             } else {
@@ -1336,13 +1353,8 @@ export class AppStore {
                     ]
                 } else {
                     elems = [
-                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_100"},"maxmissing":10}, // number of days > 100F, count
-                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_90"},"maxmissing":10}, // number of days > 90F, count
-                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_80"},"maxmissing":10}, // number of days > 80F, count
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_4"},"maxmissing":10}, // number of days > 4", count
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_3"},"maxmissing":10}, // number of days > 3", count
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_2"},"maxmissing":10}, // number of days > 2", count
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_1"},"maxmissing":10}, // number of days > 1", count
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_"+this.wxgraph_getTempThreshold},"maxmissing":10}, // number of days > F, count
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_"+this.wxgraph_getPrecipThreshold},"maxmissing":10}, // number of days > ", count
                     ]
                 }
             }
@@ -1477,13 +1489,8 @@ export class AppStore {
                     ]
                 } else {
                     elems = [
-                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_100"},"maxmissing":10}, // number of days > 100F, count
-                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_90"},"maxmissing":10}, // number of days > 90F, count
-                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_80"},"maxmissing":10}, // number of days > 80F, count
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_4"},"maxmissing":10}, // number of days > 4", count
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_3"},"maxmissing":10}, // number of days > 3", count
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_2"},"maxmissing":10}, // number of days > 2", count
-                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_1"},"maxmissing":10}, // number of days > 1", count
+                        {"vX":1,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_"+this.wxgraph_getTempThreshold},"maxmissing":10}, // number of days > F, count
+                        {"vX":4,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_gt_"+this.wxgraph_getPrecipThreshold},"maxmissing":10}, // number of days > ", count
                     ]
                 }
             }

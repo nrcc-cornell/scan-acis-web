@@ -51,12 +51,7 @@ class WxTables extends Component {
         if (app.wxgraph_getExtSwitch) {
             columns.push({name:'Date/Time', options:{filter:true,sort:true,display:true,download:true}})
             columns.push({name:'Temp>100°F', options:{filter:false,sort:true,display:true,download:true}})
-            columns.push({name:'Temp>90°F', options:{filter:false,sort:true,display:true,download:true}})
-            columns.push({name:'Temp>80°F', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Prcp>4"', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Prcp>3"', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Prcp>2"', options:{filter:false,sort:true,display:false,download:true}})
-            columns.push({name:'Prcp>1"', options:{filter:false,sort:true,display:false,download:true}})
+            columns.push({name:'Prcp>2"', options:{filter:false,sort:true,display:true,download:true}})
         } else {
             columns.push({name:'Date/Time', options:{filter:true,sort:true,display:true,download:true}})
             columns.push({name:'Ave Air Temp ('+unitsTemp+')', options:{filter:false,sort:true,display:true,download:true}})
@@ -99,6 +94,7 @@ class WxTables extends Component {
           page: 0,
           rowsPerPage: this.state.pageSize,
           rowsPerPageOptions: [10,50,data.length],
+          viewColumns: (app.wxgraph_getExtSwitch) ? false : true,
         };
 
         let tableData

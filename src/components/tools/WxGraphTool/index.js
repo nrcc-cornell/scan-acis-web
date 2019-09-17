@@ -17,7 +17,9 @@ import TimeFrameButtonGroup from './TimeFrameButtonGroup'
 import UnitsPopover from './UnitsPopover'
 import VarPopover from './VarPopover'
 import VarPicker from './VarPicker'
+import VarPickerExtreme from './VarPickerExtreme'
 import WxCharts from './WxCharts'
+import WxChartsExtreme from './WxChartsExtreme'
 import WxTables from './WxTables'
 import ExtremeSwitch from './ExtremeSwitch'
 
@@ -63,17 +65,20 @@ class WxGraphTool extends Component {
         //const { classes } = this.props;
 
         let display;
-        if (app.getOutputType==='chart') { display = <WxCharts /> }
+        if (app.getOutputType==='chart' && !app.wxgraph_getExtSwitch) { display = <WxCharts /> }
+        if (app.getOutputType==='chart' && app.wxgraph_getExtSwitch) { display = <WxChartsExtreme /> }
         if (app.getOutputType==='table') { display = <WxTables /> }
         let display_VarPicker;
-        if (app.getOutputType==='chart') { display_VarPicker = <VarPicker /> }
+        if (app.getOutputType==='chart' && !app.wxgraph_getExtSwitch) { display_VarPicker = <VarPicker /> }
+        if (app.getOutputType==='chart' && app.wxgraph_getExtSwitch) { display_VarPicker = <VarPickerExtreme /> }
         if (app.getOutputType==='table') { display_VarPicker = null }
         let display_ExtremeSwitch;
         if (app.getOutputType==='chart' && app.wxgraph_getTimeFrame==='por') { display_ExtremeSwitch = <ExtremeSwitch /> }
         if (app.getOutputType==='table') { display_ExtremeSwitch = null }
         let display_VarPopover;
         if (app.getOutputType==='chart') { display_VarPopover = <VarPopover /> }
-        if (app.getOutputType==='table') { display_VarPopover = null }
+        if (app.getOutputType==='table' && app.wxgraph_getExtSwitch) { display_VarPopover = <VarPopover /> }
+        if (app.getOutputType==='table' && !app.wxgraph_getExtSwitch) { display_VarPopover = null }
 
         if (app.getOutputType==='chart') {
 
@@ -127,6 +132,9 @@ class WxGraphTool extends Component {
             <Grid container direction="row" justify="center" alignItems="flex-start">
                     <Grid item container className="nothing" direction="column" xs={12}>
                         <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+                            <Grid item>
+                              {display_VarPopover}
+                            </Grid>
                           <Grid item>
                             <UnitsPopover/>
                           </Grid>
