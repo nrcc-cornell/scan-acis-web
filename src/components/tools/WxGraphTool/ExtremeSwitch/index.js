@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
+//import { withStyles } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 //import FormControl from '@material-ui/core/FormControl';
 //import FormLabel from '@material-ui/core/FormLabel';
 
-const styles = theme => ({
-  //root: {
-  //  display: 'flex',
-  //},
-  colorSwitchBase: {
-    '&$colorChecked': {
-      color: green[500],
-      '& + $colorBar': {
-        backgroundColor: green[500],
-      },
-    },
-  },
-  colorBar: {},
-  colorChecked: {},
-});
+//const styles = theme => ({
+//  //root: {
+//  //  display: 'flex',
+//  //},
+//  colorSwitchBase: {
+//    '&$colorChecked': {
+//      color: green[500],
+//      '& + $colorBar': {
+//        backgroundColor: green[500],
+//      },
+//    },
+//  },
+//  colorBar: {},
+//  colorChecked: {},
+//});
 
 var app;
 
@@ -45,11 +45,7 @@ class ExtremeSwitch extends Component {
               onChange={app.wxgraph_setExtSwitch}
               value="extSwitch"
               disabled={app.wxgraph_getTimeFrame!=='por'}
-              classes={{
-                    switchBase: classes.colorSwitchBase,
-                    checked: classes.colorChecked,
-                    bar: classes.colorBar,
-                  }}
+              color="primary"
             />
           }
           label="Enable Threshold View"
@@ -62,5 +58,5 @@ ExtremeSwitch.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(ExtremeSwitch);
+export default ExtremeSwitch;
 

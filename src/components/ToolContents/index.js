@@ -14,7 +14,8 @@ import OutputSelect from '../../components/OutputSelect';
 import GddTool from '../../components/tools/GddTool';
 //import GddChart from '../../components/tools/GddTool/GddChart';
 import WaterDefTool from '../../components/tools/WaterDefTool';
-import WxGraphTool from '../../components/tools/WxGraphTool';
+//import WxGraphTool from '../../components/tools/WxGraphTool';
+import WxGraphTool from '../../components/tools/WxGraphToolNew';
 import LivestockIdxTool from '../../components/tools/LivestockIdxTool';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -87,7 +88,7 @@ class ToolContents extends Component {
               <Grid item xs={12}>
                 { this.props.name==='gddtool' && (<GddTool />) }
                 { this.props.name==='waterdef' && app.getLocation && (<WaterDefTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} />) }
-                { this.props.name==='wxgrapher' && (<WxGraphTool />) }
+                { this.props.name==='wxgrapher' && app.getLocation && (<WxGraphTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} outputtype={app.getOutputType}/>) }
                 { this.props.name==='livestock' && (<LivestockIdxTool />) }
               </Grid>
             </Grid>
