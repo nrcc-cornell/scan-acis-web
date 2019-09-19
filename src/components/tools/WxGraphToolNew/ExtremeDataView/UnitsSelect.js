@@ -9,9 +9,9 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 //import FormLabel from '@material-ui/core/FormLabel';
 //import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+//import Typography from '@material-ui/core/Typography';
 
-const ToolTypeSelect = (props) => {
+const UnitsSelect = (props) => {
 
     return (
               <FormControl component="fieldset">
@@ -20,29 +20,28 @@ const ToolTypeSelect = (props) => {
                   name="tooltype"
                   value={props.value}
                   onChange={props.onchange}
-                  row
+                  column
                 >
-                  <FormControlLabel
-                    value="basic"
-                    control={<Radio color="primary" />}
-                    label={<Typography variant="button">Weather Data Summaries</Typography>}
-                    labelPlacement="right"
-                  />
-                  <FormControlLabel
-                    value="extreme"
-                    control={<Radio color="primary" />}
-                    label={<Typography variant="button">Threshold Frequencies</Typography>}
-                    labelPlacement="right"
-                  />
+                  {props.values &&
+                    props.values.map((v,i) => (
+                      <FormControlLabel
+                        value={v.value}
+                        control={<Radio color="primary" style={{ width: 12, height: 12 }} />}
+                        label={v.label}
+                        labelPlacement="right"
+                      />
+                    ))
+                  }
                 </RadioGroup>
               </FormControl>
     );
 
 }
 
-ToolTypeSelect.propTypes = {
+UnitsSelect.propTypes = {
   value: PropTypes.string.isRequired,
+  values: PropTypes.array.isRequired,
   onchange: PropTypes.func.isRequired,
 };
 
-export default ToolTypeSelect;
+export default UnitsSelect;

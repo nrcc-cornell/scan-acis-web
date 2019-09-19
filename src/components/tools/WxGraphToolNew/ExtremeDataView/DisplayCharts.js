@@ -20,7 +20,7 @@ import DownloadCharts from '../DownloadCharts'
 // Styles
 import '../../../../styles/WxCharts.css';
 
-const DisplayCharts = ({data,stnName,loading,tempTitle,prcpTitle}) => {
+const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxSelected,tminSelected,prcpSelected}) => {
 
         let formatXAxisForDate = (tickItem) => {
             let t = moment(tickItem)
@@ -41,9 +41,12 @@ const DisplayCharts = ({data,stnName,loading,tempTitle,prcpTitle}) => {
 
         return (
           <div id="wx-charts">
+
+          { (tmaxSelected || tminSelected || prcpSelected) &&
+
           <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
             <Grid item>
-              <Typography variant="subtitle1">
+              <Typography variant="h6">
                 {superChartTitle}
               </Typography>
             </Grid>
@@ -51,12 +54,15 @@ const DisplayCharts = ({data,stnName,loading,tempTitle,prcpTitle}) => {
               <DownloadCharts fname={downloadFilename} />
             </Grid>
           </Grid>
-          <Grid container justify="left" alignItems="flexStart">
 
+          }
+          { tmaxSelected &&
+
+          <Grid container justify="left" alignItems="flexStart">
             <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
               <Grid item>
                 <Typography variant="subtitle2">
-                  {tempTitle}
+                  {tmaxTitle}
                 </Typography>
               </Grid>
             </Grid>
@@ -73,11 +79,46 @@ const DisplayCharts = ({data,stnName,loading,tempTitle,prcpTitle}) => {
                     />
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
                     <Tooltip/>
-                    <Bar name={tempTitle} dataKey="cnt_t" fill="#82ca9d" />
+                    <Bar name={tmaxTitle} dataKey="cnt_x" fill="#82ca9d" />
                   </BarChart>
                 </ResponsiveContainer>
             </Grid>
+          </Grid>
 
+          }
+          { tminSelected &&
+
+          <Grid container justify="left" alignItems="flexStart">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+              <Grid item>
+                <Typography variant="subtitle2">
+                  {tminTitle}
+                </Typography>
+              </Grid>
+            </Grid>
+
+            <Grid item xs={12}>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={data} syncId="anyId"
+                        margin={{top: 0, right: 30, left: 0, bottom: 0}}>
+                    <CartesianGrid strokeDasharray="3 3"/>
+                    <XAxis
+                      dataKey="date"
+                      tickFormatter={formatXAxisForDate}
+                      interval={'preserveEnd'}
+                    />
+                    <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
+                    <Tooltip/>
+                    <Bar name={tminTitle} dataKey="cnt_n" fill="#82ca9d" />
+                  </BarChart>
+                </ResponsiveContainer>
+            </Grid>
+          </Grid>
+
+          }
+          { prcpSelected &&
+
+          <Grid container justify="left" alignItems="flexStart">
             <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
               <Grid item>
                 <Typography variant="subtitle2">
@@ -102,8 +143,10 @@ const DisplayCharts = ({data,stnName,loading,tempTitle,prcpTitle}) => {
                   </BarChart>
                 </ResponsiveContainer>
             </Grid>
-
           </Grid>
+
+          }
+
         </div>
 
         );

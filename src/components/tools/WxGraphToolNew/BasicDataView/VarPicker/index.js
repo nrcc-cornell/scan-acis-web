@@ -9,6 +9,7 @@ import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 //import FormHelperText from '@material-ui/core/FormHelperText';
 import Checkbox from '@material-ui/core/Checkbox';
+import Box from '@material-ui/core/Box';
 import 'typeface-roboto';
 //import ExtremeSwitch from '../ExtremeSwitch'
 //import UnitsSelect from '../UnitsSelect'
@@ -50,6 +51,9 @@ class VarPicker extends Component {
 
     return (
       <div>
+
+      <Box padding={1} border={1} borderRadius={4} borderColor="primary.main" bgcolor="#f5f5dc">
+
       <div className={classes.root}>
         <FormControl component="fieldset" className={classes.formControl}>
           <FormGroup className={classes.formGroup}>
@@ -176,6 +180,9 @@ class VarPicker extends Component {
           </FormGroup>
         </FormControl>
       </div>
+
+      </Box>
+
       </div>
     );
   }

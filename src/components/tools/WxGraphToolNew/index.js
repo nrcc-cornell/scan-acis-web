@@ -38,7 +38,7 @@ class WxGraphTool extends Component {
 
         return (
 
-            <Grid container direction="column" justify="center" alignItems="center" xs={12} spacing={3}>
+            <Grid container direction="column" justify="flex-start" alignItems="flex-start" xs={12} spacing={3}>
                 <Grid item>
                   <ToolTypeSelect
                       value={this.state.tooltype}

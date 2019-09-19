@@ -47,14 +47,18 @@ class ExtremeDataView extends Component {
         app = this.props.store.app;
         app.setToolName('wxgrapher')
         this.state = {
-          temp_thresh: '90',
-          temp_comparison: 'gt',
-          temp_units: 'degreeF',
-          temp_selected: true,
+          tmax_thresh: '90',
+          tmax_comparison: 'gt',
+          tmax_units: 'degreeF',
+          tmax_selected: true,
+          tmin_thresh: '32',
+          tmin_comparison: 'lt',
+          tmin_units: 'degreeF',
+          tmin_selected: false,
           prcp_thresh: '2',
           prcp_comparison: 'gt',
           prcp_units: 'inch',
-          prcp_selected: true,
+          prcp_selected: false,
           data: null,
           data_is_loading: false,
         }
@@ -62,7 +66,18 @@ class ExtremeDataView extends Component {
 
     componentDidMount() {
         this.initStateForLoading()
-        LoadStationData({sid:this.props.station,tthresh:this.state.temp_thresh,pthresh:this.state.prcp_thresh,tunits:this.state.temp_units,punits:this.state.prcp_units,tcomp:this.state.temp_comparison,pcomp:this.state.prcp_comparison})
+        LoadStationData({
+            sid:this.props.station,
+            xthresh:this.state.tmax_thresh,
+            nthresh:this.state.tmin_thresh,
+            pthresh:this.state.prcp_thresh,
+            xunits:this.state.tmax_units,
+            nunits:this.state.tmin_units,
+            punits:this.state.prcp_units,
+            xcomp:this.state.tmax_comparison,
+            ncomp:this.state.tmin_comparison,
+            pcomp:this.state.prcp_comparison
+        })
           .then(response => {
             this.setState({
               data:this.formatDataForDisplay(response.data.data), 
@@ -73,14 +88,28 @@ class ExtremeDataView extends Component {
 
     componentDidUpdate(prevProps,prevState) {
         if (prevProps.station!==this.props.station  ||
-            prevState.temp_thresh!==this.state.temp_thresh  ||
-            prevState.temp_comparison!==this.state.temp_comparison  ||
-            prevState.temp_units!==this.state.temp_units  ||
+            prevState.tmax_thresh!==this.state.tmax_thresh  ||
+            prevState.tmin_thresh!==this.state.tmin_thresh  ||
+            prevState.tmax_comparison!==this.state.tmax_comparison  ||
+            prevState.tmin_comparison!==this.state.tmin_comparison  ||
+            prevState.tmax_units!==this.state.tmax_units  ||
+            prevState.tmin_units!==this.state.tmin_units  ||
             prevState.prcp_thresh!==this.state.prcp_thresh  ||
             prevState.prcp_comparison!==this.state.prcp_comparison  ||
             prevState.prcp_units!==this.state.prcp_units) {
                 this.initStateForLoading()
-                LoadStationData({sid:this.props.station,tthresh:this.state.temp_thresh,pthresh:this.state.prcp_thresh,tunits:this.state.temp_units,punits:this.state.prcp_units,tcomp:this.state.temp_comparison,pcomp:this.state.prcp_comparison})
+                LoadStationData({
+                    sid:this.props.station,
+                    xthresh:this.state.tmax_thresh,
+                    nthresh:this.state.tmin_thresh,
+                    pthresh:this.state.prcp_thresh,
+                    xunits:this.state.tmax_units,
+                    nunits:this.state.tmin_units,
+                    punits:this.state.prcp_units,
+                    xcomp:this.state.tmax_comparison,
+                    ncomp:this.state.tmin_comparison,
+                    pcomp:this.state.prcp_comparison
+                })
                   .then(response => {
                     this.setState({
                       data:this.formatDataForDisplay(response.data.data), 
@@ -90,21 +119,54 @@ class ExtremeDataView extends Component {
         }
     }
 
-    handleChangeTempThresh = (v) => {
+    handleChangeTmaxThreshold = (v) => {
         this.setState({
-            temp_thresh:v
+            tmax_thresh:v.value,
+            tmax_units:v.units,
         })
     }
 
-    handleChangePrcpThresh = (v) => {
+    handleChangeTminThreshold = (v) => {
         this.setState({
-            prcp_thresh:v
+            tmin_thresh:v.value,
+            tmin_units:v.units,
         })
     }
 
-    handleChangeTempComparison = (e) => {
+    handleChangePrcpThreshold = (v) => {
         this.setState({
-          temp_comparison: e.target.value,
+            prcp_thresh:v.value,
+            prcp_units:v.units,
+        })
+    }
+
+    handleChangeTmaxSelected = () => {
+        this.setState({
+          tmax_selected: !this.state.tmax_selected,
+        })
+    }
+
+    handleChangeTminSelected = () => {
+        this.setState({
+          tmin_selected: !this.state.tmin_selected,
+        })
+    }
+
+    handleChangePrcpSelected = () => {
+        this.setState({
+          prcp_selected: !this.state.prcp_selected,
+        })
+    }
+
+    handleChangeTmaxComparison = (e) => {
+        this.setState({
+          tmax_comparison: e.target.value,
+        })
+    }
+
+    handleChangeTminComparison = (e) => {
+        this.setState({
+          tmin_comparison: e.target.value,
         })
     }
 
@@ -122,8 +184,9 @@ class ExtremeDataView extends Component {
         for (i=0; i<d.length; i++) {
             oseries.push({
               'date': d[i][0],
-              'cnt_t': (d[i][1]==='M') ? NaN : parseInt(d[i][1],10),
-              'cnt_p': (d[i][2]==='M') ? NaN : parseInt(d[i][2],10),
+              'cnt_x': (d[i][1]==='M') ? NaN : parseInt(d[i][1],10),
+              'cnt_n': (d[i][2]==='M') ? NaN : parseInt(d[i][2],10),
+              'cnt_p': (d[i][3]==='M') ? NaN : parseInt(d[i][3],10),
             })
         }
         return oseries
@@ -146,21 +209,26 @@ class ExtremeDataView extends Component {
         //const { classes } = this.props;
 
         let display;
-        let tempComparisonSymbol = (this.state.temp_comparison==='gt') ? '>' : '<'
+        let tmaxComparisonSymbol = (this.state.tmax_comparison==='gt') ? '>' : '<'
+        let tminComparisonSymbol = (this.state.tmin_comparison==='gt') ? '>' : '<'
         let prcpComparisonSymbol = (this.state.prcp_comparison==='gt') ? '>' : '<'
-        let tempUnitsLabel = (this.state.temp_units==='degreeF') ? '°F' : '°C'
+        let tmaxUnitsLabel = (this.state.tmax_units==='degreeF') ? '°F' : '°C'
+        let tminUnitsLabel = (this.state.tmin_units==='degreeF') ? '°F' : '°C'
         let prcpUnitsLabel = (this.state.prcp_units==='inch') ? 'in' : 'mm'
-        let tempTitle = (this.state.temp_comparison==='gt') ?
-            'Frequency of daily high temperature '+tempComparisonSymbol+' '+this.state.temp_thresh+tempUnitsLabel :
-            'Frequency of daily low temperature '+tempComparisonSymbol+' '+this.state.temp_thresh+tempUnitsLabel
+        let tmaxTitle = 'Frequency of daily high temperature '+tmaxComparisonSymbol+' '+this.state.tmax_thresh+tmaxUnitsLabel
+        let tminTitle = 'Frequency of daily low temperature '+tminComparisonSymbol+' '+this.state.tmin_thresh+tminUnitsLabel
         let prcpTitle = 'Frequency of daily precipitation '+prcpComparisonSymbol+' '+this.state.prcp_thresh+' '+prcpUnitsLabel
         if (this.props.outputtype==='chart') {
             display = <DisplayCharts
                         data={this.state.data}
                         stnName={this.props.stnname}
                         loading={this.state.data_is_loading}
-                        tempTitle={tempTitle}
+                        tmaxTitle={tmaxTitle}
+                        tminTitle={tminTitle}
                         prcpTitle={prcpTitle}
+                        tmaxSelected={this.state.tmax_selected}
+                        tminSelected={this.state.tmin_selected}
+                        prcpSelected={this.state.prcp_selected}
                       />
         }
         if (this.props.outputtype==='table') { display = <WxTables /> }
@@ -168,15 +236,26 @@ class ExtremeDataView extends Component {
         let display_VarPicker;
         if (this.props.outputtype==='chart') {
             display_VarPicker = <VarPickerExtreme
-                                  tempUnits={this.state.temp_units}
+                                  tmaxUnits={this.state.tmax_units}
+                                  tminUnits={this.state.tmin_units}
                                   prcpUnits={this.state.prcp_units}
-                                  tempThreshold={this.state.temp_thresh}
+                                  tmaxThreshold={this.state.tmax_thresh}
+                                  tminThreshold={this.state.tmin_thresh}
                                   prcpThreshold={this.state.prcp_thresh}
-                                  tempComparison={this.state.temp_comparison}
+                                  tmaxSelected={this.state.tmax_selected}
+                                  tminSelected={this.state.tmin_selected}
+                                  prcpSelected={this.state.prcp_selected}
+                                  tmaxComparison={this.state.tmax_comparison}
+                                  tminComparison={this.state.tmin_comparison}
                                   prcpComparison={this.state.prcp_comparison}
-                                  onchangeTemp={this.handleChangeTempThresh}
-                                  onchangePrcp={this.handleChangePrcpThresh}
-                                  onchangeTempComparison={this.handleChangeTempComparison}
+                                  onchangeTmaxThreshold={this.handleChangeTmaxThreshold}
+                                  onchangeTminThreshold={this.handleChangeTminThreshold}
+                                  onchangePrcpThreshold={this.handleChangePrcpThreshold}
+                                  onchangeTmaxSelected={this.handleChangeTmaxSelected}
+                                  onchangeTminSelected={this.handleChangeTminSelected}
+                                  onchangePrcpSelected={this.handleChangePrcpSelected}
+                                  onchangeTmaxComparison={this.handleChangeTmaxComparison}
+                                  onchangeTminComparison={this.handleChangeTminComparison}
                                   onchangePrcpComparison={this.handleChangePrcpComparison}
                                 />
         }
@@ -188,9 +267,9 @@ class ExtremeDataView extends Component {
                              />
 
         return (
-            <Grid container direction="row" justify="center" alignItems="flex-start" xs={12}>
+            <Grid container direction="row" justify="flex-start" alignItems="flex-start" xs={12}>
                 <Hidden smDown>
-                    <Grid item container className="nothing" direction="column" md={3}>
+                    <Grid item container className="nothing" direction="column" justify="flex-start" alignItems="flex-start" md={3}>
                         <Grid item>
                             {display_VarPicker}
                         </Grid>

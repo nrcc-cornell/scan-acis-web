@@ -32,8 +32,8 @@ const ComparisonSelect = (props) => {
                   id: 'comparison',
                 }}
               >
-                <MenuItem key={1} value={'gt'}>{'greater than'}</MenuItem>
-                <MenuItem key={2} value={'lt'}>{'less than'}</MenuItem>
+                <MenuItem key={1} value={'gt'}>{'Days greater than'}</MenuItem>
+                <MenuItem key={2} value={'lt'}>{'Days less than'}</MenuItem>
               </Select>
             </FormControl>
           </form>

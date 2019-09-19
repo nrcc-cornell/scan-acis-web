@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 //import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import Popover from '@material-ui/core/Popover';
+//import Box from '@material-ui/core/Box';
 //import VarPickerExtreme from '../VarPickerExtreme'
 //import { unstable_Box as Box } from '@material-ui/core/Box';
 
