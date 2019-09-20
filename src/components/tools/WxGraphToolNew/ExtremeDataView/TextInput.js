@@ -31,16 +31,16 @@ const TextInput = (props) => {
         setProposedunits(e.target.value)
     };
 
-    const getUnitsText = () => {
-        let unitsText = ''
-        if (props.selectedunits==='degreeF') { unitsText = '°F ' }
-        if (props.selectedunits==='degreeC') { unitsText = '°C ' }
-        if (props.selectedunits==='inch') { unitsText = 'in ' }
-        if (props.selectedunits==='in') { unitsText = 'in ' }
-        if (props.selectedunits==='cm') { unitsText = 'cm ' }
-        if (props.selectedunits==='mm') { unitsText = 'mm ' }
-        return unitsText
-    };
+    //const getUnitsText = () => {
+    //    let unitsText = ''
+    //    if (props.selectedunits==='degreeF') { unitsText = '°F ' }
+    //    if (props.selectedunits==='degreeC') { unitsText = '°C ' }
+    //    if (props.selectedunits==='inch') { unitsText = 'in ' }
+    //    if (props.selectedunits==='in') { unitsText = 'in ' }
+    //    if (props.selectedunits==='cm') { unitsText = 'cm ' }
+    //    if (props.selectedunits==='mm') { unitsText = 'mm ' }
+    //    return unitsText
+    //};
 
     return (
 

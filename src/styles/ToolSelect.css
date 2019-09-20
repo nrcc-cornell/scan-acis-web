@@ -1,4 +1,7 @@
 .tool-select {
+    border: 2px solid rgba(34,139,34,1.0);
+}
+.tool-select-OLD {
     width: 60vw;
     //left: 20vw;
     margin-left: 16vw;

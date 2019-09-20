@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import moment from 'moment';
 import { ResponsiveContainer, ComposedChart, Line, Area, XAxis, YAxis, Surface, Symbols, CartesianGrid, Tooltip, Legend } from 'recharts';
-import Grid from '@material-ui/core/Grid';
 
 //Components
 import GddChartTitle from '../GddChartTitle'

@@ -33,7 +33,6 @@ class ToolSelect extends Component {
     }
 
     render() {
-
         let disabled
         let toolOptions = []
         for (var v of this.props.names) {

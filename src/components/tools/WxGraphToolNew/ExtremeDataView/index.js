@@ -15,7 +15,8 @@ import VarPopover from './VarPopover'
 import VarPickerExtreme from './VarPickerExtreme'
 //import WxChartsExtreme from './WxChartsExtreme'
 import DisplayCharts from './DisplayCharts'
-import WxTables from './WxTables'
+import DisplayTables from './DisplayTables'
+//import WxTablesExtreme from './WxTablesExtreme'
 
 // Styles
 //import '../../../styles/WxGraphTool.css';
@@ -231,10 +232,24 @@ class ExtremeDataView extends Component {
                         prcpSelected={this.state.prcp_selected}
                       />
         }
-        if (this.props.outputtype==='table') { display = <WxTables /> }
+        let tmaxTitleTableColumn = 'High Temp '+tmaxComparisonSymbol+' '+this.state.tmax_thresh+tmaxUnitsLabel+' (days)'
+        let tminTitleTableColumn = 'Low Temp '+tminComparisonSymbol+' '+this.state.tmin_thresh+tminUnitsLabel+' (days)'
+        let prcpTitleTableColumn = 'Precipitation '+prcpComparisonSymbol+' '+this.state.prcp_thresh+' '+prcpUnitsLabel+' (days)'
+        if (this.props.outputtype==='table') {
+            display = <DisplayTables
+                        data={this.state.data}
+                        stnName={this.props.stnname}
+                        loading={this.state.data_is_loading}
+                        tmaxTitle={tmaxTitleTableColumn}
+                        tminTitle={tminTitleTableColumn}
+                        prcpTitle={prcpTitleTableColumn}
+                        tmaxSelected={this.state.tmax_selected}
+                        tminSelected={this.state.tmin_selected}
+                        prcpSelected={this.state.prcp_selected}
+                      />
+        }
 
         let display_VarPicker;
-        if (this.props.outputtype==='chart') {
             display_VarPicker = <VarPickerExtreme
                                   tmaxUnits={this.state.tmax_units}
                                   tminUnits={this.state.tmin_units}
@@ -258,15 +273,15 @@ class ExtremeDataView extends Component {
                                   onchangeTminComparison={this.handleChangeTminComparison}
                                   onchangePrcpComparison={this.handleChangePrcpComparison}
                                 />
-        }
-        if (this.props.outputtype==='table') { display_VarPicker = null }
 
         let display_VarPopover;
         display_VarPopover = <VarPopover
                                contents={display_VarPicker}
                              />
 
-        return (
+        if (this.props.outputtype==='chart') {
+
+          return (
             <Grid container direction="row" justify="flex-start" alignItems="flex-start" xs={12}>
                 <Hidden smDown>
                     <Grid item container className="nothing" direction="column" justify="flex-start" alignItems="flex-start" md={3}>
@@ -297,6 +312,31 @@ class ExtremeDataView extends Component {
                     </Grid>
             </Grid>
         );
+
+      } else {
+
+          return (
+                    <Grid item container className="nothing" direction="column" xs={12}>
+                        <Grid item container direction="row" justify="flex-start" alignItems="flex-start" spacing="1">
+                            <Grid item>
+                              {display_VarPopover}
+                            </Grid>
+                        </Grid>
+                        <Grid item>
+                            <LoadingOverlay
+                              active={this.dataIsLoading()}
+                              spinner
+                              background={'rgba(255,255,255,1.0)'}
+                              color={'rgba(34,139,34,1.0)'}
+                              spinnerSize={'10vw'}
+                              >
+                                {display}
+                            </LoadingOverlay>
+                        </Grid>
+                    </Grid>
+        );
+
+      }
 
     }
 }

@@ -1,11 +1,9 @@
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////
 
-import React, { Component } from 'react';
-import { inject, observer} from 'mobx-react';
+import React from 'react';
 import moment from 'moment';
-//import { ResponsiveContainer, ComposedChart, AreaChart, LineChart, BarChart, Bar, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { ResponsiveContainer, ComposedChart, AreaChart, LineChart, BarChart, Bar, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 // to save charts in specific id
@@ -23,7 +21,7 @@ import '../../../../styles/WxCharts.css';
 const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxSelected,tminSelected,prcpSelected}) => {
 
         let formatXAxisForDate = (tickItem) => {
-            let t = moment(tickItem)
+            //let t = moment(tickItem)
             return moment(tickItem).add(1,'days').format('YYYY')
         }
 
@@ -79,7 +77,7 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
                     />
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
                     <Tooltip/>
-                    <Bar name={tmaxTitle} dataKey="cnt_x" fill="#82ca9d" />
+                    <Bar name="Number of days" dataKey="cnt_x" fill="#82ca9d" />
                   </BarChart>
                 </ResponsiveContainer>
             </Grid>
@@ -109,7 +107,7 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
                     />
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
                     <Tooltip/>
-                    <Bar name={tminTitle} dataKey="cnt_n" fill="#82ca9d" />
+                    <Bar name="Number of days" dataKey="cnt_n" fill="#82ca9d" />
                   </BarChart>
                 </ResponsiveContainer>
             </Grid>
@@ -139,7 +137,7 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
                     />
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
                     <Tooltip/>
-                    <Bar name={prcpTitle} dataKey="cnt_p" fill="#82ca9d" />
+                    <Bar name="Number of days" dataKey="cnt_p" fill="#82ca9d" />
                   </BarChart>
                 </ResponsiveContainer>
             </Grid>

@@ -14,7 +14,7 @@ import MUIDataTable from "mui-datatables";
 var app;
 
 @inject('store') @observer
-class WxTables extends Component {
+class WxTablesExtreme extends Component {
 
     constructor(props) {
         super(props);
@@ -154,5 +154,5 @@ class WxTables extends Component {
     }
 }
 
-export default WxTables;
+export default WxTablesExtreme;
 

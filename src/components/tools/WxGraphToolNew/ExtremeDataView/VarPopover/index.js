@@ -1,5 +1,4 @@
 import React from 'react';
-import { inject, observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 //import { makeStyles } from '@material-ui/core/styles';

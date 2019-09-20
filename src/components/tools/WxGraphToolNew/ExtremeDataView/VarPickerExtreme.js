@@ -1,12 +1,9 @@
-import React, { Component } from 'react';
-import { inject, observer} from 'mobx-react';
+import React from 'react';
 import PropTypes from 'prop-types';
 //import { withStyles } from '@material-ui/core/styles';
-import green from '@material-ui/core/colors/green';
 import 'typeface-roboto';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-//import Divider from '@material-ui/core/Divider';
 import Box from '@material-ui/core/Box';
 import Checkbox from '@material-ui/core/Checkbox';
 //import UnitsSelect from './UnitsSelect'
@@ -18,7 +15,8 @@ const VarPickerExtreme = (props) => {
     return (
 
 
-      <Box width="240px" padding={1} border={1} borderRadius={4} borderColor="primary.main" bgcolor="#f5f5dc">
+      <div>
+      <Box width="240px" padding={1} border={1} borderRadius={2} borderColor="primary.main" bgcolor={(props.tmaxSelected) ? "#f5f5dc" : "#ffffff"}>
 
 
       <Grid item container direction="column" justify="flex-start" spacing={1}>
@@ -56,6 +54,8 @@ const VarPickerExtreme = (props) => {
 
       }
 
+      </Box>
+      <Box width="240px" padding={1} border={1} borderRadius={2} borderColor="primary.main" bgcolor={(props.tminSelected) ? "#f5f5dc" : "#ffffff"}>
       <Grid item container direction="column" justify="flex-start" spacing={1}>
         <Grid item>
           <Typography variant="h6" style={{color: (props.tminSelected) ? '#000000' : '#B0B0B0'}}>
@@ -90,6 +90,8 @@ const VarPickerExtreme = (props) => {
       </Grid>
       }
 
+      </Box>
+      <Box width="240px" padding={1} border={1} borderRadius={2} borderColor="primary.main" bgcolor={(props.prcpSelected) ? "#f5f5dc" : "#ffffff"}>
       <Grid item container direction="column" justify="flex-start" spacing={1}>
         <Grid item>
           <Typography variant="h6" style={{color: (props.prcpSelected) ? '#000000' : '#B0B0B0'}}>
@@ -125,6 +127,7 @@ const VarPickerExtreme = (props) => {
       }
 
       </Box>
+      </div>
 
     );
 
