@@ -30,9 +30,9 @@ const DisplayTables = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
         let tableData=[]
         if (data) {
             tableData = data.map(row => {
-                row.cnt_x = !isNaN(row.cnt_x) ? row.cnt_x : '--'
-                row.cnt_n = !isNaN(row.cnt_n) ? row.cnt_n : '--'
-                row.cnt_p = !isNaN(row.cnt_p) ? row.cnt_p : '--'
+                row.cnt_x = (row.cnt_x) ? row.cnt_x : '--'
+                row.cnt_n = (row.cnt_n) ? row.cnt_n : '--'
+                row.cnt_p = (row.cnt_p) ? row.cnt_p : '--'
                 return [row.date,row.cnt_x,row.cnt_n,row.cnt_p]
             })
         }

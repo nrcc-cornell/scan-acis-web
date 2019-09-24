@@ -2064,18 +2064,18 @@ export class AppStore {
     //     wind : wind speed for hour (mph)
     @observable livestock_climateSummary = [{
                 'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
-                'avgt': NaN,
-                'humid': NaN,
-                'solar': NaN,
-                'wind': NaN,
+                'avgt': null,
+                'humid': null,
+                'solar': null,
+                'wind': null,
                 }]
     @action livestock_initClimateSummary = () => {
         let dataObjArray = [{
                 'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
-                'avgt': NaN,
-                'humid': NaN,
-                'solar': NaN,
-                'wind': NaN,
+                'avgt': null,
+                'humid': null,
+                'solar': null,
+                'wind': null,
             }];
         this.livestock_climateSummary = dataObjArray;
     }
@@ -2094,41 +2094,41 @@ export class AppStore {
               // hourly data
               if (dateToday===data[0][0]) {
                   // first day: only use last hour (midnight)
-                  tvar = (d[1][23]==='M') ? NaN : parseFloat(d[1][23])
-                  hvar = (d[2][23]==='M' || parseFloat(d[2][23])<0.0 || parseFloat(d[2][23])>100.0) ? NaN : parseFloat(d[2][23])
-                  svar = (d[3][23]==='M' || parseFloat(d[3][23])<0.0) ? NaN : parseFloat(d[3][23])
-                  wvar = (d[4][23]==='M' || parseFloat(d[4][23])<0.0) ? NaN : parseFloat(d[4][23])
+                  tvar = (d[1][23]==='M') ? null : parseFloat(d[1][23])
+                  hvar = (d[2][23]==='M' || parseFloat(d[2][23])<0.0 || parseFloat(d[2][23])>100.0) ? null : parseFloat(d[2][23])
+                  svar = (d[3][23]==='M' || parseFloat(d[3][23])<0.0) ? null : parseFloat(d[3][23])
+                  wvar = (d[4][23]==='M' || parseFloat(d[4][23])<0.0) ? null : parseFloat(d[4][23])
                   // use estimate of solar radiation, if unavailable
                   //if (!svar) { svar = 1000 };
-                  if (!isNaN(tvar) && !isNaN(hvar) && !isNaN(svar) && !isNaN(wvar)) {
+                  if (tvar && hvar && svar && wvar) {
                       //https://www.ars.usda.gov/plains-area/clay-center-ne/marc/docs/heat-stress/forecastingheatstress/
                       cattleIdx = (2.83*tvar) + (0.58*hvar) - (0.76*wvar) + (0.039*svar) - 196.4
                       cattleIdx = (cattleIdx<40) ? 40 : parseInt(cattleIdx,10)
                   } else {
-                      cattleIdx = NaN
+                      cattleIdx = null
                   }
-                  if (!isNaN(tvar) && !isNaN(hvar)) {
+                  if (tvar && hvar) {
                       //THI from https://www.progressivedairy.com/topics/herd-health/how-do-i-determine-how-do-i-calculate-temperature-humidity-index-thi
                       cowIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                       bigAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                       smallAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                   } else {
-                      cowIdx = NaN
-                      bigAnimalIdx = NaN
-                      smallAnimalIdx = NaN
+                      cowIdx = null
+                      bigAnimalIdx = null
+                      smallAnimalIdx = null
                   }
                   //format hour
                   formattedHourString = moment(dateToday,"YYYY-MM-DD").add(1,'days').format("YYYY-MM-DD")+' 00:00'
                   dataObjArray_hours.push({
                       'date':formattedHourString,
-                      'avgt':tvar,
-                      'humid':hvar,
-                      'solar':svar,
-                      'wind':wvar,
-                      'cattle':cattleIdx,
-                      'cow':cowIdx,
-                      'biganimal':bigAnimalIdx,
-                      'smallanimal':smallAnimalIdx
+                      'avgt':(tvar) ? tvar : 'M',
+                      'humid':(hvar) ? hvar : 'M',
+                      'solar':(svar) ? svar : 'M',
+                      'wind':(wvar) ? wvar : 'M',
+                      'cattle':(cattleIdx) ? cattleIdx : 'M',
+                      'cow':(cowIdx) ? cowIdx : 'M',
+                      'biganimal':(bigAnimalIdx) ? bigAnimalIdx : 'M',
+                      'smallanimal':(smallAnimalIdx) ? smallAnimalIdx : 'M'
                   })
               } else if (dateToday===data[data.length-1][0]) {
                   // last day: leave off future hours with missing data
@@ -2143,30 +2143,30 @@ export class AppStore {
                   }
                   numHours -= numFutureMissingHours
                   for (i = 0; i < numHours; i++) { 
-                      tvar = (d[1][i]==='M') ? NaN : parseFloat(d[1][i])
-                      hvar = (d[2][i]==='M' || parseFloat(d[2][i])<0.0 || parseFloat(d[2][i])>100.0) ? NaN : parseFloat(d[2][i])
-                      svar = (d[3][i]==='M' || parseFloat(d[3][i])<0.0) ? NaN : parseFloat(d[3][i])
-                      wvar = (d[4][i]==='M' || parseFloat(d[4][i])<0.0) ? NaN : parseFloat(d[4][i])
+                      tvar = (d[1][i]==='M') ? null : parseFloat(d[1][i])
+                      hvar = (d[2][i]==='M' || parseFloat(d[2][i])<0.0 || parseFloat(d[2][i])>100.0) ? null : parseFloat(d[2][i])
+                      svar = (d[3][i]==='M' || parseFloat(d[3][i])<0.0) ? null : parseFloat(d[3][i])
+                      wvar = (d[4][i]==='M' || parseFloat(d[4][i])<0.0) ? null : parseFloat(d[4][i])
                       // use estimate of solar radiation, if unavailable
                       //if (!svar) { svar = 1000 };
-                      if (!isNaN(tvar) && !isNaN(hvar) && !isNaN(svar) && !isNaN(wvar)) {
+                      if (tvar && hvar && svar && wvar) {
                           //https://www.ars.usda.gov/plains-area/clay-center-ne/marc/docs/heat-stress/forecastingheatstress/
                           cattleIdx = (2.83*tvar) + (0.58*hvar) - (0.76*wvar) + (0.039*svar) - 196.4
                           cattleIdx = (cattleIdx<40) ? 40 : parseInt(cattleIdx,10)
                           // THI from https://www.progressivedairy.com/topics/herd-health/how-do-i-determine-how-do-i-calculate-temperature-humidity-index-thi
                           //cattleIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                       } else {
-                          cattleIdx = NaN
+                          cattleIdx = null
                       }
-                      if (!isNaN(tvar) && !isNaN(hvar)) {
+                      if (tvar && hvar) {
                           //THI from https://www.progressivedairy.com/topics/herd-health/how-do-i-determine-how-do-i-calculate-temperature-humidity-index-thi
                           cowIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                           bigAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                           smallAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                       } else {
-                          cowIdx = NaN
-                          bigAnimalIdx = NaN
-                          smallAnimalIdx = NaN
+                          cowIdx = null
+                          bigAnimalIdx = null
+                          smallAnimalIdx = null
                       }
                       // format hour
                       if (i<=8) {
@@ -2180,43 +2180,43 @@ export class AppStore {
                       dataObjArray_hours.push({
                           //'date':(i+1>=10) ? dateToday+' '+(i+1).toString()+':00' : dateToday+' 0'+(i+1).toString()+':00',
                           'date':formattedHourString,
-                          'avgt':tvar,
-                          'humid':hvar,
-                          'solar':svar,
-                          'wind':wvar,
-                          'cattle':cattleIdx,
-                          'cow':cowIdx,
-                          'biganimal':bigAnimalIdx,
-                          'smallanimal':smallAnimalIdx,
+                          'avgt':(tvar) ? tvar : 'M',
+                          'humid':(hvar) ? hvar : 'M',
+                          'solar':(svar) ? svar : 'M',
+                          'wind':(wvar) ? wvar : 'M',
+                          'cattle':(cattleIdx) ? cattleIdx : 'M',
+                          'cow':(cowIdx) ? cowIdx : 'M',
+                          'biganimal':(bigAnimalIdx) ? bigAnimalIdx : 'M',
+                          'smallanimal':(smallAnimalIdx) ? smallAnimalIdx : 'M',
                       })
                   }
               } else {
                   numHours = d[1].length
                   for (i = 0; i < numHours; i++) { 
-                      tvar = (d[1][i]==='M') ? NaN : parseFloat(d[1][i])
-                      hvar = (d[2][i]==='M' || parseFloat(d[2][i])<0.0 || parseFloat(d[2][i])>100.0) ? NaN : parseFloat(d[2][i])
-                      svar = (d[3][i]==='M' || parseFloat(d[3][i])<0.0) ? NaN : parseFloat(d[3][i])
-                      wvar = (d[4][i]==='M' || parseFloat(d[4][i])<0.0) ? NaN : parseFloat(d[4][i])
+                      tvar = (d[1][i]==='M') ? null : parseFloat(d[1][i])
+                      hvar = (d[2][i]==='M' || parseFloat(d[2][i])<0.0 || parseFloat(d[2][i])>100.0) ? null : parseFloat(d[2][i])
+                      svar = (d[3][i]==='M' || parseFloat(d[3][i])<0.0) ? null : parseFloat(d[3][i])
+                      wvar = (d[4][i]==='M' || parseFloat(d[4][i])<0.0) ? null : parseFloat(d[4][i])
                       // use estimate of solar radiation, if unavailable
                       //if (!svar) { svar = 1000 };
-                      if (!isNaN(tvar) && !isNaN(hvar) && !isNaN(svar) && !isNaN(wvar)) {
+                      if (tvar && hvar && svar && wvar) {
                           //https://www.ars.usda.gov/plains-area/clay-center-ne/marc/docs/heat-stress/forecastingheatstress/
                           cattleIdx = (2.83*tvar) + (0.58*hvar) - (0.76*wvar) + (0.039*svar) - 196.4
                           cattleIdx = (cattleIdx<40) ? 40 : parseInt(cattleIdx,10)
                           // THI from https://www.progressivedairy.com/topics/herd-health/how-do-i-determine-how-do-i-calculate-temperature-humidity-index-thi
                           //cattleIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                       } else {
-                          cattleIdx = NaN
+                          cattleIdx = null
                       }
-                      if (!isNaN(tvar) && !isNaN(hvar)) {
+                      if (tvar && hvar) {
                           //THI from https://www.progressivedairy.com/topics/herd-health/how-do-i-determine-how-do-i-calculate-temperature-humidity-index-thi
                           cowIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                           bigAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                           smallAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                       } else {
-                          cowIdx = NaN
-                          bigAnimalIdx = NaN
-                          smallAnimalIdx = NaN
+                          cowIdx = null
+                          bigAnimalIdx = null
+                          smallAnimalIdx = null
                       }
                       // format hour
                       if (i<=8) {
@@ -2229,14 +2229,14 @@ export class AppStore {
                       }
                       dataObjArray_hours.push({
                           'date':formattedHourString,
-                          'avgt':tvar,
-                          'humid':hvar,
-                          'solar':svar,
-                          'wind':wvar,
-                          'cattle':cattleIdx,
-                          'cow':cowIdx,
-                          'biganimal':bigAnimalIdx,
-                          'smallanimal':smallAnimalIdx,
+                          'avgt':(tvar) ? tvar : 'M',
+                          'humid':(hvar) ? hvar : 'M',
+                          'solar':(svar) ? svar : 'M',
+                          'wind':(wvar) ? wvar : 'M',
+                          'cattle':(cattleIdx) ? cattleIdx : 'M',
+                          'cow':(cowIdx) ? cowIdx : 'M',
+                          'biganimal':(bigAnimalIdx) ? bigAnimalIdx : 'M',
+                          'smallanimal':(smallAnimalIdx) ? smallAnimalIdx : 'M',
                       })
                   }
               }

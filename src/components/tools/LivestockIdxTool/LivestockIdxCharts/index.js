@@ -42,7 +42,7 @@ class LivestockIdxCharts extends Component {
         let dataMax=-999;
         let dataMin=999;
         dataForChart.forEach(function (d) {
-            if (isNaN(d[typeToDisplay])) { return };
+            if (!d[typeToDisplay]) { return };
             dataMax = (d[typeToDisplay]>dataMax) ? d[typeToDisplay] : dataMax
             dataMin = (d[typeToDisplay]<dataMin) ? d[typeToDisplay] : dataMin
         });

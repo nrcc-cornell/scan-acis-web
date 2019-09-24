@@ -66,14 +66,14 @@ class LivestockIdxTables extends Component {
         };
 
         let tableData = data.map(row => {
-                    row.cattle = !isNaN(row.cattle) ? row.cattle : '--'
-                    row.cow = !isNaN(row.cow) ? row.cow : '--'
-                    row.biganimal = !isNaN(row.biganimal) ? row.biganimal : '--'
-                    row.smallanimal = !isNaN(row.smallanimal) ? row.smallanimal : '--'
-                    row.avgt = !isNaN(row.avgt) ? row.avgt : '--'
-                    row.humid = !isNaN(row.humid) ? row.humid : '--'
-                    row.solar = !isNaN(row.solar) ? row.solar : '--'
-                    row.wind = !isNaN(row.wind) ? row.wind : '--'
+                    row.cattle = (row.cattle) ? row.cattle : '--'
+                    row.cow = (row.cow) ? row.cow : '--'
+                    row.biganimal = (row.biganimal) ? row.biganimal : '--'
+                    row.smallanimal = (row.smallanimal) ? row.smallanimal : '--'
+                    row.avgt = (row.avgt) ? row.avgt : '--'
+                    row.humid = (row.humid) ? row.humid : '--'
+                    row.solar = (row.solar) ? row.solar : '--'
+                    row.wind = (row.wind) ? row.wind : '--'
                     return [row.date,row.cattle,row.cow,row.biganimal,row.smallanimal,row.avgt,row.humid,row.solar,row.wind]
                 })
 

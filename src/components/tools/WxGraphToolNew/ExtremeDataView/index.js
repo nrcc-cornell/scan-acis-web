@@ -185,9 +185,9 @@ class ExtremeDataView extends Component {
         for (i=0; i<d.length; i++) {
             oseries.push({
               'date': d[i][0],
-              'cnt_x': (d[i][1]==='M') ? NaN : parseInt(d[i][1],10),
-              'cnt_n': (d[i][2]==='M') ? NaN : parseInt(d[i][2],10),
-              'cnt_p': (d[i][3]==='M') ? NaN : parseInt(d[i][3],10),
+              'cnt_x': (d[i][1]==='M') ? 'M' : parseInt(d[i][1],10),
+              'cnt_n': (d[i][2]==='M') ? 'M' : parseInt(d[i][2],10),
+              'cnt_p': (d[i][3]==='M') ? 'M' : parseInt(d[i][3],10),
             })
         }
         return oseries
