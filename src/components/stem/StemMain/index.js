@@ -24,7 +24,7 @@ const styles = theme => ({
     flexGrow: 1,
   },
   control: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
   },
 });
 

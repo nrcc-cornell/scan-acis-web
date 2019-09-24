@@ -23,10 +23,10 @@ const styles = theme => ({
     flexGrow: 1,
   },
   control: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
 });
 
@@ -59,7 +59,7 @@ The U.S. Department of Agriculture's Natural Resources Conservation Service (USD
                     <Typography align="justify" paragraph variant="body2">
 In addition to the original SCAN project, NRCS also operates a soil moisture and climate information network on Tribal lands. The Tribal Soil Climate Analysis Network (known as Tribal SCAN) focuses on agricultural areas which are situated on Tribal lands in the United States.
                     </Typography>
-                    <Typography align="justify" paragraph variant="body2">
+                    <Typography component="span" align="justify" paragraph variant="body2">
                       More information about these networks is available at the NRCS website:
                       <ul>
                         <li><a href="https://www.wcc.nrcs.usda.gov/scan/" target="_blank" rel="noopener noreferrer">SCAN / Tribal SCAN documentation</a></li>

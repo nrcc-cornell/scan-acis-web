@@ -149,7 +149,7 @@ class WxCharts extends Component {
           </Grid>
           <Grid container justify="center" alignItems="center">
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('airtemp','Air Temperature')}
@@ -179,7 +179,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('rainfall','Total Precipitation')}
@@ -208,7 +208,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('soiltemp','Soil Temperature')}
@@ -242,7 +242,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('soilmoist','Soil Moisture')}
@@ -276,7 +276,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('humidity',app.wxgraph_getVarLabels['humidity_label'])}
@@ -305,7 +305,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('solarrad',app.wxgraph_getVarLabels['solarrad_label'])}
@@ -334,7 +334,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('wind',app.wxgraph_getVarLabels['wind_label'])}
@@ -365,7 +365,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('wind',app.wxgraph_getVarLabels['winddir_label'])}
@@ -394,7 +394,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('leafwet',app.wxgraph_getVarLabels['leafwet_label'])}

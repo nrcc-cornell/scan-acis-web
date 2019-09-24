@@ -86,7 +86,7 @@ class WxChartsExtreme extends Component {
           </Grid>
           <Grid container justify="left" alignItems="flexStart">
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   Number of Days > {app.wxgraph_getTempThreshold}°F
@@ -111,7 +111,7 @@ class WxChartsExtreme extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   Number of Days > {app.wxgraph_getPrecipThreshold} inches

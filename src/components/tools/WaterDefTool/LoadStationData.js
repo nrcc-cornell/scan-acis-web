@@ -8,8 +8,8 @@ import PropTypes from 'prop-types';
 const protocol = window.location.protocol;
 
 const LoadStationData = ({sid,period}) => {
-        console.log('LoadStationData params');
-        console.log(sid,period);
+        //console.log('LoadStationData params');
+        //console.log(sid,period);
         let params
         let network = sid.split(' ')[1]
         if (network==='17') {

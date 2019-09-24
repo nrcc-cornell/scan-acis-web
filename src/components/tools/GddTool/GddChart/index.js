@@ -40,13 +40,13 @@ class GddChart extends Component {
                 moment(label,"YYYY-MM-DD").format("MMM D, YYYY")
             }
             {
-                payload.map((entry) => {
+                payload.map((entry,index) => {
                     const { dataKey, color, value, name } = entry
                     let style = {}
                     style = { color: color }
                     if (dataKey==='obs' || dataKey==='ave' || dataKey==='recent') {
                       return (
-                        <span className="tooltip-item">
+                        <span key={index} className="tooltip-item">
                         <br/>
                         <span style={style}>{name} : </span>
                         <span>{(isNaN(value)) ? '--' : value}</span>
@@ -54,13 +54,13 @@ class GddChart extends Component {
                       )
                     } else {
                       return (
-                        <span className="tooltip-item"></span>
+                        <span key={index} className="tooltip-item"></span>
                       )
                     }
                 })
             }
             {
-                payload.map((entry) => {
+                payload.map((entry,index) => {
                     const { dataKey, color } = entry
                     let style = {}
                     style = { color: color }
@@ -68,7 +68,7 @@ class GddChart extends Component {
                       let v1 = (isNaN(payload[0].value)) ? '--' : payload[0].value
                       let v2 = (isNaN(payload[0].value) || isNaN(payload[1].value)) ? '--' : payload[0].value + payload[1].value
                       return (
-                        <span className="tooltip-item">
+                        <span key={index} className="tooltip-item">
                         <br/>
                         <span style={style}>Period of record : </span>
                         <span>{v1} - {v2}</span>
@@ -76,7 +76,7 @@ class GddChart extends Component {
                       )
                     } else {
                       return (
-                        <span className="tooltip-item"></span>
+                        <span key={index} className="tooltip-item"></span>
                       )
                     }
                 })
@@ -94,14 +94,14 @@ class GddChart extends Component {
       return (
         <div className="customized-legend">
           {
-            payload.map((entry) => {
+            payload.map((entry,index) => {
               const { dataKey, color, value } = entry
               let style = {}
               style = { color: color }
               if (dataKey==='obs' || dataKey==='ave' || dataKey==='recent') {
                 return (
-                  <span className="legend-item" style={style}>
-                    <Surface width={10} height={10} viewBox="0 0 10 10">
+                  <span key={index} className="legend-item" style={style}>
+                    <Surface width={10} height={10} viewBox={{x:0,y:0,width:10,height:10}}>
                       <Symbols cx={5} cy={5} type="circle" size={50} fill={color} />
                     </Surface>
                     <span>{value}</span>
@@ -109,20 +109,20 @@ class GddChart extends Component {
                 )
               } else {
                 return (
-                  <span className="tooltip-item"></span>
+                  <span key={index} className="tooltip-item"></span>
                 )
               }
             })
           }
           {
-            payload.map((entry) => {
+            payload.map((entry,index) => {
               const { dataKey, color, value } = entry
               let style = {}
               style = { color: color }
               if (dataKey==='min_por') {
                 return (
-                  <span className="legend-item" style={style}>
-                    <Surface width={10} height={10} viewBox="0 0 10 10">
+                  <span key={index} className="legend-item" style={style}>
+                    <Surface width={10} height={10} viewBox={{x:0,y:0,width:10,height:10}}>
                       <Symbols cx={5} cy={5} type="square" size={50} fill={color} />
                     </Surface>
                     <span>{value}</span>
@@ -130,7 +130,7 @@ class GddChart extends Component {
                 )
               } else {
                 return (
-                  <span className="tooltip-item"></span>
+                  <span key={index} className="tooltip-item"></span>
                 )
               }
             })

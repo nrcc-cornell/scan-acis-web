@@ -100,7 +100,7 @@ class LivestockIdxCharts extends Component {
               </Grid>
           </Grid>
 
-          <Grid container justify="left" alignItems="flexStart">
+          <Grid container justify="flex-start" alignItems="flex-start">
 
         {typeToDisplay==='cattle' &&
 
@@ -205,7 +205,7 @@ class LivestockIdxCharts extends Component {
 
         }
 
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
                           <Grid item>
                             <Typography variant="subtitle2">
                               Air Temperature
@@ -230,7 +230,7 @@ class LivestockIdxCharts extends Component {
         </LineChart>
       </ResponsiveContainer>
             </Grid>
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
                           <Grid item>
                             <Typography variant="subtitle2">
                               Humidity
@@ -257,7 +257,7 @@ class LivestockIdxCharts extends Component {
 
         {typeToDisplay==='cattle' &&
 
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
                           <Grid item>
                             <Typography variant="subtitle2">
                               Solar Radiation
@@ -289,7 +289,7 @@ class LivestockIdxCharts extends Component {
 
         {typeToDisplay==='cattle' &&
 
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
                           <Grid item>
                             <Typography variant="subtitle2">
                               Wind Speed

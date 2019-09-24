@@ -29,11 +29,12 @@ import Footer from '../../components/Footer';
 // Styles
 //import 'react-tabs/style/react-tabs.css';
 // modified tab css version for this app
-import '../../styles/react-tabs.css';
+//import '../../styles/react-tabs.css';
 import '../../styles/App.css';
 
 const theme = createMuiTheme({
-  shadows: ["none"],
+  //shadows: ["none"],
+  shadows: Array(25).fill('none'),
   palette: {
     primary: green,
     //secondary:

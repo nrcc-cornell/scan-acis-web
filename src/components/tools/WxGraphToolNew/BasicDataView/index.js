@@ -75,7 +75,7 @@ class BasicDataView extends Component {
         if (app.getOutputType==='chart') {
 
           return (
-            <Grid container direction="row" justify="center" alignItems="flex-start" xs={12}>
+            <Grid container direction="row" justify="center" alignItems="flex-start">
                 <Hidden smDown>
                     <Grid item container className="nothing" direction="column" md={3}>
                         <Grid item>
@@ -84,7 +84,7 @@ class BasicDataView extends Component {
                     </Grid>
                 </Hidden>
                     <Grid item container className="nothing" direction="column" xs={12} md={9}>
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
                           <Hidden mdUp>
                             <Grid item>
                               {display_VarPopover}
@@ -120,7 +120,7 @@ class BasicDataView extends Component {
           return (
             <Grid container direction="row" justify="center" alignItems="flex-start">
                     <Grid item container className="nothing" direction="column" xs={12}>
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+                        <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
                             <Grid item>
                               {display_VarPopover}
                             </Grid>

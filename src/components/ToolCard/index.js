@@ -16,9 +16,7 @@ const styles = theme => ({
     flexGrow: 1,
   },
   paper: {
-    //padding: theme.spacing.unit * 2,
     margin: 'auto',
-    //maxWidth: 600,
     height: 320,
     width: 240,
     background: '#F1F1F1',
@@ -37,7 +35,7 @@ const styles = theme => ({
     maxHeight: '100%',
   },
   button: {
-    margin: theme.spacing.unit,
+    margin: theme.spacing(1),
   },
   input: {
     display: 'none',

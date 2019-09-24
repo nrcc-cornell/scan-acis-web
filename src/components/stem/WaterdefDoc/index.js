@@ -38,7 +38,7 @@ const styles = theme => ({
     //},
   },
   control: {
-    padding: theme.spacing.unit * 2,
+    padding: theme.spacing(2),
   },
 });
 

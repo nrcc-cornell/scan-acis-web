@@ -12,7 +12,7 @@ import StemMenu from '../StemMenu'
 
 const styles = theme => ({
   typography: {
-    margin: theme.spacing.unit * 2,
+    margin: theme.spacing(2),
   },
   menuButton: {
     marginRight: 20,
@@ -43,7 +43,7 @@ class MenuPopover extends React.Component {
     const open = Boolean(anchorEl);
 
     return (
-      <div>
+      <span>
          <IconButton
           color="inherit"
           aria-label="Open drawer"
@@ -68,7 +68,7 @@ class MenuPopover extends React.Component {
         >
           <StemMenu/>
         </Popover>
-      </div>
+      </span>
     );
   }
 }

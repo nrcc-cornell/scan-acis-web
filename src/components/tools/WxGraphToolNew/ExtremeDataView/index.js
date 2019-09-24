@@ -291,7 +291,7 @@ class ExtremeDataView extends Component {
                     </Grid>
                 </Hidden>
                     <Grid item container className="nothing" direction="column" xs={12} md={9}>
-                        <Grid item container direction="row" justify="flex-start" alignItems="flex-start" spacing="1">
+                        <Grid item container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
                           <Hidden mdUp>
                             <Grid item>
                               {display_VarPopover}
@@ -317,7 +317,7 @@ class ExtremeDataView extends Component {
 
           return (
                     <Grid item container className="nothing" direction="column" xs={12}>
-                        <Grid item container direction="row" justify="flex-start" alignItems="flex-start" spacing="1">
+                        <Grid item container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
                             <Grid item>
                               {display_VarPopover}
                             </Grid>

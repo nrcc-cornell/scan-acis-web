@@ -28,9 +28,7 @@ const styles = theme => ({
   },
   checked: {},
   formControl: {
-    marginLeft: theme.spacing.unit,
-    //marginLeft: theme.spacing.unit * 4,
-    //width: '160px',
+    marginLeft: theme.spacing(1),
   },
 });
 

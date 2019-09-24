@@ -57,7 +57,7 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
           { tmaxSelected &&
 
           <Grid container justify="left" alignItems="flexStart">
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {tmaxTitle}
@@ -87,7 +87,7 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
           { tminSelected &&
 
           <Grid container justify="left" alignItems="flexStart">
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {tminTitle}
@@ -117,7 +117,7 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
           { prcpSelected &&
 
           <Grid container justify="left" alignItems="flexStart">
-            <Grid item container direction="row" justify="center" alignItems="center" spacing="1">
+            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {prcpTitle}

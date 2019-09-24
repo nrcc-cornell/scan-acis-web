@@ -70,7 +70,7 @@ class GrapherDatePicker extends Component {
                   scrollableYearDropdown
                   dropdownMode="select"
                   //filterDate={this.isMonthInGrowingSeason}
-                  popperPlacement="center"
+                  //popperPlacement="bottom"
                   popperModifiers={{
                     offset: {
                       enabled: true,

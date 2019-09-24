@@ -35,14 +35,14 @@ class WxGraphTool extends Component {
 
         return (
 
-            <Grid container direction="column" justify="flex-start" alignItems="center" xs={12} spacing={3}>
-                <Grid item>
+            <Grid container direction="column" justify="flex-start" alignItems="center" spacing={3}>
+                <Grid item xs={12}>
                   <ToolTypeSelect
                       value={this.state.tooltype}
                       onchange={this.handleChangeTooltype}
                   />
                 </Grid>
-                <Grid item>
+                <Grid item xs={12} >
                   {this.state.tooltype==='basic' &&
                       <BasicDataView
                           station={this.props.station}

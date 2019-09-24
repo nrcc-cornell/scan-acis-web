@@ -72,7 +72,7 @@ class WaterDefTool extends Component {
         this.initStateForLoading()
         LoadStationData({sid:this.props.station, period:[this.state.year.toString()+'-01-01',this.state.year.toString()+'-12-31']})
           .then(response => {
-            console.log(response);
+            //console.log(response);
             let yearStart = (response.data.meta && response.data.meta.valid_daterange && response.data.meta.valid_daterange[1][0]) ? parseInt(response.data.meta.valid_daterange[1][0].split('-')[0],10) : moment().year()
             let yearEnd = (response.data.meta && response.data.meta.valid_daterange && response.data.meta.valid_daterange[1][1]) ? parseInt(response.data.meta.valid_daterange[1][1].split('-')[0],10) : moment().year()
             let yearArr = Array.from({length: yearEnd-yearStart+1}, (v, k) => k+yearStart)
@@ -259,7 +259,7 @@ class WaterDefTool extends Component {
               }
               {(!this.state.data_soil_parameters || !this.state.data_soil_moisture) &&
                 <DisplayWaterDeficitChart
-                  data={[]}
+                  data={{}}
                   depthRangeTop={this.state.depth_top}
                   depthRangeBottom={this.state.depth_bottom}
                   units={this.state.units}

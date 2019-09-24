@@ -63,13 +63,15 @@ export class AppStore {
     @computed get getActiveTabIndex() {
         let tabIndex = null;
         if (this.getActivePage==='home') {
-            tabIndex = 0;
+            //tabIndex = 0;
+            tabIndex = false;
         } else if (this.getActivePage==='about') {
             tabIndex = 1;
         } else if (this.getActivePage==='stem') {
             tabIndex = 2;
         } else if (this.getActivePage==='tool') {
-            tabIndex = 3;
+            //tabIndex = 3;
+            tabIndex = false;
         } else {
         }
         return tabIndex
@@ -136,7 +138,7 @@ export class AppStore {
 
     @observable outputType = 'chart';
     @action setOutputType = (changeEvent) => {
-        console.log('Changing output type to ', changeEvent.target.value)
+        //console.log('Changing output type to ', changeEvent.target.value)
         this.outputType = changeEvent.target.value
     }
     // set outputType from select menu
@@ -721,15 +723,15 @@ export class AppStore {
 
     // GDD tool data download - download data using parameters
     @action gddtool_downloadData = () => {
-        console.log("Call gddtool_downloadData")
+        //console.log("Call gddtool_downloadData")
         this.gddtool_setDataIsLoading(true);
         return axios
           //.post(`${protocol}//grid2.rcc-acis.org/GridData`, this.getAcisParams)
           //.post(`${protocol}//data.rcc-acis.org/StnData`, this.getAcisParams)
           .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.getAcisParams)
           .then(res => {
-            console.log('SUCCESS downloading from ACIS');
-            console.log(res);
+            //console.log('SUCCESS downloading from ACIS');
+            //console.log(res);
             if (res.data.hasOwnProperty('error')) {
                 this.gddtool_setClimateData(null);
                 this.gddtool_initClimateSummary()
@@ -1535,8 +1537,8 @@ export class AppStore {
 
     // Wx Grapher tool daily data download - download data using parameters
     @action wxgraph_downloadData = () => {
-        console.log("Call wxgraph_downloadData")
-        console.log(this.getLocation.sid.split(' ')[1]);
+        //console.log("Call wxgraph_downloadData")
+        //console.log(this.getLocation.sid.split(' ')[1]);
         let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.wxgraph_getAcisParams : this.wxgraph_getAcisParams_tscan
         this.wxgraph_setDataIsLoading(true);
         return axios
@@ -1544,8 +1546,8 @@ export class AppStore {
           //.post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
           .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
           .then(res => {
-            console.log('SUCCESS downloading from ACIS');
-            console.log(res);
+            //console.log('SUCCESS downloading from ACIS');
+            //console.log(res);
             if (res.data.hasOwnProperty('error')) {
                 console.log('Error: resetting data to null');
                 this.wxgraph_setClimateData(null);
@@ -1893,7 +1895,7 @@ export class AppStore {
 
     // Station explorer hourly data (latest conditions) download
     @action explorer_downloadData = () => {
-        console.log("Call explorer_downloadData")
+        //console.log("Call explorer_downloadData")
         let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.explorer_getAcisParams : this.explorer_getAcisParams_tscan
         this.explorer_initLatestConditions();
         this.explorer_setDataIsLoading(true);
@@ -1902,8 +1904,8 @@ export class AppStore {
           //.post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.explorer_getAcisParams)
           .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
           .then(res => {
-            console.log('SUCCESS downloading from ACIS');
-            console.log(res);
+            //console.log('SUCCESS downloading from ACIS');
+            //console.log(res);
             if (res.data.hasOwnProperty('error')) {
                 console.log('Error: resetting data to null');
                 this.explorer_setClimateData(null);
@@ -1923,15 +1925,15 @@ export class AppStore {
 
     // Station explorer hourly data (latest conditions) download
     @action explorerClimateSummary_downloadData = () => {
-        console.log("Call explorerClimateSummary_downloadData")
+        //console.log("Call explorerClimateSummary_downloadData")
         this.explorer_initClimateSummary();
         this.explorerClimateSummary_setDataIsLoading(true);
         return axios
           //.post(`${protocol}//data.rcc-acis.org/StnData`, this.explorer_getAcisParams)
           .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.explorerClimateSummary_getAcisParams)
           .then(res => {
-            console.log('SUCCESS downloading climate summary from ACIS');
-            console.log(res);
+            //console.log('SUCCESS downloading climate summary from ACIS');
+            //console.log(res);
             if (res.data.hasOwnProperty('error')) {
                 console.log('Error: resetting data to null');
                 this.explorerClimateSummary_setClimateData(null);
@@ -2250,13 +2252,13 @@ export class AppStore {
 
     // Livestock Heat Index tool daily data download - download data using parameters
     @action livestock_downloadData = () => {
-        console.log("Call livestock_downloadData")
+        //console.log("Call livestock_downloadData")
         this.livestock_setDataIsLoading(true);
         return axios
           //.post(`${protocol}//data.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
           .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.livestock_getAcisParams)
           .then(res => {
-            console.log('SUCCESS downloading from ACIS');
+            //console.log('SUCCESS downloading from ACIS');
             //console.log(res);
             if (res.data.hasOwnProperty('error')) {
                 console.log('Error: resetting data to null');

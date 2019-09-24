@@ -8,8 +8,8 @@ import PropTypes from 'prop-types';
 const protocol = window.location.protocol;
 
 const LoadStationData = ({sid,xthresh,nthresh,pthresh,xunits,nunits,punits,xcomp,ncomp,pcomp}) => {
-        console.log('LoadStationData');
-        console.log(sid);
+        //console.log('LoadStationData');
+        //console.log(sid);
         let params
         params = {
           "sid": sid,

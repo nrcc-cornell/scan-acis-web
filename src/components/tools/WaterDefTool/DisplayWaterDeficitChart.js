@@ -19,10 +19,13 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
         const afterRender = (chart) => {
             //let textX = chart.plotLeft + (chart.plotWidth  * 0.5);
             let textY = chart.plotTop  + (chart.plotHeight * 0.5);
-            if (Array.isArray(data)) {
-                if (data.length===0) {
-                    chart.renderer.text('No data to display', chart.plotLeft+40, textY).css({ color:"#ff0000", fontSize:"16px"}).add()
-                }
+            //if (Array.isArray(data)) {
+            //    if (data.length===0) {
+            //        chart.renderer.text('No data to display', chart.plotLeft+40, textY).css({ color:"#ff0000", fontSize:"16px"}).add()
+            //    }
+            //}
+            if (Object.keys(data).length===0) {
+                chart.renderer.text('No data to display', chart.plotLeft+40, textY).css({ color:"#ff0000", fontSize:"16px"}).add()
             }
         };
 
@@ -119,7 +122,7 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
 }
 
 DisplayWaterDeficitChart.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.object.isRequired,
   depthRangeTop: PropTypes.number.isRequired,
   depthRangeBottom: PropTypes.number.isRequired,
   units: PropTypes.string.isRequired,

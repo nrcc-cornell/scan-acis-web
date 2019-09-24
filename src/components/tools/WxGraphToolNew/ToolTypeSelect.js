@@ -26,13 +26,13 @@ const ToolTypeSelect = (props) => {
                     value="basic"
                     control={<Radio color="primary" />}
                     label={<Typography variant="h6">Weather Data Summaries</Typography>}
-                    labelPlacement="right"
+                    labelPlacement="end"
                   />
                   <FormControlLabel
                     value="extreme"
                     control={<Radio color="primary" />}
                     label={<Typography variant="h6">Threshold Exceedences</Typography>}
-                    labelPlacement="right"
+                    labelPlacement="end"
                   />
                 </RadioGroup>
               </FormControl>

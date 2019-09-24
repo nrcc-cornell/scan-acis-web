@@ -36,7 +36,7 @@ const VarPickerExtreme = (props) => {
 
       <Grid item container direction="column" justify="flex-start" spacing={1}>
         <Grid item>
-          <Typography variant="body1">
+          <Typography component="span" variant="body1">
             <ComparisonSelect value={props.tmaxComparison} onchange={props.onchangeTmaxComparison} />
           </Typography>
         </Grid>

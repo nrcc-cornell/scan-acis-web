@@ -18,29 +18,22 @@ class DisplayTables extends Component {
         super(props);
 
         let pageSize = 10;
-        //let setPage = () => {
-        //        let data = this.props.data_wd.data_series
-        //        let idxValid = 0;
-        //        data.slice().reverse().some(function (value,index) {
-        //            idxValid=index;
-        //            return !isNaN(value[1]);
-        //        });
-        //        return parseInt(Math.floor(idxValid/pageSize),10);
-        //    }
+        let setPage = () => {
+                let data = this.props.data_wd.data_series
+                let idxValid = 0;
+                data.slice().reverse().some(function (value,index) {
+                    idxValid=index;
+                    //return !isNaN(value[1]);
+                    return value[1];
+                });
+                return parseInt(Math.floor(idxValid/pageSize),10);
+            }
 
         this.state = {
-            //page: setPage(),
-            page: null,
+            page: setPage(),
+            //page: null,
             pageSize: pageSize,
         }
-    }
-
-    componentWillMount() {
-        //console.log('setPage');
-        //console.log(this.setPage());
-        this.setState({
-            page:this.setPage()
-        })
     }
 
     componentDidUpdate(prevProps,prevState) {
@@ -70,8 +63,8 @@ class DisplayTables extends Component {
 
         const options = {
           filterType: 'checkbox',
-          responsive: 'scroll',
-          selectableRows: false,
+          responsive: 'scrollFullHeight',
+          selectableRows: 'none',
           fixedHeader: false,
           search: false,
           filter: false,
