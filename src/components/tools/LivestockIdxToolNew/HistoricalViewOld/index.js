@@ -41,12 +41,12 @@ const styles = theme => ({
 var app;
 
 @inject('store') @observer
-class ExtremeDataView extends Component {
+class HistoricalView extends Component {
 
     constructor(props) {
         super(props);
         app = this.props.store.app;
-        app.setToolName('wxgrapher')
+        app.setToolName('livestock')
         this.state = {
           tmax_thresh: '90',
           tmax_comparison: 'gt',
@@ -80,6 +80,8 @@ class ExtremeDataView extends Component {
             pcomp:this.state.prcp_comparison
         })
           .then(response => {
+            console.log('Historical View : LoadStationData response');
+            console.log(response);
             this.setState({
               data:this.formatDataForDisplay(response.data.data), 
               data_is_loading:false,
@@ -279,7 +281,9 @@ class ExtremeDataView extends Component {
                                contents={display_VarPicker}
                              />
 
-        return (
+        if (this.props.outputtype==='chart') {
+
+          return (
             <Grid container direction="row" justify="flex-start" alignItems="flex-start" xs={12}>
                 <Hidden smDown>
                     <Grid item container className="nothing" direction="column" justify="flex-start" alignItems="flex-start" md={3}>
@@ -311,7 +315,32 @@ class ExtremeDataView extends Component {
             </Grid>
         );
 
+      } else {
+
+          return (
+                    <Grid item container className="nothing" direction="column" xs={12}>
+                        <Grid item container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
+                            <Grid item>
+                              {display_VarPopover}
+                            </Grid>
+                        </Grid>
+                        <Grid item>
+                            <LoadingOverlay
+                              active={this.dataIsLoading()}
+                              spinner
+                              background={'rgba(255,255,255,1.0)'}
+                              color={'rgba(34,139,34,1.0)'}
+                              spinnerSize={'10vw'}
+                              >
+                                {display}
+                            </LoadingOverlay>
+                        </Grid>
+                    </Grid>
+        );
+
+      }
+
     }
 }
 
-export default withStyles(styles)(ExtremeDataView);
+export default withStyles(styles)(HistoricalView);

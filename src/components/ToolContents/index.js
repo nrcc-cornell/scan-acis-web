@@ -16,7 +16,8 @@ import GddTool from '../../components/tools/GddTool';
 import WaterDefTool from '../../components/tools/WaterDefTool';
 //import WxGraphTool from '../../components/tools/WxGraphTool';
 import WxGraphTool from '../../components/tools/WxGraphToolNew';
-import LivestockIdxTool from '../../components/tools/LivestockIdxTool';
+//import LivestockIdxTool from '../../components/tools/LivestockIdxTool';
+import LivestockIdxTool from '../../components/tools/LivestockIdxToolNew';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 //import { spacing } from '@material-ui/system';
@@ -89,7 +90,7 @@ class ToolContents extends Component {
                 { this.props.name==='gddtool' && (<GddTool />) }
                 { this.props.name==='waterdef' && app.getLocation && (<WaterDefTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} />) }
                 { this.props.name==='wxgrapher' && app.getLocation && (<WxGraphTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} outputtype={app.getOutputType}/>) }
-                { this.props.name==='livestock' && (<LivestockIdxTool />) }
+                { this.props.name==='livestock' && app.getLocation && (<LivestockIdxTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} outputtype={app.getOutputType}/>) }
               </Grid>
             </Grid>
             </div>

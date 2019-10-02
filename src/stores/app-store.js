@@ -982,6 +982,7 @@ export class AppStore {
                 // not using wind speed from daily+, looks to be averaged incorrectly
                 //'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
                 'winddirave':NaN,
+                //'leafwet':(d[19]==='M' || parseFloat(d[19])<0.0 || this.getLocation.sid.split(' ')[1]==='17') ? NaN : parseFloat(d[19]).toFixed(0),
                 'leafwet':NaN,
               })
             } else if (timeFrame==='two_years') {
@@ -1009,6 +1010,7 @@ export class AppStore {
                 // not using wind speed from daily+, looks to be averaged incorrectly
                 //'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
                 'winddirave':NaN,
+                //'leafwet':(d[19]==='M' || parseFloat(d[19])<0.0 || this.getLocation.sid.split(' ')[1]==='17') ? NaN : parseFloat(d[19]).toFixed(0),
                 'leafwet':NaN,
               })
             } else if (timeFrame==='por') {
@@ -1037,6 +1039,7 @@ export class AppStore {
                     // not using wind speed from daily+, looks to be averaged incorrectly
                     //'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
                     'winddirave':NaN,
+                    //'leafwet':(d[19]==='M' || parseFloat(d[19])<0.0 || this.getLocation.sid.split(' ')[1]==='17') ? NaN : parseFloat(d[19]).toFixed(0),
                     'leafwet':NaN,
                   })
               } else {
@@ -1076,6 +1079,7 @@ export class AppStore {
                       'windspdmax':(d[17][23]==='M' || parseFloat(d[17][23])<0.0) ? NaN : parseFloat(d[17][23]).toFixed(1),
                       'windspdave':(d[18][23]==='M' || parseFloat(d[18][23])<0.0) ? NaN : parseFloat(d[18][23]).toFixed(1),
                       'winddirave':(d[19][23]==='M' || parseFloat(d[19][23])<0.0 || parseFloat(d[19][23])>360.0) ? NaN : parseFloat(d[19][23]).toFixed(1),
+                      //'leafwet':(d[20][23]==='M' || parseFloat(d[20][23])<0.0 || this.getLocation.sid.split(' ')[1]==='17') ? NaN : parseFloat(d[20][23]).toFixed(0),
                       'leafwet':NaN,
                   })
               } else if (dateToday===data[data.length-1][0]) {
@@ -1122,6 +1126,7 @@ export class AppStore {
                           'windspdmax':(d[17][i]==='M' || parseFloat(d[17][i])<0.0) ? NaN : parseFloat(d[17][i]).toFixed(1),
                           'windspdave':(d[18][i]==='M' || parseFloat(d[18][i])<0.0) ? NaN : parseFloat(d[18][i]).toFixed(1),
                           'winddirave':(d[19][i]==='M' || parseFloat(d[19][i])<0.0 || parseFloat(d[4][i])>360.0) ? NaN : parseFloat(d[19][i]).toFixed(1),
+                          //'leafwet':(d[20][i]==='M' || parseFloat(d[20][i])<0.0 || this.getLocation.sid.split(' ')[1]==='17') ? NaN : parseFloat(d[20][i]).toFixed(0),
                           'leafwet':NaN,
                       })
                   }
@@ -1159,6 +1164,7 @@ export class AppStore {
                           'windspdmax':(d[17][i]==='M' || parseFloat(d[17][i])<0.0) ? NaN : parseFloat(d[17][i]).toFixed(1),
                           'windspdave':(d[18][i]==='M' || parseFloat(d[18][i])<0.0) ? NaN : parseFloat(d[18][i]).toFixed(1),
                           'winddirave':(d[19][i]==='M' || parseFloat(d[19][i])<0.0 || parseFloat(d[4][i])>360.0) ? NaN : parseFloat(d[19][i]).toFixed(1),
+                          //'leafwet':(d[20][i]==='M' || parseFloat(d[20][i])<0.0 || this.getLocation.sid.split(' ')[1]==='17') ? NaN : parseFloat(d[20][i]).toFixed(0),
                           'leafwet':NaN,
                       })
                   }
@@ -1417,6 +1423,7 @@ export class AppStore {
                     {"vX":42}, //hourly wind speed, peak, max
                     {"vX":128}, //hourly wind speed, average, ave
                     {"vX":130}, //hourly wind direction, average, ave
+                    {"vX":118,"vN":9}, //hourly leaf wetness, sum, minutes
                 ]
                 numdays=-3
             } else if (this.wxgraph_getTimeFrame==='two_months') {
@@ -1440,6 +1447,7 @@ export class AppStore {
                     {"vX":77,"interval":[0,0,1],"duration":"dly"}, // daily wind speed, maximum, max
                     {"vX":89,"interval":[0,0,1],"duration":"dly"}, // daily wind speed, average, ave
                     {"vX":101,"interval":[0,0,1],"duration":"dly"}, // daily wind direction, average, ave
+                    {"vX":118,"vN":9,"interval":[0,0,1],"duration":"dly"}, // daily leaf wetness, sum, minutes
                 ]
                 numdays=-60
             } else if (this.wxgraph_getTimeFrame==='two_years') {
@@ -1463,6 +1471,7 @@ export class AppStore {
                     {"vX":77,"interval":[0,1],"duration":"mly","reduce":{"reduce":"max"},"maxmissing":3}, // monthly wind speed, maximum, max
                     {"vX":89,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly wind speed, average, ave
                     {"vX":101,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly wind direction, average, ave
+                    {"vX":118,"vN":9,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly leaf wetness, ave, minutes/day
                 ]
                 numdays=-730
             } else if (this.wxgraph_getTimeFrame==='por') {
@@ -1488,6 +1497,7 @@ export class AppStore {
                         {"vX":77,"interval":[1],"duration":"yly","reduce":{"reduce":"max"},"maxmissing":10}, //annual wind speed, maximum, max
                         {"vX":89,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, //annual wind speed, average, ave
                         {"vX":101,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, //annual wind direction, average, ave
+                        {"vX":118,"vN":9,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, //annual leaf wetness, average, minutes/day
                     ]
                 } else {
                     elems = [
