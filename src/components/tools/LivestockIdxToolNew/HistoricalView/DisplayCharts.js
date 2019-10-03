@@ -42,7 +42,7 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo}) => {
         downloadFilename = downloadFilename.replace(' ','-');
 
         return (
-          <div id="wx-charts">
+          <div id="livestock-charts">
 
           <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
             <Grid item>

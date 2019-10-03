@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer} from 'mobx-react';
+import { withRouter } from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
 //import IconButton from '@material-ui/core/IconButton';
 //import MenuIcon from '@material-ui/icons/Menu';
@@ -11,6 +12,10 @@ import Hidden from '@material-ui/core/Hidden';
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 import StemMenu from '../StemMenu'
+import Button from '@material-ui/core/Button';
+
+import userinput from '../../../assets/GddTool/user_input.png'
+import gddtooloutput from '../../../assets/GddTool/gddtool_output.png'
 
 // Components
 import MenuPopover from '../MenuPopover'
@@ -36,19 +41,22 @@ const styles = theme => ({
   },
 });
 
-//var app;
+var app;
+var history;
 
 @inject('store') @observer
 class GddtoolDoc extends Component {
 
-    //constructor(props) {
-    //    super(props);
-    //    app = this.props.store.app;
-    //}
+    constructor(props) {
+        super(props);
+        app = this.props.store.app;
+        history = this.props.history;
+    }
 
     render() {
 
         const { classes } = this.props;
+        let url = app.getToolInfo('gddtool').url
 
         return (
           <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={0}>
@@ -73,16 +81,64 @@ class GddtoolDoc extends Component {
                       What does this tool do?
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      Lorem ipsum dolor sit amet, eu tristique, etiam vel donec, lorem ut ridiculus aliquam, eget faucibus at nunc, cursus justo nonummy et. Imperdiet ut pellentesque eu lacus tincidunt, dolor pede velit felis tempus et justo. Id sit eget sollicitudin, vitae et, tellus cum a massa quam scelerisque sed. Sed duis suscipit, sed quisque potenti quis donec mollitia. Justo urna fusce sed id nisl eu, lobortis tincidunt lobortis, aenean diam orci, mauris elit in, quam bibendum sed commodo est sed. Pellentesque a nam, non in nullam rhoncus neque aliquam ac, mollis convallis. Sed vestibulum, dolor vulputate leo a, a in posuere et a. Nam commodo condimentum, est ipsum mattis sollicitudin ante commodo tristique. Mollitia taciti luctus lacus quisque. Nec maecenas ut dui maecenas sapien. Tincidunt nullam occaecat in, mauris exercitation ipsum vitae, nunc integer non, at quis turpis varius, nibh adipiscing velit mi.
+                      This tool monitors heat accumulation throughout the growing season to help agricultural producers estimate when important developmental stages are reached. In a stress-free environment, the development rate of a plant is dependent on temperature. Growing Degree Days (GDD) are also frequently used to help predict potential pest and disease threats.<br/><br/>
+                      GDDs are calculated by taking the average of the daily maximum temperature and minimum temperature, and then subtracting a base temperature. The base temperature is the lowest temperature at which a crop will grow. As an example, a common base for many crops is 50°F.  On days when the average temperature is below 50°F, the GDD value is set to zero.<br/><br/>
+                      The base value used in the GDD calculation depends on the lifecycle of the plant or insect of interest. Some species continue to grow at lower temperatures, and require a lower base during calculations. Below are some examples of bases used when calculating GDD for a variety of species:
                     </Typography>
+                    <Typography align="left" paragraph variant="body1">
+                      <i>Plants</i><br/>
+                      50°F : corn, sorghum, soybeans, tomato<br/>
+                      46°F : sunflower, potato<br/>
+                      42°F : wheat, barley, rye, oats, flaxseed, lettuce, asparagus<br/><br/>
+                      <i>Insects and Diseases</i><br/>
+                      52°F : Green Cloverworm<br/>
+                      50°F : Codling moth, Apple maggot<br/>
+                      48°F : Alfalfa weevil<br/>
+                      45°F : Corn rootworm, Oriental fruit moth<br/>
+                      43°F : Stalk Borer<br/>
+                      40°F : Onion maggot<br/>
+                      39°F : Cabbage maggot<br/>
+                      32°F : Apple scab<br/><br/>
+                    </Typography>
+                    <Button variant="outlined" color="primary" onClick={()=>{history.push(url)}}>
+                      Growing Degree Day Calculator
+                    </Button>
               </Grid>
               <Grid item>
                     <Typography align="left" paragraph variant="h6">
-                      How to use this tool.
+                      Sources of data
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-Vestibulum eu sociis litora sed mauris, fusce consequat gravida mi dictum cras turpis, lectus suscipit eros phasellus nunc vel. Euismod eros duis, tortor aliquam, ipsum scelerisque viverra, nonummy at nisl neque neque ornare, ultricies quam venenatis est nunc duis. A wisi rhoncus. Sit quasi augue aliquam in, nibh vel posuere, sollicitudin nec mi mollis, imperdiet quam maecenas ac tellus, aptent mi pede auctor non. Luctus placerat metus enim risus dui, lectus fermentum libero, erat risus sit ut mauris arcu, lorem vestibulum purus mattis vestibulum in non, ullamcorper a donec praesent fringilla ut. Amet quisque vehicula, venenatis rhoncus metus blandit pede et orci, tempus euismod arcu, diam rhoncus ut, magna tempor eget tristique vel quasi mollis. In in nibh pharetra mi. Pellentesque vel eget nobis, hymenaeos at hendrerit, augue sapien, maecenas pharetra, interdum id gravida cum mauris hymenaeos. Praesent in ut qui, lacus gravida, quasi urna sagittis a, accumsan dui metus sit aliquam lobortis lectus. Minima a amet, neque odio, sit enim netus adipiscing porttitor aenean et.
+                      Observations from SCAN air temperature sensors provide this tool with the data necessary for calculating daily GDD amounts. The maximum and minimum temperatures observed during each day are used to calculate daily GDD as described above. From the daily GDD totals, seasonal accumulations are then calculated starting from the date selected.
                     </Typography>
+                    <Button variant="outlined" color="primary" onClick={()=>{history.push(url)}}>
+                      Growing Degree Day Calculator
+                    </Button>
+              </Grid>
+              <Grid item>
+                    <Typography align="left" paragraph variant="h6">
+                      How to use this tool
+                    </Typography>
+                    <Typography align="left" paragraph variant="body1">
+                      <i>1. User Options</i><br/><br/>
+                      Once your site is selected, there are two options to choose from at the top of the tool.<br/><br/>
+                      <b>a) Planting/Budbreak Date :</b> Click on the calendar icon to select a date from the dropdown calendar. This is the date from which you would like to start GDD accumulation. The current year is selected by default, however previous years can be selected if data at your location of interest is available.<br/><br/>
+                      <b>b) GDD Base :</b> Enter the base value you would like to use for calculating GDDs. After editing this value, an "Update" button will appear to allow you set this value as the new base.<br/><br/>
+                      Changing either of these user options will automatically cause the output charts and tables to update with current settings.<br/><br/>
+                      <img className="doc-image" src={userinput} alt="Growing Degree Day Calculator User Input" />
+                    </Typography>
+                    <Typography align="left" paragraph variant="body1">
+                      <i>2. Output</i><br/><br/>
+                      Accumulated GDD values that correspond to your selections will appear below the user options. Below is a sample chart showing all of the features.<br/><br/>
+                      <b>a) Green Line : </b> The season-to-date accumulation for the selected year.<br/><br/>
+                      <b>b) Blue Line : </b> The average season-to-date accumulation for the most recent 15-year period.<br/><br/>
+                      <b>c) Purple Line : </b> The average season-to-date accumulation for the entire period of record.<br/><br/>
+                      <b>d) Gray Shading : </b> The extreme season-to-date accumulations observed throughout the entire period of record.<br/><br/>
+                      <img className="doc-image" src={gddtooloutput} alt="Growing Degree Day Output" /><br/><br/>
+                    </Typography>
+                    <Button variant="outlined" color="primary" onClick={()=>{history.push(url)}}>
+                      Growing Degree Day Calculator
+                    </Button>
               </Grid>
             </Grid>
           </Grid>
@@ -94,4 +150,4 @@ GddtoolDoc.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(GddtoolDoc);
+export default withRouter(withStyles(styles)(GddtoolDoc));

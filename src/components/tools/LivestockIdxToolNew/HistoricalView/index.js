@@ -242,38 +242,38 @@ class HistoricalView extends Component {
             return {
                 'typeLabel':'Cattle',
                 'dataInfo': [
-                    {'key':'alert','label':'Alert','color':'#C70039'},
-                    {'key':'danger','label':'Danger','color':'#900C3F'},
                     {'key':'emergency','label':'Emergency','color':'#581845'},
+                    {'key':'danger','label':'Danger','color':'#900C3F'},
+                    {'key':'alert','label':'Alert','color':'#C70039'},
                 ]
             }
         } else if (type==='cow') {
             return {
                 'typeLabel':'Dairy Cow',
                 'dataInfo': [
-                    {'key':'mild_discomfort','label':'Mild Discomfort','color':'#FFC300'},
-                    {'key':'discomfort','label':'Discomfort','color':'#FF5733'},
-                    {'key':'alert','label':'Alert','color':'#C70039'},
-                    {'key':'danger','label':'Danger','color':'#900C3F'},
                     {'key':'emergency','label':'Emergency','color':'#581845'},
+                    {'key':'danger','label':'Danger','color':'#900C3F'},
+                    {'key':'alert','label':'Alert','color':'#C70039'},
+                    {'key':'discomfort','label':'Discomfort','color':'#FF5733'},
+                    {'key':'mild_discomfort','label':'Mild Discomfort','color':'#FFC300'},
                 ]
             }
         } else if (type==='biganimal') {
             return {
                 'typeLabel':'Big Animal',
                 'dataInfo': [
-                    {'key':'moderate','label':'Moderate','color':'#C70039'},
-                    {'key':'severe','label':'Severe','color':'#900C3F'},
                     {'key':'very severe','label':'Very Severe','color':'#581845'},
+                    {'key':'severe','label':'Severe','color':'#900C3F'},
+                    {'key':'moderate','label':'Moderate','color':'#C70039'},
                 ]
             }
         } else if (type==='smallanimal') {
             return {
                 'typeLabel':'Small Animal',
                 'dataInfo': [
-                    {'key':'moderate','label':'Moderate','color':'#C70039'},
-                    {'key':'severe','label':'Severe','color':'#900C3F'},
                     {'key':'very severe','label':'Very Severe','color':'#581845'},
+                    {'key':'severe','label':'Severe','color':'#900C3F'},
+                    {'key':'moderate','label':'Moderate','color':'#C70039'},
                 ]
             }
         } else {

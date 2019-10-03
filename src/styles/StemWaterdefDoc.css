@@ -8,3 +8,12 @@
     //maxHeight: '100%';
 }
 
+.doc-image-2 {
+    //display: 'flex';
+    //margin: 'auto';
+    width: 40%;
+    //max-width: '100%';
+    max-width: 800px;
+    //maxHeight: '100%';
+}
+

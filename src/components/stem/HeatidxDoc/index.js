@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject, observer} from 'mobx-react';
+import { withRouter } from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
 //import IconButton from '@material-ui/core/IconButton';
 //import MenuIcon from '@material-ui/icons/Menu';
@@ -11,6 +12,12 @@ import Hidden from '@material-ui/core/Hidden';
 import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 import StemMenu from '../StemMenu'
+import Button from '@material-ui/core/Button';
+
+import viewselection from '../../../assets/LivestockIdxTool/view_selection.png'
+import userinput from '../../../assets/LivestockIdxTool/user_input.png'
+import livestockoutput1 from '../../../assets/LivestockIdxTool/livestock_output_1.png'
+import livestockoutput2 from '../../../assets/LivestockIdxTool/livestock_output_2.png'
 
 // Components
 import MenuPopover from '../MenuPopover'
@@ -18,7 +25,7 @@ import MenuPopover from '../MenuPopover'
 //import scanstn from '../../../assets/scan-station.png'
 
 // Styles
-//import '../../../styles/StemHeatidxDoc.css';
+//import '../../../styles/StemWxGraphDoc.css';
 
 const styles = theme => ({
   root: {
@@ -36,19 +43,22 @@ const styles = theme => ({
   },
 });
 
-//var app;
+var app;
+var history;
 
 @inject('store') @observer
-class HeatidxDoc extends Component {
+class HeatIdxDoc extends Component {
 
-    //constructor(props) {
-    //    super(props);
-    //    app = this.props.store.app;
-    //}
+    constructor(props) {
+        super(props);
+        app = this.props.store.app;
+        history = this.props.history;
+    }
 
     render() {
 
         const { classes } = this.props;
+        let url = app.getToolInfo('livestock').url
 
         return (
           <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={0}>
@@ -73,16 +83,71 @@ class HeatidxDoc extends Component {
                       What does this tool do?
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      Lorem ipsum dolor sit amet, eu tristique, etiam vel donec, lorem ut ridiculus aliquam, eget faucibus at nunc, cursus justo nonummy et. Imperdiet ut pellentesque eu lacus tincidunt, dolor pede velit felis tempus et justo. Id sit eget sollicitudin, vitae et, tellus cum a massa quam scelerisque sed. Sed duis suscipit, sed quisque potenti quis donec mollitia. Justo urna fusce sed id nisl eu, lobortis tincidunt lobortis, aenean diam orci, mauris elit in, quam bibendum sed commodo est sed. Pellentesque a nam, non in nullam rhoncus neque aliquam ac, mollis convallis. Sed vestibulum, dolor vulputate leo a, a in posuere et a. Nam commodo condimentum, est ipsum mattis sollicitudin ante commodo tristique. Mollitia taciti luctus lacus quisque. Nec maecenas ut dui maecenas sapien. Tincidunt nullam occaecat in, mauris exercitation ipsum vitae, nunc integer non, at quis turpis varius, nibh adipiscing velit mi.
+                      This tool monitors environmental conditions in order to estimate the coincident heat stress experienced by a variety of animals. A combination of air temperature, humidity, solar radiation, and wind speed are used to determine likely levels of heat stress for different species. Biological factors, including each animal's ability to naturally cool itself (by sweating, panting, etc), are major considerations when determining the calculated levels of heat stress.<br/><br/>
+                      Current conditions are monitored and data from the past 24-48 hours (through the last hour) are presented. Additionally, heat stress indices are calculated for each hour throughout all years of available weather observations. Using these data, the historical frequency of each heat stress category can be viewed for each SCAN location.
                     </Typography>
+                    <Button variant="outlined" color="primary" onClick={()=>{history.push(url)}}>
+                      Livestock Heat Index
+                    </Button>
               </Grid>
               <Grid item>
                     <Typography align="left" paragraph variant="h6">
-                      How to use this tool.
+                      Sources of data
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-Vestibulum eu sociis litora sed mauris, fusce consequat gravida mi dictum cras turpis, lectus suscipit eros phasellus nunc vel. Euismod eros duis, tortor aliquam, ipsum scelerisque viverra, nonummy at nisl neque neque ornare, ultricies quam venenatis est nunc duis. A wisi rhoncus. Sit quasi augue aliquam in, nibh vel posuere, sollicitudin nec mi mollis, imperdiet quam maecenas ac tellus, aptent mi pede auctor non. Luctus placerat metus enim risus dui, lectus fermentum libero, erat risus sit ut mauris arcu, lorem vestibulum purus mattis vestibulum in non, ullamcorper a donec praesent fringilla ut. Amet quisque vehicula, venenatis rhoncus metus blandit pede et orci, tempus euismod arcu, diam rhoncus ut, magna tempor eget tristique vel quasi mollis. In in nibh pharetra mi. Pellentesque vel eget nobis, hymenaeos at hendrerit, augue sapien, maecenas pharetra, interdum id gravida cum mauris hymenaeos. Praesent in ut qui, lacus gravida, quasi urna sagittis a, accumsan dui metus sit aliquam lobortis lectus. Minima a amet, neque odio, sit enim netus adipiscing porttitor aenean et.
+                      Observations from multiple SCAN sensors at each site provide necessary input data for this tool. Hourly air temperature, relative humidity, solar radiation and wind speed are used to calculate the likely amount of heat stress experienced during each hour. Heat stress index equations and categories often differ for individual animal species or groups of animals that share similar biological traits. Sources of heat stress calculation for each animal category in this tool are provided below:<br/><br/>
                     </Typography>
+                    <Typography align="left" paragraph variant="body1">
+                      <b>1) Cattle</b><br/><br/>
+                      The Cattle Heat Index is based on breathing rate, which increases as the animal becomes more heat stressed. This calculation requires temperature, humidity, solar radiation and wind speed. In cases where all variables are not available, using the "big animal" general calculation (#3, below) is suggested.<br/><br/>
+                      <i>Brown-Brandl, T. M., Eigenberg, R. A., Nienaber, J. A., and Hahn, G. L. 2005. Dynamic response indicators of heat stress in shaded and non-shaded feedlot cattle, Part 1: Analyses of indicators. Biosystems Engineering 90(4): 451-462.</i><br/><br/>
+                      <i>Eigenberg, R. A., Brown-Brandl, T. M., Nienaber, J. A., and Hahn, G. L. 2005. Dynamic Response Indicators of Heat Stress in Shaded and Non-shaded Feedlot Cattle, Part 2: Predictive Relationships. Biosystems Engineering 91(1): 111-118.</i><br/><br/>
+                    </Typography>
+                    <Typography align="left" paragraph variant="body1">
+                      <b>2) Dairy Cows</b><br/><br/>
+                      Dairy cows respond with decreased milk production and calf rates as the amount of heat stress increases. During warm seasons, it is often necessary to provide facilities (fans, shade, etc) to maintain the cow's comfort level.<br/><br/>
+                      <i>Habeeb, A. A., Gad, A. E., and Atta, M. A. 2018. Temperature-Humidity Indices as Indicators to Heat Stress of Climatic Conditions with Relation to Production and Reproduction of Farm Animals. International Journal of Biotechnology and Recent Advances 1(1): 35-50.</i><br/><br/>
+                    </Typography>
+                    <Typography align="left" paragraph variant="body1">
+                      <b>3) Big Animals (general case for cattle, bison, sheep, goats, etc)</b><br/><br/>
+                      Larger animals are grouped together in this general case that only requires temperature and humidity for calculation. These animals use similar biological cooling methods, so extreme environmental conditions can affect them in a similar way.<br/><br/>
+                      <i>Habeeb, A. A., Gad, A. E., and Atta, M. A. 2018. Temperature-Humidity Indices as Indicators to Heat Stress of Climatic Conditions with Relation to Production and Reproduction of Farm Animals. International Journal of Biotechnology and Recent Advances 1(1): 35-50.</i><br/><br/>
+                    </Typography>
+                    <Typography align="left" paragraph variant="body1">
+                      <b>4) Small Animals (general case for rabbits, poultry, etc)</b><br/><br/>
+                      Smaller animals are also grouped together in this general case that only requires temperature and humidity for calculation. These animals have different biological cooling methods from larger animals, and can often endure higher levels of heat before stress is experienced.<br/><br/>
+                      <i>Habeeb, A. A., Gad, A. E., and Atta, M. A. 2018. Temperature-Humidity Indices as Indicators to Heat Stress of Climatic Conditions with Relation to Production and Reproduction of Farm Animals. International Journal of Biotechnology and Recent Advances 1(1): 35-50.</i><br/><br/>
+                    </Typography>
+                    <Button variant="outlined" color="primary" onClick={()=>{history.push(url)}}>
+                      Livestock Heat Index
+                    </Button>
+              </Grid>
+              <Grid item>
+                    <Typography align="left" paragraph variant="h6">
+                      How to use this tool
+                    </Typography>
+                    <Typography align="left" paragraph variant="body1">
+                      <i>1. User Options</i><br/><br/>
+                      Once your site is selected, there are two different types of data views to select from, <i>Current Heat Indices</i> and <i>Historical Frequencies</i>.<br/><br/>
+                      <b>a) Current Heat Indices</b> provide hourly heat index conditions over the past 24-48 hours.<br/>
+                      <b>b) Historical Frequencies</b> provide the number of hours during each year in which the selected heat index surpassed significant heat stress thresholds.<br/><br/>
+                      Finally, the type of heat index must be selected, based on the animal of interest. Below represents what these user interfaces look like in the tool:
+                      <img className="doc-image" src={viewselection} alt="Livestock Heat Index View Selection" /><br/>
+                      <img className="doc-image-2" src={userinput} alt="Livestock Heat Index User Input" /><br/><br/>
+                    </Typography>
+                    <Typography align="left" paragraph variant="body1">
+                      <i>2. Output</i><br/><br/>
+                      Data in this tool can be viewed in either graphical or tabular form by selecting 'chart' or 'table' above each tool. Charts can also be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
+                      <b>a) Current Heat Indices</b><br/><br/>
+                      Time series of heat indices that correspond to your selections will appear within the tool. Below is a sample chart showing a sample of the features. Horizontal reference lines indicate significant heat stress levels for the selected animal. Gray shading represents the calculated heat index each hour over the visible time span. Also available are associated weather variables used in the heat index calculation. Moving your cursor over the charts in the live tool will show the actual heat index values for the selected hour.<br/><br/>
+                      <img className="doc-image" src={livestockoutput1} alt="Livestock Heat Index Output" /><br/><br/>
+                      <b>b) Historical Frequencies</b><br/><br/>
+                      Time series charts provide the number of hours during each year that surpassed significant heat stress thresholds. Below is a sample chart showing a sample of the features. Moving your cursor over the chart in the live tool will show the actual number of hours for each category. The visibility of specific categories can be toggled by clicking on the category names in the chart legend.<br/><br/>
+                      <img className="doc-image" src={livestockoutput2} alt="Livestock Heat Index Output" /><br/><br/>
+                    </Typography>
+                    <Button variant="outlined" color="primary" onClick={()=>{history.push(url)}}>
+                      Livestock Heat Index
+                    </Button>
               </Grid>
             </Grid>
           </Grid>
@@ -90,8 +155,8 @@ Vestibulum eu sociis litora sed mauris, fusce consequat gravida mi dictum cras t
     }
 }
 
-HeatidxDoc.propTypes = {
+HeatIdxDoc.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(HeatidxDoc);
+export default withRouter(withStyles(styles)(HeatIdxDoc));

@@ -56,7 +56,7 @@ class LivestockIdxCharts extends Component {
         downloadFilename = downloadFilename.replace(' ','-');
 
         return (
-          <div id="wx-charts">
+          <div id="livestock-charts">
 
           <Grid item container justify="center" alignItems="center" spacing={1}>
             {typeToDisplay==='cattle' &&
