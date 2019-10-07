@@ -14,6 +14,7 @@ import UnitsSelect from './UnitsSelect';
 const styles = theme => ({
   textfield: {
     width: '240px',
+    background: '#FFFFFF',
   },
 });
 

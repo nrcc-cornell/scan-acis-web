@@ -48,6 +48,8 @@ class HistoricalView extends Component {
         this.state = {
           data: null,
           data_is_loading: false,
+          //disabled: ['mild_discomfort'],
+          disabled: [],
         }
     }
 
@@ -211,6 +213,17 @@ class HistoricalView extends Component {
         return outArray
     }
 
+    handleClickLegend = (dataKey) => {
+        // dataKey : key in legend of chart
+        if (this.state.disabled.includes(dataKey)) {
+          this.setState({
+            disabled: this.state.disabled.filter(obj => obj !== dataKey)
+          });
+        } else {
+          this.setState({ disabled: this.state.disabled.concat([dataKey]) });
+        }
+    }
+
     initStateForLoading = () => {
         this.setState({
           data_is_loading: true,
@@ -292,6 +305,8 @@ class HistoricalView extends Component {
                         loading={this.state.data_is_loading}
                         chartTitle={'Extreme Heat Index Frequencies ('+this.getIdxTypeLabel(app.livestock_getLivestockType)+', hours)'}
                         chartInfo={this.getChartInfo(app.livestock_getLivestockType)}
+                        disabled={this.state.disabled}
+                        onClickLegend={this.handleClickLegend}
                       />
         }
         if (this.props.outputtype==='table') {

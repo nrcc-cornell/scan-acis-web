@@ -279,23 +279,21 @@ class ExtremeDataView extends Component {
                                contents={display_VarPicker}
                              />
 
-        return (
+        if (this.props.outputtype==='chart') {
+
+          return (
             <Grid container direction="row" justify="flex-start" alignItems="flex-start" xs={12}>
                 <Hidden smDown>
-                    <Grid item container className="nothing" direction="column" justify="flex-start" alignItems="flex-start" md={3}>
-                        <Grid item>
+                    <Grid item container direction="column" justify="flex-start" alignItems="flex-start" md={3}>
                             {display_VarPicker}
-                        </Grid>
                     </Grid>
                 </Hidden>
-                    <Grid item container className="nothing" direction="column" xs={12} md={9}>
-                        <Grid item container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
-                          <Hidden mdUp>
-                            <Grid item>
+                    <Grid item container direction="column" xs={12} md={9}>
+                        <Hidden mdUp>
+                          <Grid item container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
                               {display_VarPopover}
-                            </Grid>
-                          </Hidden>
-                        </Grid>
+                          </Grid>
+                        </Hidden>
                         <Grid item>
                             <LoadingOverlay
                               active={this.dataIsLoading()}
@@ -309,7 +307,30 @@ class ExtremeDataView extends Component {
                         </Grid>
                     </Grid>
             </Grid>
-        );
+          );
+
+        } else {
+
+          return (
+            <Grid container direction="column" justify="flex-start" alignItems="flex-start" xs={12}>
+                        <Grid item xs={12}>
+                            {display_VarPopover}
+                        </Grid>
+                        <Grid item xs={12}>
+                            <LoadingOverlay
+                              active={this.dataIsLoading()}
+                              spinner
+                              background={'rgba(255,255,255,1.0)'}
+                              color={'rgba(34,139,34,1.0)'}
+                              spinnerSize={'10vw'}
+                              >
+                                {display}
+                            </LoadingOverlay>
+                        </Grid>
+            </Grid>
+          );
+
+        }
 
     }
 }
