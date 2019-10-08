@@ -68,36 +68,6 @@ class Resources extends Component {
                   Resources
                 </Typography>
               </Grid>
-              <Grid item>
-                    <Typography align="left" paragraph variant="body1">
-                      <ul>
-                        <li>
-                          Lorem ipsum dolor sit amet, eu tristique, etiam vel donec.
-                        </li>
-                        <li>
-                          Vestibulum eu sociis litora sed mauris, fusce consequat.
-                        </li>
-                        <li>
-                          Lorem ipsum dolor sit amet, eu tristique, etiam vel donec.
-                        </li>
-                        <li>
-                          Vestibulum eu sociis litora sed mauris, fusce consequat.
-                        </li>
-                        <li>
-                          Lorem ipsum dolor sit amet, eu tristique, etiam vel donec.
-                        </li>
-                        <li>
-                          Vestibulum eu sociis litora sed mauris, fusce consequat.
-                        </li>
-                        <li>
-                          Lorem ipsum dolor sit amet, eu tristique, etiam vel donec.
-                        </li>
-                        <li>
-                          Vestibulum eu sociis litora sed mauris, fusce consequat.
-                        </li>
-                      </ul>
-                    </Typography>
-              </Grid>
             </Grid>
           </Grid>
         );

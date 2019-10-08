@@ -946,12 +946,16 @@ export class AppStore {
         this.wxgraph_climateSummary = {'por':dataObjArray,'two_years':dataObjArray,'two_months':dataObjArray,'two_days':dataObjArray}
     }
     @action wxgraph_setClimateSummary = () => {
+        console.log('wxgraph_setClimateSummary');
+        console.log(this.getLocation.sid.split(' ')[1]);
+        console.log(this.getLocation.sid.split(' ')[1]==='17');
         let data = this.wxgraph_getClimateData;
         let dataObjArray_hours = [];
         let dataObjArray_days = [];
         let dataObjArray_months = [];
         let dataObjArray_years = [];
         let dataObjArray_extremes = [];
+        let network = this.getLocation.sid.split(' ')[1]
         let i, dateToday, numHours, numFutureMissingHours;
         let formattedHourString
         let timeFrame = this.wxgraph_getTimeFrame
@@ -982,7 +986,7 @@ export class AppStore {
                 // not using wind speed from daily+, looks to be averaged incorrectly
                 //'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
                 'winddirave':NaN,
-                //'leafwet':(d[19]==='M' || parseFloat(d[19])<0.0 || this.getLocation.sid.split(' ')[1]==='17') ? NaN : parseFloat(d[19]).toFixed(0),
+                // leaf wetness not available daily+ ?
                 'leafwet':NaN,
               })
             } else if (timeFrame==='two_years') {
@@ -1010,7 +1014,7 @@ export class AppStore {
                 // not using wind speed from daily+, looks to be averaged incorrectly
                 //'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
                 'winddirave':NaN,
-                //'leafwet':(d[19]==='M' || parseFloat(d[19])<0.0 || this.getLocation.sid.split(' ')[1]==='17') ? NaN : parseFloat(d[19]).toFixed(0),
+                // leaf wetness not available daily+ ?
                 'leafwet':NaN,
               })
             } else if (timeFrame==='por') {
@@ -1039,7 +1043,7 @@ export class AppStore {
                     // not using wind speed from daily+, looks to be averaged incorrectly
                     //'winddirave':(d[18]==='M' || parseFloat(d[18])<0.0 || parseFloat(d[18])>360.0) ? NaN : parseFloat(d[18]).toFixed(1),
                     'winddirave':NaN,
-                    //'leafwet':(d[19]==='M' || parseFloat(d[19])<0.0 || this.getLocation.sid.split(' ')[1]==='17') ? NaN : parseFloat(d[19]).toFixed(0),
+                    // leaf wetness not available daily+ ?
                     'leafwet':NaN,
                   })
               } else {
@@ -1057,8 +1061,8 @@ export class AppStore {
               if (dateToday===data[data.length-4][0]) {
                   // first day: only use last hour (midnight)
                   formattedHourString = moment(dateToday,"YYYY-MM-DD").add(1,'days').format("YYYY-MM-DD")+' 00:00'
-                  dataObjArray_hours.push({
-                      //'date':dateToday+' 24',
+                  if (network==='19') {
+                    dataObjArray_hours.push({
                       'date':formattedHourString,
                       'avgt':(d[1][23]==='M') ? NaN : parseFloat(d[1][23]).toFixed(1),
                       'maxt':(d[2][23]==='M') ? NaN : parseFloat(d[2][23]).toFixed(1),
@@ -1079,9 +1083,33 @@ export class AppStore {
                       'windspdmax':(d[17][23]==='M' || parseFloat(d[17][23])<0.0) ? NaN : parseFloat(d[17][23]).toFixed(1),
                       'windspdave':(d[18][23]==='M' || parseFloat(d[18][23])<0.0) ? NaN : parseFloat(d[18][23]).toFixed(1),
                       'winddirave':(d[19][23]==='M' || parseFloat(d[19][23])<0.0 || parseFloat(d[19][23])>360.0) ? NaN : parseFloat(d[19][23]).toFixed(1),
-                      //'leafwet':(d[20][23]==='M' || parseFloat(d[20][23])<0.0 || this.getLocation.sid.split(' ')[1]==='17') ? NaN : parseFloat(d[20][23]).toFixed(0),
+                      'leafwet':(d[20][23]==='M' || parseFloat(d[20][23])<0.0) ? NaN : parseFloat(d[20][23]).toFixed(0),
+                    })
+                  } else {
+                    dataObjArray_hours.push({
+                      'date':formattedHourString,
+                      'avgt':(d[1][23]==='M') ? NaN : parseFloat(d[1][23]).toFixed(1),
+                      'maxt':(d[2][23]==='M') ? NaN : parseFloat(d[2][23]).toFixed(1),
+                      'mint':(d[3][23]==='M') ? NaN : parseFloat(d[3][23]).toFixed(1),
+                      'pcpn':(d[4][23]==='M' || parseFloat(d[4][23])<0.0) ? NaN : ((d[4][23]==='T') ? 0.00 : parseFloat(d[4][23])).toFixed(2),
+                      'soilt2in':(d[5][23]==='M') ? NaN : parseFloat(d[5][23]).toFixed(1),
+                      'soilt4in':(d[6][23]==='M') ? NaN : parseFloat(d[6][23]).toFixed(1),
+                      'soilt8in':(d[7][23]==='M') ? NaN : parseFloat(d[7][23]).toFixed(1),
+                      'soilt20in':(d[8][23]==='M') ? NaN : parseFloat(d[8][23]).toFixed(1),
+                      'soilt40in':(d[9][23]==='M') ? NaN : parseFloat(d[9][23]).toFixed(1),
+                      'soilm2in':(d[10][23]==='M' || parseFloat(d[10][23])<0.0) ? NaN : parseFloat(d[10][23]).toFixed(1),
+                      'soilm4in':(d[11][23]==='M' || parseFloat(d[11][23])<0.0) ? NaN : parseFloat(d[11][23]).toFixed(1),
+                      'soilm8in':(d[12][23]==='M' || parseFloat(d[12][23])<0.0) ? NaN : parseFloat(d[12][23]).toFixed(1),
+                      'soilm20in':(d[13][23]==='M' || parseFloat(d[13][23])<0.0) ? NaN : parseFloat(d[13][23]).toFixed(1),
+                      'soilm40in':(d[14][23]==='M' || parseFloat(d[14][23])<0.0) ? NaN : parseFloat(d[14][23]).toFixed(1),
+                      'humid':(d[15][23]==='M' || parseFloat(d[15][23])<0.0 || parseFloat(d[15][23])>100.0) ? NaN : parseFloat(d[15][23]).toFixed(1),
+                      'solar':(d[16][23]==='M' || parseFloat(d[16][23])<0.0) ? NaN : parseFloat(d[16][23]).toFixed(1),
+                      'windspdmax':(d[17][23]==='M' || parseFloat(d[17][23])<0.0) ? NaN : parseFloat(d[17][23]).toFixed(1),
+                      'windspdave':(d[18][23]==='M' || parseFloat(d[18][23])<0.0) ? NaN : parseFloat(d[18][23]).toFixed(1),
+                      'winddirave':(d[19][23]==='M' || parseFloat(d[19][23])<0.0 || parseFloat(d[19][23])>360.0) ? NaN : parseFloat(d[19][23]).toFixed(1),
                       'leafwet':NaN,
-                  })
+                    })
+                  }
               } else if (dateToday===data[data.length-1][0]) {
                   // last day: leave off future hours with missing data
                   numHours = d[1].length
@@ -1104,8 +1132,8 @@ export class AppStore {
                           formattedHourString = moment(dateToday,"YYYY-MM-DD").add(1,'days').format("YYYY-MM-DD")+' 00:00'
                       } else {
                       }
-                      dataObjArray_hours.push({
-                          //'date':(i+1>=10) ? dateToday+' '+(i+1).toString() : dateToday+' 0'+(i+1).toString(),
+                      if (network==='19') {
+                        dataObjArray_hours.push({
                           'date':formattedHourString,
                           'avgt':(d[1][i]==='M') ? NaN : parseFloat(d[1][i]).toFixed(1),
                           'maxt':(d[2][i]==='M') ? NaN : parseFloat(d[2][i]).toFixed(1),
@@ -1126,9 +1154,33 @@ export class AppStore {
                           'windspdmax':(d[17][i]==='M' || parseFloat(d[17][i])<0.0) ? NaN : parseFloat(d[17][i]).toFixed(1),
                           'windspdave':(d[18][i]==='M' || parseFloat(d[18][i])<0.0) ? NaN : parseFloat(d[18][i]).toFixed(1),
                           'winddirave':(d[19][i]==='M' || parseFloat(d[19][i])<0.0 || parseFloat(d[4][i])>360.0) ? NaN : parseFloat(d[19][i]).toFixed(1),
-                          //'leafwet':(d[20][i]==='M' || parseFloat(d[20][i])<0.0 || this.getLocation.sid.split(' ')[1]==='17') ? NaN : parseFloat(d[20][i]).toFixed(0),
+                          'leafwet':(d[20][i]==='M' || parseFloat(d[20][i])<0.0) ? NaN : parseFloat(d[20][i]).toFixed(0),
+                        })
+                      } else {
+                        dataObjArray_hours.push({
+                          'date':formattedHourString,
+                          'avgt':(d[1][i]==='M') ? NaN : parseFloat(d[1][i]).toFixed(1),
+                          'maxt':(d[2][i]==='M') ? NaN : parseFloat(d[2][i]).toFixed(1),
+                          'mint':(d[3][i]==='M') ? NaN : parseFloat(d[3][i]).toFixed(1),
+                          'pcpn':(d[4][i]==='M' || parseFloat(d[4][i])<0.0) ? NaN : ((d[4][i]==='T') ? 0.00 : parseFloat(d[4][i])).toFixed(2),
+                          'soilt2in':(d[5][i]==='M') ? NaN : parseFloat(d[5][i]).toFixed(1),
+                          'soilt4in':(d[6][i]==='M') ? NaN : parseFloat(d[6][i]).toFixed(1),
+                          'soilt8in':(d[7][i]==='M') ? NaN : parseFloat(d[7][i]).toFixed(1),
+                          'soilt20in':(d[8][i]==='M') ? NaN : parseFloat(d[8][i]).toFixed(1),
+                          'soilt40in':(d[9][i]==='M') ? NaN : parseFloat(d[9][i]).toFixed(1),
+                          'soilm2in':(d[10][i]==='M' || parseFloat(d[10][i])<0.0) ? NaN : parseFloat(d[10][i]).toFixed(1),
+                          'soilm4in':(d[11][i]==='M' || parseFloat(d[11][i])<0.0) ? NaN : parseFloat(d[11][i]).toFixed(1),
+                          'soilm8in':(d[12][i]==='M' || parseFloat(d[12][i])<0.0) ? NaN : parseFloat(d[12][i]).toFixed(1),
+                          'soilm20in':(d[13][i]==='M' || parseFloat(d[13][i])<0.0) ? NaN : parseFloat(d[13][i]).toFixed(1),
+                          'soilm40in':(d[14][i]==='M' || parseFloat(d[14][i])<0.0) ? NaN : parseFloat(d[14][i]).toFixed(1),
+                          'humid':(d[15][i]==='M' || parseFloat(d[15][i])<0.0 || parseFloat(d[15][i])>100.0) ? NaN : parseFloat(d[15][i]).toFixed(1),
+                          'solar':(d[16][i]==='M' || parseFloat(d[16][i])<0.0) ? NaN : parseFloat(d[16][i]).toFixed(1),
+                          'windspdmax':(d[17][i]==='M' || parseFloat(d[17][i])<0.0) ? NaN : parseFloat(d[17][i]).toFixed(1),
+                          'windspdave':(d[18][i]==='M' || parseFloat(d[18][i])<0.0) ? NaN : parseFloat(d[18][i]).toFixed(1),
+                          'winddirave':(d[19][i]==='M' || parseFloat(d[19][i])<0.0 || parseFloat(d[4][i])>360.0) ? NaN : parseFloat(d[19][i]).toFixed(1),
                           'leafwet':NaN,
-                      })
+                        })
+                      }
                   }
               } else {
                   numHours = d[1].length
@@ -1142,8 +1194,8 @@ export class AppStore {
                           formattedHourString = moment(dateToday,"YYYY-MM-DD").add(1,'days').format("YYYY-MM-DD")+' 00:00'
                       } else {
                       }
-                      dataObjArray_hours.push({
-                          //'date':(i+1>=10) ? dateToday+' '+(i+1).toString() : dateToday+' 0'+(i+1).toString(),
+		      if (network==='19') {
+                        dataObjArray_hours.push({
                           'date':formattedHourString,
                           'avgt':(d[1][i]==='M') ? NaN : parseFloat(d[1][i]).toFixed(1),
                           'maxt':(d[2][i]==='M') ? NaN : parseFloat(d[2][i]).toFixed(1),
@@ -1164,9 +1216,33 @@ export class AppStore {
                           'windspdmax':(d[17][i]==='M' || parseFloat(d[17][i])<0.0) ? NaN : parseFloat(d[17][i]).toFixed(1),
                           'windspdave':(d[18][i]==='M' || parseFloat(d[18][i])<0.0) ? NaN : parseFloat(d[18][i]).toFixed(1),
                           'winddirave':(d[19][i]==='M' || parseFloat(d[19][i])<0.0 || parseFloat(d[4][i])>360.0) ? NaN : parseFloat(d[19][i]).toFixed(1),
-                          //'leafwet':(d[20][i]==='M' || parseFloat(d[20][i])<0.0 || this.getLocation.sid.split(' ')[1]==='17') ? NaN : parseFloat(d[20][i]).toFixed(0),
+                          'leafwet':(d[20][i]==='M' || parseFloat(d[20][i])<0.0) ? NaN : parseFloat(d[20][i]).toFixed(0),
+                        })
+                      } else {
+                        dataObjArray_hours.push({
+                          'date':formattedHourString,
+                          'avgt':(d[1][i]==='M') ? NaN : parseFloat(d[1][i]).toFixed(1),
+                          'maxt':(d[2][i]==='M') ? NaN : parseFloat(d[2][i]).toFixed(1),
+                          'mint':(d[3][i]==='M') ? NaN : parseFloat(d[3][i]).toFixed(1),
+                          'pcpn':(d[4][i]==='M' || parseFloat(d[4][i])<0.0) ? NaN : ((d[4][i]==='T') ? 0.00 : parseFloat(d[4][i])).toFixed(2),
+                          'soilt2in':(d[5][i]==='M') ? NaN : parseFloat(d[5][i]).toFixed(1),
+                          'soilt4in':(d[6][i]==='M') ? NaN : parseFloat(d[6][i]).toFixed(1),
+                          'soilt8in':(d[7][i]==='M') ? NaN : parseFloat(d[7][i]).toFixed(1),
+                          'soilt20in':(d[8][i]==='M') ? NaN : parseFloat(d[8][i]).toFixed(1),
+                          'soilt40in':(d[9][i]==='M') ? NaN : parseFloat(d[9][i]).toFixed(1),
+                          'soilm2in':(d[10][i]==='M' || parseFloat(d[10][i])<0.0) ? NaN : parseFloat(d[10][i]).toFixed(1),
+                          'soilm4in':(d[11][i]==='M' || parseFloat(d[11][i])<0.0) ? NaN : parseFloat(d[11][i]).toFixed(1),
+                          'soilm8in':(d[12][i]==='M' || parseFloat(d[12][i])<0.0) ? NaN : parseFloat(d[12][i]).toFixed(1),
+                          'soilm20in':(d[13][i]==='M' || parseFloat(d[13][i])<0.0) ? NaN : parseFloat(d[13][i]).toFixed(1),
+                          'soilm40in':(d[14][i]==='M' || parseFloat(d[14][i])<0.0) ? NaN : parseFloat(d[14][i]).toFixed(1),
+                          'humid':(d[15][i]==='M' || parseFloat(d[15][i])<0.0 || parseFloat(d[15][i])>100.0) ? NaN : parseFloat(d[15][i]).toFixed(1),
+                          'solar':(d[16][i]==='M' || parseFloat(d[16][i])<0.0) ? NaN : parseFloat(d[16][i]).toFixed(1),
+                          'windspdmax':(d[17][i]==='M' || parseFloat(d[17][i])<0.0) ? NaN : parseFloat(d[17][i]).toFixed(1),
+                          'windspdave':(d[18][i]==='M' || parseFloat(d[18][i])<0.0) ? NaN : parseFloat(d[18][i]).toFixed(1),
+                          'winddirave':(d[19][i]==='M' || parseFloat(d[19][i])<0.0 || parseFloat(d[4][i])>360.0) ? NaN : parseFloat(d[19][i]).toFixed(1),
                           'leafwet':NaN,
-                      })
+                        })
+                      }
                   }
               }
             }
@@ -1556,13 +1632,14 @@ export class AppStore {
           //.post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
           .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
           .then(res => {
-            //console.log('SUCCESS downloading from ACIS');
-            //console.log(res);
+            console.log('SUCCESS downloading from ACIS');
+            console.log(res);
             if (res.data.hasOwnProperty('error')) {
                 console.log('Error: resetting data to null');
                 this.wxgraph_setClimateData(null);
                 this.wxgraph_initClimateSummary()
             } else {
+                console.log('processing wxgraph ACIS data');
                 this.wxgraph_setClimateData(res.data.data.slice(0));
                 this.wxgraph_setClimateSummary()
             }

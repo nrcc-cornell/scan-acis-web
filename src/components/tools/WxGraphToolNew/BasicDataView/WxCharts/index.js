@@ -5,7 +5,7 @@ import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import moment from 'moment';
 //import { ResponsiveContainer, ComposedChart, AreaChart, LineChart, BarChart, Bar, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
-import { ResponsiveContainer, ComposedChart, AreaChart, LineChart, BarChart, Bar, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { ResponsiveContainer, ComposedChart, AreaChart, LineChart, BarChart, Bar, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Surface, Symbols } from 'recharts';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 // to save charts in specific id
@@ -28,7 +28,88 @@ class WxCharts extends Component {
     constructor(props) {
         super(props);
         app = this.props.store.app;
+        this.state = {
+            disabled: ['soilt40in','soilt20in','soilm40in','soilm20in'],
+        }
     }
+
+    onClickLegend = (dataKey) => {
+        // dataKey : key in legend of chart
+        if (this.state.disabled.includes(dataKey)) {
+          this.setState({
+            disabled: this.state.disabled.filter(obj => obj !== dataKey)
+          });
+        } else {
+          this.setState({ disabled: this.state.disabled.concat([dataKey]) });
+        }
+    }
+
+    getChartInfo = (type) => {
+        if (type==='soilt') {
+            return {
+                'typeLabel':'Soil Temperature',
+                'dataInfo': [
+                    {'key':'soilt2in','label':'SoilT @ 2"','color':'#FFC300'},
+                    {'key':'soilt4in','label':'SoilT @ 4"','color':'#FF5733'},
+                    {'key':'soilt8in','label':'SoilT @ 8"','color':'#C70039'},
+                    {'key':'soilt20in','label':'SoilT @ 20"','color':'#900C3F'},
+                    {'key':'soilt40in','label':'SoilT @ 40"','color':'#581845'},
+                ]
+            }
+        } else if (type==='soilm') {
+            return {
+                'typeLabel':'Soil Moisture',
+                'dataInfo': [
+                    {'key':'soilm2in','label':'SoilM @ 2"','color':'#33C2FF'},
+                    {'key':'soilm4in','label':'SoilM @ 4"','color':'#2DAADF'},
+                    {'key':'soilm8in','label':'SoilM @ 8"','color':'#2692BF'},
+                    {'key':'soilm20in','label':'SoilM @ 20"','color':'#1A6180'},
+                    {'key':'soilm40in','label':'SoilM @ 40"','color':'#134960'},
+                ]
+            }
+        } else {
+            return []
+        }
+    }
+
+    renderCustomizedLegend = ({ payload }) => {
+        return (
+            <div className="customized-legend-wxgraph">
+              {payload.map(entry => {
+                const { dataKey, dataLabel, color } = entry;
+                const active = this.state.disabled.includes(dataKey);
+                const style = {
+                  marginRight: 10,
+                  //color: active ? "#AAA" : "#000"
+                  color: active ? "#AAA" : color
+                };
+
+                return (
+                  <span
+                    className="legend-item-wxgraph"
+                    onClick={() => this.onClickLegend(dataKey)}
+                    align="center"
+                    style={style}
+                  >
+                    <Surface width={10} height={10} viewBox="0 0 10 10">
+                      <Symbols cx={5} cy={5} type="square" size={100} fill={color} />
+                      {active && (
+                        <Symbols
+                          cx={5}
+                          cy={5}
+                          type="square"
+                          size={25}
+                          fill={"#FFF"}
+                        />
+                      )}
+                    </Surface>
+                    <span>&nbsp;{dataLabel}</span>
+                  </span>
+                );
+              })}
+            </div>
+        );
+    };
 
     render() {
 
@@ -135,6 +216,9 @@ class WxCharts extends Component {
             'scan_data.png'
         downloadFilename = downloadFilename.replace(' ','-');
 
+        let chartInfo_soilt = this.getChartInfo('soilt')
+        let chartInfo_soilm = this.getChartInfo('soilm')
+
         return (
           <div id="wx-charts">
           <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
@@ -220,6 +304,13 @@ class WxCharts extends Component {
                 <ResponsiveContainer width="100%" height={200} className={(app.wxgraph_getVars['soiltemp']) ? "" : "isHidden"}>
                   <LineChart data={dataForChart} syncId="anyId"
                         margin={{top: 10, right: 30, left: 0, bottom: 0}}>
+                    {chartInfo_soilt.dataInfo && this.state.disabled &&
+                        chartInfo_soilt.dataInfo
+                          .filter(info => !this.state.disabled.includes(info.key))
+                          .map(info =>
+                            <Line type='monotone' dot={false} name={info.label} key={info.key} dataKey={info.key} stroke={info.color} />
+                          )
+                    }
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis
                       dataKey="date"
@@ -232,12 +323,18 @@ class WxCharts extends Component {
                         domain = {calcDomain(dataForChart,['soilt40in','soilt20in','soilt8in','soilt4in','soilt2in'],[1,1],1)}
                     />
                     <Tooltip/>
-                    <Legend verticalAlign="top" height={36}/>
-                    <Line type='monotone' name='SoilT @ 40"' dataKey='soilt40in' dot={false} stroke='#581845' />
-                    <Line type='monotone' name='SoilT @ 20"' dataKey='soilt20in' dot={false} stroke='#900C3F' />
-                    <Line type='monotone' name='SoilT @ 8"' dataKey='soilt8in' dot={false} stroke='#C70039' />
-                    <Line type='monotone' name='SoilT @ 4"' dataKey='soilt4in' dot={false} stroke='#FF5733' />
-                    <Line type='monotone' name='SoilT @ 2"' dataKey='soilt2in' dot={false} stroke='#FFC300' />
+                    {chartInfo_soilt.dataInfo && this.state.disabled &&
+                      <Legend
+                        verticalAlign="top"
+                        height={36}
+                        payload={chartInfo_soilt.dataInfo.map(info => ({
+                          dataKey: info.key,
+                          dataLabel: info.label,
+                          color: info.color
+                        }))}
+                        content={this.renderCustomizedLegend}
+                      />
+                    }
                   </LineChart>
                 </ResponsiveContainer>
             </Grid>
@@ -254,6 +351,13 @@ class WxCharts extends Component {
                 <ResponsiveContainer width="100%" height={200} className={(app.wxgraph_getVars['soilmoist']) ? "" : "isHidden"}>
                   <LineChart data={dataForChart} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>
+                    {chartInfo_soilm.dataInfo && this.state.disabled &&
+                        chartInfo_soilm.dataInfo
+                          .filter(info => !this.state.disabled.includes(info.key))
+                          .map(info =>
+                            <Line type='monotone' dot={false} name={info.label} key={info.key} dataKey={info.key} stroke={info.color} />
+                          )
+                    }
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis
                       dataKey="date"
@@ -266,12 +370,18 @@ class WxCharts extends Component {
                         domain = {calcDomain(dataForChart,['soilm40in','soilm20in','soilm8in','soilm4in','soilm2in'],[1,1],1)}
                     />
                     <Tooltip/>
-                    <Legend verticalAlign="top" height={36}/>
-                    <Line type='monotone' name='SoilM @ 40"' dataKey='soilm40in' dot={false} stroke='#134960' />
-                    <Line type='monotone' name='SoilM @ 20"' dataKey='soilm20in' dot={false} stroke='#1A6180' />
-                    <Line type='monotone' name='SoilM @ 8"' dataKey='soilm8in' dot={false} stroke='#2692BF' />
-                    <Line type='monotone' name='SoilM @ 4"' dataKey='soilm4in' dot={false} stroke='#2DAADF' />
-                    <Line type='monotone' name='SoilM @ 2"' dataKey='soilm2in' dot={false} stroke='#33C2FF' />
+                    {chartInfo_soilm.dataInfo && this.state.disabled &&
+                      <Legend
+                        verticalAlign="top"
+                        height={36}
+                        payload={chartInfo_soilm.dataInfo.map(info => ({
+                          dataKey: info.key,
+                          dataLabel: info.label,
+                          color: info.color
+                        }))}
+                        content={this.renderCustomizedLegend}
+                      />
+                    }
                   </LineChart>
                 </ResponsiveContainer>
             </Grid>
@@ -415,7 +525,7 @@ class WxCharts extends Component {
                     />
                     <YAxis
                         label={{ value: app.wxgraph_getVarUnits['leafwet_units'], angle: -90, position:'insideLeft', offset: 10 }}
-                        domain = {calcDomain(dataForChart,['leafwet'],[0,1],0)}
+                        domain = {calcDomain(dataForChart,['leafwet'],[1,1],0)}
                     />
                     <Tooltip/>
                     <Line type='monotone' name='Leaf Wetness' dataKey='leafwet' stroke='#8884d8' />

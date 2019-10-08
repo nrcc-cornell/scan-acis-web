@@ -25,12 +25,98 @@ class GddChart extends Component {
     constructor(props) {
         super(props);
         this.state = {
-              active: ""
+              active: "",
+              disabled: [],
             }
         app = this.props.store.app;
     }
 
+    onClickLegend = (dataKey) => {
+        // dataKey : key in legend of chart
+        if (this.state.disabled.includes(dataKey)) {
+          if (dataKey!=='max_minus_min') {
+            this.setState({
+              disabled: this.state.disabled.filter(obj => obj !== dataKey)
+            });
+          } else {
+            this.setState({
+              disabled: this.state.disabled.filter(obj => obj !== dataKey && obj !== 'min_por')
+            });
+          }
+        } else {
+          if (dataKey!=='max_minus_min') {
+            this.setState({ disabled: this.state.disabled.concat([dataKey]) });
+          } else {
+            // must include 'min_por' with 'max_minus_min'
+            this.setState({ disabled: this.state.disabled.concat([dataKey,'min_por']) });
+          }
+        }
+    }
+
+    getChartInfo = (type) => {
+        if (type==='gdd') {
+            return {
+                'typeLabel':'Growing Degree Days',
+                'dataInfo': [
+                    {'key':'min_por','label':'Period extremes','color':'#342E37'},
+                    {'key':'max_minus_min','label':'Period extremes','color':'#342E37'},
+                    {'key':'obs','label':'Season to date','color':'green'},
+                    {'key':'recent','label':'15-yr ave','color':'blue'},
+                    {'key':'ave','label':'Period ave','color':'purple'},
+                ]
+            }
+        } else {
+            return []
+        }
+    }
+
+    renderCustomizedLegend = ({ payload }) => {
+        return (
+            <div className="customized-legend">
+              {payload.map(entry => {
+                const { dataKey, dataLabel, color } = entry;
+                const active = this.state.disabled.includes(dataKey);
+                const style = {
+                  marginRight: 10,
+                  //color: active ? "#AAA" : "#000"
+                  color: active ? "#AAA" : color
+                };
+
+                if (dataKey!=='min_por') {
+                  return (
+                    <span
+                      className="legend-item-wxgraph"
+                      onClick={() => this.onClickLegend(dataKey)}
+                      align="center"
+                      style={style}
+                    >
+                      <Surface width={10} height={10} viewBox="0 0 10 10">
+                        <Symbols cx={5} cy={5} type="square" size={100} fill={color} />
+                        {active && (
+                          <Symbols
+                            cx={5}
+                            cy={5}
+                            type="square"
+                            size={25}
+                            fill={"#FFF"}
+                          />
+                        )}
+                      </Surface>
+                      <span>&nbsp;{dataLabel}</span>
+                    </span>
+                  );
+                } else {
+                  return (false)
+                }
+              })}
+            </div>
+        );
+    };
+
+
     render() {
+
+    let chartInfo_gdd = this.getChartInfo('gdd')
 
     const renderCustomTooltip = (props) => {
       const { payload, label } = props
@@ -89,7 +175,7 @@ class GddChart extends Component {
             return moment(tickItem).format('MMM D')
         }
 
-    const renderCustomLegend = (props) => {
+    const renderCustomLegend_old = (props) => {
       const { payload } = props
       return (
         <div className="customized-legend">
@@ -145,30 +231,56 @@ class GddChart extends Component {
             <MessageMissing/>
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={app.gddtool_getClimateSummary}>
-                <Area
-                  stackId="1"
-                  name="Period extremes"
-                  dataKey={"min_por"}
-                  stroke="#342E37"
-                  fill="#FFF"
-                />
-                <Area
-                  stackId="1"
-                  name=" "
-                  dataKey={"max_minus_min"}
-                  stroke="#342E37"
-                  fill="#F0F0F0"
-                />
-                <Line name="Season to date" type="monotone" dataKey="obs" stroke="green" fill="green" dot={true} r={1} isAnimationActive={false}/>
-                <Line name="15-yr ave" type="monotone" dataKey="recent" stroke="blue" dot={false} isAnimationActive={false} />
-                <Line name="Period ave" type="monotone" dataKey="ave" stroke="purple" dot={false} isAnimationActive={false} />
+                {chartInfo_gdd.dataInfo && this.state.disabled &&
+                    chartInfo_gdd.dataInfo
+                      .filter(info => !this.state.disabled.includes(info.key))
+                      .map(info => {
+                          if (info.key==='min_por') {
+                            return <Area
+                              stackId="1"
+                              name={info.label}
+                              dataKey={info.key}
+                              stroke={info.color}
+                              fill="#FFF"
+                            />
+                          } else if (info.key==='max_minus_min') {
+                            return <Area
+                              stackId="1"
+                              name={info.label}
+                              dataKey={info.key}
+                              stroke={info.color}
+                              fill="#F0F0F0"
+                            />
+                          } else if (info.key==='obs') {
+                            return <Line name={info.label} type="monotone" dataKey={info.key} stroke={info.color} fill={info.color} dot={true} r={1} isAnimationActive={false}/>
+                          } else if (info.key==='recent') {
+                            return <Line name={info.label} type="monotone" dataKey={info.key} stroke={info.color} fill={info.color} dot={false} isAnimationActive={false}/>
+                          } else if (info.key==='ave') {
+                            return <Line name={info.label} type="monotone" dataKey={info.key} stroke={info.color} fill={info.color} dot={false} isAnimationActive={false}/>
+                          } else {
+                            return (false)
+                          }
+                        }
+                      )
+                }
                 <CartesianGrid stroke="#ccc" />
                 <Tooltip
                     labelFormatter={(name) => moment(name,"YYYY-MM-DD").format("MMM D, YYYY")}
                     content={renderCustomTooltip}
                     cursor={{ stroke: 'red', strokeWidth: 1 }}
                 />
-                <Legend verticalAlign="top" align="center" content={renderCustomLegend} />
+                {chartInfo_gdd.dataInfo && this.state.disabled &&
+                  <Legend
+                    verticalAlign="top"
+                    align="center"
+                    payload={chartInfo_gdd.dataInfo.map(info => ({
+                      dataKey: info.key,
+                      dataLabel: info.label,
+                      color: info.color
+                    }))}
+                    content={this.renderCustomizedLegend}
+                  />
+                }
                 <XAxis dataKey="date" tickFormatter={formatXAxisForDate} label={{ value: "Date in "+app.getPlantingYear, position: "insideBottom", dy: 10}} />
                 <YAxis label={{ value: 'Acc GDD (base '+app.gddtool_getBase+'°F)', angle: -90, position:'insideLeft', dy: 60, offset: 10 }} />
               </ComposedChart>

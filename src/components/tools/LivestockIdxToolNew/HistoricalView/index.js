@@ -194,14 +194,20 @@ class HistoricalView extends Component {
         for (iyr=0; iyr<heatIdxHourly_byYear.length; iyr++) {
             // object for this year. It will hold the year and all frequencies
             outObject = {'year':heatIdxHourly_byYear[iyr]['year']}
-            // If there are not enough valid hours, skip this year
-            if (heatIdxHourly_byYear[iyr]['idx'].length < validThresh) { continue }
-            //loop through all given thresholds
-            for (prop in t) {
-                filteredArr = []
-                if (prop!=='idx_type' && Object.prototype.hasOwnProperty.call(t, prop)) {
-                    filteredArr = heatIdxHourly_byYear[iyr]['idx'].filter(v => v>=t[prop][0] && v<t[prop][1])
-                    outObject[prop] = filteredArr.length
+            // If there are not enough valid hours, set categories to null for year
+            if (heatIdxHourly_byYear[iyr]['idx'].length < validThresh) {
+                // Set all categories for this year to null
+                for (prop in t) {
+                    outObject[prop]=null
+                }
+            } else {
+                //loop through all given thresholds
+                for (prop in t) {
+                    filteredArr = []
+                    if (prop!=='idx_type' && Object.prototype.hasOwnProperty.call(t, prop)) {
+                        filteredArr = heatIdxHourly_byYear[iyr]['idx'].filter(v => v>=t[prop][0] && v<t[prop][1])
+                        outObject[prop] = filteredArr.length
+                    }
                 }
             }
             // output array, will contain frequencies for each year

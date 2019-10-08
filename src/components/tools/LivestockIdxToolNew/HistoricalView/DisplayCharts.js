@@ -36,7 +36,8 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
                 const active = disabled.includes(dataKey);
                 const style = {
                   //marginRight: 10,
-                  color: active ? "#AAA" : "#000"
+                  //color: active ? "#AAA" : "#000"
+                  color: active ? "#AAA" : color
                 };
 
                 return (
