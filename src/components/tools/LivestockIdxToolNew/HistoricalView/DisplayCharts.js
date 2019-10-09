@@ -121,7 +121,9 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
                       interval={'preserveEnd'}
                     />
                     <YAxis label={{ value: 'hours', angle: -90, position:'insideLeft', offset: 20 }} />
-                    <Tooltip/>
+                    <Tooltip
+                      cursor={{ stroke: 'red', strokeWidth: 2, fill: 'transparent' }}
+                    />
                     {chartInfo.dataInfo && disabled &&
                       <Legend
                         payload={chartInfo.dataInfo.map(info => ({

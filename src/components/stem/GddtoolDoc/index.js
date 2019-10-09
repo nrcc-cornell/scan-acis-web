@@ -59,7 +59,7 @@ class GddtoolDoc extends Component {
         let url = app.getToolInfo('gddtool').url
 
         return (
-          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={0}>
+          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
             <Grid item container justify="flex-start" alignItems="flex-start" direction="row" xs={2} md={3}>
               <Grid item>
                 <Hidden mdUp>
@@ -129,6 +129,7 @@ class GddtoolDoc extends Component {
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <i>2. Output</i><br/><br/>
+                      Data in this tool can be viewed in either graphical or tabular form by selecting 'chart' or 'table' above each tool. Charts can also be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
                       Accumulated GDD values that correspond to your selections will appear below the user options. Below is a sample chart showing all of the features.<br/><br/>
                       <b>a) Green Line : </b> The season-to-date accumulation for the selected year.<br/><br/>
                       <b>b) Blue Line : </b> The average season-to-date accumulation for the most recent 15-year period.<br/><br/>

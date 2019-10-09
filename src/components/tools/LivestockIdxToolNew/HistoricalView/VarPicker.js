@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 import 'typeface-roboto';
@@ -26,7 +26,7 @@ const styles = theme => ({
 
 const VarPicker = (props) => {
 
-    const { classes } = props;
+    //const { classes } = props;
 
     return (
       <div>
@@ -41,8 +41,8 @@ const VarPicker = (props) => {
 
 }
 
-VarPicker.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+//VarPicker.propTypes = {
+//  classes: PropTypes.object.isRequired,
+//};
 
 export default withStyles(styles)(VarPicker);

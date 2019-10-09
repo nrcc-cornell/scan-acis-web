@@ -10,6 +10,7 @@ import Popover from '@material-ui/core/Popover';
 import UnitsTempSelect from '../UnitsTempSelect'
 import UnitsPrcpSelect from '../UnitsPrcpSelect'
 //import { unstable_Box as Box } from '@material-ui/core/Box';
+import Box from '@material-ui/core/Box';
 
 const styles = theme => ({
   typography: {
@@ -69,8 +70,10 @@ class UnitsPopover extends React.Component {
             horizontal: 'left',
           }}
         >
-          <UnitsTempSelect />
-          <UnitsPrcpSelect/>
+          <Box padding={1} border={1} borderRadius={4} borderColor="primary.main" bgcolor="#f5f5dc">
+            <UnitsTempSelect />
+            <UnitsPrcpSelect/>
+          </Box>
         </Popover>
       </div>
     );

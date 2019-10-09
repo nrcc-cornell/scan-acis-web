@@ -9,12 +9,13 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 //import InboxIcon from '@material-ui/icons/Inbox';
 //import DraftsIcon from '@material-ui/icons/Drafts';
-import Grid from '@material-ui/core/Grid';
+//import Grid from '@material-ui/core/Grid';
 //import Hidden from '@material-ui/core/Hidden';
 //import Typography from '@material-ui/core/Typography';
 //import MemoryRouter from 'react-router/MemoryRouter';
 //import Route from 'react-router/Route';
 import { Link } from 'react-router-dom';
+import Box from '@material-ui/core/Box';
 
 //import StemMain from '../StemMain';
 //import '../../styles/StemContents.css';
@@ -26,7 +27,8 @@ const styles = theme => ({
     //width: 240,
   },
   lists: {
-    backgroundColor: theme.palette.background.paper,
+    //backgroundColor: theme.palette.background.paper,
+    backgroundColor: '#f5f5dc',
   },
   content: {
   },
@@ -52,8 +54,7 @@ function ComponentProperty(props) {
   const { classes } = props;
 
   return (
-    <Grid container direction="row">
-      <Grid item>
+    <Box padding={1} border={4} borderRadius={4} borderColor="primary.main" bgcolor="#f5f5dc">
         <div className={classes.root}>
           <div className={classes.lists}>
             <List component="nav">
@@ -75,8 +76,7 @@ function ComponentProperty(props) {
             </List>
           </div>
         </div>
-      </Grid>
-    </Grid>
+    </Box>
   );
 }
 

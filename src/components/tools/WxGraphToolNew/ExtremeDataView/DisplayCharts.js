@@ -76,8 +76,10 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
                       interval={'preserveEnd'}
                     />
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
-                    <Tooltip/>
-                    <Bar name="Number of days" dataKey="cnt_x" fill="#82ca9d" />
+                    <Tooltip
+                      cursor={{ stroke: '#AAA', strokeWidth: 2, fill: 'transparent' }}
+                    />
+                    <Bar name="Number of days" dataKey="cnt_x" fill="#f25e5e" />
                   </BarChart>
                 </ResponsiveContainer>
             </Grid>
@@ -106,8 +108,10 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
                       interval={'preserveEnd'}
                     />
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
-                    <Tooltip/>
-                    <Bar name="Number of days" dataKey="cnt_n" fill="#82ca9d" />
+                    <Tooltip
+                      cursor={{ stroke: '#AAA', strokeWidth: 2, fill: 'transparent' }}
+                    />
+                    <Bar name="Number of days" dataKey="cnt_n" fill="#5d5df0" />
                   </BarChart>
                 </ResponsiveContainer>
             </Grid>
@@ -136,7 +140,9 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
                       interval={'preserveEnd'}
                     />
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
-                    <Tooltip/>
+                    <Tooltip
+                      cursor={{ stroke: '#AAA', strokeWidth: 2, fill: 'transparent' }}
+                    />
                     <Bar name="Number of days" dataKey="cnt_p" fill="#82ca9d" />
                   </BarChart>
                 </ResponsiveContainer>

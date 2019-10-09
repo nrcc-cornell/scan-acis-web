@@ -60,7 +60,7 @@ class WaterdefDoc extends Component {
         let url = app.getToolInfo('waterdef').url
 
         return (
-          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={0}>
+          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
             <Grid item container justify="flex-start" alignItems="flex-start" direction="row" xs={2} md={3}>
               <Grid item>
                 <Hidden mdUp>
@@ -110,6 +110,7 @@ class WaterdefDoc extends Component {
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <i>2. Output</i><br/><br/>
+                      Data in this tool can be viewed in either graphical or tabular form by selecting 'chart' or 'table' above each tool. Charts can also be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
                       Water deficit values that correspond to your selections will appear below the user options. Below is a sample chart showing all of the features. The zero line on the chart represents conditions when no water deficit exists. This zero line is also representative of when soil moisture amounts are at field capacity. At these conditions, the maximum amount of water possible is available to plants, and plants are not under any water stress (indicated by green color). As conditions begin to dry in the soil, water deficits may reach a point when plants begin to experience water stress (indicated by red color). This level of water stress is typically about halfway between field capacity and the wilting point. If natural precipitation does not provide relief, properly timed irrigation may be necessary to provide the water necessary to eliminate plant stress. When monitoring conditions for the current year, these data are available through the current day in order to assist with timely decision making.<br/><br/>
                       <img className="doc-image" src={waterdefoutput} alt="Water Deficit Output" /><br/><br/>
                       Also provided are data measured by the SCAN station equipment that are relevent to calculating the water deficit. Volumetric soil moisture at up to five soil depths and daily precipitation totals are included, with samples below. Specific depths may be toggled in the live chart for viewing preference.<br/><br/>

@@ -63,7 +63,7 @@ class WxgraphDoc extends Component {
         let url = app.getToolInfo('wxgrapher').url
 
         return (
-          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={0}>
+          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
             <Grid item container justify="flex-start" alignItems="flex-start" direction="row" xs={2} md={3}>
               <Grid item>
                 <Hidden mdUp>
@@ -119,6 +119,7 @@ class WxgraphDoc extends Component {
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <i>2. Output</i><br/><br/>
+                      Data in this tool can be viewed in either graphical or tabular form by selecting 'chart' or 'table' above each tool. Charts can also be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
                       <b>a) Weather Data Summaries</b><br/><br/>
                       Time series of weather observations that correspond to your selections will appear within the tool. Below is a sample chart showing a sample of the features. Moving the cursor over the charts in the live tool displays data for each variable displayed.<br/><br/>
                       <img className="doc-image" src={wxgraphoutput1} alt="Weather Grapher Output" /><br/><br/>

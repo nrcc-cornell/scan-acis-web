@@ -554,21 +554,51 @@ export class AppStore {
         //let doy_planting = this.getPlantingDate.dayOfYear()
         let data = this.gddtool_getClimateData
         let idxPlantingDate
+        // data_by_date will hold data for all years that will be included in averages/max/min
         let data_by_date = {}
+        // data_by_date_for_obs will hold data only for the current planting year selection
+        let data_by_date_for_obs = {}
         let time_obj
         let isLeapYear = moment([year_planting]).isLeapYear()
+        let yearsMissing=[]
+
+        // find years with missing data - these years are held in yearsMissing
         for (var i = 0, len = data.length; i < len; i++) {
+            time_obj = moment(data[i][0],'YYYY-MM-DD')
+            let year = time_obj.format('YYYY')
+            let numMiss = data[i][1][1]
+            if (numMiss>10) {
+                if (!yearsMissing.includes(year)) { yearsMissing.push(year) }
+            }
+        };
+
+        // format data into object by date
+        for (i = 0, len = data.length; i < len; i++) {
             time_obj = moment(data[i][0],'YYYY-MM-DD')
             let year = time_obj.format('YYYY')
             let month = time_obj.format('MM')
             let day = time_obj.format('DD')
             let month_day = month+'-'+day
             if (month_day===this.getPlantingDate.format('MM')+'-'+this.getPlantingDate.format('DD')) { idxPlantingDate = i };
+
+            // first, data for current planting year selected
+            if (year===year_planting) {
+              if (month_day>=this.getPlantingDate.format('MM')+'-'+this.getPlantingDate.format('DD')) {
+                if (!data_by_date_for_obs.hasOwnProperty(month_day)) { data_by_date_for_obs[month_day] = {} };
+                if ((data[i][1][1]===0) && (data[i][1][0] !== -999) && (data[idxPlantingDate][1][0] !== -999) && (data[i][1][0] !== 'M') && (data[idxPlantingDate][1][0] !=='M')) {
+                    data_by_date_for_obs[month_day][year] = data[i][1][0] - data[idxPlantingDate][1][0];
+                } else {
+                    data_by_date_for_obs[month_day][year] = NaN
+                }
+              };
+            }
+
+            // next, data used for averages and extremes
+            if (yearsMissing.includes(year)) { continue }
             if (month_day>=this.getPlantingDate.format('MM')+'-'+this.getPlantingDate.format('DD')) {
                 if (!data_by_date.hasOwnProperty(month_day)) { data_by_date[month_day] = {} };
-                //if ((data[i][1] !== -999) && (data[idxPlantingDate][1] !== -999)) {
-                if ((data[i][1] !== -999) && (data[idxPlantingDate][1] !== -999) && (data[i][1] !== 'M') && (data[idxPlantingDate][1] !=='M')) {
-                    data_by_date[month_day][year] = data[i][1] - data[idxPlantingDate][1];
+                if ((data[i][1][0] !== -999) && (data[idxPlantingDate][1][0] !== -999) && (data[i][1][0] !== 'M') && (data[idxPlantingDate][1][0] !=='M')) {
+                    data_by_date[month_day][year] = data[i][1][0] - data[idxPlantingDate][1][0];
                 } else {
                     data_by_date[month_day][year] = NaN
                 }
@@ -596,10 +626,14 @@ export class AppStore {
             let yearsArray = Object.keys(data_by_date[d])
 
             // get obs array: for this planting year
-            if (data_by_date[d].hasOwnProperty(year_planting)) {
-                obs = data_by_date[d][year_planting];
-            } else {
+            if (data_by_date_for_obs.hasOwnProperty(d)) {
+              if (data_by_date_for_obs[d].hasOwnProperty(year_planting)) {
+                obs = data_by_date_for_obs[d][year_planting];
+              } else {
                 obs = NaN;
+              }
+            } else {
+              obs = NaN;
             }
 
             // get ave array: POR ave
@@ -696,8 +730,10 @@ export class AppStore {
                 "interval":[0,0,1],
                 "duration":"std",
                 "season_start":[1,1],
-                "reduce":"sum",
-                "maxmissing":1
+                //"reduce":"sum",
+                //"maxmissing":1
+                "reduce":{"add":"mcnt","reduce":"sum"},
+                //"maxmissing":0
             }]
             if (this.gddtool_getBase==='50' && this.gddtool_getIsMethod8650) {
                 elems[0]["limit"]=[50,86]

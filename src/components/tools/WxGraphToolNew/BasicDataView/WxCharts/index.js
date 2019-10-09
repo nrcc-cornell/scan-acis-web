@@ -72,6 +72,41 @@ class WxCharts extends Component {
         }
     }
 
+    renderCustomTooltip = (props) => {
+      const { payload, label } = props
+      return (
+          <div className="customized-tooltip-wxgraph">
+            {
+                label
+            }
+            {
+                payload.map((entry,index) => {
+                    const { dataKey, color, value, name } = entry
+                    let style = {}
+                    style = { color: color }
+                    if (dataKey==='temprange') {
+                      return (
+                        <span key={index} className="tooltip-item">
+                        <br/>
+                        <span style={style}>{name} : </span>
+                        <span>{(isNaN(value[0])) ? '--' : value[0]} - {(isNaN(value[1])) ? '--' : value[1]}</span>
+                        </span>
+                      )
+                    } else {
+                      return (
+                        <span key={index} className="tooltip-item">
+                        <br/>
+                        <span style={style}>{name} : </span>
+                        <span>{(isNaN(value)) ? '--' : value}</span>
+                        </span>
+                      )
+                    }
+                })
+            }
+          </div>
+      )
+    }
+
     renderCustomizedLegend = ({ payload }) => {
         return (
             <div className="customized-legend-wxgraph">
@@ -256,7 +291,9 @@ class WxCharts extends Component {
                         label={{ value: app.wxgraph_getVarUnits['airtemp_units'], angle: -90, position:'insideLeft', offset: 10 }}
                         domain = {(app.wxgraph_getTimeFrame==='two_months') ? calcDomain(dataForChart,['avgt','mint','maxt'],[1,1],1) : calcDomain(dataForChart,['avgt'],[1,1],1)}
                     />
-                    <Tooltip/>
+                    <Tooltip
+                        content={this.renderCustomTooltip}
+                    />
                     {app.wxgraph_getTimeFrame==='two_months' && <Area type='monotone' name='Air Temp Range' dataKey='temprange' stroke='' fill='#D3D3D3' />}
                     <Line type='monotone' name='Air Temp Ave' dataKey='avgt' stroke='#8884d8' fill='#8884d8'/>
                   </ComposedChart>
@@ -286,7 +323,9 @@ class WxCharts extends Component {
                         label={{ value: app.wxgraph_getVarUnits['rainfall_units'], angle: -90, position:'insideBottomLeft', offset: 10 }}
                         domain = {[0,'auto']}
                     />
-                    <Tooltip/>
+                    <Tooltip
+                        content={this.renderCustomTooltip}
+                    />
                     <Bar name='Total Precip' dataKey="pcpn" fill="#82ca9d" />
                   </BarChart>
                 </ResponsiveContainer>
@@ -322,7 +361,9 @@ class WxCharts extends Component {
                         label={{ value: app.wxgraph_getVarUnits['soiltemp_units'], angle: -90, position:'insideLeft', offset: 10 }}
                         domain = {calcDomain(dataForChart,['soilt40in','soilt20in','soilt8in','soilt4in','soilt2in'],[1,1],1)}
                     />
-                    <Tooltip/>
+                    <Tooltip
+                        content={this.renderCustomTooltip}
+                    />
                     {chartInfo_soilt.dataInfo && this.state.disabled &&
                       <Legend
                         verticalAlign="top"
@@ -369,7 +410,9 @@ class WxCharts extends Component {
                         label={{ value: app.wxgraph_getVarUnits['soilmoist_units'], angle: -90, position:'insideLeft', offset: 10 }}
                         domain = {calcDomain(dataForChart,['soilm40in','soilm20in','soilm8in','soilm4in','soilm2in'],[1,1],1)}
                     />
-                    <Tooltip/>
+                    <Tooltip
+                        content={this.renderCustomTooltip}
+                    />
                     {chartInfo_soilm.dataInfo && this.state.disabled &&
                       <Legend
                         verticalAlign="top"
@@ -409,7 +452,9 @@ class WxCharts extends Component {
                         label={{ value: app.wxgraph_getVarUnits['humidity_units'], angle: -90, position:'insideLeft', offset: 10 }}
                         domain = {[0,100]}
                     />
-                    <Tooltip/>
+                    <Tooltip
+                        content={this.renderCustomTooltip}
+                    />
                     <Line type='monotone' name='Relative Humidity' dataKey='humid' stroke='#82ca9d' fill='#82ca9d' />
                   </LineChart>
                 </ResponsiveContainer>
@@ -438,7 +483,9 @@ class WxCharts extends Component {
                         label={{ value: app.wxgraph_getVarUnits['solarrad_units'], angle: -90, position:'insideBottomLeft', offset: 10 }}
                         domain = {calcDomain(dataForChart,['solar'],[0,1],0)}
                     />
-                    <Tooltip/>
+                    <Tooltip
+                        content={this.renderCustomTooltip}
+                    />
                     <Area type='monotone' name='Solar Radiation' dataKey='solar' stroke='#82ca9d' fill='#82ca9d' />
                   </AreaChart>
                 </ResponsiveContainer>
@@ -467,7 +514,9 @@ class WxCharts extends Component {
                         label={{ value: app.wxgraph_getVarUnits['wind_units'], angle: -90, position:'insideLeft', offset: 10 }}
                         domain = {calcDomain(dataForChart,['windspdave','windspdmax'],[0,1],0)}
                     />
-                    <Tooltip/>
+                    <Tooltip
+                        content={this.renderCustomTooltip}
+                    />
                     <Legend verticalAlign="top" height={36}/>
                     <Line type='monotone' name='Wind Speed (ave)' dataKey='windspdave' stroke='#8884d8' />
                     <Line type='monotone' name='Wind Speed (max)' dataKey='windspdmax' dot={false} stroke='#000000' />
@@ -498,7 +547,9 @@ class WxCharts extends Component {
                         label={{ value: app.wxgraph_getVarUnits['winddir_units'], angle: -90, position:'insideLeft', offset: 10 }}
                         domain = {calcDomain(dataForChart,['winddirave'],[0,1],0)}
                     />
-                    <Tooltip/>
+                    <Tooltip
+                        content={this.renderCustomTooltip}
+                    />
                     <Line type='monotone' name='Wind Direction' dataKey='winddirave' stroke='#8884d8' fill='#8884d8' />
                   </LineChart>
                 </ResponsiveContainer>
@@ -527,7 +578,9 @@ class WxCharts extends Component {
                         label={{ value: app.wxgraph_getVarUnits['leafwet_units'], angle: -90, position:'insideLeft', offset: 10 }}
                         domain = {calcDomain(dataForChart,['leafwet'],[1,1],0)}
                     />
-                    <Tooltip/>
+                    <Tooltip
+                        content={this.renderCustomTooltip}
+                    />
                     <Line type='monotone' name='Leaf Wetness' dataKey='leafwet' stroke='#8884d8' />
                   </LineChart>
                 </ResponsiveContainer>

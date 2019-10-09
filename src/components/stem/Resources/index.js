@@ -51,7 +51,7 @@ class Resources extends Component {
         const { classes } = this.props;
 
         return (
-          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={0}>
+          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
             <Grid item container justify="flex-start" alignItems="flex-start" direction="row" xs={2} md={3}>
               <Grid item>
                 <Hidden mdUp>

@@ -121,7 +121,7 @@ class GddChart extends Component {
     const renderCustomTooltip = (props) => {
       const { payload, label } = props
       return (
-          <div className="customized-tooltip">
+          <div className="customized-tooltip-gddtool">
             {
                 moment(label,"YYYY-MM-DD").format("MMM D, YYYY")
             }
@@ -174,56 +174,6 @@ class GddChart extends Component {
         let formatXAxisForDate = (tickItem) => {
             return moment(tickItem).format('MMM D')
         }
-
-    const renderCustomLegend_old = (props) => {
-      const { payload } = props
-      return (
-        <div className="customized-legend">
-          {
-            payload.map((entry,index) => {
-              const { dataKey, color, value } = entry
-              let style = {}
-              style = { color: color }
-              if (dataKey==='obs' || dataKey==='ave' || dataKey==='recent') {
-                return (
-                  <span key={index} className="legend-item" style={style}>
-                    <Surface width={10} height={10} viewBox={{x:0,y:0,width:10,height:10}}>
-                      <Symbols cx={5} cy={5} type="circle" size={50} fill={color} />
-                    </Surface>
-                    <span>{value}</span>
-                  </span>
-                )
-              } else {
-                return (
-                  <span key={index} className="tooltip-item"></span>
-                )
-              }
-            })
-          }
-          {
-            payload.map((entry,index) => {
-              const { dataKey, color, value } = entry
-              let style = {}
-              style = { color: color }
-              if (dataKey==='min_por') {
-                return (
-                  <span key={index} className="legend-item" style={style}>
-                    <Surface width={10} height={10} viewBox={{x:0,y:0,width:10,height:10}}>
-                      <Symbols cx={5} cy={5} type="square" size={50} fill={color} />
-                    </Surface>
-                    <span>{value}</span>
-                  </span>
-                )
-              } else {
-                return (
-                  <span key={index} className="tooltip-item"></span>
-                )
-              }
-            })
-          }
-        </div>
-      )
-    }
 
         return (
             <div id="gdd-chart">

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
-import PropTypes from 'prop-types';
+//import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import green from '@material-ui/core/colors/green';
 //import FormLabel from '@material-ui/core/FormLabel';
@@ -31,18 +31,17 @@ const styles = theme => ({
   },
 });
 
-var app;
+//var app;
 
 @inject('store') @observer
 class VarPicker extends Component {
 
-  constructor(props) {
-    super(props);
-    app = this.props.store.app;
-  }
+  //constructor(props) {
+  //  super(props);
+  //  app = this.props.store.app;
+  //}
 
   render() {
-    const { classes } = this.props;
 
     return (
       <div>
@@ -57,8 +56,8 @@ class VarPicker extends Component {
   }
 }
 
-VarPicker.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
+//VarPicker.propTypes = {
+//  classes: PropTypes.object.isRequired,
+//};
 
 export default withStyles(styles)(VarPicker);
