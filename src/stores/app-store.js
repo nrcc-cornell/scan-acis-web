@@ -843,6 +843,7 @@ export class AppStore {
             humidity : false,
             solarrad : false,
             wind : false,
+            winddir : false,
             leafwet : false,
         };
     @action wxgraph_setVars = name => event => {
@@ -868,11 +869,11 @@ export class AppStore {
             rainfall_label : 'Rainfall',
             soiltemp_label : 'Soil Temperature',
             soilmoist_label : 'Soil Moisture',
-            humidity_label : 'Relative Humidity',
+            humidity_label : (this.wxgraph_getTimeFrame!=='two_days') ? 'Relative Humidity *' : 'Relative Humidity',
             solarrad_label : 'Solar Radiation',
             wind_label : 'Wind Speed',
-            winddir_label : 'Wind Direction',
-            leafwet_label : 'Leaf Wetness',
+            winddir_label : (this.wxgraph_getTimeFrame!=='two_days') ? 'Wind Direction *' : 'Wind Direction',
+            leafwet_label : (this.wxgraph_getTimeFrame!=='two_days') ? 'Leaf Wetness *' : 'Leaf Wetness',
           };
         }
     }
@@ -1559,7 +1560,7 @@ export class AppStore {
                     {"vX":77,"interval":[0,0,1],"duration":"dly"}, // daily wind speed, maximum, max
                     {"vX":89,"interval":[0,0,1],"duration":"dly"}, // daily wind speed, average, ave
                     {"vX":101,"interval":[0,0,1],"duration":"dly"}, // daily wind direction, average, ave
-                    {"vX":118,"vN":9,"interval":[0,0,1],"duration":"dly"}, // daily leaf wetness, sum, minutes
+                    //{"vX":118,"vN":9,"interval":[0,0,1],"duration":"dly"}, // daily leaf wetness, sum, minutes
                 ]
                 numdays=-60
             } else if (this.wxgraph_getTimeFrame==='two_years') {
@@ -1583,7 +1584,7 @@ export class AppStore {
                     {"vX":77,"interval":[0,1],"duration":"mly","reduce":{"reduce":"max"},"maxmissing":3}, // monthly wind speed, maximum, max
                     {"vX":89,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly wind speed, average, ave
                     {"vX":101,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly wind direction, average, ave
-                    {"vX":118,"vN":9,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly leaf wetness, ave, minutes/day
+                    //{"vX":118,"vN":9,"interval":[0,1],"duration":"mly","reduce":{"reduce":"mean"},"maxmissing":3}, // monthly leaf wetness, ave, minutes/day
                 ]
                 numdays=-730
             } else if (this.wxgraph_getTimeFrame==='por') {
@@ -1609,7 +1610,7 @@ export class AppStore {
                         {"vX":77,"interval":[1],"duration":"yly","reduce":{"reduce":"max"},"maxmissing":10}, //annual wind speed, maximum, max
                         {"vX":89,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, //annual wind speed, average, ave
                         {"vX":101,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, //annual wind direction, average, ave
-                        {"vX":118,"vN":9,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, //annual leaf wetness, average, minutes/day
+                        //{"vX":118,"vN":9,"interval":[1],"duration":"yly","reduce":{"reduce":"mean"},"maxmissing":10}, //annual leaf wetness, average, minutes/day
                     ]
                 } else {
                     elems = [
@@ -1668,14 +1669,14 @@ export class AppStore {
           //.post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
           .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
           .then(res => {
-            console.log('SUCCESS downloading from ACIS');
-            console.log(res);
+            //console.log('SUCCESS downloading from ACIS');
+            //console.log(res);
             if (res.data.hasOwnProperty('error')) {
-                console.log('Error: resetting data to null');
+                //console.log('Error: resetting data to null');
                 this.wxgraph_setClimateData(null);
                 this.wxgraph_initClimateSummary()
             } else {
-                console.log('processing wxgraph ACIS data');
+                //console.log('processing wxgraph ACIS data');
                 this.wxgraph_setClimateData(res.data.data.slice(0));
                 this.wxgraph_setClimateSummary()
             }

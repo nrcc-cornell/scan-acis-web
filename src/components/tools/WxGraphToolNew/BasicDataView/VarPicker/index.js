@@ -44,8 +44,8 @@ class VarPicker extends Component {
 
   render() {
     const { classes } = this.props;
-    const { airtemp, rainfall, soiltemp, soilmoist, humidity, solarrad, wind, leafwet } = app.wxgraph_getVars;
-    const { airtemp_label, rainfall_label, soiltemp_label, soilmoist_label, humidity_label, solarrad_label, wind_label, leafwet_label } = app.wxgraph_getVarLabels;
+    const { airtemp, rainfall, soiltemp, soilmoist, humidity, solarrad, wind, winddir, leafwet } = app.wxgraph_getVars;
+    const { airtemp_label, rainfall_label, soiltemp_label, soilmoist_label, humidity_label, solarrad_label, wind_label, winddir_label, leafwet_label } = app.wxgraph_getVarLabels;
 
     return (
       <div>
@@ -119,7 +119,8 @@ class VarPicker extends Component {
               className={classes.formControlLabel}
               control={
                 <Checkbox
-                  checked={humidity}
+                  checked={(app.wxgraph_getTimeFrame!=='two_days') ? false : humidity}
+                  disabled={app.wxgraph_getTimeFrame!=='two_days'}
                   onChange={app.wxgraph_setVars('humidity')}
                   value="humidity"
                   classes={{
@@ -164,7 +165,25 @@ class VarPicker extends Component {
               className={classes.formControlLabel}
               control={
                 <Checkbox
-                  checked={leafwet}
+                  checked={(app.wxgraph_getTimeFrame!=='two_days') ? false : winddir}
+                  disabled={app.wxgraph_getTimeFrame!=='two_days'}
+                  onChange={app.wxgraph_setVars('winddir')}
+                  value="winddir"
+                  classes={{
+                    root: classes.root,
+                    checked: classes.checked,
+                  }}
+                />
+              }
+              label={winddir_label}
+            />
+            {app.getLocation.sid.split(' ')[1]==='19' &&
+            <FormControlLabel
+              className={classes.formControlLabel}
+              control={
+                <Checkbox
+                  checked={(app.wxgraph_getTimeFrame!=='two_days') ? false : leafwet}
+                  disabled={app.wxgraph_getTimeFrame!=='two_days'}
                   onChange={app.wxgraph_setVars('leafwet')}
                   value="leafwet"
                   classes={{
@@ -175,7 +194,9 @@ class VarPicker extends Component {
               }
               label={leafwet_label}
             />
+            }
           </FormGroup>
+          {app.wxgraph_getTimeFrame!=='two_days' && <span style={{'color':'#AAA'}}>* hourly data only</span>}
         </FormControl>
       </div>
 

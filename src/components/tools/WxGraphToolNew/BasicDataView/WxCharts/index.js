@@ -429,6 +429,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
+            {app.wxgraph_getVars['humidity'] && app.wxgraph_getTimeFrame==='two_days' &&
             <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
@@ -436,9 +437,10 @@ class WxCharts extends Component {
                 </Typography>
               </Grid>
             </Grid>
+            }
 
             <Grid item xs={12}>
-                <ResponsiveContainer width="100%" height={100} className={(app.wxgraph_getVars['humidity']) ? "" : "isHidden"}>
+                <ResponsiveContainer width="100%" height={100} className={(app.wxgraph_getVars['humidity'] && app.wxgraph_getTimeFrame==='two_days') ? "" : "isHidden"}>
                   <LineChart data={dataForChart} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>
                     <CartesianGrid strokeDasharray="3 3"/>
@@ -481,7 +483,7 @@ class WxCharts extends Component {
                     />
                     <YAxis
                         label={{ value: app.wxgraph_getVarUnits['solarrad_units'], angle: -90, position:'insideBottomLeft', offset: 10 }}
-                        domain = {calcDomain(dataForChart,['solar'],[0,1],0)}
+                        domain = {calcDomain(dataForChart,['solar'],[1,1],0)}
                     />
                     <Tooltip
                         content={this.renderCustomTooltip}
@@ -512,7 +514,7 @@ class WxCharts extends Component {
                     />
                     <YAxis
                         label={{ value: app.wxgraph_getVarUnits['wind_units'], angle: -90, position:'insideLeft', offset: 10 }}
-                        domain = {calcDomain(dataForChart,['windspdave','windspdmax'],[0,1],0)}
+                        domain = {calcDomain(dataForChart,['windspdave','windspdmax'],[1,1],0)}
                     />
                     <Tooltip
                         content={this.renderCustomTooltip}
@@ -524,16 +526,18 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
+            {app.wxgraph_getVars['winddir'] && app.wxgraph_getTimeFrame==='two_days' &&
             <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
-                  {createChartTitle('wind',app.wxgraph_getVarLabels['winddir_label'])}
+                  {createChartTitle('winddir',app.wxgraph_getVarLabels['winddir_label'])}
                 </Typography>
               </Grid>
             </Grid>
+            }
 
             <Grid item xs={12}>
-                <ResponsiveContainer width="100%" height={160} className={(app.wxgraph_getVars['wind']) ? "" : "isHidden"}>
+                <ResponsiveContainer width="100%" height={160} className={(app.wxgraph_getVars['winddir'] && app.wxgraph_getTimeFrame==='two_days') ? "" : "isHidden"}>
                   <LineChart data={dataForChart} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>
                     <CartesianGrid strokeDasharray="3 3"/>
@@ -545,7 +549,7 @@ class WxCharts extends Component {
                     />
                     <YAxis
                         label={{ value: app.wxgraph_getVarUnits['winddir_units'], angle: -90, position:'insideLeft', offset: 10 }}
-                        domain = {calcDomain(dataForChart,['winddirave'],[0,1],0)}
+                        domain = {calcDomain(dataForChart,['winddirave'],[1,1],0)}
                     />
                     <Tooltip
                         content={this.renderCustomTooltip}
@@ -555,6 +559,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
+            {app.wxgraph_getVars['leafwet'] && app.wxgraph_getTimeFrame==='two_days' && app.getLocation.sid.split(' ')[1]==='19' &&
             <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
@@ -562,9 +567,10 @@ class WxCharts extends Component {
                 </Typography>
               </Grid>
             </Grid>
+            }
 
             <Grid item xs={12}>
-                <ResponsiveContainer width="100%" height={100} className={(app.wxgraph_getVars['leafwet']) ? "" : "isHidden"}>
+                <ResponsiveContainer width="100%" height={100} className={(app.wxgraph_getVars['leafwet'] && app.wxgraph_getTimeFrame==='two_days' && app.getLocation.sid.split(' ')[1]==='19') ? "" : "isHidden"}>
                   <LineChart data={dataForChart} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>
                     <CartesianGrid strokeDasharray="3 3"/>
