@@ -125,7 +125,7 @@ class GddChart extends Component {
             {
                 moment(label,"YYYY-MM-DD").format("MMM D, YYYY")
             }
-            {
+            {payload &&
                 payload.map((entry,index) => {
                     const { dataKey, color, value, name } = entry
                     let style = {}
@@ -145,7 +145,7 @@ class GddChart extends Component {
                     }
                 })
             }
-            {
+            {payload &&
                 payload.map((entry,index) => {
                     const { dataKey, color } = entry
                     let style = {}
