@@ -68,6 +68,23 @@ class Resources extends Component {
                   Resources
                 </Typography>
               </Grid>
+              <Grid item>
+                <Typography variant="body1" gutterBottom="true">
+                  <a href="https://www.noaa.gov/office-education/grants/noaa-assets#weather" target="_blank" rel="noopener noreferrer">National Oceanic and Atmospheric Administration Education Resources</a>
+                </Typography>
+                <Typography variant="body1" gutterBottom="true">
+                  <a href="https://www.nsf.gov/funding/programs.jsp?org=EHR" target="_blank" rel="noopener noreferrer">National Science Foundation Education Resources</a>
+                </Typography>
+                <Typography variant="body1" gutterBottom="true">
+                  <a href="https://www.climatehubs.usda.gov/tools/all" target="_blank" rel="noopener noreferrer">USDA Climate Hub Tools</a>
+                </Typography>
+                <Typography variant="body1" gutterBottom="true">
+                  <a href="https://www.weather.gov/jetstream/" target="_blank" rel="noopener noreferrer">National Weather Service - Jetstream - Online Weather School</a>
+                </Typography>
+                <Typography variant="body1" gutterBottom="true">
+                  <a href="https://worldwind.arc.nasa.gov/worldweather/" target="_blank" rel="noopener noreferrer">NASA World Weather</a>
+                </Typography>
+              </Grid>
             </Grid>
           </Grid>
         );

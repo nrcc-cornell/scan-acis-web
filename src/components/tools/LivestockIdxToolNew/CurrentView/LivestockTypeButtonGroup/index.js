@@ -50,7 +50,7 @@ class LivestockTypeButtonGroup extends React.Component {
           <FormControlLabel
             value="biganimal"
             control={<Radio color="primary" />}
-            label="Big Animal"
+            label="Large Animal"
             labelPlacement="right"
           />
           <FormControlLabel

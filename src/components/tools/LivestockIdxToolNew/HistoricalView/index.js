@@ -247,7 +247,7 @@ class HistoricalView extends Component {
         } else if (type==='cow') {
             return 'Dairy Cow'
         } else if (type==='biganimal') {
-            return 'Big Animal'
+            return 'Large Animal'
         } else if (type==='smallanimal') {
             return 'Small Animal'
         } else {
@@ -279,7 +279,7 @@ class HistoricalView extends Component {
             }
         } else if (type==='biganimal') {
             return {
-                'typeLabel':'Big Animal',
+                'typeLabel':'Large Animal',
                 'dataInfo': [
                     {'key':'very severe','label':'Very Severe','color':'#581845'},
                     {'key':'severe','label':'Severe','color':'#900C3F'},

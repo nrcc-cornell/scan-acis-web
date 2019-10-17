@@ -70,6 +70,10 @@ function ComponentProperty(props) {
                   <ListItemLinkShorthand to="/stem/heatidx_doc" primary="Livestock Heat Index" />
               </ul>
             </List>
+            <Divider />
+            <List component="nav">
+              <ListItemLinkShorthand to="/stem/resources" primary="Resources" />
+            </List>
           </div>
         </div>
     </Box>

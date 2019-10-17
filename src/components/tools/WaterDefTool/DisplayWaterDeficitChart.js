@@ -60,7 +60,7 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
                   label:{
                       text:'No Plant Stress',
                       style: {
-                        color: 'green',
+                        color: '#0000FF',
                         fontWeight: 'bold'
                       }
                   }
@@ -73,7 +73,7 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
                   label:{
                       text:'Plant Stress',
                       style: {
-                        color: 'red',
+                        color: '#FF0000',
                         fontWeight: 'bold'
                       },
                   }
@@ -98,9 +98,9 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
             color: 'black',
             zones: [{
               value: (data.fc_ref - data.pwp_ref)/2.,
-              color: 'green'
+              color: '#0000FF'
             },{
-              color: 'red'
+              color: '#FF0000'
             }],
             data: data.data_series,
             zIndex: 102,

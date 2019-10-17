@@ -76,7 +76,7 @@ class LivestockIdxCharts extends Component {
             {typeToDisplay==='biganimal' &&
               <Grid item>
                  <Typography variant="h5">
-                     Big Animal Heat Index (cattle, bison, sheep, goats, etc)
+                     Large Animal Heat Index (cattle, bison, sheep, goats, etc)
                  </Typography>
               </Grid>
             }
@@ -168,12 +168,12 @@ class LivestockIdxCharts extends Component {
             tickFormatter={formatXAxisForDate}
             interval={11}
           />
-          <YAxis tick={false} label={{ value: 'Big Animal Heat Stress (THI)', angle: -90, position:'insideLeft', offset: -100 }} domain={[70, 84]}/>
+          <YAxis tick={false} label={{ value: 'Large Animal Heat Stress (THI)', angle: -90, position:'insideLeft', offset: -100 }} domain={[70, 84]}/>
           <Tooltip/>
           <ReferenceLine y={72} label={{position: "left", value:" 72 Moderate Heat Stress", offset:-140}} stroke="yellow" isFront={true} />
           <ReferenceLine y={74} label={{position: "left", value:" 74 Severe Heat Stress", offset:-122}} stroke="orange" isFront={true} />
           <ReferenceLine y={78} label={{position: "left", value:" 78 Very Severe Heat Stress", offset:-156}} stroke="brown" isFront={true} />
-          <Area type='monotone' name={'Big Animal Heat Index'} dataKey='biganimal' stroke='#D3D3D3' fill='#D3D3D3'/>
+          <Area type='monotone' name={'Large Animal Heat Index'} dataKey='biganimal' stroke='#D3D3D3' fill='#D3D3D3'/>
         </AreaChart>
       </ResponsiveContainer>
             </Grid>
@@ -193,7 +193,7 @@ class LivestockIdxCharts extends Component {
             tickFormatter={formatXAxisForDate}
             interval={11}
           />
-          <YAxis tick={false} label={{ value: 'Big Animal Heat Stress (THI)', angle: -90, position:'insideLeft', offset: -100 }} domain={[80, 90]}/>
+          <YAxis tick={false} label={{ value: 'Large Animal Heat Stress (THI)', angle: -90, position:'insideLeft', offset: -100 }} domain={[80, 90]}/>
           <Tooltip/>
           <ReferenceLine y={82} label={{position: "left", value:" 82 Moderate Heat Stress", offset:-140}} stroke="yellow" isFront={true} />
           <ReferenceLine y={84} label={{position: "left", value:" 84 Severe Heat Stress", offset:-122}} stroke="orange" isFront={true} />

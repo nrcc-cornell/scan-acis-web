@@ -109,7 +109,7 @@ class HeatIdxDoc extends Component {
                       <i>Habeeb, A. A., Gad, A. E., and Atta, M. A. 2018. Temperature-Humidity Indices as Indicators to Heat Stress of Climatic Conditions with Relation to Production and Reproduction of Farm Animals. International Journal of Biotechnology and Recent Advances 1(1): 35-50.</i><br/><br/>
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      <b>3) Big Animals (general case for cattle, bison, sheep, goats, etc)</b><br/><br/>
+                      <b>3) Large Animals (general case for cattle, bison, sheep, goats, etc)</b><br/><br/>
                       Larger animals are grouped together in this general case that only requires temperature and humidity for calculation. These animals use similar biological cooling methods, so extreme environmental conditions can affect them in a similar way.<br/><br/>
                       <i>Habeeb, A. A., Gad, A. E., and Atta, M. A. 2018. Temperature-Humidity Indices as Indicators to Heat Stress of Climatic Conditions with Relation to Production and Reproduction of Farm Animals. International Journal of Biotechnology and Recent Advances 1(1): 35-50.</i><br/><br/>
                     </Typography>
@@ -131,7 +131,7 @@ class HeatIdxDoc extends Component {
                       Once your site is selected, there are two different types of data views to select from, <i>Current Heat Indices</i> and <i>Historical Frequencies</i>.<br/><br/>
                       <b>a) Current Heat Indices</b> provide hourly heat index conditions over the past 24-48 hours.<br/>
                       <b>b) Historical Frequencies</b> provide the number of hours during each year in which the selected heat index surpassed significant heat stress thresholds.<br/><br/>
-                      Finally, the type of heat index must be selected, based on the animal of interest. Below represents what these user interfaces look like in the tool:
+                      Finally, the type of heat index must be selected, based on the animal of interest. Below represents what these user interfaces look like in the tool:<br/>
                       <img className="doc-image" src={viewselection} alt="Livestock Heat Index View Selection" /><br/>
                       <img className="doc-image-2" src={userinput} alt="Livestock Heat Index User Input" /><br/><br/>
                     </Typography>
