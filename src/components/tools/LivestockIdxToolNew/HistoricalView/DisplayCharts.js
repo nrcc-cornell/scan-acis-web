@@ -2,6 +2,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 import React from 'react';
+import PropTypes from 'prop-types';
 import moment from 'moment';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Surface, Symbols } from 'recharts';
 import Typography from '@material-ui/core/Typography';
@@ -18,14 +19,28 @@ import DownloadCharts from '../DownloadCharts'
 // Styles
 import '../../../../styles/LivestockCharts.css';
 
-const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onClickLegend}) => {
+const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onClickLegend,timescale}) => {
 
         console.log('DisplayCharts: data')
         console.log(data)
+        let year = new Date().getFullYear()
+
+        let yearHasValidData = (y) => {
+            if (data[data.length-1]['year']===y && data[data.length-1]['idx_type']!==null) {
+                return true
+            } else {
+                return false
+            }
+        }
 
         let formatXAxisForDate = (tickItem) => {
             //let t = moment(tickItem)
-            return moment(tickItem).add(1,'days').format('YYYY')
+            let tickYear = moment(tickItem).add(1,'days').format('YYYY')
+            if (tickYear===year.toString() && yearHasValidData(year.toString())) {
+                return moment(tickItem).add(1,'days').format('YYYY')+'*'
+            } else {
+                return moment(tickItem).add(1,'days').format('YYYY')
+            }
         }
 
         let renderCustomizedLegend = ({ payload }) => {
@@ -119,8 +134,11 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
                       dataKey="year"
                       tickFormatter={formatXAxisForDate}
                       interval={'preserveEnd'}
+                      label={(yearHasValidData(year.toString())) ?
+                          { value:"* year-to-date", position:'insideBottomRight', offset: 0 } :
+                          null }
                     />
-                    <YAxis label={{ value: 'hours', angle: -90, position:'insideLeft', offset: 20 }} />
+                    <YAxis label={{ value: timescale, angle: -90, position:'insideLeft', offset: 20 }} />
                     <Tooltip
                       cursor={{ stroke: 'red', strokeWidth: 2, fill: 'transparent' }}
                     />
@@ -144,6 +162,10 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
         );
 
 }
+
+DisplayCharts.propTypes = {
+  timescale: PropTypes.string.isRequired,
+};
 
 export default DisplayCharts;
 

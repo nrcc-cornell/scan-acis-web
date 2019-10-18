@@ -20,9 +20,28 @@ import '../../../../styles/WxCharts.css';
 
 const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxSelected,tminSelected,prcpSelected}) => {
 
+        console.log('DATA');
+        console.log(data);
+
+        let year = new Date().getFullYear()
+
+        let yearHasValidData = (y,v) => {
+            // year
+            // variable type (cnt_x, cnt_n, cnt_p)
+            if (data[data.length-1]['date']===y && data[data.length-1][v]!=='M') {
+                return true
+            } else {
+                return false
+            }
+        }
+
         let formatXAxisForDate = (tickItem) => {
-            //let t = moment(tickItem)
-            return moment(tickItem).add(1,'days').format('YYYY')
+            let tickYear = moment(tickItem).add(1,'days').format('YYYY')
+            if (tickYear===year.toString() && yearHasValidData(year.toString(),'cnt_x')) {
+                return moment(tickItem).add(1,'days').format('YYYY')+'*'
+            } else {
+                return moment(tickItem).add(1,'days').format('YYYY')
+            }
         }
 
         let firstDate = (data && data[0]) ? data[0]['date'] : ''
@@ -74,6 +93,9 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
                       dataKey="date"
                       tickFormatter={formatXAxisForDate}
                       interval={'preserveEnd'}
+                      label={(data && yearHasValidData(year.toString(),'cnt_x')) ?
+                          { value:"* year-to-date", position:'insideBottomRight', offset: 0 } :
+                          null }
                     />
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
                     <Tooltip
@@ -106,6 +128,9 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
                       dataKey="date"
                       tickFormatter={formatXAxisForDate}
                       interval={'preserveEnd'}
+                      label={(data && yearHasValidData(year.toString(),'cnt_n')) ?
+                          { value:"* year-to-date", position:'insideBottomRight', offset: 0 } :
+                          null }
                     />
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
                     <Tooltip
@@ -138,6 +163,9 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
                       dataKey="date"
                       tickFormatter={formatXAxisForDate}
                       interval={'preserveEnd'}
+                      label={(data && yearHasValidData(year.toString(),'cnt_p')) ?
+                          { value:"* year-to-date", position:'insideBottomRight', offset: 0 } :
+                          null }
                     />
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
                     <Tooltip

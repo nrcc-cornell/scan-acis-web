@@ -15,11 +15,6 @@ import StemMenu from '../StemMenu'
 // Components
 import MenuPopover from '../MenuPopover'
 
-//import scanstn from '../../../assets/scan-station.png'
-
-// Styles
-//import '../../../styles/StemResources.css';
-
 const styles = theme => ({
   root: {
     //flexGrow: 1,
@@ -39,7 +34,7 @@ const styles = theme => ({
 //var app;
 
 @inject('store') @observer
-class Resources extends Component {
+class Soils extends Component {
 
     //constructor(props) {
     //    super(props);
@@ -65,24 +60,7 @@ class Resources extends Component {
             <Grid item container direction="column" className={classes.root} spacing={4} xs={10} md={8} lg={9}>
               <Grid item>
                 <Typography variant="h5">
-                  Resource Links
-                </Typography>
-              </Grid>
-              <Grid item>
-                <Typography variant="body1" gutterBottom="true">
-                  <a href="https://www.noaa.gov/office-education/grants/noaa-assets#weather" target="_blank" rel="noopener noreferrer">National Oceanic and Atmospheric Administration Education Resources</a>
-                </Typography>
-                <Typography variant="body1" gutterBottom="true">
-                  <a href="https://www.nsf.gov/funding/programs.jsp?org=EHR" target="_blank" rel="noopener noreferrer">National Science Foundation Education Resources</a>
-                </Typography>
-                <Typography variant="body1" gutterBottom="true">
-                  <a href="https://www.climatehubs.usda.gov/tools/all" target="_blank" rel="noopener noreferrer">USDA Climate Hub Tools</a>
-                </Typography>
-                <Typography variant="body1" gutterBottom="true">
-                  <a href="https://www.weather.gov/jetstream/" target="_blank" rel="noopener noreferrer">National Weather Service - Jetstream - Online Weather School</a>
-                </Typography>
-                <Typography variant="body1" gutterBottom="true">
-                  <a href="https://worldwind.arc.nasa.gov/worldweather/" target="_blank" rel="noopener noreferrer">NASA World Weather</a>
+                  Soils
                 </Typography>
               </Grid>
             </Grid>
@@ -91,8 +69,8 @@ class Resources extends Component {
     }
 }
 
-Resources.propTypes = {
+Soils.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Resources);
+export default withStyles(styles)(Soils);

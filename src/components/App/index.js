@@ -81,6 +81,7 @@ class App extends Component {
                   <Route path="/stem/waterdef_doc" render={(props) => <StemMain {...props} loc={'/stem/waterdef_doc'} />} />
                   <Route path="/stem/wxgraph_doc" render={(props) => <StemMain {...props} loc={'/stem/wxgraph_doc'} />} />
                   <Route path="/stem/heatidx_doc" render={(props) => <StemMain {...props} loc={'/stem/heatidx_doc'} />} />
+                  <Route path="/stem/soils" render={(props) => <StemMain {...props} loc={'/stem/soils'} />} />
                   <Route path="/stem/resources" render={(props) => <StemMain {...props} loc={'/stem/resources'} />} />
                   <Route exact path="/tools" render={(props) => <ToolContents {...props} name={'gddtool'} />} />
                   <Route path="/tools/growing-degree-day" render={(props) => <ToolContents {...props} name={'gddtool'} />} />

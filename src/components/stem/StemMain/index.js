@@ -15,6 +15,7 @@ import WaterdefDoc from '../WaterdefDoc'
 import WxgraphDoc from '../WxgraphDoc'
 import HeatidxDoc from '../HeatidxDoc'
 import Resources from '../Resources'
+import Soils from '../Soils'
 
 // Styles
 //import '../../styles/AboutContents.css';
@@ -46,6 +47,7 @@ class StemMain extends Component {
         waterdef_doc: WaterdefDoc,
         wxgraph_doc: WxgraphDoc,
         heatidx_doc: HeatidxDoc,
+        soils: Soils,
         resources: Resources,
     };
 

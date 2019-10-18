@@ -2238,6 +2238,10 @@ export class AppStore {
                       cowIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                       bigAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                       smallAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
+                      // If a very low number, set to 60 for graphing the 'Normal' level
+                      cowIdx = (cowIdx<60) ? 60 : parseInt(cowIdx,10)
+                      bigAnimalIdx = (bigAnimalIdx<66) ? 66 : parseInt(bigAnimalIdx,10)
+                      smallAnimalIdx = (smallAnimalIdx<76) ? 76 : parseInt(smallAnimalIdx,10)
                   } else {
                       cowIdx = null
                       bigAnimalIdx = null
@@ -2289,6 +2293,10 @@ export class AppStore {
                           cowIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                           bigAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                           smallAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
+                          // If a very low number, set to 60 for graphing the 'Normal' level
+                          cowIdx = (cowIdx<60) ? 60 : parseInt(cowIdx,10)
+                          bigAnimalIdx = (bigAnimalIdx<66) ? 66 : parseInt(bigAnimalIdx,10)
+                          smallAnimalIdx = (smallAnimalIdx<76) ? 76 : parseInt(smallAnimalIdx,10)
                       } else {
                           cowIdx = null
                           bigAnimalIdx = null
@@ -2339,6 +2347,10 @@ export class AppStore {
                           cowIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                           bigAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
                           smallAnimalIdx = tvar-(0.55-(0.55*hvar/100.))*(tvar-58)
+                          // If a very low number, set to 60 for graphing the 'Normal' level
+                          cowIdx = (cowIdx<60) ? 60 : parseInt(cowIdx,10)
+                          bigAnimalIdx = (bigAnimalIdx<66) ? 66 : parseInt(bigAnimalIdx,10)
+                          smallAnimalIdx = (smallAnimalIdx<76) ? 76 : parseInt(smallAnimalIdx,10)
                       } else {
                           cowIdx = null
                           bigAnimalIdx = null

@@ -60,7 +60,7 @@ class GddtoolDoc extends Component {
 
         return (
           <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
-            <Grid item container justify="flex-start" alignItems="flex-start" direction="row" xs={2} md={3}>
+            <Grid item container justify="flex-start" alignItems="flex-start" direction="row" xs={2} md={4} lg={3}>
               <Grid item>
                 <Hidden mdUp>
                   <MenuPopover/>
@@ -70,7 +70,7 @@ class GddtoolDoc extends Component {
                 </Hidden>
               </Grid>
             </Grid>
-            <Grid item container className={classes.root} spacing={4} xs={10} md={9}>
+            <Grid item container className={classes.root} spacing={4} xs={10} md={8} lg={9}>
               <Grid item>
                 <Typography variant="h5">
                   About the Growing Degree Day Calculator

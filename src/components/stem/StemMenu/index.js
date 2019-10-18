@@ -2,18 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
-//import NoSsr from '@material-ui/core/NoSsr';
 import ListItem from '@material-ui/core/ListItem';
 //import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-//import InboxIcon from '@material-ui/icons/Inbox';
-//import DraftsIcon from '@material-ui/icons/Drafts';
-//import Grid from '@material-ui/core/Grid';
-//import Hidden from '@material-ui/core/Hidden';
-//import Typography from '@material-ui/core/Typography';
-//import MemoryRouter from 'react-router/MemoryRouter';
-//import Route from 'react-router/Route';
+//import ArrowBack from '@material-ui/icons/ArrowBack';
+//import Assessment from '@material-ui/icons/Assessment';
+//import WbSunny from '@material-ui/icons/WbSunny';
+import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
 
@@ -25,10 +21,14 @@ const styles = theme => ({
     display: 'flex',
     flexDirection: 'column',
     //width: 240,
+    //minWidth: 400,
   },
   lists: {
     //backgroundColor: theme.palette.background.paper,
     backgroundColor: '#f5f5dc',
+  },
+  listHeaders: {
+    fontWeight: 'bold',
   },
   content: {
   },
@@ -39,7 +39,24 @@ function ListItemLinkShorthand(props) {
   return (
     <li>
       <ListItem button component={Link} to={to} data-next="true">
-        <ListItemText primary={primary} />
+        <ListItemText
+          disableTypography
+          primary={<Typography type="body2" style={{ color: '#000000' }}>{primary}</Typography>}
+        />
+      </ListItem>
+    </li>
+  );
+}
+
+function ListHeaderItemLinkShorthand(props) {
+  const { primary, to } = props;
+  return (
+    <li>
+      <ListItem button component={Link} to={to} data-next="true">
+        <ListItemText
+          disableTypography
+          primary={<Typography type="body2" style={{ color: '#000000', fontSize: '20px', fontWeight:'bold' }}>{primary}</Typography>}
+        />
       </ListItem>
     </li>
   );
@@ -58,11 +75,13 @@ function ComponentProperty(props) {
         <div className={classes.root}>
           <div className={classes.lists}>
             <List component="nav">
-              <ListItemLinkShorthand to="/stem/instrumentation" primary="Instrumentation" />
+              <div className={classes.listHeaders}>
+                <ListHeaderItemLinkShorthand to="/stem/instrumentation" primary="Instrumentation" />
+              </div>
             </List>
             <Divider />
             <List component="nav">
-              <ListItemLinkShorthand to="/stem/gddtool_doc" primary="Tools Documentation" />
+              <ListHeaderItemLinkShorthand to="/stem/gddtool_doc" primary="Tools Documentation" />
               <ul>
                   <ListItemLinkShorthand to="/stem/gddtool_doc" primary="Growing Degree Day Calculator" />
                   <ListItemLinkShorthand to="/stem/waterdef_doc" primary="Water Deficit Calculator" />
@@ -72,7 +91,7 @@ function ComponentProperty(props) {
             </List>
             <Divider />
             <List component="nav">
-              <ListItemLinkShorthand to="/stem/resources" primary="Resources" />
+              <ListHeaderItemLinkShorthand to="/stem/resources" primary="Resource Links" />
             </List>
           </div>
         </div>

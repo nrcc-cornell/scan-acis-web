@@ -45,9 +45,12 @@ class HistoricalView extends Component {
         super(props);
         app = this.props.store.app;
         app.setToolName('livestock')
+        this.year = new Date().getFullYear()
+        this.doy = Math.round((Date.now() - Date.parse(new Date().getFullYear(), 0, 0)) / 86400000)
         this.state = {
           data: null,
           data_is_loading: false,
+          timescale: 'hours',
           //disabled: ['mild_discomfort'],
           disabled: [],
         }
@@ -152,13 +155,13 @@ class HistoricalView extends Component {
         }
     }
 
-    calc_heat_index_frequencies = () => {
+    calc_heat_index_frequencies_hourly = () => {
         // t: object containing category names and index thresholds
         // e.g. {'idx_type':'thi','alert':75,'danger':79,'emergency':84}
         let t = this.get_heat_index_thresholds(app.livestock_getLivestockType)
         // heatIdxHourly: hourly heat index values by day
         let heatIdxHourly = this.calc_hourly_indices(this.state.data)
-        console.log('calc_heat_index_frequencies: heatIdxHourly')
+        console.log('calc_heat_index_frequencies_hourly: heatIdxHourly')
         console.log(heatIdxHourly)
         // construct list of all hours annually
         let iday,iyr
@@ -190,10 +193,13 @@ class HistoricalView extends Component {
         let prop,filteredArr,outObject
         let outArray=[]
         let missThresh = 240 // allowed number of hours to be missing in year
-        let validThresh = parseInt(365.*24.,10) - missThresh
+        //let validThresh = parseInt(365.*24.,10) - missThresh
+        let validThresh
         for (iyr=0; iyr<heatIdxHourly_byYear.length; iyr++) {
             // object for this year. It will hold the year and all frequencies
             outObject = {'year':heatIdxHourly_byYear[iyr]['year']}
+            // calculate validThresh. For current year, we test based on day of year, instead of full year
+            validThresh = (this.year.toString()===outObject.year) ? parseInt(this.doy*24.,10)-missThresh : parseInt(365*24.,10)-missThresh
             // If there are not enough valid hours, set categories to null for year
             if (heatIdxHourly_byYear[iyr]['idx'].length < validThresh) {
                 // Set all categories for this year to null
@@ -214,9 +220,86 @@ class HistoricalView extends Component {
             outArray.push(outObject)
         }
 
-        console.log('calc_heat_index_frequencies')
+        console.log('calc_heat_index_frequencies_hourly')
         console.log(outArray)
         return outArray
+    }
+
+    calc_heat_index_frequencies_daily = () => {
+        // t: object containing category names and index thresholds
+        // e.g. {'idx_type':'thi','alert':75,'danger':79,'emergency':84}
+        let t = this.get_heat_index_thresholds(app.livestock_getLivestockType)
+        // heatIdxHourly: hourly heat index values by day
+        let heatIdxHourly = this.calc_hourly_indices(this.state.data)
+        console.log('calc_heat_index_frequencies_hourly: heatIdxHourly')
+        console.log(heatIdxHourly)
+        // construct an annual list of daily maximum indices.
+        // This will be a list of daily values, and each value is the highest index for that day
+        let iday,iyr
+        let year=null
+        let year_today
+        let temp_array=[]
+        let heatIdxDaily_byYear=[]
+        for (iday=0; iday<heatIdxHourly.length; iday++) {
+            year_today = heatIdxHourly[iday]['date'].split('-')[0]
+            // if just starting the loop, assigned year
+            if (!year) { year = year_today }
+            //
+            if (year_today===year) {
+                //same year - append arrays
+                temp_array.push(Math.max(...heatIdxHourly[iday][t['idx_type']]))
+            } else {
+                // write array of hourly values to output array
+                heatIdxDaily_byYear.push({'year':year, 'idx':temp_array})
+                // reinit year and annual array of indices
+                year = year_today
+                temp_array=[]
+                
+            }
+        }
+        // final year: write array of hourly values to output array
+        heatIdxDaily_byYear.push({'year':year, 'idx':temp_array})
+
+        // determine frequency of occurrences above specified thresholds
+        let prop,filteredArr,outObject
+        let outArray=[]
+        let missThresh = 10 // allowed number of days to be missing in year
+        //let validThresh = parseInt(365.*24.,10) - missThresh
+        let validThresh
+        for (iyr=0; iyr<heatIdxDaily_byYear.length; iyr++) {
+            // object for this year. It will hold the year and all frequencies
+            outObject = {'year':heatIdxDaily_byYear[iyr]['year']}
+            // calculate validThresh. For current year, we test based on day of year, instead of full year
+            validThresh = (this.year.toString()===outObject.year) ? parseInt(this.doy,10)-missThresh : 365-missThresh
+            // If there are not enough valid days, set categories to null for year
+            if (heatIdxDaily_byYear[iyr]['idx'].length < validThresh) {
+                // Set all categories for this year to null
+                for (prop in t) {
+                    outObject[prop]=null
+                }
+            } else {
+                //loop through all given thresholds
+                for (prop in t) {
+                    filteredArr = []
+                    if (prop!=='idx_type' && Object.prototype.hasOwnProperty.call(t, prop)) {
+                        filteredArr = heatIdxDaily_byYear[iyr]['idx'].filter(v => v>=t[prop][0] && v<t[prop][1])
+                        outObject[prop] = filteredArr.length
+                    }
+                }
+            }
+            // output array, will contain frequencies for each year
+            outArray.push(outObject)
+        }
+
+        console.log('calc_heat_index_frequencies_daily')
+        console.log(outArray)
+        return outArray
+    }
+
+    handleChangeTimescale = (e) => {
+      this.setState({
+        timescale: e.target.value
+      })
     }
 
     handleClickLegend = (dataKey) => {
@@ -306,27 +389,28 @@ class HistoricalView extends Component {
         let display;
         if (this.props.outputtype==='chart') {
             display = <DisplayCharts
-                        data={this.calc_heat_index_frequencies()}
+                        data={(this.state.timescale==='hours') ? this.calc_heat_index_frequencies_hourly() : this.calc_heat_index_frequencies_daily()}
                         stnName={this.props.stnname}
                         loading={this.state.data_is_loading}
-                        chartTitle={'Extreme Heat Index Frequencies ('+this.getIdxTypeLabel(app.livestock_getLivestockType)+', hours)'}
+                        chartTitle={'Extreme Heat Index Frequencies ('+this.getIdxTypeLabel(app.livestock_getLivestockType)+', '+this.state.timescale+')'}
                         chartInfo={this.getChartInfo(app.livestock_getLivestockType)}
                         disabled={this.state.disabled}
                         onClickLegend={this.handleClickLegend}
+                        timescale={this.state.timescale}
                       />
         }
         if (this.props.outputtype==='table') {
             display = <DisplayTables
-                        data={this.calc_heat_index_frequencies()}
+                        data={(this.state.timescale==='hours') ? this.calc_heat_index_frequencies_hourly() : this.calc_heat_index_frequencies_daily()}
                         stnName={this.props.stnname}
                         loading={this.state.data_is_loading}
-                        tableTitle={'Extreme Heat Index Frequencies ('+this.getIdxTypeLabel(app.livestock_getLivestockType)+', hours)'}
+                        tableTitle={'Extreme Heat Index Frequencies ('+this.getIdxTypeLabel(app.livestock_getLivestockType)+', '+this.state.timescale+')'}
                         tableInfo={this.getChartInfo(app.livestock_getLivestockType)}
                       />
         }
 
         let display_VarPicker;
-        display_VarPicker = <VarPicker />
+        display_VarPicker = <VarPicker timescale={this.state.timescale} onchangeTimescale={this.handleChangeTimescale} />
 
         let display_VarPopover;
         display_VarPopover = <VarPopover

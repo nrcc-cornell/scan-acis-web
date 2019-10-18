@@ -47,6 +47,7 @@ class ExtremeDataView extends Component {
         super(props);
         app = this.props.store.app;
         app.setToolName('wxgrapher')
+        this.year = new Date().getFullYear()
         this.state = {
           tmax_thresh: '90',
           tmax_comparison: 'gt',
@@ -183,12 +184,23 @@ class ExtremeDataView extends Component {
         let oseries=[]
         if (!d) {return oseries}
         for (i=0; i<d.length; i++) {
-            oseries.push({
-              'date': d[i][0],
-              'cnt_x': (d[i][1]==='M') ? 'M' : parseInt(d[i][1],10),
-              'cnt_n': (d[i][2]==='M') ? 'M' : parseInt(d[i][2],10),
-              'cnt_p': (d[i][3]==='M') ? 'M' : parseInt(d[i][3],10),
-            })
+            if (this.year.toString()===d[i][0]) {
+              // if current year, use year to date values without restrictions to missing data
+              oseries.push({
+                'date': d[i][0],
+                'cnt_x': (d[i][4]==='M') ? 'M' : parseInt(d[i][4],10),
+                'cnt_n': (d[i][5]==='M') ? 'M' : parseInt(d[i][5],10),
+                'cnt_p': (d[i][6]==='M') ? 'M' : parseInt(d[i][6],10),
+              })
+            } else {
+              // if not current year, use annual tallies with missing data limitations
+              oseries.push({
+                'date': d[i][0],
+                'cnt_x': (d[i][1]==='M') ? 'M' : parseInt(d[i][1],10),
+                'cnt_n': (d[i][2]==='M') ? 'M' : parseInt(d[i][2],10),
+                'cnt_p': (d[i][3]==='M') ? 'M' : parseInt(d[i][3],10),
+              })
+            }
         }
         return oseries
     }

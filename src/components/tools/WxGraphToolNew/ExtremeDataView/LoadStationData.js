@@ -17,9 +17,12 @@ const LoadStationData = ({sid,xthresh,nthresh,pthresh,xunits,nunits,punits,xcomp
           "sdate":"por",
           "edate":"por",
           "elems":[
-              {"vX":1,"units":xunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+xcomp+"_"+xthresh},"maxmissing":10}, // number of days > tmax threshold
-              {"vX":2,"units":nunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+ncomp+"_"+nthresh},"maxmissing":10}, // number of days < tmin threshold
-              {"vX":4,"units":punits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+pcomp+"_"+pthresh},"maxmissing":10}, // number of days > prcp threshold
+              {"vX":1,"units":xunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+xcomp+"_"+xthresh},"maxmissing":10},
+              {"vX":2,"units":nunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+ncomp+"_"+nthresh},"maxmissing":10},
+              {"vX":4,"units":punits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+pcomp+"_"+pthresh},"maxmissing":10},
+              {"vX":1,"units":xunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+xcomp+"_"+xthresh}}, // number of days > tmax threshold
+              {"vX":2,"units":nunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+ncomp+"_"+nthresh}}, // number of days < tmin threshold
+              {"vX":4,"units":punits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+pcomp+"_"+pthresh}}, // number of days > prcp threshold
             ]
         }
         return axios

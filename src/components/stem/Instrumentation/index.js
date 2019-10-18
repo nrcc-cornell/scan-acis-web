@@ -78,9 +78,9 @@ class Instrumentation extends Component {
                   Instrumentation
                 </Typography>
               </Grid>
-            <Grid item container direction="row" className={classes.root} spacing={4}>
-              <Grid item>
-                    <img className="scan-station-instrument" src={scanstn} alt="SCAN instrumentation" usemap="#instrumentmap" />
+            <Grid item container direction="row" className={classes.root} justify="center" spacing={4}>
+              <Grid item xs={12} sm={8} md={7} lg={7}>
+                    <img className="scan-station-instrument" src={scanstn} border="5" alt="SCAN instrumentation" usemap="#instrumentmap" />
                     <map name="instrumentmap">
                         <area onClick={(e) => {this.updateInstrument(e,'wind')}} shape="rect" coords="16,181,180,327" alt="wind instrument" href="#" />
                         <area onClick={(e) => {this.updateInstrument(e,'solarrad')}} shape="rect" coords="350,267,547,327" alt="solar radiation instrument" href="#" />
@@ -89,7 +89,7 @@ class Instrumentation extends Component {
                         <area onClick={(e) => {this.updateInstrument(e,'soil')}} shape="rect" coords="9,496,176,606" alt="soil temperature and soil moisture instrument" href="#" />
                     </map>
               </Grid>
-              <Grid item>
+              <Grid item xs={12} sm={12} md={5} lg={5}>
                     <Typography align="left" paragraph variant="h6">
                       {app.stem_getInstrumentName}
                     </Typography>
