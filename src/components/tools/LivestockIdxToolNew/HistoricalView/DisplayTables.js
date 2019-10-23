@@ -23,11 +23,10 @@ const DisplayTables = ({data,stnName,loading,tableTitle,tableInfo}) => {
 
         let columns = [];
         columns.push({name:'Date/Time', options:{filter:true,sort:true,display:true,download:true}})
-        {tableInfo.dataInfo &&
+        tableInfo.dataInfo &&
             tableInfo.dataInfo.reverse().map((info,i) => (
                 columns.push({name:info.label, options:{filter:false,sort:true,display:true,download:true}})
             ))
-        }
 
         let tableData=[]
         if (data) {

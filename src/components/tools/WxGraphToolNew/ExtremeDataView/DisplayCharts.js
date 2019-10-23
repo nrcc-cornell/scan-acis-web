@@ -44,6 +44,32 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
             }
         }
 
+        let renderCustomTooltip = (props) => {
+          const { payload, label } = props
+          return (
+              <div className="customized-tooltip-wxgraph">
+                {
+                    label
+                }
+                {
+                    payload.map((entry,index) => {
+                        //const { dataKey, color, value, name } = entry
+                        const { color, value, name } = entry
+                        let style = {}
+                        style = { color: color }
+                        return (
+                            <span key={index} className="tooltip-item">
+                            <br/>
+                            <span style={style}>{name} : </span>
+                            <span>{(isNaN(value)) ? '--' : value}</span>
+                            </span>
+                        )
+                    })
+                }
+              </div>
+          )
+        }
+
         let firstDate = (data && data[0]) ? data[0]['date'] : ''
         let lastDate = (data && data[0]) ? data[data.length-1]['date'] : ''
 
@@ -100,6 +126,7 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
                     <Tooltip
                       cursor={{ stroke: '#AAA', strokeWidth: 2, fill: 'transparent' }}
+                      content={renderCustomTooltip}
                     />
                     <Bar name="Number of days" dataKey="cnt_x" fill="#f25e5e" />
                   </BarChart>
@@ -135,6 +162,7 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
                     <Tooltip
                       cursor={{ stroke: '#AAA', strokeWidth: 2, fill: 'transparent' }}
+                      content={renderCustomTooltip}
                     />
                     <Bar name="Number of days" dataKey="cnt_n" fill="#5d5df0" />
                   </BarChart>
@@ -170,6 +198,7 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
                     <YAxis label={{ value: 'days', angle: -90, position:'insideLeft', offset: 20 }} />
                     <Tooltip
                       cursor={{ stroke: '#AAA', strokeWidth: 2, fill: 'transparent' }}
+                      content={renderCustomTooltip}
                     />
                     <Bar name="Number of days" dataKey="cnt_p" fill="#82ca9d" />
                   </BarChart>

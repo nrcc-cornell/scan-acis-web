@@ -43,6 +43,32 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
             }
         }
 
+        let renderCustomTooltip = (props) => {
+          const { payload, label } = props
+          return (
+              <div className="customized-tooltip-livestock">
+                {
+                    label
+                }
+                {
+                    payload.map((entry,index) => {
+                        //const { dataKey, color, value, name } = entry
+                        const { color, value, name } = entry
+                        let style = {}
+                        style = { color: color }
+                        return (
+                            <span key={index} className="tooltip-item">
+                            <br/>
+                            <span style={style}>{name} : </span>
+                            <span>{(isNaN(value)) ? '--' : value}</span>
+                            </span>
+                        )
+                    })
+                }
+              </div>
+          )
+        }
+
         let renderCustomizedLegend = ({ payload }) => {
           return (
             <div className="customized-legend-livestock">
@@ -141,6 +167,7 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
                     <YAxis label={{ value: timescale, angle: -90, position:'insideLeft', offset: 20 }} />
                     <Tooltip
                       cursor={{ stroke: 'red', strokeWidth: 2, fill: 'transparent' }}
+                      content={renderCustomTooltip}
                     />
                     {chartInfo.dataInfo && disabled &&
                       <Legend

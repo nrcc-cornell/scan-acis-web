@@ -20,13 +20,24 @@
   //height: 30px;
   background-color: #fff;
   font-size: calc(10px + 0.8vw);
+  font-family: Roboto;
   line-height: calc(1em + 0.5vw);
   text-align: center;
 }
 
 .customized-tooltip-livestock {
+  font-family: Roboto;
+  line-height: calc(1em + 0.5vw);
+  background-color: #ffffff;
+  padding: 6px;
+  border-color: #000000;
+  border: 1px solid;
+}
+
+.customized-tooltip-livestock-OLD {
   margin-top: 6vw;
   font-size: calc(6px + 0.7vw);
+  font-family: Roboto;
   line-height: calc(1em + 0.5vw);
 }
 

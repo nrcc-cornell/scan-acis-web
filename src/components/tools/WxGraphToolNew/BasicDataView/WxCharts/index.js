@@ -67,6 +67,14 @@ class WxCharts extends Component {
                     {'key':'soilm40in','label':'SoilM @ 40"','color':'#134960'},
                 ]
             }
+        } else if (type==='wind') {
+            return {
+                'typeLabel':'Wind Speed',
+                'dataInfo': [
+                    {'key':'windspdave','label':'Wind Speed (ave)','color':'#33C2FF'},
+                    {'key':'windspdmax','label':'Wind Speed (max)','color':'#134960'},
+                ]
+            }
         } else {
             return []
         }
@@ -253,6 +261,7 @@ class WxCharts extends Component {
 
         let chartInfo_soilt = this.getChartInfo('soilt')
         let chartInfo_soilm = this.getChartInfo('soilm')
+        let chartInfo_wind = this.getChartInfo('wind')
 
         return (
           <div id="wx-charts">
@@ -505,6 +514,13 @@ class WxCharts extends Component {
                 <ResponsiveContainer width="100%" height={160} className={(app.wxgraph_getVars['wind']) ? "" : "isHidden"}>
                   <LineChart data={dataForChart} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>
+                    {chartInfo_wind.dataInfo && this.state.disabled &&
+                        chartInfo_wind.dataInfo
+                          .filter(info => !this.state.disabled.includes(info.key))
+                          .map(info =>
+                            <Line type='monotone' dot={false} name={info.label} key={info.key} dataKey={info.key} stroke={info.color} />
+                          )
+                    }
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis
                       dataKey="date"
@@ -519,9 +535,16 @@ class WxCharts extends Component {
                     <Tooltip
                         content={this.renderCustomTooltip}
                     />
-                    <Legend verticalAlign="top" height={36}/>
-                    <Line type='monotone' name='Wind Speed (ave)' dataKey='windspdave' stroke='#8884d8' />
-                    <Line type='monotone' name='Wind Speed (max)' dataKey='windspdmax' dot={false} stroke='#000000' />
+                    <Legend
+                        verticalAlign="top"
+                        height={36}
+                        payload={chartInfo_wind.dataInfo.map(info => ({
+                          dataKey: info.key,
+                          dataLabel: info.label,
+                          color: info.color
+                        }))}
+                        content={this.renderCustomizedLegend}
+                    />
                   </LineChart>
                 </ResponsiveContainer>
             </Grid>
