@@ -62,8 +62,8 @@ class HistoricalView extends Component {
             sid:this.props.station
         })
           .then(response => {
-            console.log('Historical View : LoadStationData response');
-            console.log(response);
+            //console.log('Historical View : LoadStationData response');
+            //console.log(response);
             this.setState({
               data:response.data.data,
               data_is_loading:false,
@@ -106,8 +106,8 @@ class HistoricalView extends Component {
 
     calc_hourly_indices = (d) => {
         // d: data from acis call
-        console.log('calc_hourly_indices: d')
-        console.log(d)
+        //console.log('calc_hourly_indices: d')
+        //console.log(d)
         let iday,ihr
         let t,rh,s,w
         let thi,cbr
@@ -161,8 +161,8 @@ class HistoricalView extends Component {
         let t = this.get_heat_index_thresholds(app.livestock_getLivestockType)
         // heatIdxHourly: hourly heat index values by day
         let heatIdxHourly = this.calc_hourly_indices(this.state.data)
-        console.log('calc_heat_index_frequencies_hourly: heatIdxHourly')
-        console.log(heatIdxHourly)
+        //console.log('calc_heat_index_frequencies_hourly: heatIdxHourly')
+        //console.log(heatIdxHourly)
         // construct list of all hours annually
         let iday,iyr
         let year=null
@@ -220,8 +220,8 @@ class HistoricalView extends Component {
             outArray.push(outObject)
         }
 
-        console.log('calc_heat_index_frequencies_hourly')
-        console.log(outArray)
+        //console.log('calc_heat_index_frequencies_hourly')
+        //console.log(outArray)
         return outArray
     }
 
@@ -231,8 +231,8 @@ class HistoricalView extends Component {
         let t = this.get_heat_index_thresholds(app.livestock_getLivestockType)
         // heatIdxHourly: hourly heat index values by day
         let heatIdxHourly = this.calc_hourly_indices(this.state.data)
-        console.log('calc_heat_index_frequencies_hourly: heatIdxHourly')
-        console.log(heatIdxHourly)
+        //console.log('calc_heat_index_frequencies_hourly: heatIdxHourly')
+        //console.log(heatIdxHourly)
         // construct an annual list of daily maximum indices.
         // This will be a list of daily values, and each value is the highest index for that day
         let iday,iyr
@@ -291,8 +291,8 @@ class HistoricalView extends Component {
             outArray.push(outObject)
         }
 
-        console.log('calc_heat_index_frequencies_daily')
-        console.log(outArray)
+        //console.log('calc_heat_index_frequencies_daily')
+        //console.log(outArray)
         return outArray
     }
 

@@ -20,8 +20,8 @@ import '../../../../styles/WxCharts.css';
 
 const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxSelected,tminSelected,prcpSelected}) => {
 
-        console.log('DATA');
-        console.log(data);
+        //console.log('DATA');
+        //console.log(data);
 
         let year = new Date().getFullYear()
 

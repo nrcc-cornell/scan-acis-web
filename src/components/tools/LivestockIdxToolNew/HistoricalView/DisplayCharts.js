@@ -21,8 +21,8 @@ import '../../../../styles/LivestockCharts.css';
 
 const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onClickLegend,timescale}) => {
 
-        console.log('DisplayCharts: data')
-        console.log(data)
+        //console.log('DisplayCharts: data')
+        //console.log(data)
         let year = new Date().getFullYear()
 
         let yearHasValidData = (y) => {

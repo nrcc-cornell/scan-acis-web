@@ -983,9 +983,9 @@ export class AppStore {
         this.wxgraph_climateSummary = {'por':dataObjArray,'two_years':dataObjArray,'two_months':dataObjArray,'two_days':dataObjArray}
     }
     @action wxgraph_setClimateSummary = () => {
-        console.log('wxgraph_setClimateSummary');
-        console.log(this.getLocation.sid.split(' ')[1]);
-        console.log(this.getLocation.sid.split(' ')[1]==='17');
+        //console.log('wxgraph_setClimateSummary');
+        //console.log(this.getLocation.sid.split(' ')[1]);
+        //console.log(this.getLocation.sid.split(' ')[1]==='17');
         let data = this.wxgraph_getClimateData;
         let dataObjArray_hours = [];
         let dataObjArray_days = [];
