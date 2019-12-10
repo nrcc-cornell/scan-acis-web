@@ -81,6 +81,16 @@ function ComponentProperty(props) {
             </List>
             <Divider />
             <List component="nav">
+              <ListHeaderItemLinkShorthand to="/stem/soils_overview" primary="Soils" />
+              <ul>
+                  <ListItemLinkShorthand to="/stem/soils_overview" primary="Overview of Soils" />
+                  <ListItemLinkShorthand to="/stem/soils_reports" primary="Soil Reports on TSCAN sites" />
+                  <ListItemLinkShorthand to="/stem/soils_manuals" primary="Manuals about KSSL Laboratory Data" />
+                  <ListItemLinkShorthand to="/stem/soils_examples" primary="Example Pedons" />
+              </ul>
+            </List>
+            <Divider />
+            <List component="nav">
               <ListHeaderItemLinkShorthand to="/stem/gddtool_doc" primary="Tools Documentation" />
               <ul>
                   <ListItemLinkShorthand to="/stem/gddtool_doc" primary="Growing Degree Day Calculator" />

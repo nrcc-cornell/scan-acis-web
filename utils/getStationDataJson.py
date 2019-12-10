@@ -11,6 +11,7 @@ except ImportError :
 def acis_ws(method,params) :
 	#acis_url = 'http://data.rcc-acis.org/'
 	acis_url = 'http://data.nrcc.rcc-acis.org/'
+	#acis_url = 'http://data.srcc.lsu.edu/'
 	req = urllib2.Request(acis_url+method,
 		urllib.urlencode({'params':json.dumps(params)}),
 		{'Accept':'application/json'})

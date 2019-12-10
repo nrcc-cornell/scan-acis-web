@@ -10,12 +10,15 @@ import Typography from '@material-ui/core/Typography';
 
 // Components
 import Instrumentation from '../Instrumentation'
+import SoilsOverview from '../SoilsOverview'
+import SoilsReports from '../SoilsReports'
+import SoilsManuals from '../SoilsManuals'
+import SoilsExamples from '../SoilsExamples'
 import GddtoolDoc from '../GddtoolDoc'
 import WaterdefDoc from '../WaterdefDoc'
 import WxgraphDoc from '../WxgraphDoc'
 import HeatidxDoc from '../HeatidxDoc'
 import Resources from '../Resources'
-import Soils from '../Soils'
 
 // Styles
 //import '../../styles/AboutContents.css';
@@ -47,7 +50,10 @@ class StemMain extends Component {
         waterdef_doc: WaterdefDoc,
         wxgraph_doc: WxgraphDoc,
         heatidx_doc: HeatidxDoc,
-        soils: Soils,
+        soils_overview: SoilsOverview,
+        soils_reports: SoilsReports,
+        soils_manuals: SoilsManuals,
+        soils_examples: SoilsExamples,
         resources: Resources,
     };
 

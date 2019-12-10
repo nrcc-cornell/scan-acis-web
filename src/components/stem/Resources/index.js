@@ -70,19 +70,34 @@ class Resources extends Component {
               </Grid>
               <Grid item>
                 <Typography variant="body1" gutterBottom="true">
-                  <a href="https://www.noaa.gov/office-education/grants/noaa-assets#weather" target="_blank" rel="noopener noreferrer">National Oceanic and Atmospheric Administration Education Resources</a>
+                  &bull;&nbsp;<a href="https://www.nrcs.usda.gov/wps/portal/nrcs/main/national/careers/" target="_blank" rel="noopener noreferrer">STEM careers with NRCS</a>
                 </Typography>
                 <Typography variant="body1" gutterBottom="true">
-                  <a href="https://www.nsf.gov/funding/programs.jsp?org=EHR" target="_blank" rel="noopener noreferrer">National Science Foundation Education Resources</a>
+                  &bull;&nbsp;<a href="https://www.carbonscapes.org/" target="_blank" rel="noopener noreferrer">USDA CarbonScapes</a> (and see the Learn section: <a href="https://www.carbonscapes.org/learn/" target="_blank" rel="noopener noreferrer">https://www.carbonscapes.org/learn/</a> for details on carbon in soil)
                 </Typography>
                 <Typography variant="body1" gutterBottom="true">
-                  <a href="https://www.climatehubs.usda.gov/tools/all" target="_blank" rel="noopener noreferrer">USDA Climate Hub Tools</a>
+                  &bull;&nbsp;<a href="https://www.nrcs.usda.gov/wps/portal/nrcs/site/soils/home/" target="_blank" rel="noopener noreferrer">NRCS Soils</a>
                 </Typography>
                 <Typography variant="body1" gutterBottom="true">
-                  <a href="https://www.weather.gov/jetstream/" target="_blank" rel="noopener noreferrer">National Weather Service - Jetstream - Online Weather School</a>
+                  &bull;&nbsp;<a href="https://www.nrcs.usda.gov/wps/portal/nrcs/main/soils/research/guide/" target="_blank" rel="noopener noreferrer">NRCS Soil Manuals and Guides</a>
                 </Typography>
                 <Typography variant="body1" gutterBottom="true">
-                  <a href="https://worldwind.arc.nasa.gov/worldweather/" target="_blank" rel="noopener noreferrer">NASA World Weather</a>
+                  &bull;&nbsp;<a href="https://www.nrcs.usda.gov/Internet/FSE_DOCUMENTS/nrcseprd1467417.pdf" target="_blank" rel="noopener noreferrer">Soil Web App for Mobile Phones</a>
+                </Typography>
+                <Typography variant="body1" gutterBottom="true">
+                  &bull;&nbsp;<a href="https://www.noaa.gov/office-education/grants/noaa-assets#weather" target="_blank" rel="noopener noreferrer">National Oceanic and Atmospheric Administration Education Resources</a>
+                </Typography>
+                <Typography variant="body1" gutterBottom="true">
+                  &bull;&nbsp;<a href="https://www.nsf.gov/funding/programs.jsp?org=EHR" target="_blank" rel="noopener noreferrer">National Science Foundation Education Resources</a>
+                </Typography>
+                <Typography variant="body1" gutterBottom="true">
+                  &bull;&nbsp;<a href="https://www.climatehubs.usda.gov/tools/all" target="_blank" rel="noopener noreferrer">USDA Climate Hub Tools</a>
+                </Typography>
+                <Typography variant="body1" gutterBottom="true">
+                  &bull;&nbsp;<a href="https://www.weather.gov/jetstream/" target="_blank" rel="noopener noreferrer">National Weather Service - Jetstream - Online Weather School</a>
+                </Typography>
+                <Typography variant="body1" gutterBottom="true">
+                  &bull;&nbsp;<a href="https://worldwind.arc.nasa.gov/worldweather/" target="_blank" rel="noopener noreferrer">NASA World Weather</a>
                 </Typography>
               </Grid>
             </Grid>
