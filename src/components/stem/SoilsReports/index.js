@@ -12,12 +12,12 @@ import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 import StemMenu from '../StemMenu'
 
-import soilsreports1 from '../../../assets/Soils/soils_reports_1.png'
-import soilsreports2 from '../../../assets/Soils/soils_reports_2.png'
-import soilsreports3 from '../../../assets/Soils/soils_reports_3.png'
-import soilsreports4 from '../../../assets/Soils/soils_reports_4.png'
-import soilsreports5 from '../../../assets/Soils/soils_reports_5.png'
-import soilsreports6 from '../../../assets/Soils/soils_reports_6.png'
+//import soilsreports1 from '../../../assets/Soils/soils_reports_1.png'
+//import soilsreports2 from '../../../assets/Soils/soils_reports_2.png'
+//import soilsreports3 from '../../../assets/Soils/soils_reports_3.png'
+//import soilsreports4 from '../../../assets/Soils/soils_reports_4.png'
+//import soilsreports5 from '../../../assets/Soils/soils_reports_5.png'
+//import soilsreports6 from '../../../assets/Soils/soils_reports_6.png'
 
 // Components
 import MenuPopover from '../MenuPopover'
@@ -37,6 +37,14 @@ const styles = theme => ({
     padding: theme.spacing(2),
   },
 });
+
+const images = require.context('../../../../public/stem_soils_images/', true);
+let soilsreports1 = images('./soils_reports_1.png');
+let soilsreports2 = images('./soils_reports_2.png');
+let soilsreports3 = images('./soils_reports_3.png');
+let soilsreports4 = images('./soils_reports_4.png');
+let soilsreports5 = images('./soils_reports_5.png');
+let soilsreports6 = images('./soils_reports_6.png');
 
 //var app;
 

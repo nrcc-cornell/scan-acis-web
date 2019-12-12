@@ -12,8 +12,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 import StemMenu from '../StemMenu'
 
-import soilsoverview1 from '../../../assets/Soils/soils_overview_1.png'
-import soilsoverview2 from '../../../assets/Soils/soils_overview_2.png'
+//import soilsoverview1 from '../../../assets/Soils/soils_overview_1.png'
+//import soilsoverview2 from '../../../assets/Soils/soils_overview_2.png'
 
 // Components
 import MenuPopover from '../MenuPopover'
@@ -33,6 +33,10 @@ const styles = theme => ({
     padding: theme.spacing(2),
   },
 });
+
+const images = require.context('../../../../public/stem_soils_images/', true);
+let soilsoverview1 = images('./soils_overview_1.png');
+let soilsoverview2 = images('./soils_overview_2.png');
 
 //var app;
 

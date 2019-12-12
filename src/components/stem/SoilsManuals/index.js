@@ -12,7 +12,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from '@material-ui/core/Typography';
 import StemMenu from '../StemMenu'
 
-import soilsmanuals1 from '../../../assets/Soils/soils_manuals_1.png'
+//import soilsmanuals1 from '../../../assets/Soils/soils_manuals_1.png'
 
 // Components
 import MenuPopover from '../MenuPopover'
@@ -32,6 +32,9 @@ const styles = theme => ({
     padding: theme.spacing(2),
   },
 });
+
+const images = require.context('../../../../public/stem_soils_images/', true);
+let soilsmanuals1 = images('./soils_manuals_1.png');
 
 //var app;
 
