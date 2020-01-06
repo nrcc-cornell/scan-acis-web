@@ -81,8 +81,11 @@ class PlantingDatePicker extends Component {
                   scrollableYearDropdown
                   dropdownMode="select"
                   //filterDate={this.isMonthInGrowingSeason}
-                  //popperPlacement="right"
+                  popperPlacement="bottom-start"
                   popperModifiers={{
+                    flip: {
+                      enabled: false
+                    },
                     offset: {
                       enabled: true,
                       offset: '-40px, 5px'

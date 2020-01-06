@@ -99,7 +99,7 @@ class HeatIdxDoc extends Component {
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <b>1) Cattle</b><br/><br/>
-                      The Cattle Heat Index is based on breathing rate, which increases as the animal becomes more heat stressed. This calculation requires temperature, humidity, solar radiation and wind speed. In cases where all variables are not available, using the "big animal" general calculation (#3, below) is suggested.<br/><br/>
+                      The Cattle Heat Index is based on breathing rate, which increases as the animal becomes more heat stressed. This calculation requires temperature, humidity, solar radiation and wind speed. In cases where all variables are not available, using the "large animal" general calculation (#3, below) is suggested.<br/><br/>
                       <i>Brown-Brandl, T. M., Eigenberg, R. A., Nienaber, J. A., and Hahn, G. L. 2005. Dynamic response indicators of heat stress in shaded and non-shaded feedlot cattle, Part 1: Analyses of indicators. Biosystems Engineering 90(4): 451-462.</i><br/><br/>
                       <i>Eigenberg, R. A., Brown-Brandl, T. M., Nienaber, J. A., and Hahn, G. L. 2005. Dynamic Response Indicators of Heat Stress in Shaded and Non-shaded Feedlot Cattle, Part 2: Predictive Relationships. Biosystems Engineering 91(1): 111-118.</i><br/><br/>
                     </Typography>

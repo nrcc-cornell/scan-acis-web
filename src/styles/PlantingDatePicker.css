@@ -17,6 +17,7 @@
 
     .date-text-input {
         width: 170px;
+        z-index: 0;
     }
 
     .react-datepicker.calendar-pdate {
