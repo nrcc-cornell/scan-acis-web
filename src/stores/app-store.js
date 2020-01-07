@@ -63,8 +63,8 @@ export class AppStore {
     @computed get getActiveTabIndex() {
         let tabIndex = null;
         if (this.getActivePage==='home') {
-            //tabIndex = 0;
-            tabIndex = false;
+            tabIndex = 0;
+            //tabIndex = false;
         } else if (this.getActivePage==='about') {
             tabIndex = 1;
         } else if (this.getActivePage==='stem') {

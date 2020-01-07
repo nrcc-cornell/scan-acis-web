@@ -32,6 +32,10 @@ const styles = theme => ({
   appBar: {
     marginLeft: 0,
   },
+  tab: {
+    minWidth: 120,
+    width: 120,
+  },
   headerText: {
     color: 'green',
     fontSize: '26px',
@@ -137,8 +141,9 @@ class FullWidthTabs extends React.Component {
                 textColor="primary"
                 variant="standard"
               >
-                <Tab label="ABOUT" value={1} />
-                <Tab label="SCAN 4 STEM" value={2} />
+                <Tab classes={{ root: classes.tab }} label="HOME" value={0} />
+                <Tab classes={{ root: classes.tab }} label="ABOUT" value={1} />
+                <Tab classes={{ root: classes.tab }} label="SCAN 4 STEM" value={2} />
               </Tabs>
             </section>
           </Toolbar>
@@ -150,6 +155,7 @@ class FullWidthTabs extends React.Component {
                 textColor="primary"
                 variant="standard"
               >
+                <Tab label="HOME" value={0} />
                 <Tab label="ABOUT" value={1} />
                 <Tab label="SCAN 4 STEM" value={2} />
               </Tabs>
