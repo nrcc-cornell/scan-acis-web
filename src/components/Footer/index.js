@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button';
 import acislogo from '../../assets/acis-transparent.png'
 import nrcslogo from '../../assets/NRCS-Logo.png'
 import usdalogo from '../../assets/USDA-Logo.jpg'
+import hublogo from '../../assets/climate-hub-logo.png'
 
 class Footer extends Component {
   render () {
@@ -36,6 +37,8 @@ class Footer extends Component {
                         <a href="https://www.nrcs.usda.gov/wps/portal/nrcs/site/national/home/" target="_blank" rel="noopener noreferrer"><img src={nrcslogo} alt="NRCS" /></a>
                         {' '}
                         <a href="http://www.rcc-acis.org" target="_blank" rel="noopener noreferrer"><img src={acislogo} alt="RCC ACIS" /></a>
+                        {' '}
+                        <a href="https://www.climatehubs.usda.gov" target="_blank" rel="noopener noreferrer"><img width="60%" src={hublogo} alt="USDA Climate Hubs" /></a>
           </Grid>
           <Grid container item direction="column" spacing={1} xs={12} sm={4}>
               <Grid item>
