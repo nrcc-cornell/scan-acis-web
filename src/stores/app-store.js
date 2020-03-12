@@ -642,7 +642,8 @@ export class AppStore {
                 //if (y!=='2018') {
                 //if (y!==this_year) {
                 if (y!==this_year.toString()) {
-                    if (data_by_date[d][y]) { ave_data.push(data_by_date[d][y]) }
+                    if (isNaN(data_by_date[d][y])===false) { ave_data.push(data_by_date[d][y]) }
+                    //if (data_by_date[d][y]) { ave_data.push(data_by_date[d][y]) }
                     //ave_data.push(data_by_date[d][y])
                 }
             });
@@ -653,7 +654,8 @@ export class AppStore {
             yearsArray.forEach(function (y) {
                 //if (y<='2017' && y>='2003') {
                 if (y<=(parseInt(this_year,10)-1).toString() && y>=(parseInt(this_year,10)-15).toString()) {
-                    if (data_by_date[d][y]) { recent_data.push(data_by_date[d][y]) }
+                    if (isNaN(data_by_date[d][y])===false) { recent_data.push(data_by_date[d][y]) }
+                    //if (data_by_date[d][y]) { recent_data.push(data_by_date[d][y]) }
                     //recent_data.push(data_by_date[d][y])
                 }
             });
@@ -666,7 +668,8 @@ export class AppStore {
                 //if (y!=='2018') {
                 //if (y!==this_year) {
                 if (y!==this_year.toString()) {
-                    if (data_by_date[d][y]) { valArray.push(data_by_date[d][y]) }
+                    if (isNaN(data_by_date[d][y])===false) { valArray.push(data_by_date[d][y]) }
+                    //if (data_by_date[d][y]) { valArray.push(data_by_date[d][y]) }
                     //valArray.push(data_by_date[d][y])
                 }
             });

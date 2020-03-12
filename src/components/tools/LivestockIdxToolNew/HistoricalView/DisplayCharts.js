@@ -144,7 +144,7 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
               </Grid>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid item container direction="row" justify="center" alignItems="center" xs={12}>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={data} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>
@@ -181,6 +181,11 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
                     }
                   </BarChart>
                 </ResponsiveContainer>
+                <Grid item>
+                  <Typography variant="caption">
+                    {'(click legend to toggle categories)'}
+                  </Typography>
+                </Grid>
             </Grid>
           </Grid>
 

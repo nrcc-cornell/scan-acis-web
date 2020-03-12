@@ -29,7 +29,7 @@ class WxCharts extends Component {
         super(props);
         app = this.props.store.app;
         this.state = {
-            disabled: ['soilt40in','soilt20in','soilm40in','soilm20in'],
+            disabled: ['soilt40in','soilt2in','soilm40in','soilm2in'],
         }
     }
 
@@ -65,6 +65,11 @@ class WxCharts extends Component {
                     {'key':'soilm8in','label':'SoilM @ 8"','color':'#2692BF'},
                     {'key':'soilm20in','label':'SoilM @ 20"','color':'#1A6180'},
                     {'key':'soilm40in','label':'SoilM @ 40"','color':'#134960'},
+                    //{'key':'soilm2in','label':'SoilM @ 2"','color':'#006837'},
+                    //{'key':'soilm4in','label':'SoilM @ 4"','color':'#31a354'},
+                    //{'key':'soilm8in','label':'SoilM @ 8"','color':'#41b6c4'},
+                    //{'key':'soilm20in','label':'SoilM @ 20"','color':'#2c7fb8'},
+                    //{'key':'soilm40in','label':'SoilM @ 40"','color':'#253494'},
                 ]
             }
         } else if (type==='wind') {
@@ -346,6 +351,11 @@ class WxCharts extends Component {
                   {createChartTitle('soiltemp','Soil Temperature')}
                 </Typography>
               </Grid>
+              <Grid item>
+                <Typography variant="caption">
+                  {createChartTitle('soiltemp','(click legend to toggle depths)')}
+                </Typography>
+              </Grid>
             </Grid>
 
             <Grid item xs={12}>
@@ -395,12 +405,17 @@ class WxCharts extends Component {
                   {createChartTitle('soilmoist','Soil Moisture')}
                 </Typography>
               </Grid>
+              <Grid item>
+                <Typography variant="caption">
+                  {createChartTitle('soilmoist','(click legend to toggle depths)')}
+                </Typography>
+              </Grid>
             </Grid>
 
             <Grid item xs={12}>
                 <ResponsiveContainer width="100%" height={200} className={(app.wxgraph_getVars['soilmoist']) ? "" : "isHidden"}>
                   <LineChart data={dataForChart} syncId="anyId"
-                        margin={{top: 0, right: 30, left: 0, bottom: 0}}>
+                        margin={{top: 10, right: 30, left: 0, bottom: 0}}>
                     {chartInfo_soilm.dataInfo && this.state.disabled &&
                         chartInfo_soilm.dataInfo
                           .filter(info => !this.state.disabled.includes(info.key))
@@ -508,12 +523,17 @@ class WxCharts extends Component {
                   {createChartTitle('wind',app.wxgraph_getVarLabels['wind_label'])}
                 </Typography>
               </Grid>
+              <Grid item>
+                <Typography variant="caption">
+                  {createChartTitle('wind','(click legend to toggle variables)')}
+                </Typography>
+              </Grid>
             </Grid>
 
             <Grid item xs={12}>
                 <ResponsiveContainer width="100%" height={160} className={(app.wxgraph_getVars['wind']) ? "" : "isHidden"}>
                   <LineChart data={dataForChart} syncId="anyId"
-                        margin={{top: 0, right: 30, left: 0, bottom: 0}}>
+                        margin={{top: 10, right: 30, left: 0, bottom: 0}}>
                     {chartInfo_wind.dataInfo && this.state.disabled &&
                         chartInfo_wind.dataInfo
                           .filter(info => !this.state.disabled.includes(info.key))
