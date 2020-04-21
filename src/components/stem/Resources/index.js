@@ -99,6 +99,9 @@ class Resources extends Component {
                 <Typography variant="body1" gutterBottom="true">
                   &bull;&nbsp;<a href="https://worldwind.arc.nasa.gov/worldweather/" target="_blank" rel="noopener noreferrer">NASA World Weather</a>
                 </Typography>
+                <Typography variant="body1" gutterBottom="true">
+                  &bull;&nbsp;<a href="https://earthobservatory.nasa.gov/global-maps" target="_blank" rel="noopener noreferrer">NASA Earth Observatory - Global Maps</a>
+                </Typography>
               </Grid>
             </Grid>
           </Grid>
