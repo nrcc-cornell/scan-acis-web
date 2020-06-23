@@ -261,7 +261,10 @@ for item in rData['data']:
 		stnDict = {}
 		stnDict['uid'] = m['uid']
 		stnDict['sid'] = stn
-		stnDict['ll'] = m['ll']
+		if stn=='3064 19':
+			stnDict['ll'] = [-133.1249333,55.47135]
+		else:
+			stnDict['ll'] = m['ll']
 		stnDict['name'] = m['name']
 		stnDict['state'] = m['state']
 		stnDict['elev'] = m['elev'] if 'elev' in m.keys() else 'N/A'
