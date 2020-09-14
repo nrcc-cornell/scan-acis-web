@@ -1,6 +1,6 @@
 {
   "name": "nrcc-scan-acis",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "private": true,
   "devDependencies": {
     "custom-react-scripts": "0.2.2",

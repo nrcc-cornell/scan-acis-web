@@ -18,6 +18,7 @@ import WaterDefTool from '../../components/tools/WaterDefTool';
 import WxGraphTool from '../../components/tools/WxGraphToolNew';
 //import LivestockIdxTool from '../../components/tools/LivestockIdxTool';
 import LivestockIdxTool from '../../components/tools/LivestockIdxToolNew';
+import WindRose from '../../components/tools/WindRose';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 //import { spacing } from '@material-ui/system';
@@ -70,17 +71,19 @@ class ToolContents extends Component {
               </Grid>
             </Grid>
             </div>
-            <div style={{ marginTop:30, marginBottom:10 }}>
+            <div style={{ marginTop:30, marginBottom:0 }}>
             <Grid container spacing={1}>
               <Grid item xs={12}>
                 <Typography align="center" variant="h3" className="tool-title">
                   {app.getToolInfo(this.props.name).title}
                 </Typography>
+                {this.props.name!=='windrose' &&
                 <Typography align="center" variant="h3">
                   <Button variant="text" color="primary" onClick={()=>{history.push(url_doc)}}>
                     View Documentation
                   </Button>
                 </Typography>
+                }
               </Grid>
             </Grid>
             </div>
@@ -91,6 +94,7 @@ class ToolContents extends Component {
                 { this.props.name==='waterdef' && app.getLocation && (<WaterDefTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} />) }
                 { this.props.name==='wxgrapher' && app.getLocation && (<WxGraphTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} outputtype={app.getOutputType}/>) }
                 { this.props.name==='livestock' && app.getLocation && (<LivestockIdxTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} outputtype={app.getOutputType}/>) }
+                { this.props.name==='windrose' && app.getLocation && (<WindRose {...this.props} station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} por_start={app.getLocation.sdate} outputtype={app.getOutputType}/>) }
               </Grid>
             </Grid>
             </div>

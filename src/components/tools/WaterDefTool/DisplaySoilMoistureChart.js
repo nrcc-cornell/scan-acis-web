@@ -3,12 +3,22 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import Highcharts from 'highcharts';
-import HighchartsReact from 'highcharts-react-official';
+//import Highcharts from 'highcharts';
+//import HighchartsReact from 'highcharts-react-official';
 
-var HighchartsMore = require('highcharts-more');
-HighchartsMore(Highcharts);
-require("highcharts/modules/exporting")(Highcharts);
+//var HighchartsMore = require('highcharts-more');
+//HighchartsMore(Highcharts);
+//require("highcharts/modules/exporting")(Highcharts);
+
+import Highcharts from 'highcharts'
+import HighchartsMore from 'highcharts/highcharts-more'
+import Exporting from 'highcharts/modules/exporting'
+import ExportData from 'highcharts/modules/export-data'
+import HighchartsReact from 'highcharts-react-official'
+
+HighchartsMore(Highcharts)
+Exporting(Highcharts)
+ExportData(Highcharts)
 
 const DisplaySoilMoistureChart = ({data,stnName}) => {
 

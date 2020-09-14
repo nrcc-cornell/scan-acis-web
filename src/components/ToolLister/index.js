@@ -40,6 +40,9 @@ class ToolLister extends Component {
               <Grid item>
                 <ToolCard {...app.getToolInfo('livestock')} />
               </Grid>
+              <Grid item>
+                <ToolCard {...app.getToolInfo('windrose')} />
+              </Grid>
              </Grid>
             </Grid>
             <br/>

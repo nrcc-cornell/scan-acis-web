@@ -49,6 +49,10 @@ class ToolSelect extends Component {
         return (
             <Typography variant="subtitle2">
                 <Select
+                    styles={{
+                      // Fixes the overlapping problem of the component
+                      menu: provided => ({ ...provided, zIndex: 9999 })
+                    }}
                     name="tool"
                     className="tool-select"
                     placeholder={'TOOL > '+app.getToolInfo(app.getToolName).title}

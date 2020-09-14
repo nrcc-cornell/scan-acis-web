@@ -89,7 +89,7 @@ export class AppStore {
     /// -     description (one sentence description of tool)
     /// -     thumbnail (thumbnail image for tool card)
     //////////////////////////////////////////////
-    toolNameArray = ['gddtool','waterdef','wxgrapher','livestock']
+    toolNameArray = ['gddtool','waterdef','wxgrapher','livestock','windrose']
     @observable toolName = this.toolNameArray[0]
     // set toolName from tool card
     @action setToolName = (n) => {
@@ -130,6 +130,12 @@ export class AppStore {
                 thumbnail = pathToImages+'Livestock-thumbnail.png'
                 url = '/tools/livestock-heat-index'
                 url_doc = '/stem/heatidx_doc'
+            } else if (name==='windrose') {
+                title = 'Wind Rose Diagram'
+                description = 'Summarize wind speed and direction over time.'
+                thumbnail = pathToImages+'WindRose-thumbnail.png'
+                url = '/tools/wind-rose'
+                url_doc = '/stem/windrose_doc'
             } else {
             }
             onclick = () => {this.setActivePage(3); this.setToolName(name)}
