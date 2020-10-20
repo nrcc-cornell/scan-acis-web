@@ -125,7 +125,7 @@ class GddtoolDoc extends Component {
                       <b>a) Planting/Budbreak Date :</b> Click on the calendar icon to select a date from the dropdown calendar. This is the date from which you would like to start GDD accumulation. The current year is selected by default, however previous years can be selected if data at your location of interest is available.<br/><br/>
                       <b>b) GDD Base :</b> Enter the base value you would like to use for calculating GDDs. After editing this value, an "Update" button will appear to allow you set this value as the new base.<br/><br/>
                       Changing either of these user options will automatically cause the output charts and tables to update with current settings.<br/><br/>
-                      <img className="doc-image" src={userinput} alt="Growing Degree Day Calculator User Input" />
+                      <img className="doc-image" src={userinput} alt="User input for the SCAN/TSCAN Growing Degree Day Calculator" />
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <i>2. Output</i><br/><br/>
@@ -135,7 +135,7 @@ class GddtoolDoc extends Component {
                       <b>b) Blue Line : </b> The average season-to-date accumulation for the most recent 15-year period.<br/><br/>
                       <b>c) Purple Line : </b> The average season-to-date accumulation for the entire period of record.<br/><br/>
                       <b>d) Gray Shading : </b> The extreme season-to-date accumulations observed throughout the entire period of record.<br/><br/>
-                      <img className="doc-image" src={gddtooloutput} alt="Growing Degree Day Output" /><br/><br/>
+                      <img className="doc-image" src={gddtooloutput} alt="Sample output for the SCAN/TSCAN Growing Degree Day Calculator" /><br/><br/>
                     </Typography>
                     <Button variant="outlined" color="primary" onClick={()=>{history.push(url)}}>
                       Growing Degree Day Calculator

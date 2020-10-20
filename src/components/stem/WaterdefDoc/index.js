@@ -106,15 +106,15 @@ class WaterdefDoc extends Component {
                     <Typography align="left" paragraph variant="body1">
                       <i>1. User Options</i><br/><br/>
                       Once your site is selected, there are two options to choose from at the top of the tool: the year, and the range of soil depths. The year selection defaults to the current year, while the soil depth defaults to the top 12 inches of the soil profile. To change the soil depth, click and drag the handles of the selected range to the depths of interest.<br/>
-                      <img className="doc-image" src={userinput} alt="Water Deficit User Input" />
+                      <img className="doc-image" src={userinput} alt="Sample user input from the SCAN/TSCAN Water Deficit Calculator" />
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <i>2. Output</i><br/><br/>
                       Data in this tool can be viewed in either graphical or tabular form by selecting 'chart' or 'table' above each tool. Charts can also be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
                       Water deficit values that correspond to your selections will appear below the user options. Below is a sample chart showing all of the features. The zero line on the chart represents conditions when no water deficit exists. This zero line is also representative of when soil moisture amounts are at field capacity. At these conditions, the maximum amount of water possible is available to plants, and plants are not under any water stress (indicated by blue color). As conditions begin to dry in the soil, water deficits may reach a point when plants begin to experience water stress (indicated by red color). This level of water stress is typically about halfway between field capacity and the wilting point. If natural precipitation does not provide relief, properly timed irrigation may be necessary to provide the water necessary to eliminate plant stress. When monitoring conditions for the current year, these data are available through the current day in order to assist with timely decision making.<br/><br/>
-                      <img className="doc-image" src={waterdefoutput} alt="Water Deficit Output" /><br/><br/>
+                      <img className="doc-image" src={waterdefoutput} alt="Sample output from the SCAN/TSCAN Water Deficit Calculator" /><br/><br/>
                       Also provided are data measured by the SCAN station equipment that are relevent to calculating the water deficit. Volumetric soil moisture at up to five soil depths and daily precipitation totals are included, with samples below. Specific depths may be toggled in the live chart for viewing preference.<br/><br/>
-                      <img className="doc-image" src={soilmprecipoutput} alt="Soil Moisture and Precip Output" />
+                      <img className="doc-image" src={soilmprecipoutput} alt="Sample soil moisture and precipitation output as they appear in the SCAN/TSCAN Water Deficit Calculator" />
                     </Typography>
                     <Button variant="outlined" color="primary" onClick={()=>{history.push(url)}}>
                       Water Deficit Calculator

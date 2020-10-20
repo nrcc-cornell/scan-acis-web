@@ -80,7 +80,7 @@ class Instrumentation extends Component {
               </Grid>
             <Grid item container direction="row" className={classes.root} justify="center" spacing={4}>
               <Grid item xs={12} sm={8} md={7} lg={7}>
-                    <img className="scan-station-instrument" src={scanstn} border="5" alt="SCAN instrumentation" usemap="#instrumentmap" />
+                    <img className="scan-station-instrument" src={scanstn} border="5" alt="A complete SCAN climate station installation" usemap="#instrumentmap" />
                     <map name="instrumentmap">
                         <area onClick={(e) => {this.updateInstrument(e,'wind')}} shape="rect" coords="16,181,180,327" alt="wind instrument" href="#" />
                         <area onClick={(e) => {this.updateInstrument(e,'solarrad')}} shape="rect" coords="350,267,547,327" alt="solar radiation instrument" href="#" />

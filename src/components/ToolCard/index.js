@@ -68,7 +68,7 @@ function ComplexGrid(props) {
           </Grid>
           <Grid item xs={12} className={classes.cardImage}>
             <ButtonBase className={classes.image} onClick={() => {props.history.push(url)}}>
-              <img className={classes.img} alt="complex" src={require(`${thumbnail}`)} />
+              <img className={classes.img} alt="Sample output from SCAN/TSCAN decision support tools" src={require(`${thumbnail}`)} />
             </ButtonBase>
           </Grid>
           <Grid item xs={10} className={classes.cardDescription}>

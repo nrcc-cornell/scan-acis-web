@@ -113,7 +113,7 @@ class WindRoseDoc extends Component {
                       <b>a) Data units and summaries</b><br/><br/>
                       Before a wind rose can be constructed, wind speed and direction data for each hour must be categorized into discrete bins. For wind direction, two options are available: a 36-point compass and a 16-point compass. For wind speed, some common bin thresholds are provided under the 'SHORTCUTS' button, but you can type in custom values to suit your needs. <br/><br/>
                       The number of hours categorized in each of the specified bins will be displayed in the wind rose as either 1) a percentage of total hours, or 2) the total count. This preference can be chosen under the 'Summary Type' option. Additionally, your preferred wind speed units can be selected.<br/>
-                      <img className="doc-image" src={userinput1} alt="Wind Rose User Input" /><br/><br/>
+                      <img className="doc-image" src={userinput1} alt="Sample user input from the SCAN/TSCAN Wind Rose Diagram" /><br/><br/>
                       <b>b) Data filtering by time period</b><br/><br/>
                       Time filters are available to customize the data used in the wind rose construction. Data may be filtered for specific times of the day, months, seasons, or custom date ranges. A few real-world examples of applying these filters include:<br/>
                       <ul>
@@ -122,8 +122,8 @@ class WindRoseDoc extends Component {
                         <li>Using seasonal wind roses when designing windbreaks for livestock comfort. Information from summer and winter wind roses can help position windbreaks to minimize wind exposure during cold winter months, and maximize wind exposure during hot summer months.</li>
                         <li>Using early morning and late afternoon wind roses to understand common exhaust dispersion patterns that are expected from rush hour traffic in large cities.</li>
                       </ul>
-                      <img className="doc-image" src={userinput3} alt="Wind Rose User Input" />
-                      <img className="doc-image" src={userinput2} alt="Wind Rose User Input" /><br/><br/>
+                      <img className="doc-image" src={userinput3} alt="Sample user input from the SCAN/TSCAN Wind Rose Diagram" />
+                      <img className="doc-image" src={userinput2} alt="Sample user input from the SCAN/TSCAN Wind Rose Diagram" /><br/><br/>
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <i>2. Output</i><br/><br/>
@@ -132,10 +132,10 @@ class WindRoseDoc extends Component {
                       The wind rose diagram is presented in a circular format, with bars showing how often winds are blowing <b>from</b> particular directions. Concentric circles represent different frequencies (either as percentages or counts), starting from zero at the center and increasing outward. Colored sections within each bar allows you to see how wind speeds are distributed when winds are blowing from a specific direction.<br/><br/>
                       This chart is interactive in the live tool, allowing you to mouse over bars or legend components to highlight specific conditions in the wind rose. Utilizing this interactive feature is very useful when you need to focus on particular wind speed thresholds in the chart. Tooltips also appear with numerical values when mousing over bars.<br/><br/>
                       In the sample wind rose below, the most frequent wind directions at this station are from the W (about 16% of the time) and SSE (about 11% of the time). The most common speed of the winds from these directions is between 5 and 10 miles/hr.<br/><br/>
-                      <img className="doc-image" src={output1} alt="Wind Rose Diagram" /><br/>
+                      <img className="doc-image" src={output1} alt="Sample graphic output of the SCAN/TSCAN Wind Rose Diagram" /><br/>
                       <b>b) Wind Frequency Table</b><br/><br/>
                       Tables often accompany wind roses, and they sometimes serve as a more convenient way to gather the data of interest. In these tables, frequencies of hours (either as percentages or counts) are given for specific wind speed ranges and directions. Additional information is available in the table that is not included in the wind rose diagram. These additional data include the average wind speed by direction, and the frequency of calm wind conditions.<br/><br/>
-                      <img className="doc-image" src={output2} alt="Wind Frequency Table" /><br/>
+                      <img className="doc-image" src={output2} alt="Sample wind frequency table output from the SCAN/TSCAN Wind Rose Diagram" /><br/>
                     </Typography>
                     <Button variant="outlined" color="primary" onClick={()=>{history.push(url)}}>
                       Wind Rose Diagram

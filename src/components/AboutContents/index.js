@@ -57,7 +57,7 @@ class AboutContents extends Component {
 The U.S. Department of Agriculture's Natural Resources Conservation Service (USDA NRCS) operates a comprehensive, nationwide soil moisture and climate information network. The Soil Climate Analysis Network, also known as SCAN, supports natural resource assessments and conservation activities through its network of automated climate monitoring and data collection sites. SCAN focuses primarily on agricultural areas of the U.S., Puerto Rico and the Virgin Islands. The network consists of over 200 stations in almost every state, and is growing every year.
                     </Typography>
                     <Typography align="justify" paragraph variant="body2">
-In addition to the original SCAN project, NRCS also operates a soil moisture and climate information network on Tribal lands. The Tribal Soil Climate Analysis Network (known as Tribal SCAN) focuses on agricultural areas which are situated on Tribal lands in the United States.
+In addition to the original SCAN project, NRCS also operates a soil moisture and climate information network on Tribal lands. The Tribal Soil Climate Analysis Network (known as Tribal SCAN, or TSCAN) focuses on agricultural areas which are situated on Tribal lands in the United States.
                     </Typography>
                     <Typography component="span" align="justify" paragraph variant="body2">
                       More information about these networks is available at the NRCS website:
@@ -115,6 +115,16 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                               Tool
                             </Button>
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/heatidx_doc")}}>
+                              Docs
+                            </Button>
+                            <br/>
+                    </Typography>
+                    <Typography component="span" align="justify" paragraph variant="button">
+                            Wind Rose Diagram
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/wind-rose")}}>
+                              Tool
+                            </Button>
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/windrose_doc")}}>
                               Docs
                             </Button>
                             <br/>

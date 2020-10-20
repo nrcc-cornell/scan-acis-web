@@ -110,11 +110,11 @@ class WxgraphDoc extends Component {
                       <i>1. User Options</i><br/><br/>
                       Once your site is selected, there are two different types of data views to select from, <i>Weather Data Summaries</i> and <i>Threshold Exceedences</i>.<br/><br/>
                       <b>a) Weather Data Summaries</b> provide a side-by-side view of multiple variables at multiple timescales. Options to select include variables, units, ending date of data, and the length of time series.<br/>
-                      <img className="doc-image" src={viewselection1} alt="Weather Grapher View Selection For Data Summaries" /><br/>
-                      <img className="doc-image" src={userinput1} alt="Weather Grapher User Input For Data Summaries" /><br/><br/>
+                      <img className="doc-image" src={viewselection1} alt="View selection for data summaries in the SCAN/TSCAN Weather Grapher" /><br/>
+                      <img className="doc-image" src={userinput1} alt="User input for data summaries in the SCAN/TSCAN Weather Grapher" /><br/><br/>
                       <b>b) Threshold Exceedences</b> provide the number of days during each year on which weather observations surpassed user-defined values. Options include the type of variable to analyze, a comparison operator, threshold value, and units.<br/><br/>
                       The example user interface given below would produce two charts showing: 1) the number of days during each year on which daily maximum temperatures exceeded 90°F, and 2) the number of days during each year on which daily minimum temperatures were less than 32°F. In this example, analysis of total precipitation is toggled off.
-                      <img className="doc-image" src={viewselection2} alt="Weather Grapher View Selection For Threshold Exceedences" /><br/>
+                      <img className="doc-image" src={viewselection2} alt="View selection for threshold exceedences in the SCAN/TSCAN Weather Grapher" /><br/>
                       <img className="doc-image-2" src={userinput2} alt="Weather Grapher User Input For Threshold Exceedences" /><br/><br/>
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
@@ -122,10 +122,10 @@ class WxgraphDoc extends Component {
                       Data in this tool can be viewed in either graphical or tabular form by selecting 'chart' or 'table' above each tool. Charts can also be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
                       <b>a) Weather Data Summaries</b><br/><br/>
                       Time series of weather observations that correspond to your selections will appear within the tool. Below is a sample chart showing a sample of the features. Moving the cursor over the charts in the live tool displays data for each variable displayed.<br/><br/>
-                      <img className="doc-image" src={wxgraphoutput1} alt="Weather Grapher Output" /><br/><br/>
+                      <img className="doc-image" src={wxgraphoutput1} alt="Sample output from the SCAN/TSCAN Weather Grapher" /><br/><br/>
                       <b>b) Threshold Exceedences</b><br/><br/>
                       Time series charts provide the number of days each year that surpassed user-defined thresholds. Below is a sample chart showing a sample of the features. Moving the cursor over the charts in the live tool displays the number of days each year.<br/><br/>
-                      <img className="doc-image" src={wxgraphoutput2} alt="Weather Grapher Output" /><br/><br/>
+                      <img className="doc-image" src={wxgraphoutput2} alt="Sample output from the SCAN/TSCAN Weather Grapher" /><br/><br/>
                     </Typography>
                     <Button variant="outlined" color="primary" onClick={()=>{history.push(url)}}>
                       Weather Grapher
