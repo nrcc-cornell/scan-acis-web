@@ -19,7 +19,7 @@ const LoadStationData = ({sid,period}) => {
             "sdate":period[0],
             "edate":period[1],
             "elems":[
-                {"vX":4,"interval":[0,0,1],"duration":"dly"}, // daily precipitation, sum
+                {"vX":4,"vN":22,"interval":[0,0,1],"duration":"dly"}, // daily precipitation, sum
                 {"vX":68,"vN":65,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 2", ave
                 {"vX":68,"vN":97,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 4", ave
                 {"vX":68,"vN":161,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 8", ave
@@ -34,7 +34,7 @@ const LoadStationData = ({sid,period}) => {
             "sdate":period[0],
             "edate":period[1],
             "elems":[
-                {"vX":4,"interval":[0,0,1],"duration":"dly"}, // daily precipitation, sum
+                {"vX":4,"vN":23,"interval":[0,0,1],"duration":"dly"}, // daily precipitation, sum
                 {"vX":68,"vN":66,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 2", ave
                 {"vX":68,"vN":98,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 4", ave
                 {"vX":68,"vN":162,"interval":[0,0,1],"duration":"dly"}, // daily soil moisture @ 8", ave
