@@ -15,7 +15,7 @@
     "classnames": "^2.2.6",
     "dom-to-image": "^2.6.0",
     "file-saver": "^2.0.1",
-    "highcharts": "^7.2.0",
+    "highcharts": "^9.0.0",
     "highcharts-more": "^0.1.7",
     "highcharts-react-official": "^2.2.2",
     "image-map-resizer": "^1.0.9",
