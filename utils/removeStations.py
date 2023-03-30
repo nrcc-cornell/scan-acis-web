@@ -1,6 +1,8 @@
 import json
 
 def removeStations(new_filepath, remove_stations_filepath):
+  print 'Removing obsolete stations...'
+  
   with open(new_filepath, 'r') as f:
     all_stations = json.load(f)
 

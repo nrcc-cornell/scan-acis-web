@@ -12,6 +12,6 @@ getData(new_filepath)
 remove_stations_filename = 'remove_stations.json'
 removeStations(new_filepath, os.path.join(src_dir, remove_stations_filename))
 
-cmd = 'aws s3 sync ' + new_filepath + ' ' + os.path.join(web_data_dir, new_filename)
-print cmd
-# res = os.system(cmd)
+cmd = 'aws s3 cp ' + new_filepath + ' ' + os.path.join(web_data_dir, new_filename)
+
+res = os.system(cmd)
