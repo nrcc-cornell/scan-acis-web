@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import DayPicker from 'react-day-picker'
+import { DayPicker } from 'react-day-picker'
 import './react-daypicker-style.css'
 
 export default function RenderDaypicker(props) {

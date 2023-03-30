@@ -1,0 +1,134 @@
+[
+  {
+    "name": "Canyon Lake",
+    "uid": 85588,
+    "sid": "1232 17",
+    "state": "AK"
+  },
+  {
+    "name": "Lower Mulchatna",
+    "uid": 85589,
+    "sid": "1233 17",
+    "state": "AK"
+  },
+  {
+    "name": "Weary Lake",
+    "uid": 85590,
+    "sid": "1234 17",
+    "state": "AK"
+  },
+  {
+    "name": "Spring Creek",
+    "uid": 85631,
+    "sid": "2044 17",
+    "state": "AK"
+  },
+  {
+    "name": "Aniak",
+    "uid": 85649,
+    "sid": "2065 17",
+    "state": "AK"
+  },
+  {
+    "name": "Tok",
+    "uid": 85663,
+    "sid": "2080 17",
+    "state": "AK"
+  },
+  {
+    "name": "Nenana",
+    "uid": 85664,
+    "sid": "2081 17",
+    "state": "AK"
+  },
+  {
+    "name": "Kanaryagak Camp",
+    "uid": 85790,
+    "sid": "2208 17",
+    "state": "AK"
+  },
+  {
+    "name": "NakNek River",
+    "uid": 85791,
+    "sid": "2209 17",
+    "state": "AK"
+  },
+  {
+    "name": "Innoko Camp",
+    "sid": "2211 17",
+    "uid": 85793,
+    "state": "AK"
+  },
+  {
+    "name": "Hozatka Lake",
+    "uid": 85792,
+    "sid": "2210 17",
+    "state": "AK"
+  },
+  {
+    "name": "Gulkana River",
+    "uid": 85804,
+    "sid": "2222 17",
+    "state": "AK"
+  },
+  {
+    "name": "Unalakleet",
+    "uid": 85803,
+    "sid": "2221 17",
+    "state": "AK"
+  },
+  {
+    "name": "Mayaguez TARS",
+    "uid": 85694,
+    "sid": "2112 17",
+    "state": "PR"
+  },
+  {
+    "name": "Pua Akala",
+    "uid": 85680,
+    "sid": "2098 17",
+    "state": "HI"
+  },
+  {
+    "name": "Island Dairy",
+    "uid": 85682,
+    "sid": "2100 17",
+    "state": "HI"
+  },
+  {
+    "name": "Kemole Gulch",
+    "uid": 85685,
+    "sid": "2103 17",
+    "state": "HI"
+  },
+  {
+    "name": "Hayford Peak",
+    "uid": 85725,
+    "sid": "2143 17",
+    "state": "NV"
+  },
+  {
+    "name": "Sunleaf Nursery",
+    "uid": 85656,
+    "sid": "2073 17",
+    "state": "OH"
+  },
+  {
+    "name": "Lynhart Ranch",
+    "uid": 85657,
+    "sid": "2074 17",
+    "state": "OR"
+  },
+  {
+    "name": "Tidewater Arec",
+    "uid": 85627,
+    "sid": "2040 17",
+    "state": "VA"
+  },
+  {
+    "name": "Cinnamon Bay",
+    "uid": 85706,
+    "sid": "2124 17",
+    "state": "VI"
+  }
+]
