@@ -44,219 +44,258 @@ def getStdStartString(s):
 	if month in SON: return '9-1'
 	return ''
 
-# use today's date as current date
-date_current = datetime.datetime.now()
-# use some date in the past as current date
-#date_current = datetime.date(2019,3,4)
-#date_current = datetime.date(2019,3,17)
+def getData(filename):
+	# use today's date as current date
+	date_current = datetime.datetime.now()
+	# use some date in the past as current date
+	#date_current = datetime.date(2019,3,4)
+	#date_current = datetime.date(2019,3,17)
 
-# grid data
-#pData = {"bbox":"-82.708330,37.166667,-66.875,47.625","grid":"3","elems":"pcpn","meta":"ll","date":"2019-02-07"}
-#rData = acis_ws('GridData',pData)
+	# grid data
+	#pData = {"bbox":"-82.708330,37.166667,-66.875,47.625","grid":"3","elems":"pcpn","meta":"ll","date":"2019-02-07"}
+	#rData = acis_ws('GridData',pData)
 
-print 'Find all stations in network ...'
-print datetime.datetime.now()
+	print 'Find all stations in network ...'
+	print datetime.datetime.now()
 
-# filter by network, adjust content
-networks = ['17','19']
-stnListForNetwork = []
+	# filter by network, adjust content
+	networks = ['17','19']
+	stnListForNetwork = []
 
-### Continental U.S.
-#pData = {"state":"NY","meta":"sids","output":"json"}
-pData = {"bbox":"-125,24.3,-66.8,49.4","meta":"sids","output":"json"}
-rData = acis_ws('StnMeta',pData)
+	### Continental U.S.
+	#pData = {"state":"NY","meta":"sids","output":"json"}
+	pData = {"bbox":"-125,24.3,-66.8,49.4","meta":"sids","output":"json"}
+	rData = acis_ws('StnMeta',pData)
 
-for m in rData['meta']:
-	for network in networks:
-		# bypass station if it is not in network
-		if not np.any([' '+network in s for s in m['sids']]): continue
+	for m in rData['meta']:
+		for network in networks:
+			# bypass station if it is not in network
+			if not np.any([' '+network in s for s in m['sids']]): continue
 
-		stn = [s for s in m['sids'] if ' '+network in s][0]
-		stnListForNetwork.append(stn)
+			stn = [s for s in m['sids'] if ' '+network in s][0]
+			stnListForNetwork.append(stn)
 
-### Alaska
-pData = {"state":"AK","meta":"sids","output":"json"}
-rData = acis_ws('StnMeta',pData)
+	### Alaska
+	pData = {"state":"AK","meta":"sids","output":"json"}
+	rData = acis_ws('StnMeta',pData)
 
-for m in rData['meta']:
-	for network in networks:
-		# bypass station if it is not in network
-		if not np.any([' '+network in s for s in m['sids']]): continue
+	for m in rData['meta']:
+		for network in networks:
+			# bypass station if it is not in network
+			if not np.any([' '+network in s for s in m['sids']]): continue
 
-		stn = [s for s in m['sids'] if ' '+network in s][0]
-		stnListForNetwork.append(stn)
+			stn = [s for s in m['sids'] if ' '+network in s][0]
+			stnListForNetwork.append(stn)
 
-### Hawaii
-pData = {"state":"HI","meta":"sids","output":"json"}
-rData = acis_ws('StnMeta',pData)
+	### Hawaii
+	pData = {"state":"HI","meta":"sids","output":"json"}
+	rData = acis_ws('StnMeta',pData)
 
-for m in rData['meta']:
-	for network in networks:
-		# bypass station if it is not in network
-		if not np.any([' '+network in s for s in m['sids']]): continue
+	for m in rData['meta']:
+		for network in networks:
+			# bypass station if it is not in network
+			if not np.any([' '+network in s for s in m['sids']]): continue
 
-		stn = [s for s in m['sids'] if ' '+network in s][0]
-		stnListForNetwork.append(stn)
+			stn = [s for s in m['sids'] if ' '+network in s][0]
+			stnListForNetwork.append(stn)
 
-### Puerto Rico
-pData = {"state":"PR","meta":"sids","output":"json"}
-rData = acis_ws('StnMeta',pData)
+	### Puerto Rico
+	pData = {"state":"PR","meta":"sids","output":"json"}
+	rData = acis_ws('StnMeta',pData)
 
-for m in rData['meta']:
-	for network in networks:
-		# bypass station if it is not in network
-		if not np.any([' '+network in s for s in m['sids']]): continue
+	for m in rData['meta']:
+		for network in networks:
+			# bypass station if it is not in network
+			if not np.any([' '+network in s for s in m['sids']]): continue
 
-		stn = [s for s in m['sids'] if ' '+network in s][0]
-		stnListForNetwork.append(stn)
+			stn = [s for s in m['sids'] if ' '+network in s][0]
+			stnListForNetwork.append(stn)
 
-### Virgin Islands
-pData = {"state":"VI","meta":"sids","output":"json"}
-rData = acis_ws('StnMeta',pData)
+	### Virgin Islands
+	pData = {"state":"VI","meta":"sids","output":"json"}
+	rData = acis_ws('StnMeta',pData)
 
-for m in rData['meta']:
-	for network in networks:
-		# bypass station if it is not in network
-		if not np.any([' '+network in s for s in m['sids']]): continue
+	for m in rData['meta']:
+		for network in networks:
+			# bypass station if it is not in network
+			if not np.any([' '+network in s for s in m['sids']]): continue
 
-		stn = [s for s in m['sids'] if ' '+network in s][0]
-		stnListForNetwork.append(stn)
+			stn = [s for s in m['sids'] if ' '+network in s][0]
+			stnListForNetwork.append(stn)
 
-print 'Get climate summaries and metadata for these stations, and write to json file ...'
-print datetime.datetime.now()
-print stnListForNetwork
+	print 'Get climate summaries and metadata for these stations, and write to json file ...'
+	print datetime.datetime.now()
+	# print stnListForNetwork
 
-### using fixed day until data are up-to-date
-#yest = datetime.date(2019,2,18)-datetime.timedelta(1)
-#yest = datetime.datetime.now()-datetime.timedelta(1)
-yest = date_current-datetime.timedelta(1)
-dateString = yest.strftime('%Y-%m-%d')
+	### using fixed day until data are up-to-date
+	#yest = datetime.date(2019,2,18)-datetime.timedelta(1)
+	#yest = datetime.datetime.now()-datetime.timedelta(1)
+	yest = date_current-datetime.timedelta(1)
+	dateString = yest.strftime('%Y-%m-%d')
 
-# station meta data
-pData = {
-	"sids":stnListForNetwork,
-        "sdate":dateString,
-        "edate":dateString,
-	"elems": [{
-		"name": "pcpn",
-		"interval": "dly",
-		"duration": "ytd",
-		#"reduce": {"reduce":"sum","add":"date"},
-		"reduce": "sum",
-                "prec": 2,
-		"maxmissing": 0,
-	},{
-		"name": "pcpn",
-		"interval": "dly",
-		"duration": "ytd",
-		"reduce": "sum",
-		"maxmissing": 0,
-                "prec": 2,
-		"normal": "departure"
-	},{
-		"name": "pcpn",
-		"interval": "dly",
-		"duration": "std",
-		"reduce": "sum",
-		"season_start":getStdStartString(dateString),
-                "prec": 2,
-		"maxmissing": 0,
-	},{
-		"name": "pcpn",
-		"interval": "dly",
-		"duration": "std",
-		"reduce": "sum",
-		"season_start":getStdStartString(dateString),
-                "prec": 2,
-		"maxmissing": 0,
-		"normal": "departure"
-	},{
-		"name": "pcpn",
-		"interval": "dly",
-		"duration": "mtd",
-		"reduce": "sum",
-                "prec": 2,
-		"maxmissing": 0,
-	},{
-		"name": "pcpn",
-		"interval": "dly",
-		"duration": "mtd",
-		"reduce": "sum",
-                "prec": 2,
-		"maxmissing": 0,
-		"normal": "departure"
-	},{
-		"name": "avgt",
-		"interval": "dly",
-		"duration": "ytd",
-		#"reduce": {"reduce":"sum","add":"date"},
-		"reduce": "mean",
-                "prec": 1,
-		"maxmissing": 0,
-	},{
-		"name": "avgt",
-		"interval": "dly",
-		"duration": "ytd",
-		"reduce": "mean",
-                "prec": 1,
-		"maxmissing": 0,
-		"normal": "departure"
-	},{
-		"name": "avgt",
-		"interval": "dly",
-		"duration": "std",
-		"reduce": "mean",
-		"season_start":getStdStartString(dateString),
-                "prec": 1,
-		"maxmissing": 0,
-	},{
-		"name": "avgt",
-		"interval": "dly",
-		"duration": "std",
-		"reduce": "mean",
-		"season_start":getStdStartString(dateString),
-                "prec": 1,
-		"maxmissing": 0,
-		"normal": "departure"
-	},{
-		"name": "avgt",
-		"interval": "dly",
-		"duration": "mtd",
-		"reduce": "mean",
-                "prec": 1,
-		"maxmissing": 0,
-	},{
-		"name": "avgt",
-		"interval": "dly",
-		"duration": "mtd",
-		"reduce": "mean",
-                "prec": 1,
-		"maxmissing": 0,
-		"normal": "departure"
-	}],
-	"meta":"uid,name,state,elev,ll,sids,sid_dates",
-	"output":"json"
-}
-rData = acis_ws('MultiStnData',pData)
-print len(stnListForNetwork)
-print len(rData['data'])
-print datetime.datetime.now()
+	# station meta data
+	pData = {
+		"sids":stnListForNetwork,
+					"sdate":dateString,
+					"edate":dateString,
+		"elems": [{
+			"name": "pcpn",
+			"interval": "dly",
+			"duration": "ytd",
+			#"reduce": {"reduce":"sum","add":"date"},
+			"reduce": "sum",
+									"prec": 2,
+			"maxmissing": 0,
+		},{
+			"name": "pcpn",
+			"interval": "dly",
+			"duration": "ytd",
+			"reduce": "sum",
+			"maxmissing": 0,
+									"prec": 2,
+			"normal": "departure"
+		},{
+			"name": "pcpn",
+			"interval": "dly",
+			"duration": "std",
+			"reduce": "sum",
+			"season_start":getStdStartString(dateString),
+									"prec": 2,
+			"maxmissing": 0,
+		},{
+			"name": "pcpn",
+			"interval": "dly",
+			"duration": "std",
+			"reduce": "sum",
+			"season_start":getStdStartString(dateString),
+									"prec": 2,
+			"maxmissing": 0,
+			"normal": "departure"
+		},{
+			"name": "pcpn",
+			"interval": "dly",
+			"duration": "mtd",
+			"reduce": "sum",
+									"prec": 2,
+			"maxmissing": 0,
+		},{
+			"name": "pcpn",
+			"interval": "dly",
+			"duration": "mtd",
+			"reduce": "sum",
+									"prec": 2,
+			"maxmissing": 0,
+			"normal": "departure"
+		},{
+			"name": "avgt",
+			"interval": "dly",
+			"duration": "ytd",
+			#"reduce": {"reduce":"sum","add":"date"},
+			"reduce": "mean",
+									"prec": 1,
+			"maxmissing": 0,
+		},{
+			"name": "avgt",
+			"interval": "dly",
+			"duration": "ytd",
+			"reduce": "mean",
+									"prec": 1,
+			"maxmissing": 0,
+			"normal": "departure"
+		},{
+			"name": "avgt",
+			"interval": "dly",
+			"duration": "std",
+			"reduce": "mean",
+			"season_start":getStdStartString(dateString),
+									"prec": 1,
+			"maxmissing": 0,
+		},{
+			"name": "avgt",
+			"interval": "dly",
+			"duration": "std",
+			"reduce": "mean",
+			"season_start":getStdStartString(dateString),
+									"prec": 1,
+			"maxmissing": 0,
+			"normal": "departure"
+		},{
+			"name": "avgt",
+			"interval": "dly",
+			"duration": "mtd",
+			"reduce": "mean",
+									"prec": 1,
+			"maxmissing": 0,
+		},{
+			"name": "avgt",
+			"interval": "dly",
+			"duration": "mtd",
+			"reduce": "mean",
+									"prec": 1,
+			"maxmissing": 0,
+			"normal": "departure"
+		}],
+		"meta":"uid,name,state,elev,ll,sids,sid_dates",
+		"output":"json"
+	}
+	rData = acis_ws('MultiStnData',pData)
+	# print len(stnListForNetwork)
+	# print len(rData['data'])
+	print datetime.datetime.now()
 
-stnDataOut = []
-acisStnList = []
-for item in rData['data']:
-	m = item['meta']
-	d = item['data']
+	stnDataOut = []
+	acisStnList = []
+	for item in rData['data']:
+		m = item['meta']
+		d = item['data']
 
-	for network in networks:
+		for network in networks:
 
-		# bypass station if it is not in network
-		if not np.any([' '+network in s for s in m['sids']]): continue
+			# bypass station if it is not in network
+			if not np.any([' '+network in s for s in m['sids']]): continue
 
-		stn = [s for s in m['sids'] if ' '+network in s][0]
+			stn = [s for s in m['sids'] if ' '+network in s][0]
+			sdate = [dList[1] for dList in m['sid_dates'] if stn in dList][0]
+			edate = [dList[2] for dList in m['sid_dates'] if stn in dList][0]
+			acisStnList.append(stn)
+
+			stnDict = {}
+			stnDict['uid'] = m['uid']
+			stnDict['sid'] = stn
+			if stn=='3064 19':
+				stnDict['ll'] = [-133.1249333,55.47135]
+			else:
+				stnDict['ll'] = m['ll']
+			stnDict['name'] = m['name']
+			stnDict['state'] = m['state']
+			stnDict['elev'] = m['elev'] if 'elev' in m.keys() else 'N/A'
+			stnDict['sdate'] = sdate
+			stnDict['edate'] = edate
+			stnDict['network'] = int(network)
+			stnDict['p_ytd_o'] = d[0]
+			stnDict['p_ytd_n'] = d[1]
+			stnDict['p_std_o'] = d[2]
+			stnDict['p_std_n'] = d[3]
+			stnDict['p_mtd_o'] = d[4]
+			stnDict['p_mtd_n'] = d[5]
+			stnDict['t_ytd_o'] = d[6]
+			stnDict['t_ytd_n'] = d[7]
+			stnDict['t_std_o'] = d[8]
+			stnDict['t_std_n'] = d[9]
+			stnDict['t_mtd_o'] = d[10]
+			stnDict['t_mtd_n'] = d[11]
+
+			stnDataOut.append(stnDict)
+
+	extraStations = [s for s in stnListForNetwork if s not in acisStnList]
+	pData = {"sids":extraStations,"meta":"uid,name,state,ll,elev,sids,sid_dates","output":"json"}
+	rData = acis_ws('StnMeta',pData)
+	sList = []
+	for m in rData['meta']:
+		stn = m['sids'][0]
+		network = stn.split(' ')[1]
 		sdate = [dList[1] for dList in m['sid_dates'] if stn in dList][0]
 		edate = [dList[2] for dList in m['sid_dates'] if stn in dList][0]
-		acisStnList.append(stn)
 
 		stnDict = {}
 		stnDict['uid'] = m['uid']
@@ -271,69 +310,31 @@ for item in rData['data']:
 		stnDict['sdate'] = sdate
 		stnDict['edate'] = edate
 		stnDict['network'] = int(network)
-		stnDict['p_ytd_o'] = d[0]
-		stnDict['p_ytd_n'] = d[1]
-		stnDict['p_std_o'] = d[2]
-		stnDict['p_std_n'] = d[3]
-		stnDict['p_mtd_o'] = d[4]
-		stnDict['p_mtd_n'] = d[5]
-		stnDict['t_ytd_o'] = d[6]
-		stnDict['t_ytd_n'] = d[7]
-		stnDict['t_std_o'] = d[8]
-		stnDict['t_std_n'] = d[9]
-		stnDict['t_mtd_o'] = d[10]
-		stnDict['t_mtd_n'] = d[11]
+		stnDict['p_ytd_o'] = 'M'
+		stnDict['p_ytd_n'] = 'M'
+		stnDict['p_std_o'] = 'M'
+		stnDict['p_std_n'] = 'M'
+		stnDict['p_mtd_o'] = 'M'
+		stnDict['p_mtd_n'] = 'M'
+		stnDict['t_ytd_o'] = 'M'
+		stnDict['t_ytd_n'] = 'M'
+		stnDict['t_std_o'] = 'M'
+		stnDict['t_std_n'] = 'M'
+		stnDict['t_mtd_o'] = 'M'
+		stnDict['t_mtd_n'] = 'M'
 
 		stnDataOut.append(stnDict)
 
-extraStations = [s for s in stnListForNetwork if s not in acisStnList]
-pData = {"sids":extraStations,"meta":"uid,name,state,ll,elev,sids,sid_dates","output":"json"}
-rData = acis_ws('StnMeta',pData)
-sList = []
-for m in rData['meta']:
-	stn = m['sids'][0]
-	network = stn.split(' ')[1]
-	sdate = [dList[1] for dList in m['sid_dates'] if stn in dList][0]
-	edate = [dList[2] for dList in m['sid_dates'] if stn in dList][0]
+	dataOut = {
+		'date':dateString,
+		'ytd_start': 'Jan 1',
+		'mtd_start':getMtdStartLabel(dateString),
+		'std_start':getStdStartLabel(dateString),
+		'locs':stnDataOut,
+	}
 
-	stnDict = {}
-	stnDict['uid'] = m['uid']
-	stnDict['sid'] = stn
-	if stn=='3064 19':
-		stnDict['ll'] = [-133.1249333,55.47135]
-	else:
-		stnDict['ll'] = m['ll']
-	stnDict['name'] = m['name']
-	stnDict['state'] = m['state']
-	stnDict['elev'] = m['elev'] if 'elev' in m.keys() else 'N/A'
-	stnDict['sdate'] = sdate
-	stnDict['edate'] = edate
-	stnDict['network'] = int(network)
-	stnDict['p_ytd_o'] = 'M'
-	stnDict['p_ytd_n'] = 'M'
-	stnDict['p_std_o'] = 'M'
-	stnDict['p_std_n'] = 'M'
-	stnDict['p_mtd_o'] = 'M'
-	stnDict['p_mtd_n'] = 'M'
-	stnDict['t_ytd_o'] = 'M'
-	stnDict['t_ytd_n'] = 'M'
-	stnDict['t_std_o'] = 'M'
-	stnDict['t_std_n'] = 'M'
-	stnDict['t_mtd_o'] = 'M'
-	stnDict['t_mtd_n'] = 'M'
+	#for d in rData['data']: print d
 
-	stnDataOut.append(stnDict)
-
-dataOut = {
-	'date':dateString,
-	'ytd_start': 'Jan 1',
-	'mtd_start':getMtdStartLabel(dateString),
-	'std_start':getStdStartLabel(dateString),
-	'locs':stnDataOut,
-}
-
-#for d in rData['data']: print d
-
-with open('scan_stations.json', 'w') as f:
-    json.dump(dataOut, f)
+	with open(filename, 'w') as f:
+			json.dump(dataOut, f)
 
