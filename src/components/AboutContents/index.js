@@ -129,6 +129,16 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                             </Button>
                             <br/>
                     </Typography>
+                    <Typography component="span" align="justify" paragraph variant="button">
+                            Wind Chill & Heat Stress
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/wind-heat")}}>
+                              Tool
+                            </Button>
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/windheat_doc")}}>
+                              Docs
+                            </Button>
+                            <br/>
+                    </Typography>
               </Grid>
             </Grid>
             <br/>

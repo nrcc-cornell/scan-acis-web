@@ -182,7 +182,6 @@ class WindRose extends Component {
         this.initStateForLoading()
         LoadStationData({sid:this.state.userParams.sid, period:[this.state.userParams.fromDate,this.state.userParams.toDate], wsunits: this.state.userParams.wsunits})
           .then(response => {
-            console.log(response);
             this.setState({
               acisWindResults: response,
               data_is_loading: false

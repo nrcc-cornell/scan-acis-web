@@ -43,6 +43,9 @@ class ToolLister extends Component {
               <Grid item>
                 <ToolCard {...app.getToolInfo('windrose')} />
               </Grid>
+              <Grid item>
+                <ToolCard {...app.getToolInfo('windheat')} />
+              </Grid>
              </Grid>
             </Grid>
             <br/>

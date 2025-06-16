@@ -89,7 +89,7 @@ export class AppStore {
     /// -     description (one sentence description of tool)
     /// -     thumbnail (thumbnail image for tool card)
     //////////////////////////////////////////////
-    toolNameArray = ['gddtool','waterdef','wxgrapher','livestock','windrose']
+    toolNameArray = ['gddtool','waterdef','wxgrapher','livestock','windrose','windheat']
     @observable toolName = this.toolNameArray[0]
     // set toolName from tool card
     @action setToolName = (n) => {
@@ -136,6 +136,12 @@ export class AppStore {
                 thumbnail = pathToImages+'WindRose-thumbnail.png'
                 url = '/tools/wind-rose'
                 url_doc = '/stem/windrose_doc'
+            } else if (name==='windheat') {
+                title = 'Wind Chill & Heat Stress'
+                description = 'Visualize year to date wind chill and heat stress.'
+                thumbnail = pathToImages+'WindHeat-thumbnail.png'
+                url = '/tools/wind-chill-heat-stress'
+                url_doc = '/stem/windheat_doc'
             } else {
             }
             onclick = () => {this.setActivePage(3); this.setToolName(name)}
@@ -382,7 +388,7 @@ export class AppStore {
 
                this.setDataView_explorer('weather');
                this.setDatesForLocations({'date':data['date'],'ytd_start':data['ytd_start'],'std_start':data['std_start'],'mtd_start':data['mtd_start']});
-               // download of data for water deficit calculator is done within tool
+               // download of data for water deficit calculator and wind chill/heat stress are done within tool
                // here are initial downloads for others:
                if (this.getToolName==='gddtool') {this.gddtool_downloadData()}
                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}

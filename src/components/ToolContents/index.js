@@ -19,6 +19,7 @@ import WxGraphTool from '../../components/tools/WxGraphToolNew';
 //import LivestockIdxTool from '../../components/tools/LivestockIdxTool';
 import LivestockIdxTool from '../../components/tools/LivestockIdxToolNew';
 import WindRose from '../../components/tools/WindRose';
+import WindHeat from '../../components/tools/WindHeat';
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 //import { spacing } from '@material-ui/system';
@@ -77,7 +78,7 @@ class ToolContents extends Component {
                 <Typography align="center" variant="h3" className="tool-title">
                   {app.getToolInfo(this.props.name).title}
                 </Typography>
-                {this.props.name!=='windrose' &&
+                {this.props.name!=='windrose' && this.props.name!=='windheat' &&
                 <Typography align="center" variant="h3">
                   <Button variant="text" color="primary" onClick={()=>{history.push(url_doc)}}>
                     View Documentation
@@ -95,6 +96,7 @@ class ToolContents extends Component {
                 { this.props.name==='wxgrapher' && app.getLocation && (<WxGraphTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} outputtype={app.getOutputType}/>) }
                 { this.props.name==='livestock' && app.getLocation && (<LivestockIdxTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} outputtype={app.getOutputType}/>) }
                 { this.props.name==='windrose' && app.getLocation && (<WindRose {...this.props} station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} por_start={app.getLocation.sdate} outputtype={app.getOutputType}/>) }
+                { this.props.name==='windheat' && app.getLocation && (<WindHeat {...this.props} station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} por_start={app.getLocation.sdate} outputtype={app.getOutputType}/>) }
               </Grid>
             </Grid>
             </div>

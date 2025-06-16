@@ -82,6 +82,7 @@ class App extends Component {
                   <Route path="/stem/wxgraph_doc" render={(props) => <StemMain {...props} loc={'/stem/wxgraph_doc'} />} />
                   <Route path="/stem/heatidx_doc" render={(props) => <StemMain {...props} loc={'/stem/heatidx_doc'} />} />
                   <Route path="/stem/windrose_doc" render={(props) => <StemMain {...props} loc={'/stem/windrose_doc'} />} />
+                  <Route path="/stem/windheat_doc" render={(props) => <StemMain {...props} loc={'/stem/windheat_doc'} />} />
                   <Route path="/stem/soils_overview" render={(props) => <StemMain {...props} loc={'/stem/soils_overview'} />} />
                   <Route path="/stem/soils_reports" render={(props) => <StemMain {...props} loc={'/stem/soils_reports'} />} />
                   <Route path="/stem/soils_manuals" render={(props) => <StemMain {...props} loc={'/stem/soils_manuals'} />} />
@@ -93,6 +94,7 @@ class App extends Component {
                   <Route path="/tools/weather-grapher" render={(props) => <ToolContents {...props} name={'wxgrapher'} />} />
                   <Route path="/tools/livestock-heat-index" render={(props) => <ToolContents {...props} name={'livestock'} />} />
                   <Route path="/tools/wind-rose" render={(props) => <ToolContents {...props} name={'windrose'} />} />
+                  <Route path="/tools/wind-chill-heat-stress" render={(props) => <ToolContents {...props} name={'windheat'} />} />
                   <Route render={() => <Redirect to="/" />} />
                 </Switch>
 
