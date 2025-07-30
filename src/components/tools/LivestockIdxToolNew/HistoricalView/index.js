@@ -123,10 +123,10 @@ class HistoricalView extends Component {
                 rh = (d[iday][2][ihr]==='M') ? null : parseFloat(d[iday][2][ihr])
                 s = (d[iday][3][ihr]==='M') ? null : parseFloat(d[iday][3][ihr])
                 w = (d[iday][4][ihr]==='M') ? null : parseFloat(d[iday][4][ihr])
-                thi = (t && rh) ? this.calc_thi(t,rh) : null
-                cbr = (t && rh && s && w) ? this.calc_cattle_breathing_rate(t,rh,s,w) : null
-                if (thi) {thi_array.push(thi)}
-                if (cbr) {cbr_array.push(cbr)}
+                thi = (t !== null && rh !== null) ? this.calc_thi(t,rh) : null
+                cbr = (t !== null && rh !== null && s !== null && w !== null) ? this.calc_cattle_breathing_rate(t,rh,s,w) : null
+                if (thi !== null) {thi_array.push(thi)}
+                if (cbr !== null) {cbr_array.push(cbr)}
             }
             oseries.push({
               'date': d[iday][0],
