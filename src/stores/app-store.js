@@ -5,6 +5,7 @@
 import { observable, computed, action } from 'mobx';
 import axios from 'axios';
 import moment from 'moment';
+import { heatindex as calculateHeatStressIndex, windchill as calculateWindChill } from '../components/tools/WindHeat/windheatModels';
 
 const protocol = window.location.protocol;
 
@@ -137,10 +138,10 @@ export class AppStore {
                 url = '/tools/wind-rose'
                 url_doc = '/stem/windrose_doc'
             } else if (name==='windheat') {
-                title = 'Wind Chill & Heat Stress'
-                description = 'Visualize year to date wind chill and heat stress.'
+                title = 'Wind Chill & Heat Stress Index'
+                description = 'Visualize year to date wind chill and heat stress index.'
                 thumbnail = pathToImages+'WindHeat-thumbnail.png'
-                url = '/tools/wind-chill-heat-stress'
+                url = '/tools/wind-chill-heat-stress-index'
                 url_doc = '/stem/windheat_doc'
             } else {
             }
@@ -182,6 +183,7 @@ export class AppStore {
             if (this.getToolName==='gddtool' && this.toolIsSelected) { this.gddtool_downloadData() }
             if (this.getToolName==='wxgrapher' && this.toolIsSelected) { this.wxgraph_downloadData() }
             if (this.getToolName==='livestock' && this.toolIsSelected) { this.livestock_downloadData() }
+            if (this.getToolName==='windheat' && this.toolIsSelected) { this.windheat_downloadData() }
             // save location to local storage
             localStorage.setItem("SCAN-ACIS-TOOLS.uid",l.toString())
         };
@@ -193,6 +195,7 @@ export class AppStore {
                 if (this.getToolName==='gddtool' && this.toolIsSelected) { this.gddtool_downloadData() }
                 if (this.getToolName==='wxgrapher' && this.toolIsSelected) { this.wxgraph_downloadData() }
                 if (this.getToolName==='livestock' && this.toolIsSelected) { this.livestock_downloadData() }
+                if (this.getToolName==='windheat' && this.toolIsSelected) { this.windheat_downloadData() }
                 // save location to local storage
                 localStorage.setItem("SCAN-ACIS-TOOLS.uid",t.value)
             }
@@ -393,6 +396,7 @@ export class AppStore {
                if (this.getToolName==='gddtool') {this.gddtool_downloadData()}
                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
                if (this.getToolName==='livestock') {this.livestock_downloadData()}
+               if (this.getToolName==='windheat') {this.windheat_downloadData()}
              });
     }
 
@@ -2477,6 +2481,215 @@ export class AppStore {
                 this.livestock_setClimateSummary()
             }
             this.livestock_setDataIsLoading(false);
+          })
+          .catch(err => {
+            console.log(
+              "Request Error: " + (err.response.data || err.response.statusText)
+            );
+          });
+    }
+
+    ////////////////////////////////////
+    /// TOOL: WIND CHILL / HEAT INDEX
+    ////////////////////////////////////
+    @observable windheat_vars={
+            airtemp : true,
+            humidity : true,
+            wind : true,
+        };
+    @action windheat_setVars = name => event => {
+            this.windheat_vars[name] = event.target.checked
+        }
+    @computed get windheat_getVars() {
+        return this.windheat_vars
+    }
+    @computed get windheat_getVarLabels() {
+          return {
+            airtemp_label : 'Air Temperature',
+            humidity_label : 'Relative Humidity',
+            wind_label : 'Wind',
+          };
+    }
+    @computed get windheat_getVarUnits() {
+        let varUnits = {}
+          varUnits = {
+            airtemp_units : '°F',
+            humidity_units : '%',
+            wind_units : 'mph',
+          };
+        return varUnits
+    }
+
+    // windheat to view data
+    // - options are 'windchill', 'heatstress'
+    @observable windheat_windheatType = 'windchill'
+    @action windheat_setwindheatType = (t) => {
+        // has the windheat changed?
+        let changed = (this.windheat_getWindHeatType===t) ? false : true
+        // only update and download data if windheat has changed
+        if (changed===true) {
+            this.windheat_windheatType = t;
+        }
+    }
+    @action windheat_setwindheatTypeFromRadioGroup = (e) => {
+        let t = e.target.value;
+        // has the windheat changed?
+        let changed = (this.windheat_getWindHeatType===t) ? false : true
+        // only update and download data if time frame has changed
+        if (changed===true) {
+            this.windheat_windheatType = t;
+        }
+    }
+    @computed get windheat_getWindHeatType() {
+        return this.windheat_windheatType;
+    }
+
+    // windheat tool data download - set parameters
+    @computed get windheat_getAcisParams() {
+            let elems
+            let numdays
+            elems = [
+                {"vX":23}, //temp
+                {"vX":24}, //relative humidity
+                {"vX":128}, //wind speed
+            ]
+            numdays=-2
+
+            return {
+                "sid":this.getLocation.sid,
+                "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                "elems":elems,
+                "meta":""
+            }
+        }
+
+    // data is loading - boolean - to control the spinner
+    @observable windheat_dataIsLoading = false
+    @action windheat_setDataIsLoading = (b) => {
+        this.windheat_dataIsLoading = b;
+    }
+    @computed get windheat_getDataIsLoading() {
+        return this.windheat_dataIsLoading;
+    }
+
+    // climate data saved in this var
+    // - the full request downloaded from ACIS
+    @observable windheat_climateData = null;
+    @action windheat_setClimateData = (res) => {
+        this.windheat_climateData = res
+    }
+    @computed get windheat_getClimateData() {
+        return this.windheat_climateData
+    }
+
+    // summary for windheat
+    // - data includes:
+    //     date : date of observation
+    //     temp : temperature for hour (F)
+    //     humid : humidity for hour (%)
+    //     wind : wind speed for hour (mph)
+    @observable windheat_climateSummary = [{
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+                'avgt': null,
+                'humid': null,
+                'wind': null,
+                }]
+    @action windheat_initClimateSummary = () => {
+        let dataObjArray = [{
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+                'avgt': null,
+                'humid': null,
+                'wind': null,
+            }];
+        this.windheat_climateSummary = dataObjArray;
+    }
+    @action windheat_setClimateSummary = () => {
+        let data = this.windheat_getClimateData;
+        let dataObjArray_hours = [];
+
+        // hourly data for two days
+        data.forEach(function (d) {
+            const MISSING = 'M';
+            const NO_VALUE = '--';
+            
+            // Extract date
+            const dateToday = d[0];
+            
+            let startIdx = 0;
+            let numHours = d[1].length;
+            if (dateToday===data[0][0]) {
+                // If it is the first day only use the midnight hour (idx = 23)
+                startIdx = 23;
+            } else if (dateToday===data[data.length-1][0]) {
+                // If it is the last day leave off hours from end that have missing data
+                let numFutureMissingHours = 0
+                for (let i = numHours-1; i >= 0; i--) { 
+                    if (d[1][i]===MISSING) {
+                        numFutureMissingHours += 1;
+                    } else {
+                        break;
+                    }
+                }
+                numHours -= numFutureMissingHours  
+            }
+
+            // Iterate hours
+            for (let i = startIdx; i < numHours; i++) { 
+                // Extract data and parse into usable form
+                const tvar = (d[1][i]===MISSING) ? MISSING : parseFloat(d[1][i]);               // Normal
+                // const tvar = (d[1][i]===MISSING) ? MISSING : -parseFloat(d[1][i]);              // Wind chill
+                // const tvar = (d[1][i]===MISSING) ? MISSING : 40+parseFloat(d[1][i]);              // Heat stress
+                const hvar = (d[2][i]===MISSING || parseFloat(d[2][i])<0.0 || parseFloat(d[2][i])>100.0) ? MISSING : parseFloat(d[2][i]);
+                const wvar = (d[3][i]===MISSING || parseFloat(d[3][i])<0.0) ? MISSING : parseFloat(d[3][i]);
+                
+                // Calculate heat stress index and wind chill
+                const windchill = (tvar === MISSING || wvar === MISSING) ? MISSING : calculateWindChill(tvar, wvar, MISSING, NO_VALUE);
+                const heatstress = (tvar === MISSING || hvar === MISSING) ? MISSING : calculateHeatStressIndex(tvar, hvar, MISSING, NO_VALUE);
+
+                //format hour
+                let formattedHourString; 
+                if (i<=8) {
+                    formattedHourString = dateToday+' 0'+(i+1).toString()+':00'
+                } else if (8<i && i<23) {
+                    formattedHourString = dateToday+' '+(i+1).toString()+':00'
+                } else if (23<=i) {
+                    formattedHourString = moment(dateToday,"YYYY-MM-DD").add(1,'days').format("YYYY-MM-DD")+' 00:00'
+                }
+
+                // construct return
+                dataObjArray_hours.push({
+                    'date':formattedHourString,
+                    'avgt': tvar,
+                    'humid': hvar,
+                    'wind': wvar,
+                    'windchill': windchill,
+                    'heatstress': heatstress,
+                })
+            }
+        })
+
+        this.windheat_climateSummary = dataObjArray_hours
+    }
+    @computed get windheat_getClimateSummary() {
+        return this.windheat_climateSummary
+    }
+
+    // windheat tool daily data download - download data using parameters
+    @action windheat_downloadData = () => {
+        this.windheat_setDataIsLoading(true);
+        return axios
+          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.windheat_getAcisParams)
+          .then(res => {
+            if (res.data.hasOwnProperty('error')) {
+                console.log('Error: resetting data to null');
+                this.windheat_setClimateData(null);
+                this.windheat_initClimateSummary()
+            } else {
+                this.windheat_setClimateData(res.data.data.slice(0));
+                this.windheat_setClimateSummary()
+            }
+            this.windheat_setDataIsLoading(false);
           })
           .catch(err => {
             console.log(

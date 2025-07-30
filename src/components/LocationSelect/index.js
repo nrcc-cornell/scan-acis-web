@@ -58,7 +58,7 @@ class LocationSelect extends Component {
                    overlayClassName="Overlay"
                  >
                    <Grid container spacing="1" direction="column">
-                     <Grid container item direction="row" justify="space-around">
+                     <Grid container item direction="row" justifyContent="space-around">
                        <StationExplorerSelect names={app.getLocations} />
                        <Button variant="contained" onClick={()=>{app.setShowModalMap(false)}}>
                            Close Map

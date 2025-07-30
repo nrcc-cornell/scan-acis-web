@@ -98,7 +98,7 @@ function ComponentProperty(props) {
                   <ListItemLinkShorthand to="/stem/wxgraph_doc" primary="Weather Grapher" />
                   <ListItemLinkShorthand to="/stem/heatidx_doc" primary="Livestock Heat Index" />
                   <ListItemLinkShorthand to="/stem/windrose_doc" primary="Wind Rose Diagram" />
-                  <ListItemLinkShorthand to="/stem/windheat_doc" primary="Wind Chill & Heat Stress" />
+                  <ListItemLinkShorthand to="/stem/windheat_doc" primary="Wind Chill & Heat Stress Index" />
               </ul>
             </List>
             <Divider />

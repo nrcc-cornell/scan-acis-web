@@ -74,7 +74,7 @@ class WxChartsExtreme extends Component {
 
         return (
           <div id="wx-charts">
-          <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
+          <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
             <Grid item>
               <Typography variant="subtitle1">
                 {superChartTitle}
@@ -84,9 +84,9 @@ class WxChartsExtreme extends Component {
               <DownloadCharts fname={downloadFilename} />
             </Grid>
           </Grid>
-          <Grid container justify="left" alignItems="flexStart">
+          <Grid container justifyContent="left" alignItems="flexStart">
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   Number of Days > {app.wxgraph_getTempThreshold}°F
@@ -111,7 +111,7 @@ class WxChartsExtreme extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   Number of Days > {app.wxgraph_getPrecipThreshold} inches

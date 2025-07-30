@@ -418,16 +418,16 @@ class HistoricalView extends Component {
                              />
 
         return (
-            <Grid container direction="row" justify="flex-start" alignItems="flex-start" xs={12}>
+            <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" xs={12}>
                 <Hidden smDown>
-                    <Grid item container className="nothing" direction="column" justify="flex-start" alignItems="flex-start" md={3}>
+                    <Grid item container className="nothing" direction="column" justifyContent="flex-start" alignItems="flex-start" md={3}>
                         <Grid item>
                             {display_VarPicker}
                         </Grid>
                     </Grid>
                 </Hidden>
                     <Grid item container className="nothing" direction="column" xs={12} md={9}>
-                        <Grid item container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
+                        <Grid item container direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
                           <Hidden mdUp>
                             <Grid item>
                               {display_VarPopover}

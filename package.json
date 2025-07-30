@@ -2,6 +2,7 @@
   "name": "nrcc-scan-acis",
   "version": "1.2.3",
   "private": true,
+  "homepage": "https://pages.github.coecis.cornell.edu/be99/scan-temp/",
   "devDependencies": {
     "custom-react-scripts": "0.2.2",
     "gh-pages": "^2.0.1"
@@ -45,7 +46,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
+    "deploy": "gh-pages -d build -r git@github.coecis.cornell.edu:be99/scan-temp",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }

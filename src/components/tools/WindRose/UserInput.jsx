@@ -417,7 +417,7 @@ class UserInput extends Component {
         <Grid
           container
           direction="row"
-          justify="flex-start"
+          justifyContent="flex-start"
           alignItems="flex-start"
           spacing={2}
         >
@@ -536,7 +536,7 @@ class UserInput extends Component {
         <Grid
           container
           direction="row"
-          justify="center"
+          justifyContent="center"
           alignItems="center"
           spacing={2}
         >

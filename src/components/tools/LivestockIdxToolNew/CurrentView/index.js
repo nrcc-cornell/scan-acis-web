@@ -65,7 +65,7 @@ class CurrentView extends Component {
         if (app.getOutputType==='chart') {
 
           return (
-            <Grid container direction="row" justify="center" alignItems="flex-start">
+            <Grid container direction="row" justifyContent="center" alignItems="flex-start">
                 <Hidden smDown>
                     <Grid item container className="nothing" direction="column" md={3}>
                         <Grid item>
@@ -74,7 +74,7 @@ class CurrentView extends Component {
                     </Grid>
                 </Hidden>
                     <Grid item container className="nothing" direction="column" xs={12} md={9}>
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+                        <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
                           <Hidden mdUp>
                             <Grid item>
                               {display_VarPopover}
@@ -99,7 +99,7 @@ class CurrentView extends Component {
         } else {
 
           return (
-            <Grid container direction="row" justify="center" alignItems="flex-start">
+            <Grid container direction="row" justifyContent="center" alignItems="flex-start">
                     <Grid item container className="nothing" direction="column" xs={12}>
                         <Grid item>
                             <LoadingOverlay

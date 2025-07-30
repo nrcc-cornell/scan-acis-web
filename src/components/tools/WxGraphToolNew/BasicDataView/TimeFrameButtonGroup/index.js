@@ -23,12 +23,12 @@ class TimeFrameButtonGroup extends React.Component {
   render() {
     return (
       <Grid container>
-          <Grid container item justify="center">
+          <Grid container item justifyContent="center">
              <Typography variant="subtitle2">
                Length of data period
              </Typography>
           </Grid>
-          <Grid container item justify="center">
+          <Grid container item justifyContent="center">
       <FormControl component="fieldset">
         <RadioGroup
           aria-label="timeframe"

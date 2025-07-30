@@ -61,8 +61,8 @@ class Instrumentation extends Component {
         const { classes } = this.props;
 
         return (
-          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
-            <Grid item container justify="flex-start" alignItems="flex-start" direction="row" xs={2} sm={1} lg={3}>
+          <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
+            <Grid item container justifyContent="flex-start" alignItems="flex-start" direction="row" xs={2} sm={1} lg={3}>
               <Grid item>
                 <Hidden lgUp>
                   <MenuPopover/>
@@ -78,7 +78,7 @@ class Instrumentation extends Component {
                   Instrumentation
                 </Typography>
               </Grid>
-            <Grid item container direction="row" className={classes.root} justify="center" spacing={4}>
+            <Grid item container direction="row" className={classes.root} justifyContent="center" spacing={4}>
               <Grid item xs={12} sm={8} md={7} lg={7}>
                     <img className="scan-station-instrument" src={scanstn} border="5" alt="A complete SCAN climate station installation" usemap="#instrumentmap" />
                     <map name="instrumentmap">

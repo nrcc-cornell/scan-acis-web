@@ -35,7 +35,7 @@ class LivestockIdxTool extends Component {
 
         return (
 
-            <Grid container direction="column" justify="flex-start" alignItems="center" spacing={3}>
+            <Grid container direction="column" justifyContent="flex-start" alignItems="center" spacing={3}>
                 <Grid item xs={12}>
                   <ToolTypeSelect
                       value={this.state.tooltype}

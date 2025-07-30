@@ -28,7 +28,7 @@ const UnitsSelect = (props) => {
                         value={v.value}
                         control={<Radio color="primary" style={{ width: 12, height: 12 }} />}
                         label={v.label}
-                        labelPlacement="right"
+                        labelPlacement="end"
                       />
                     ))
                   }

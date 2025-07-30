@@ -60,7 +60,7 @@ function ComplexGrid(props) {
   return (
     <div className={classes.root}>
       <Paper className={classes.paper}>
-        <Grid container justify="center">
+        <Grid container justifyContent="center">
           <Grid item xs={12} className={classes.cardTitle}>
             <Typography gutterBottom variant="h6">
               {title}
@@ -76,7 +76,7 @@ function ComplexGrid(props) {
               {description}
             </Typography>
           </Grid>
-          <Grid item container justify="space-evenly" className={classes.cardButtons}>
+          <Grid item container justifyContent="space-evenly" className={classes.cardButtons}>
               <Grid item>
                 <Button variant="contained" color="primary" className={classes.button} onClick={() => {props.history.push(url)}}>
                   Go

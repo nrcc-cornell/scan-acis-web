@@ -208,7 +208,7 @@ class WaterDefTool extends Component {
 
         return (
           <div>
-            <Grid item container direction="row" justify="space-evenly" alignItems="flex-start">
+            <Grid item container direction="row" justifyContent="space-evenly" alignItems="flex-start">
               <Grid item>
               {this.state.depth_top!==null && this.state.depth_bottom!==null &&
                 <DepthRangeSelect

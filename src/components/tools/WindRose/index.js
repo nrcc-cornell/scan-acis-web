@@ -7,7 +7,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 //import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles'
 import green from '@material-ui/core/colors/green';
 import grey from '@material-ui/core/colors/grey'
 import Button from '@material-ui/core/Button';
@@ -43,7 +43,7 @@ const styles = theme => ({
   },
 });
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: green[800],
@@ -237,8 +237,8 @@ class WindRose extends Component {
 
             <br/>
             {/* begin charts */}
-            <Grid item container direction="column" justify="center" alignItems="center" spacing={2} xs={12}>
-              <Grid item container direction="row" justify="center" alignItems="center" spacing={4}>
+            <Grid item container direction="column" justifyContent="center" alignItems="center" spacing={2} xs={12}>
+              <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={4}>
                 <Hidden lgUp>
                   <Grid item>
                   <ChangeOptions
@@ -254,7 +254,7 @@ class WindRose extends Component {
                 </Grid>
               </Grid>
 
-              <Grid item container direction="row" justify="space-evenly" alignItems="center">
+              <Grid item container direction="row" justifyContent="space-evenly" alignItems="center">
                 <Hidden mdDown>
                   <Grid item>
                   {!this.state.data_is_loading &&

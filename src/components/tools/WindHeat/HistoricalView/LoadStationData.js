@@ -7,17 +7,18 @@ import PropTypes from 'prop-types';
 
 const protocol = window.location.protocol;
 
-const LoadStationData = ({sid,period}) => {
-        let params = {
+const LoadStationData = ({sid}) => {
+        let params
+        params = {
           "sid": sid,
-          "meta":"name,state,valid_daterange",
-          "sdate":period[0],
-          "edate":period[1],
+          "sdate":"por",
+          "edate":"por",
           "elems":[
-              {"vX":23},                              // temperature, inst, °F
-              {"vX":24},                              // relitive humidity, inst, %
-              {"vX":128, prec:1, units: 'miles/hr'},  // wind speed, inst, mph
-            ]
+              {"vX":23}, //temp
+              {"vX":24}, //relative humidity
+              {"vX":128}, //wind speed
+            ],
+          "meta":""
         }
         return axios
           .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
@@ -33,7 +34,6 @@ const LoadStationData = ({sid,period}) => {
 
 LoadStationData.propTypes = {
   sid: PropTypes.string.isRequired,
-  period: PropTypes.array.isRequired,
 };
 
 export default LoadStationData;

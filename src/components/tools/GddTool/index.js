@@ -43,8 +43,8 @@ class GddTool extends Component {
         if (app.getOutputType==='table') { display = <GddTable /> }
 
         return (
-            <Grid container justify="center" alignItems="center" direction="column" spacing={3}>
-              <Grid item container justify="center" alignItems="center" spacing={3}>
+            <Grid container justifyContent="center" alignItems="center" direction="column" spacing={3}>
+              <Grid item container justifyContent="center" alignItems="center" spacing={3}>
                 <Grid item>
                     <PlantingDatePicker />
                 </Grid>

@@ -83,7 +83,7 @@ class LivestockIdxCharts extends Component {
         return (
           <div id="livestock-charts">
 
-          <Grid item container justify="center" alignItems="center" spacing={1}>
+          <Grid item container justifyContent="center" alignItems="center" spacing={1}>
             {typeToDisplay==='cattle' &&
               <Grid item>
                  <Typography variant="h5">
@@ -117,7 +117,7 @@ class LivestockIdxCharts extends Component {
             </Grid>
           </Grid>
 
-          <Grid item container justify="center" alignItems="center">
+          <Grid item container justifyContent="center" alignItems="center">
               <Grid item>
                  <Typography variant="subtitle1">
                      {(app.getLocation) ? app.getLocation.name+', '+app.getLocation.state : ''}
@@ -125,7 +125,7 @@ class LivestockIdxCharts extends Component {
               </Grid>
           </Grid>
 
-          <Grid container justify="flex-start" alignItems="flex-start">
+          <Grid container justifyContent="flex-start" alignItems="flex-start">
 
         {typeToDisplay==='cattle' &&
 
@@ -253,7 +253,7 @@ class LivestockIdxCharts extends Component {
 
         }
 
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+                        <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
                           <Grid item>
                             <Typography variant="subtitle2">
                               Air Temperature
@@ -280,7 +280,7 @@ class LivestockIdxCharts extends Component {
         </LineChart>
       </ResponsiveContainer>
             </Grid>
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+                        <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
                           <Grid item>
                             <Typography variant="subtitle2">
                               Humidity
@@ -309,7 +309,7 @@ class LivestockIdxCharts extends Component {
 
         {typeToDisplay==='cattle' &&
 
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+                        <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
                           <Grid item>
                             <Typography variant="subtitle2">
                               Solar Radiation
@@ -343,7 +343,7 @@ class LivestockIdxCharts extends Component {
 
         {typeToDisplay==='cattle' &&
 
-                        <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+                        <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
                           <Grid item>
                             <Typography variant="subtitle2">
                               Wind Speed

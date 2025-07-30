@@ -13,18 +13,8 @@ import { saveAs } from 'file-saver';
 
 //Components
 
-// Styles
-//import '../../../../styles/WxCharts.css';
-
-//var app;
-
 @inject('store') @observer
 class DownloadCharts extends Component {
-
-    //constructor(props) {
-    //    super(props);
-    //    app = this.props.store.app;
-    //}
 
     render() {
 

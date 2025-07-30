@@ -4,7 +4,7 @@
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 //import { MuiThemeProvider, createMuiTheme, withStyles, withTheme  } from "@material-ui/core/styles";
-import { MuiThemeProvider, createMuiTheme, withStyles, withTheme  } from "@material-ui/core/styles";
+import { MuiThemeProvider, createTheme, withStyles, withTheme  } from "@material-ui/core/styles";
 //import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import green from '@material-ui/core/colors/green';
 
@@ -32,7 +32,7 @@ import Footer from '../../components/Footer';
 //import '../../styles/react-tabs.css';
 import '../../styles/App.css';
 
-const theme = createMuiTheme({
+const theme = createTheme({
   //shadows: ["none"],
   shadows: Array(25).fill('none'),
   palette: {
@@ -94,7 +94,7 @@ class App extends Component {
                   <Route path="/tools/weather-grapher" render={(props) => <ToolContents {...props} name={'wxgrapher'} />} />
                   <Route path="/tools/livestock-heat-index" render={(props) => <ToolContents {...props} name={'livestock'} />} />
                   <Route path="/tools/wind-rose" render={(props) => <ToolContents {...props} name={'windrose'} />} />
-                  <Route path="/tools/wind-chill-heat-stress" render={(props) => <ToolContents {...props} name={'windheat'} />} />
+                  <Route path="/tools/wind-chill-heat-stress-index" render={(props) => <ToolContents {...props} name={'windheat'} />} />
                   <Route render={() => <Redirect to="/" />} />
                 </Switch>
 

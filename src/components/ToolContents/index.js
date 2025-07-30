@@ -78,7 +78,7 @@ class ToolContents extends Component {
                 <Typography align="center" variant="h3" className="tool-title">
                   {app.getToolInfo(this.props.name).title}
                 </Typography>
-                {this.props.name!=='windrose' && this.props.name!=='windheat' &&
+                {this.props.name!=='windrose' &&
                 <Typography align="center" variant="h3">
                   <Button variant="text" color="primary" onClick={()=>{history.push(url_doc)}}>
                     View Documentation

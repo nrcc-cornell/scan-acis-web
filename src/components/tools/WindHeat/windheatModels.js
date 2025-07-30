@@ -1,5 +1,5 @@
 //compute heat index for a single hour or all hours in a day
-export function heatindex(tempVals, rhumVals, nacode = 'na') {
+export function heatindex(tempVals, rhumVals, missingValue, noHSIvalue) {
   const hindx = [];
 
   // Allows single hour or array of hours to be passed in
@@ -7,9 +7,9 @@ export function heatindex(tempVals, rhumVals, nacode = 'na') {
   const rhums = typeof rhumVals !== 'object' ? [rhumVals] : rhumVals;
 
   for (let i = 0; i < temps.length; i += 1) {
-    if (temps[i] === 'M' || rhums[i] === 'M') {
+    if (temps[i] === missingValue || rhums[i] === missingValue) {
       // Add missing value if required data is missing
-      hindx.push(null);
+      hindx.push(missingValue);
     } else if (parseFloat(temps[i]) >= 80) {
       // Only calculate heat index if the temperature is at least 80°F
       
@@ -18,7 +18,7 @@ export function heatindex(tempVals, rhumVals, nacode = 'na') {
       let rhum = parseFloat(rhums[i]);
 
       // Calculate initial heat index
-      let hi = Math.round(
+      let hsi = Math.round(
         -42.379 +
           2.04901523 * temp +
           10.1433127 * rhum -
@@ -36,21 +36,21 @@ export function heatindex(tempVals, rhumVals, nacode = 'na') {
           ((13.0 - rhum) / 4.0) *
           Math.sqrt((17.0 - Math.abs(temp - 95.0)) / 17.0);
 
-        hi -= adj;
+        hsi -= adj;
       }
 
       // Adjust if temperature is between 80-87°F and humidity is greater than than 85%
       if (rhum > 85 && temp >= 80 && temp <= 87) {
         const adj2 = ((rhum - 85.0) / 10.0) * ((87.0 - temp) / 5.0);
 
-        hi -= adj2;
+        hsi -= adj2;
       }
 
       // Add final heat index value to the return
-      hindx.push(hi);
+      hindx.push(hsi);
     } else {
       // If temperature is less than 80°F push nacode
-      hindx.push(nacode);
+      hindx.push(noHSIvalue);
     }
   }
 
@@ -60,7 +60,7 @@ export function heatindex(tempVals, rhumVals, nacode = 'na') {
 
 
 //compute wind chill from temp and wind speed for single hour or all hours in a day
-export function windchill(tempVals, windVals, nacode = 'na') {
+export function windchill(tempVals, windVals, missingValue, noWCvalue) {
   const wchill = [];
 
   // Allows single hour or array of hours to be passed in
@@ -68,9 +68,9 @@ export function windchill(tempVals, windVals, nacode = 'na') {
   const winds = typeof windVals !== 'object' ? [windVals] : windVals;
 
   for (let i = 0; i < temps.length; i += 1) {
-    if (temps[i] === 'M' || winds[i] === 'M') {
+    if (temps[i] === missingValue || winds[i] === missingValue) {
       // Add missing value if required data is missing
-      wchill.push(null);
+      wchill.push(missingValue);
     } else if (parseFloat(temps[i]) <= 50 && parseFloat(winds[i]) > 3) {
       // Only calculate wind chill if temperature is less than 50°F and windspeed is greater than 3 mph
       
@@ -89,7 +89,7 @@ export function windchill(tempVals, windVals, nacode = 'na') {
       );
     } else {
       // If temperature and wind speed requirements are not met then push nacode value
-      wchill.push(nacode);
+      wchill.push(noWCvalue);
     }
   }
 
