@@ -22,17 +22,8 @@ class NwsAlerts extends React.Component {
   }
 
   componentDidMount() {
-
-    /////////////////////////////////
-    /////////////////////////////////
-    /////////////////////////////////
-    // Stubbed out right now       //
-    /////////////////////////////////
-    /////////////////////////////////
-    /////////////////////////////////
     LoadNwsAlerts({ lat: this.props.stncoords[1], lon: this.props.stncoords[0]})
       .then(response => {
-        console.log(response);
         this.setState({
           updated: '',
           windchill: [],
