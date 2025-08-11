@@ -33,6 +33,21 @@ class NwsAlerts extends React.Component {
         })
       });
   }
+  
+  componentDidUpdate(prevProps) {
+    if (JSON.stringify(prevProps.stncoords) !== JSON.stringify(this.props.stncoords)) {
+      LoadNwsAlerts({ lat: this.props.stncoords[1], lon: this.props.stncoords[0]})
+        .then(response => {
+          this.setState({
+            updated: '',
+            windchill: [],
+            heatstress: [],
+            isLoading: false,
+            ...response
+          })
+        });
+    }
+  }
 
   render() {
     const alertType = app.windheat_windheatType === 'windchill' ? 'Wind Chill' : 'Heat Stress';
