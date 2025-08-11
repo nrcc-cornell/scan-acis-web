@@ -25,7 +25,16 @@ const LoadNwsAlerts = ({lat, lon}) => {
     .then(results => {
       const { updated, features } = results.data;
       const { windchill, heatstress } = features.reduce((res, feat) => {
-        const { web, event, headline, description, instruction } = feat.properties;
+        const { event, headline, description, instruction, parameters } = feat.properties;
+
+        let web = 'https://www.weather.gov/';
+        if (
+          "AWIPSidentifier" in parameters &&
+          parameters.AWIPSidentifier.length
+        ) {
+          web += parameters.AWIPSidentifier[0].slice(3).toLowerCase();
+        }
+
         const alert = { web, event, headline, description, instruction };
         if (windchillEvents.includes(event)) {
           res.windchill.push(alert);
