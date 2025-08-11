@@ -5,8 +5,9 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 
-import TimescaleButtonGroup from './TimescaleButtonGroup'
 import WindHeatTypeButtonGroup from './WindHeatTypeButtonGroup'
+import TimescaleButtonGroup from './TimescaleButtonGroup'
+import ClimatologySelector from './ClimatologySelector'
 
 const VarPicker = (props) => {
 
@@ -24,6 +25,11 @@ const VarPicker = (props) => {
             Timescale
           </Typography>
           <TimescaleButtonGroup timescale={props.timescale} onchangeTimescale={props.onchangeTimescale} />
+          <div style={{margin:20}}></div>
+          <Typography variant="h6">
+            Climatology
+          </Typography>
+          <ClimatologySelector climatologyOptions={props.climatologyOptions} climatology={props.climatology} onchangeClimatology={props.onchangeClimatology} />
         </Box>
       </div>
     );
@@ -33,6 +39,9 @@ const VarPicker = (props) => {
 VarPicker.propTypes = {
   timescale: PropTypes.string.isRequired,
   onchangeTimescale: PropTypes.func.isRequired,
+  climatologyOptions: PropTypes.array.isRequired,
+  climatology: PropTypes.string.isRequired,
+  onchangeClimatology: PropTypes.func.isRequired,
 };
 
 export default VarPicker;

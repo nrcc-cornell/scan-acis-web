@@ -1,0 +1,70 @@
+#nws-alerts {
+  border: 1px solid rgb(76, 175, 80);
+  padding: 8px;
+  border-radius: 4px;
+  background-color: rgb(245, 245, 220);
+  text-align: center;
+  margin-top: 60px;
+}
+
+#nws-alerts-info {
+  margin: 12px 0px;
+}
+
+#nws-alerts-station-name {
+  font-size: 1.25rem;
+  margin: 4px;
+}
+
+#nws-alerts-updated-at {
+  font-size: 1.1rem;
+  font-style: italic;
+  color: rgb(120,120,120);
+  margin: 4px;
+}
+
+#nws-alerts-no-alerts {
+  font-weight: bold;
+  margin: 16px 0px 0px;
+}
+
+.nws-alerts-alert {
+  padding: 8px;
+  margin-top: 8px;
+}
+
+.nws-alerts-alert-divider {
+  border-top: 1px dashed black;
+  margin: 0px auto;
+  width: 75%;
+}
+
+.nws-alerts-alert-title-link {
+  text-decoration: none;
+}
+
+.nws-alerts-alert-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 18px 0px 8px;
+}
+
+.nws-alerts-alert-body {
+  width: 80%;
+  margin: 0px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  text-align: left;
+}
+
+.nws-alerts-alert-body-description {
+  width: 80%;
+  margin: 0px auto;
+}
+
+.nws-alerts-alert-body-headline,
+.nws-alerts-alert-body-description,
+.nws-alerts-alert-body-instruction {
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}

@@ -36,6 +36,116 @@ const styles = theme => ({
   },
 });
 
+const climatologyOptions = [{
+  value: 'season',
+  label: 'Local Season',
+  titlePosition: 'start',
+  start: null,
+  end: null
+},{
+  value: 'annual',
+  label: 'Annual',
+  titlePosition: 'start',
+  start: '01-01',
+  end: '12-31'
+},{
+  value: 'winter',
+  label: 'Winter',
+  titlePosition: 'start',
+  start: '12-01',
+  end: '02-29'
+},{
+  value: 'spring',
+  label: 'Spring',
+  titlePosition: 'start',
+  start: '03-01',
+  end: '05-31'
+},{
+  value: 'summer',
+  label: 'Summer',
+  titlePosition: 'start',
+  start: '06-01',
+  end: '08-31'
+},{
+  value: 'fall',
+  label: 'Fall',
+  titlePosition: 'start',
+  start: '09-01',
+  end: '11-30'
+},{
+  value: '01',
+  label: 'January',
+  titlePosition: 'end',
+  start: '01-01',
+  end: '01-31'
+},{
+  value: '02',
+  label: 'February',
+  titlePosition: 'end',
+  start: '02-01',
+  end: '02-29'
+},{
+  value: '03',
+  label: 'March',
+  titlePosition: 'end',
+  start: '03-01',
+  end: '03-31'
+},{
+  value: '04',
+  label: 'April',
+  titlePosition: 'end',
+  start: '04-01',
+  end: '04-30'
+},{
+  value: '05',
+  label: 'May',
+  titlePosition: 'end',
+  start: '05-01',
+  end: '05-31'
+},{
+  value: '06',
+  label: 'June',
+  titlePosition: 'end',
+  start: '06-01',
+  end: '06-30'
+},{
+  value: '07',
+  label: 'July',
+  titlePosition: 'end',
+  start: '07-01',
+  end: '07-31'
+},{
+  value: '08',
+  label: 'August',
+  titlePosition: 'end',
+  start: '08-01',
+  end: '08-31'
+},{
+  value: '09',
+  label: 'September',
+  titlePosition: 'end',
+  start: '09-01',
+  end: '09-30'
+},{
+  value: '10',
+  label: 'October',
+  titlePosition: 'end',
+  start: '10-01',
+  end: '10-31'
+},{
+  value: '11',
+  label: 'November',
+  titlePosition: 'end',
+  start: '11-01',
+  end: '11-30'
+},{
+  value: '12',
+  label: 'December',
+  titlePosition: 'end',
+  start: '12-01',
+  end: '12-31'
+}];
+
 var app;
 
 const calc_hourly_indices = (d, missingValue, noValue) => {
@@ -61,7 +171,7 @@ const calc_hourly_indices = (d, missingValue, noValue) => {
     return oseries
 }
 
-export function calcSeasonYear(currentIsoDate, seasonStartMMDD, seasonEndMMDD) {
+function calcSeasonYear(currentIsoDate, seasonStartMMDD, seasonEndMMDD) {
   const cDate = parseISO(currentIsoDate);
   const cYear = cDate.getFullYear();
   
@@ -88,7 +198,7 @@ export function calcSeasonYear(currentIsoDate, seasonStartMMDD, seasonEndMMDD) {
   }
 }
 
-const calc_frequencies = (data, locationInfo) => {
+const calc_frequencies = (data, locationInfo, climatologyStr) => {
     const MISSING = 'M';
     const NO_VALUE = '--';
     
@@ -117,7 +227,10 @@ const calc_frequencies = (data, locationInfo) => {
     };
     const [ windchillFrequencies, heatstressFrequencies ] = [windchillThresholds, heatStressThresholds].map(t => {
         // get date range to calculate from
-        const { start, end } = getDateRangeForState(locationInfo.state, t['idx_type']);
+        let { start, end } = climatologyOptions.find(({ value }) => value === climatologyStr);
+        if (start === null || end === null) {
+          ({ start, end } = getDateRangeForState(locationInfo.state, t['idx_type']));
+        }
 
         // construct list of all hours and days annually
         let start_idx = null;
@@ -131,11 +244,12 @@ const calc_frequencies = (data, locationInfo) => {
         for (let iday = 0; iday < indicesHourly.length; iday++) {
             const today = indicesHourly[iday]['date'].slice(5);
             if (today === start) {
-                start_idx = iday;
+              start_idx = iday;
             }
-
+            
             if (start_idx !== null) {
-                const today_is_end = today === end;
+                // Handles leap end date of leap day
+                const today_is_end = today === end || (end === '02-29' && today === '02-28' && indicesHourly[iday + 1]['date'].slice(5) !== end);
 
                 if (today_is_end) {
                     // In the final day
@@ -170,7 +284,7 @@ const calc_frequencies = (data, locationInfo) => {
         }
         // final year: write array of hourly values to output array if there is an incomplete season
         if (start_idx !== null) {
-            const year = String(parseInt(indicesHourly_byYear[indicesHourly_byYear.length - 1]['year']) + 1);
+            const year = String(parseInt(indicesHourly_byYear[indicesHourly_byYear.length - 1]['year'], 10) + 1);
             indicesHourly_byYear.push({'year': year, 'idx':temp_hourly_array, 'dates': temp_dates_hourly, 'isComplete': false})
             indicesDaily_byYear.push({'year': year, 'idx':temp_daily_array, 'dates': temp_dates_daily, 'isComplete': false})
         }
@@ -212,9 +326,11 @@ class HistoricalView extends Component {
         this.year = new Date().getFullYear()
         this.doy = Math.round((Date.now() - Date.parse(new Date().getFullYear(), 0, 0)) / 86400000)
         this.state = {
+          rawData: null,
           data: null,
           data_is_loading: false,
           timescale: 'hours',
+          climatology: 'season',
           disabled: [],
         }
     }
@@ -226,7 +342,8 @@ class HistoricalView extends Component {
         })
           .then(response => {
             this.setState({
-              data: calc_frequencies(response.data.data, app.location_explorer),
+              rawData: response.data.data,
+              data: calc_frequencies(response.data.data, app.location_explorer, this.state.climatology),
               data_is_loading:false,
             })
           });
@@ -240,7 +357,8 @@ class HistoricalView extends Component {
                 })
                   .then(response => {
                     this.setState({
-                      data: calc_frequencies(response.data.data, app.location_explorer),
+                      rawData: response.data.data,
+                      data: calc_frequencies(response.data.data, app.location_explorer, this.state.climatology),
                       data_is_loading:false,
                     })
                   });
@@ -250,6 +368,13 @@ class HistoricalView extends Component {
     handleChangeTimescale = (e) => {
       this.setState({
         timescale: e.target.value
+      })
+    }
+
+    handleChangeClimatology = (e) => {
+      this.setState({
+        climatology: e.target.value,
+        data: calc_frequencies(this.state.rawData, app.location_explorer, e.target.value),
       })
     }
 
@@ -267,6 +392,7 @@ class HistoricalView extends Component {
     initStateForLoading = () => {
         this.setState({
           data_is_loading: true,
+          rawData: null,
           data: null,
         })
     }
@@ -311,6 +437,21 @@ class HistoricalView extends Component {
         }
     }
 
+    constructTitle = () => {
+      let title = this.getIdxTypeLabel(app.windheat_getWindHeatType)+' Frequencies ('+this.state.timescale+')';
+      
+      const climatologyOption = climatologyOptions.find(({ value }) => value === this.state.climatology);
+      if (climatologyOption) {
+        if (climatologyOption.position === 'end') {
+          title = `${this.getIdxTypeLabel(app.windheat_getWindHeatType)} Frequencies in ${climatologyOption.label} (${this.state.timescale})`;
+        } else if (climatologyOption.titlePosition === 'start') {
+          title = `${climatologyOption.label} ${title}`;
+        }
+      }
+
+      return title;
+    } 
+
     render() {
         let display;
         if (this.props.outputtype==='chart') {
@@ -318,7 +459,7 @@ class HistoricalView extends Component {
                         data={(this.state.data === null || !app.windheat_getWindHeatType) ? [] : this.state.data[app.windheat_getWindHeatType][this.state.timescale]}
                         stnName={this.props.stnname}
                         loading={this.state.data_is_loading}
-                        chartTitle={this.getIdxTypeLabel(app.windheat_getWindHeatType)+' Frequencies ('+this.state.timescale+')'}
+                        chartTitle={this.constructTitle()}
                         chartInfo={this.getChartInfo(app.windheat_getWindHeatType)}
                         disabled={this.state.disabled}
                         onClickLegend={this.handleClickLegend}
@@ -330,13 +471,19 @@ class HistoricalView extends Component {
                         data={this.state.data ? this.state.data[app.windheat_getWindHeatType][this.state.timescale] : []}
                         stnName={this.props.stnname}
                         loading={this.state.data_is_loading}
-                        tableTitle={this.getIdxTypeLabel(app.windheat_getWindHeatType)+' Frequencies ('+this.state.timescale+')'}
+                        tableTitle={this.constructTitle()}
                         tableInfo={this.getChartInfo(app.windheat_getWindHeatType)}
                       />
         }
 
         let display_VarPicker;
-        display_VarPicker = <VarPicker timescale={this.state.timescale} onchangeTimescale={this.handleChangeTimescale} />
+        display_VarPicker = <VarPicker
+          timescale={this.state.timescale}
+          onchangeTimescale={this.handleChangeTimescale}
+          climatologyOptions={climatologyOptions}
+          climatology={this.state.climatology}
+          onchangeClimatology={this.handleChangeClimatology}
+        />
 
         let display_VarPopover;
         display_VarPopover = <VarPopover

@@ -28,7 +28,7 @@ class WindHeatCharts extends Component {
 
     render() {
 
-        let dataForChart = app.windheat_getClimateSummary
+        let dataForChart = JSON.parse(JSON.stringify(app.windheat_getClimateSummary));
         let typeToDisplay = app.windheat_getWindHeatType
 
         let formatXAxisForDate = (tickItem) => {
@@ -49,16 +49,20 @@ class WindHeatCharts extends Component {
                 }
                 {
                     payload.map((entry,index) => {
-                        const { color, value, name } = entry
-                        let style = {}
-                        style = { color: color }
-                        return (
-                            <span key={index} className="tooltip-item">
-                            <br/>
-                            <span style={style}>{name} : </span>
-                            <span>{value}</span>
-                            </span>
-                        )
+                        const { color, value, name, dataKey, payload } = entry
+                        if ((dataKey.slice(0,4) === 'fcst' && payload.fcstAvgt !== '--') || ((dataKey.slice(0,4) !== 'fcst' && payload.avgt !== '--'))) {
+                          let style = {}
+                          style = { color: color }
+                          return (
+                              <span key={index} className="tooltip-item">
+                              <br/>
+                              <span style={style}>{name} : </span>
+                              <span>{value}</span>
+                              </span>
+                          )
+                        } else {
+                          return '';
+                        }
                     })
                 }
               </div>
@@ -107,6 +111,12 @@ class WindHeatCharts extends Component {
                 <ResponsiveContainer width="100%" height={300} className={""}>
                   <AreaChart data={dataForChart} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>
+                    <defs>
+                      <pattern id="verticalStripes" width="10" height="10" patternUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="5" height="10" fill="#636363ff" />
+                        <rect x="5" y="0" width="5" height="10" fill="transparent" />
+                      </pattern>
+                    </defs>
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis
                       dataKey="date"
@@ -127,6 +137,7 @@ class WindHeatCharts extends Component {
                     <ReferenceLine y={-50} label={{position: "left", value:"-50 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#4A005A" isFront={true} />
                     <ReferenceLine y={-50} label={{position: "insideBottomLeft", value:" Emergency ", offset:0, fontFamily:"Roboto"}} stroke="#4A005A" isFront={true} />
                     <Area type='monotone' name={'Wind Chill'} dataKey='windchill' stroke='#D3D3D3' fill='#D3D3D3'/>
+                    <Area type='monotone' name={'Wind Chill Forecast'} dataKey='fcstWindchill' stroke='#636363ff' fill='url(#verticalStripes)'/>
                   </AreaChart>
                 </ResponsiveContainer>
               </Grid>
@@ -137,6 +148,12 @@ class WindHeatCharts extends Component {
                 <ResponsiveContainer width="100%" height={300} className={""}>
                   <AreaChart data={dataForChart} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>
+                    <defs>
+                      <pattern id="verticalStripes" width="10" height="10" patternUnits="userSpaceOnUse">
+                        <rect x="0" y="0" width="5" height="10" fill="#636363ff" />
+                        <rect x="5" y="0" width="5" height="10" fill="transparent" />
+                      </pattern>
+                    </defs>
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis
                       dataKey="date"
@@ -156,6 +173,7 @@ class WindHeatCharts extends Component {
                     <ReferenceLine y={125} label={{position: "left", value:"125 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#CC0003" isFront={true} />
                     <ReferenceLine y={125} label={{position: "insideBottomLeft", value:" Extreme Danger ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#CC0003" isFront={true} />
                     <Area type='monotone' name={'Heat Stress Index'} dataKey='heatstress' stroke='#D3D3D3' fill='#D3D3D3'/>
+                    <Area type='monotone' name={'Heat Stress Index Forecast'} dataKey='fcstHeatstress' stroke='#636363ff' fill='url(#verticalStripes)'/>
                   </AreaChart>
                 </ResponsiveContainer>
               </Grid>
@@ -184,6 +202,7 @@ class WindHeatCharts extends Component {
                     content={renderCustomTooltip}
                   />
                   <Line type='monotone' name={app.windheat_getVarLabels['airtemp_label']} dataKey='avgt' stroke='#8884d8' fill='#8884d8' />
+                  <Line type='monotone' name={app.windheat_getVarLabels['airtemp_label'] + ' Forecast'} dataKey='fcstAvgt' stroke='#0e0885ff' fill='#0e0885ff' strokeDasharray="5 5" />
                 </LineChart>
               </ResponsiveContainer>
             </Grid>
@@ -213,6 +232,7 @@ class WindHeatCharts extends Component {
                         content={renderCustomTooltip}
                       />
                       <Line type='monotone' name={app.windheat_getVarLabels['humidity_label']} dataKey='humid' stroke='#82ca9d' fill='#82ca9d' />
+                      <Line type='monotone' name={app.windheat_getVarLabels['humidity_label'] + ' Forecast'} dataKey='fcstHumid' stroke='#0d632eff' fill='#0d632eff' strokeDasharray="5 5" />
                     </LineChart>
                   </ResponsiveContainer>
                 </Grid>
@@ -244,7 +264,8 @@ class WindHeatCharts extends Component {
                       <Tooltip
                         content={renderCustomTooltip}
                       />
-                      <Line type='monotone' name={app.windheat_getVarLabels['wind_label']} dataKey='wind' stroke='#8884d8' fill='#8884d8' />
+                      <Line type='monotone' name={app.windheat_getVarLabels['wind_label']} dataKey='wind' stroke='#d88484ff' fill='#d88484ff' />
+                      <Line type='monotone' name={app.windheat_getVarLabels['wind_label'] + ' Forecast'} dataKey='fcstWind' stroke='#8f1313ff' fill='#8f1313ff' strokeDasharray="5 5" />
                     </LineChart>
                   </ResponsiveContainer>
                 </Grid>

@@ -101,13 +101,13 @@ class WindHeatDoc extends Component {
                       <br/><br/>
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      The heat stress index categories used in this tool match the definitions provided by the <a href='https://www.weather.gov/ama/heatindex' target='_blank'>National Weather Service</a>.
-                      <a href='https://www.weather.gov/ama/heatindex' target='_blank'><img className="doc-image" style={{ width: '600px', margin: '0 auto' }} src={heatindex1} alt="National Weather Service Heat Index chart" /></a><br/>
-                      <a href='https://www.weather.gov/ama/heatindex' target='_blank'><img className="doc-image" style={{ width: '500px', margin: '0 auto' }} src={heatindex2} alt="National Weather Service Heat Index category descriptions" /></a><br/>
+                      The heat stress index categories used in this tool match the definitions provided by the <a href='https://www.weather.gov/ama/heatindex' rel="noopener noreferrer" target='_blank'>National Weather Service</a>.
+                      <a href='https://www.weather.gov/ama/heatindex' rel="noopener noreferrer" target='_blank'><img className="doc-image" style={{ width: '600px', margin: '0 auto' }} src={heatindex1} alt="National Weather Service Heat Index chart" /></a><br/>
+                      <a href='https://www.weather.gov/ama/heatindex' rel="noopener noreferrer" target='_blank'><img className="doc-image" style={{ width: '500px', margin: '0 auto' }} src={heatindex2} alt="National Weather Service Heat Index category descriptions" /></a><br/>
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      The wind chill categories used in this tool attempt to follow the definitions provided by the <a href='https://www.weather.gov/bou/windchill' target='_blank'>National Weather Service</a>.
-                      <a href='https://www.weather.gov/bou/windchill' target='_blank'><img className="doc-image" style={{ width: '600px', margin: '0 auto' }} src={windchill1} alt="National Weather Service Wind Chill chart" /><br/></a>
+                      The wind chill categories used in this tool attempt to follow the definitions provided by the <a href='https://www.weather.gov/bou/windchill' rel="noopener noreferrer" target='_blank'>National Weather Service</a>.
+                      <a href='https://www.weather.gov/bou/windchill' rel="noopener noreferrer" target='_blank'><img className="doc-image" style={{ width: '600px', margin: '0 auto' }} src={windchill1} alt="National Weather Service Wind Chill chart" /><br/></a>
                     </Typography>
                     <Button variant="outlined" color="primary" onClick={()=>{history.push(url)}}>
                       Wind Chill and Heat Stress Charts

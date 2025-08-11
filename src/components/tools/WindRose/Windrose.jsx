@@ -77,7 +77,7 @@ export default class Windrose extends Component {
         }
       },
       credits: {
-        href: "http://www.rcc-acis.org",
+        href: "https://www.rcc-acis.org",
         text: "Powered by ACIS"
       },
       // Following are expected, but not required, to be provided via this.props.options

@@ -1,17 +1,10 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-//import React from 'react';
 import { observable, computed, action } from 'mobx';
 import axios from 'axios';
 import moment from 'moment';
+import { parse, format, subHours } from 'date-fns';
 import { heatindex as calculateHeatStressIndex, windchill as calculateWindChill } from '../components/tools/WindHeat/windheatModels';
 
-const protocol = window.location.protocol;
-
 //utils
-//const arrSum = arr => arr.reduce((a,b) => a + b, 0)
-//const arrAvg = arr => arr.reduce((a,b) => a + b, 0) / arr.length
 const getMtdStartLabel = (s) => { return moment(s,"YYYY-MM-DD").format("MMM")+' 1' }
 const getStdStartLabel = (s) => {
         let month = moment(s,'YYYY-MM-DD').month() + 1
@@ -811,9 +804,7 @@ export class AppStore {
 	let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.getAcisParams : this.getAcisParams_tscan
         this.gddtool_setDataIsLoading(true);
         return axios
-          //.post(`${protocol}//grid2.rcc-acis.org/GridData`, this.getAcisParams)
-          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.getAcisParams)
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
           .then(res => {
             //console.log('SUCCESS downloading from ACIS');
             //console.log(res);
@@ -1714,9 +1705,7 @@ export class AppStore {
         let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.wxgraph_getAcisParams : this.wxgraph_getAcisParams_tscan
         this.wxgraph_setDataIsLoading(true);
         return axios
-          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
-          //.post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
           .then(res => {
             //console.log('SUCCESS downloading from ACIS');
             //console.log(res);
@@ -2099,12 +2088,10 @@ export class AppStore {
         this.explorer_initLatestConditions();
         this.explorer_setDataIsLoading(true);
         return axios
-          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.explorer_getAcisParams)
-          //.post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.explorer_getAcisParams)
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
           .then(res => {
-            //console.log('SUCCESS downloading from ACIS');
-            //console.log(res);
+            // console.log('SUCCESS downloading from ACIS');
+            // console.log(res);
             if (res.data.hasOwnProperty('error')) {
                 console.log('Error: resetting data to null');
                 this.explorer_setClimateData(null);
@@ -2116,6 +2103,7 @@ export class AppStore {
             this.explorer_setDataIsLoading(false);
           })
           .catch(err => {
+            console.error(err);
             console.log(
               "Request Error: " + (err.response.data || err.response.statusText)
             );
@@ -2129,8 +2117,7 @@ export class AppStore {
         this.explorer_initClimateSummary();
         this.explorerClimateSummary_setDataIsLoading(true);
         return axios
-          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.explorer_getAcisParams)
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
           .then(res => {
             //console.log('SUCCESS downloading climate summary from ACIS');
             //console.log(res);
@@ -2464,14 +2451,10 @@ export class AppStore {
 
     // Livestock Heat Index tool daily data download - download data using parameters
     @action livestock_downloadData = () => {
-        //console.log("Call livestock_downloadData")
         this.livestock_setDataIsLoading(true);
         return axios
-          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.livestock_getAcisParams)
+          .post('https://data.nrcc.rcc-acis.org/StnData', this.livestock_getAcisParams)
           .then(res => {
-            //console.log('SUCCESS downloading from ACIS');
-            //console.log(res);
             if (res.data.hasOwnProperty('error')) {
                 console.log('Error: resetting data to null');
                 this.livestock_setClimateData(null);
@@ -2544,7 +2527,7 @@ export class AppStore {
         return this.windheat_windheatType;
     }
 
-    // windheat tool data download - set parameters
+    // windheat tool daily data download - set parameters
     @computed get windheat_getAcisParams() {
             let elems
             let numdays
@@ -2563,6 +2546,20 @@ export class AppStore {
                 "meta":""
             }
         }
+
+    // windheat tool forecast data download - set parameters
+    //    get two days before date to ensure plenty of date is retrieved for alignment of hours with observed data
+    //    start hour is 23 to handle edge case of a PR/VI station (Atlantic Timezone: GMT -4) and non-daylight savings time date (locHrly would return for Eastern Standard Time: GMT -5)
+    @computed get windheat_getLocHrlyParams() {
+        const { ll } = this.getLocation;
+        return {
+            "lon": ll[0],
+            "lat": ll[1],
+            "tzo": -5,
+            "sdate": moment(date_current,'YYYY-MM-DD').add(-3,'days').format("YYYYMMDD23"),
+            "edate": "now"
+        }
+    }
 
     // data is loading - boolean - to control the spinner
     @observable windheat_dataIsLoading = false
@@ -2583,36 +2580,60 @@ export class AppStore {
         return this.windheat_climateData
     }
 
+    // forecasted climate data saved in this var
+    // - the full request downloaded from locHrly
+    @observable windheat_forecastData = null;
+    @action windheat_setForecastData = (res) => {
+        this.windheat_forecastData = res
+    }
+    @computed get windheat_getForecastData() {
+        return this.windheat_forecastData
+    }
+
     // summary for windheat
-    // - data includes:
+    // - data included for both observed and forecasted:
     //     date : date of observation
     //     temp : temperature for hour (F)
     //     humid : humidity for hour (%)
     //     wind : wind speed for hour (mph)
     @observable windheat_climateSummary = [{
-                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
-                'avgt': null,
-                'humid': null,
-                'wind': null,
-                }]
+        'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+        'avgt': null,
+        'humid': null,
+        'wind': null,
+        'windchill': null,
+        'heatstress': null,
+        'fcstAvgt': null,
+        'fcstHumid': null,
+        'fcstWind': null,
+        'fcstWindchill': null,
+        'fcstHeatstress': null,
+    }];
     @action windheat_initClimateSummary = () => {
-        let dataObjArray = [{
-                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
-                'avgt': null,
-                'humid': null,
-                'wind': null,
-            }];
-        this.windheat_climateSummary = dataObjArray;
+        this.windheat_climateSummary = [{
+            'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+            'avgt': null,
+            'humid': null,
+            'wind': null,
+            'windchill': null,
+            'heatstress': null,
+            'fcstAvgt': null,
+            'fcstHumid': null,
+            'fcstWind': null,
+            'fcstWindchill': null,
+            'fcstHeatstress': null,
+        }];
     }
     @action windheat_setClimateSummary = () => {
         let data = this.windheat_getClimateData;
+        let forecastRes = this.windheat_getForecastData;
         let dataObjArray_hours = [];
+
+        const MISSING = 'M';
+        const NO_VALUE = '--';
 
         // hourly data for two days
         data.forEach(function (d) {
-            const MISSING = 'M';
-            const NO_VALUE = '--';
-            
             // Extract date
             const dateToday = d[0];
             
@@ -2637,9 +2658,7 @@ export class AppStore {
             // Iterate hours
             for (let i = startIdx; i < numHours; i++) { 
                 // Extract data and parse into usable form
-                const tvar = (d[1][i]===MISSING) ? MISSING : parseFloat(d[1][i]);               // Normal
-                // const tvar = (d[1][i]===MISSING) ? MISSING : -parseFloat(d[1][i]);              // Wind chill
-                // const tvar = (d[1][i]===MISSING) ? MISSING : 40+parseFloat(d[1][i]);              // Heat stress
+                const tvar = (d[1][i]===MISSING) ? MISSING : parseFloat(d[1][i]);
                 const hvar = (d[2][i]===MISSING || parseFloat(d[2][i])<0.0 || parseFloat(d[2][i])>100.0) ? MISSING : parseFloat(d[2][i]);
                 const wvar = (d[3][i]===MISSING || parseFloat(d[3][i])<0.0) ? MISSING : parseFloat(d[3][i]);
                 
@@ -2665,11 +2684,69 @@ export class AppStore {
                     'wind': wvar,
                     'windchill': windchill,
                     'heatstress': heatstress,
+                    'fcstAvgt': NO_VALUE,
+                    'fcstHumid': NO_VALUE,
+                    'fcstWind': NO_VALUE,
+                    'fcstWindchill': NO_VALUE,
+                    'fcstHeatstress': NO_VALUE,
                 })
             }
         })
 
-        this.windheat_climateSummary = dataObjArray_hours
+        if (forecastRes !== null) {
+            // Calculate hour offset difference between locHrly timezone (-4 or -5) and station local timezone (precalculated in scan_stations.json)
+            const stationTzo = this.getLocation.tzo;
+            const locHrlyTzo = parseInt(forecastRes.data.hrlyData[0][0].slice(-6,-3));
+            const tzoDiff = locHrlyTzo - stationTzo;
+    
+            // Combine locHrly data, it will all be considered forecast data by this tool
+            const locHrlyObs = forecastRes.data.hrlyData.map(hrArr => ([hrArr[0], hrArr[3], hrArr[4], hrArr[7]]));
+            const locHrlyFcst = forecastRes.data.fcstData.map(hrArr => ([hrArr[0], hrArr[2], hrArr[3], hrArr[6]]));
+            const hrlyFcst = locHrlyObs.concat(locHrlyFcst);
+    
+            // Find index of last observed time in forecast data
+            const lastObservedHr = dataObjArray_hours[dataObjArray_hours.length - 1];
+            const targetDate = lastObservedHr.date.slice(0,10);
+            const targetHr = lastObservedHr.date.slice(11, 13);
+            const lastObservedIdx = hrlyFcst.findIndex(hrArr => hrArr[0].slice(0,10) === targetDate && hrArr[0].slice(11, 13) === targetHr);
+    
+            // If forecast data is available, add it to the return object
+            if (lastObservedIdx >= 0) {
+                hrlyFcst.slice(lastObservedIdx + 1 + tzoDiff).map(([date, tvar, hvar, wvar]) => {
+                    // Parse into usable form
+                    tvar = (tvar === MISSING) ? MISSING : Math.round(parseFloat(tvar));
+                    hvar = (hvar === MISSING || parseFloat(hvar)<0.0 || parseFloat(hvar)>100.0) ? MISSING : Math.round(parseFloat(hvar));
+                    // Parse and convert from knots to MPH
+                    wvar = (wvar === MISSING || parseFloat(wvar)<0.0) ? MISSING : Math.round(parseFloat(wvar) * 1.151 * 10) / 10;
+    
+                    // Calculate heat stress index and wind chill
+                    const windchill = (tvar === MISSING || wvar === MISSING) ? MISSING : calculateWindChill(tvar, wvar, MISSING, NO_VALUE);
+                    const heatstress = (tvar === MISSING || hvar === MISSING) ? MISSING : calculateHeatStressIndex(tvar, hvar, MISSING, NO_VALUE);
+                
+                    // Convert datetime in locHrly timezone to station local timezone and format to match observed
+                    let formattedHourString = parse(date, "yyyy-MM-dd'T'HH:mm:ssXXX", new Date());
+                    formattedHourString = subHours(formattedHourString, tzoDiff);
+                    formattedHourString = format(formattedHourString, "yyyy-MM-dd HH:mm");
+                
+                    // construct return
+                    dataObjArray_hours.push({
+                    'date':formattedHourString,
+                    'avgt': NO_VALUE,
+                    'humid': NO_VALUE,
+                    'wind': NO_VALUE,
+                    'windchill': NO_VALUE,
+                    'heatstress': NO_VALUE,
+                    'fcstAvgt': tvar,
+                    'fcstHumid': hvar,
+                    'fcstWind': wvar,
+                    'fcstWindchill': windchill,
+                    'fcstHeatstress': heatstress,
+                    })
+                })
+            }
+        }
+
+        this.windheat_climateSummary = dataObjArray_hours;
     }
     @computed get windheat_getClimateSummary() {
         return this.windheat_climateSummary
@@ -2678,24 +2755,30 @@ export class AppStore {
     // windheat tool daily data download - download data using parameters
     @action windheat_downloadData = () => {
         this.windheat_setDataIsLoading(true);
-        return axios
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.windheat_getAcisParams)
-          .then(res => {
-            if (res.data.hasOwnProperty('error')) {
-                console.log('Error: resetting data to null');
-                this.windheat_setClimateData(null);
-                this.windheat_initClimateSummary()
-            } else {
-                this.windheat_setClimateData(res.data.data.slice(0));
-                this.windheat_setClimateSummary()
-            }
-            this.windheat_setDataIsLoading(false);
-          })
-          .catch(err => {
-            console.log(
-              "Request Error: " + (err.response.data || err.response.statusText)
-            );
-          });
+        
+        const dailyDataPromise = axios
+          .post('https://data.nrcc.rcc-acis.org/StnData', this.windheat_getAcisParams);
+        
+        const forecastDataPromise = axios
+          .post('https://hrly.nrcc.cornell.edu/locHrly', this.windheat_getLocHrlyParams);
+
+        return Promise.all([ dailyDataPromise, forecastDataPromise ])
+            .then(([dailyRes, forecastRes]) => {
+                if (dailyRes.data.hasOwnProperty('error')) {
+                    console.log('Error: resetting data to null');
+                    this.windheat_setClimateData(null);
+                    this.windheat_setForecastData(null);
+                    this.windheat_initClimateSummary()
+                } else {
+                    this.windheat_setClimateData(dailyRes.data.data.slice(0));
+                    this.windheat_setForecastData(typeof forecastRes.data === 'string' ? null : forecastRes);
+                    this.windheat_setClimateSummary()
+                }
+                this.windheat_setDataIsLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+            });
     }
 
     ////////////////////////////////////

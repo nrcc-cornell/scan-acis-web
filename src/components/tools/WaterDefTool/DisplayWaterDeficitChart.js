@@ -50,7 +50,7 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
           tooltip: { useHtml:true, shared:true, borderColor:"#000000", borderWidth:2, borderRadius:8, shadow:false, backgroundColor:"#ffffff",
               xDateFormat:"%b %d, %Y", shape: 'rect',valueDecimals:2,
               crosshairs: { width:1, color:"#ff0000", snap:true }},
-          credits: { text:"Powered by ACIS", href:"http://www.rcc-acis.org/", color:"#000000" },
+          credits: { text:"Powered by ACIS", href:"https://www.rcc-acis.org/", color:"#000000" },
           legend: false,
           xAxis: { type: 'datetime', gridLineWidth: 1, crosshair: true, startOnTick: true, endOnTick: false, labels: { align: 'center', x: 0, y: 20 },
                      dateTimeLabelFormats:{ day:'%d %b', week:'%d %b', month:'%b<br/>%Y', year:'%Y' },

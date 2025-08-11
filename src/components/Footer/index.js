@@ -36,7 +36,7 @@ class Footer extends Component {
                         {' '}
                         <a href="https://www.nrcs.usda.gov/wps/portal/nrcs/site/national/home/" target="_blank" rel="noopener noreferrer"><img src={nrcslogo} alt="Logo for NRCS" /></a>
                         {' '}
-                        <a href="http://www.rcc-acis.org" target="_blank" rel="noopener noreferrer"><img src={acislogo} alt="Logo for the Applied Climate Information System (ACIS)" /></a>
+                        <a href="https://www.rcc-acis.org" target="_blank" rel="noopener noreferrer"><img src={acislogo} alt="Logo for the Applied Climate Information System (ACIS)" /></a>
                         {' '}
                         <a href="https://www.climatehubs.usda.gov" target="_blank" rel="noopener noreferrer"><img width="60%" src={hublogo} alt="Logo for USDA Climate Hubs" /></a>
           </Grid>

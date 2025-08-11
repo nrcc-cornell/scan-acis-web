@@ -1,15 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-//import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
-const protocol = window.location.protocol;
-
 const LoadStationData = ({sid,period,wsunits}) => {
-        //console.log('LoadStationData params');
-        //console.log(sid,period,wsunits);
         let params
         params = {
           "sid": sid,
@@ -21,7 +13,7 @@ const LoadStationData = ({sid,period,wsunits}) => {
             ]
         }
         return axios
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
           .then(res => {
             return res
           })

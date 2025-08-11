@@ -177,7 +177,7 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
                       minTickGap={-10}
                       label={createXAxisLabel()}
                     />
-                    <YAxis label={{ value: timescale, angle: -90, position:'insideLeft', offset: 20 }} />
+                    <YAxis label={{ value: timescale.slice(0,1).toUpperCase() + timescale.slice(1), angle: -90, position:'insideLeft', offset: 20 }} />
                     {chartData.length === 0 ? '' : <Tooltip
                       cursor={{ stroke: 'red', strokeWidth: 2, fill: 'transparent' }}
                       content={renderCustomTooltip}

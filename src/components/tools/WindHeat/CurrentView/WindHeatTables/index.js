@@ -28,7 +28,7 @@ class WindHeatTables extends Component {
     render() {
 
         let columns = [];
-        columns.push({name:'Date/Time', options:{filter:true,sort:true,display:true,download:true}})
+        columns.push({name:'Date/Time (*: Forecast)', options:{filter:true,sort:true,display:true,download:true}})
         columns.push({name:'Wind Chill', options:{filter:false,sort:true,display:true,download:true}})
         columns.push({name:'Heat Stress Index', options:{filter:false,sort:true,display:true,download:true}})
         columns.push({name:'Air Temp (°F)', options:{filter:false,sort:true,display:true,download:true}})
@@ -50,7 +50,13 @@ class WindHeatTables extends Component {
           rowsPerPageOptions: [10,50,data.length],
         };
 
-        let tableData = data.map(row => [row.date,row.windchill,row.heatstress,row.avgt,row.humid,row.wind]);
+        let tableData = data.map(row => {
+            if (row.avgt !== '--' && row.fcstAvgt === '--') {
+                return [row.date,row.windchill,row.heatstress,row.avgt,row.humid,row.wind];
+            } else {
+                return [row.date + '*',row.fcstWindchill,row.fcstHeatstress,row.fcstAvgt,row.fcstHumid,row.fcstWind];
+            }
+        });
 
         const tableTitle = 'Wind Chill & Heat Stress Index'
 

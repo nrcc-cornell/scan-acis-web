@@ -25,6 +25,7 @@ import StemMain from '../../components/stem/StemMain';
 //import LocationSelect from '../../components/LocationSelect';
 import ToolContents from '../../components/ToolContents';
 import Footer from '../../components/Footer';
+import GAListener from './GAListener';
 
 // Styles
 //import 'react-tabs/style/react-tabs.css';
@@ -72,31 +73,33 @@ class App extends Component {
               <div className="App">
                 <Header />
 
-                <Switch>
-                  <Route exact path="/" component={HomeContents} />
-                  <Route path="/about" component={AboutContents} />
-                  <Route exact path="/stem" render={(props) => <StemMain {...props} loc={'/stem/instrumentation'} />} />
-                  <Route path="/stem/instrumentation" render={(props) => <StemMain {...props} loc={'/stem/instrumentation'} />} />
-                  <Route path="/stem/gddtool_doc" render={(props) => <StemMain {...props} loc={'/stem/gddtool_doc'} />} />
-                  <Route path="/stem/waterdef_doc" render={(props) => <StemMain {...props} loc={'/stem/waterdef_doc'} />} />
-                  <Route path="/stem/wxgraph_doc" render={(props) => <StemMain {...props} loc={'/stem/wxgraph_doc'} />} />
-                  <Route path="/stem/heatidx_doc" render={(props) => <StemMain {...props} loc={'/stem/heatidx_doc'} />} />
-                  <Route path="/stem/windrose_doc" render={(props) => <StemMain {...props} loc={'/stem/windrose_doc'} />} />
-                  <Route path="/stem/windheat_doc" render={(props) => <StemMain {...props} loc={'/stem/windheat_doc'} />} />
-                  <Route path="/stem/soils_overview" render={(props) => <StemMain {...props} loc={'/stem/soils_overview'} />} />
-                  <Route path="/stem/soils_reports" render={(props) => <StemMain {...props} loc={'/stem/soils_reports'} />} />
-                  <Route path="/stem/soils_manuals" render={(props) => <StemMain {...props} loc={'/stem/soils_manuals'} />} />
-                  <Route path="/stem/soils_examples" render={(props) => <StemMain {...props} loc={'/stem/soils_examples'} />} />
-                  <Route path="/stem/resources" render={(props) => <StemMain {...props} loc={'/stem/resources'} />} />
-                  <Route exact path="/tools" render={(props) => <ToolContents {...props} name={'gddtool'} />} />
-                  <Route path="/tools/growing-degree-day" render={(props) => <ToolContents {...props} name={'gddtool'} />} />
-                  <Route path="/tools/water-deficit-calculator" render={(props) => <ToolContents {...props} name={'waterdef'} />} />
-                  <Route path="/tools/weather-grapher" render={(props) => <ToolContents {...props} name={'wxgrapher'} />} />
-                  <Route path="/tools/livestock-heat-index" render={(props) => <ToolContents {...props} name={'livestock'} />} />
-                  <Route path="/tools/wind-rose" render={(props) => <ToolContents {...props} name={'windrose'} />} />
-                  <Route path="/tools/wind-chill-heat-stress-index" render={(props) => <ToolContents {...props} name={'windheat'} />} />
-                  <Route render={() => <Redirect to="/" />} />
-                </Switch>
+                <GAListener>
+                  <Switch>
+                    <Route exact path="/" component={HomeContents} />
+                    <Route path="/about" component={AboutContents} />
+                    <Route exact path="/stem" render={(props) => <StemMain {...props} loc={'/stem/instrumentation'} />} />
+                    <Route path="/stem/instrumentation" render={(props) => <StemMain {...props} loc={'/stem/instrumentation'} />} />
+                    <Route path="/stem/gddtool_doc" render={(props) => <StemMain {...props} loc={'/stem/gddtool_doc'} />} />
+                    <Route path="/stem/waterdef_doc" render={(props) => <StemMain {...props} loc={'/stem/waterdef_doc'} />} />
+                    <Route path="/stem/wxgraph_doc" render={(props) => <StemMain {...props} loc={'/stem/wxgraph_doc'} />} />
+                    <Route path="/stem/heatidx_doc" render={(props) => <StemMain {...props} loc={'/stem/heatidx_doc'} />} />
+                    <Route path="/stem/windrose_doc" render={(props) => <StemMain {...props} loc={'/stem/windrose_doc'} />} />
+                    <Route path="/stem/windheat_doc" render={(props) => <StemMain {...props} loc={'/stem/windheat_doc'} />} />
+                    <Route path="/stem/soils_overview" render={(props) => <StemMain {...props} loc={'/stem/soils_overview'} />} />
+                    <Route path="/stem/soils_reports" render={(props) => <StemMain {...props} loc={'/stem/soils_reports'} />} />
+                    <Route path="/stem/soils_manuals" render={(props) => <StemMain {...props} loc={'/stem/soils_manuals'} />} />
+                    <Route path="/stem/soils_examples" render={(props) => <StemMain {...props} loc={'/stem/soils_examples'} />} />
+                    <Route path="/stem/resources" render={(props) => <StemMain {...props} loc={'/stem/resources'} />} />
+                    <Route exact path="/tools" render={(props) => <ToolContents {...props} name={'gddtool'} />} />
+                    <Route path="/tools/growing-degree-day" render={(props) => <ToolContents {...props} name={'gddtool'} />} />
+                    <Route path="/tools/water-deficit-calculator" render={(props) => <ToolContents {...props} name={'waterdef'} />} />
+                    <Route path="/tools/weather-grapher" render={(props) => <ToolContents {...props} name={'wxgrapher'} />} />
+                    <Route path="/tools/livestock-heat-index" render={(props) => <ToolContents {...props} name={'livestock'} />} />
+                    <Route path="/tools/wind-rose" render={(props) => <ToolContents {...props} name={'windrose'} />} />
+                    <Route path="/tools/wind-chill-heat-stress-index" render={(props) => <ToolContents {...props} name={'windheat'} />} />
+                    <Route render={() => <Redirect to="/" />} />
+                  </Switch>
+                </GAListener>
 
                 <Footer />
               </div>

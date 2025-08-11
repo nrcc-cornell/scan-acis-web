@@ -5,8 +5,6 @@
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
-const protocol = window.location.protocol;
-
 const LoadStationData = ({sid,xthresh,nthresh,pthresh,xunits,nunits,punits,xcomp,ncomp,pcomp}) => {
         //console.log('LoadStationData');
         //console.log(sid);
@@ -26,7 +24,7 @@ const LoadStationData = ({sid,xthresh,nthresh,pthresh,xunits,nunits,punits,xcomp
             ]
         }
         return axios
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
           .then(res => {
             return res
           })

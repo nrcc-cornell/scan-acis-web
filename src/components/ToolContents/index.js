@@ -96,7 +96,7 @@ class ToolContents extends Component {
                 { this.props.name==='wxgrapher' && app.getLocation && (<WxGraphTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} outputtype={app.getOutputType}/>) }
                 { this.props.name==='livestock' && app.getLocation && (<LivestockIdxTool station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} outputtype={app.getOutputType}/>) }
                 { this.props.name==='windrose' && app.getLocation && (<WindRose {...this.props} station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} por_start={app.getLocation.sdate} outputtype={app.getOutputType}/>) }
-                { this.props.name==='windheat' && app.getLocation && (<WindHeat {...this.props} station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} por_start={app.getLocation.sdate} outputtype={app.getOutputType}/>) }
+                { this.props.name==='windheat' && app.getLocation && (<WindHeat {...this.props} station={app.getLocation.sid} stnname={app.getLocation.name+', '+app.getLocation.state} stncoords={app.getLocation.ll} por_start={app.getLocation.sdate} outputtype={app.getOutputType}/>) }
               </Grid>
             </Grid>
             </div>

@@ -26,7 +26,7 @@ const DisplayTables = ({data,stnName,loading,tableTitle,tableInfo}) => {
         columns.push({name:'Missing Data', options:{filter:false,sort:true,display:true,download:true}})
         
         let tableData=[]
-        if (data, tableInfo.dataInfo) {
+        if (data && tableInfo.dataInfo) {
             tableData = data.map(row => {
                 let outArray=[
                     row.year

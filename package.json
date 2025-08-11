@@ -30,6 +30,7 @@
     "react-datepicker": "^1.8.0",
     "react-day-picker": "^8.6.0",
     "react-dom": "^16.9.0",
+    "react-ga4": "^2.1.0",
     "react-html-parser": "^2.0.2",
     "react-icons-kit": "^1.2.0",
     "react-leaflet": "^2.4.0",
