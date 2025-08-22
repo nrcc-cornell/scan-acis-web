@@ -2,7 +2,7 @@ import { observable, computed, action } from 'mobx';
 import axios from 'axios';
 import moment from 'moment';
 import { parse, format, subHours } from 'date-fns';
-import { heatindex as calculateHeatStressIndex, windchill as calculateWindChill } from '../components/tools/WindHeat/windheatModels';
+import { heatindex as calculateHeatIndex, windchill as calculateWindChill } from '../components/tools/WindHeat/windheatModels';
 
 //utils
 const getMtdStartLabel = (s) => { return moment(s,"YYYY-MM-DD").format("MMM")+' 1' }
@@ -131,10 +131,10 @@ export class AppStore {
                 url = '/tools/wind-rose'
                 url_doc = '/stem/windrose_doc'
             } else if (name==='windheat') {
-                title = 'Wind Chill & Heat Stress Index'
-                description = 'Visualize year to date wind chill and heat stress index.'
+                title = 'Wind Chill & Heat Index'
+                description = 'Visualize year to date wind chill and heat index.'
                 thumbnail = pathToImages+'WindHeat-thumbnail.png'
-                url = '/tools/wind-chill-heat-stress-index'
+                url = '/tools/wind-chill-heat-index'
                 url_doc = '/stem/windheat_doc'
             } else {
             }
@@ -384,7 +384,7 @@ export class AppStore {
 
                this.setDataView_explorer('weather');
                this.setDatesForLocations({'date':data['date'],'ytd_start':data['ytd_start'],'std_start':data['std_start'],'mtd_start':data['mtd_start']});
-               // download of data for water deficit calculator and wind chill/heat stress are done within tool
+               // download of data for water deficit calculator and wind chill/heat index are done within tool
                // here are initial downloads for others:
                if (this.getToolName==='gddtool') {this.gddtool_downloadData()}
                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
@@ -2504,7 +2504,7 @@ export class AppStore {
     }
 
     // windheat to view data
-    // - options are 'windchill', 'heatstress'
+    // - options are 'windchill', 'heatindex'
     @observable windheat_windheatType = 'windchill'
     @action windheat_setwindheatType = (t) => {
         // has the windheat changed?
@@ -2536,7 +2536,7 @@ export class AppStore {
                 {"vX":24}, //relative humidity
                 {"vX":128}, //wind speed
             ]
-            numdays=-2
+            numdays=-3
 
             return {
                 "sid":this.getLocation.sid,
@@ -2602,12 +2602,12 @@ export class AppStore {
         'humid': null,
         'wind': null,
         'windchill': null,
-        'heatstress': null,
+        'heatindex': null,
         'fcstAvgt': null,
         'fcstHumid': null,
         'fcstWind': null,
         'fcstWindchill': null,
-        'fcstHeatstress': null,
+        'fcstHeatindex': null,
     }];
     @action windheat_initClimateSummary = () => {
         this.windheat_climateSummary = [{
@@ -2616,12 +2616,12 @@ export class AppStore {
             'humid': null,
             'wind': null,
             'windchill': null,
-            'heatstress': null,
+            'heatindex': null,
             'fcstAvgt': null,
             'fcstHumid': null,
             'fcstWind': null,
             'fcstWindchill': null,
-            'fcstHeatstress': null,
+            'fcstHeatindex': null,
         }];
     }
     @action windheat_setClimateSummary = () => {
@@ -2662,9 +2662,9 @@ export class AppStore {
                 const hvar = (d[2][i]===MISSING || parseFloat(d[2][i])<0.0 || parseFloat(d[2][i])>100.0) ? MISSING : parseFloat(d[2][i]);
                 const wvar = (d[3][i]===MISSING || parseFloat(d[3][i])<0.0) ? MISSING : parseFloat(d[3][i]);
                 
-                // Calculate heat stress index and wind chill
+                // Calculate heat index and wind chill
                 const windchill = (tvar === MISSING || wvar === MISSING) ? MISSING : calculateWindChill(tvar, wvar, MISSING, NO_VALUE);
-                const heatstress = (tvar === MISSING || hvar === MISSING) ? MISSING : calculateHeatStressIndex(tvar, hvar, MISSING, NO_VALUE);
+                const heatindex = (tvar === MISSING || hvar === MISSING) ? MISSING : calculateHeatIndex(tvar, hvar, MISSING, NO_VALUE);
 
                 //format hour
                 let formattedHourString; 
@@ -2683,12 +2683,12 @@ export class AppStore {
                     'humid': hvar,
                     'wind': wvar,
                     'windchill': windchill,
-                    'heatstress': heatstress,
+                    'heatindex': heatindex,
                     'fcstAvgt': NO_VALUE,
                     'fcstHumid': NO_VALUE,
                     'fcstWind': NO_VALUE,
                     'fcstWindchill': NO_VALUE,
-                    'fcstHeatstress': NO_VALUE,
+                    'fcstHeatindex': NO_VALUE,
                 })
             }
         })
@@ -2719,9 +2719,9 @@ export class AppStore {
                     // Parse and convert from knots to MPH
                     wvar = (wvar === MISSING || parseFloat(wvar)<0.0) ? MISSING : Math.round(parseFloat(wvar) * 1.151 * 10) / 10;
     
-                    // Calculate heat stress index and wind chill
+                    // Calculate heat index and wind chill
                     const windchill = (tvar === MISSING || wvar === MISSING) ? MISSING : calculateWindChill(tvar, wvar, MISSING, NO_VALUE);
-                    const heatstress = (tvar === MISSING || hvar === MISSING) ? MISSING : calculateHeatStressIndex(tvar, hvar, MISSING, NO_VALUE);
+                    const heatindex = (tvar === MISSING || hvar === MISSING) ? MISSING : calculateHeatIndex(tvar, hvar, MISSING, NO_VALUE);
                 
                     // Convert datetime in locHrly timezone to station local timezone and format to match observed
                     let formattedHourString = parse(date, "yyyy-MM-dd'T'HH:mm:ssXXX", new Date());
@@ -2735,12 +2735,12 @@ export class AppStore {
                     'humid': NO_VALUE,
                     'wind': NO_VALUE,
                     'windchill': NO_VALUE,
-                    'heatstress': NO_VALUE,
+                    'heatindex': NO_VALUE,
                     'fcstAvgt': tvar,
                     'fcstHumid': hvar,
                     'fcstWind': wvar,
                     'fcstWindchill': windchill,
-                    'fcstHeatstress': heatstress,
+                    'fcstHeatindex': heatindex,
                     })
                 })
             }

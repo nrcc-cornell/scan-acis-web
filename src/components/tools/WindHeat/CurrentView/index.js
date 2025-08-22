@@ -71,6 +71,9 @@ class CurrentView extends Component {
                         <Grid item>
                             {display_VarPicker}
                         </Grid>
+                        <Grid item>
+                          {this.props.children}
+                        </Grid>
                     </Grid>
                 </Hidden>
                     <Grid item container className="nothing" direction="column" xs={12} md={9}>

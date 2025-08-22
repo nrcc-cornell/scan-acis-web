@@ -60,7 +60,7 @@ class VarPopover extends React.Component {
           className={classes.buttonTest}
           onClick={this.handleClick}
         >
-          Select "Feels Like" Measure
+          Select Temperature Measure
         </Button>
         <Popover
           id="simple-popper"

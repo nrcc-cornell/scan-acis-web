@@ -1,6 +1,3 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 import React from 'react';
 import PropTypes from 'prop-types';
 import Radio from '@material-ui/core/Radio';
@@ -23,7 +20,7 @@ const ToolTypeSelect = (props) => {
                   <FormControlLabel
                     value="current"
                     control={<Radio color="primary" />}
-                    label={<Typography variant="h6">Current "Feels Like"</Typography>}
+                    label={<Typography variant="h6">Current & Forecast</Typography>}
                     labelPlacement="end"
                   />
                   <FormControlLabel

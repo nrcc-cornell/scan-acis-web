@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 import { parseISO, isBefore, isAfter } from 'date-fns';
 
-import { windchill as calculateWindChill, heatindex as calculateHeatStress } from '../windheatModels';
+import { windchill as calculateWindChill, heatindex as calculateHeatIndex } from '../windheatModels';
 import { getDateRangeForState } from './windheatHistoricalDateRanges';
 
 // Components
@@ -153,19 +153,19 @@ const calc_hourly_indices = (d, missingValue, noValue) => {
     let oseries=[]
     if (!d) {return oseries}
     for (let iday=0; iday<d.length; iday++) {
-        const heatstress = [];
+        const heatindex = [];
         const windchill = [];
         for (let ihr=0; ihr<d[iday][1].length; ihr++) {
             const t = (d[iday][1][ihr]===missingValue) ? missingValue : parseFloat(d[iday][1][ihr])
             const rh = (d[iday][2][ihr]===missingValue) ? missingValue : parseFloat(d[iday][2][ihr])
             const w = (d[iday][3][ihr]===missingValue) ? missingValue : parseFloat(d[iday][3][ihr])
-            heatstress.push(calculateHeatStress(t,rh,missingValue, noValue));
+            heatindex.push(calculateHeatIndex(t,rh,missingValue, noValue));
             windchill.push(calculateWindChill(t,w, missingValue, noValue));
         }
         oseries.push({
             'date': d[iday][0],
             'windchill': windchill,
-            'heatstress': heatstress,
+            'heatindex': heatindex,
         })
     }
     return oseries
@@ -215,8 +215,8 @@ const calc_frequencies = (data, locationInfo, climatologyStr) => {
             'emergency':[-1000000, -50]
         }
     };
-    const heatStressThresholds = {
-        'idx_type':'heatstress',
+    const heatindexThresholds = {
+        'idx_type':'heatindex',
         'agg_fn': (arr) => Math.max(...arr.filter(v => typeof v === 'number')),
         'categories': {
             'caution':[80,90],
@@ -225,7 +225,7 @@ const calc_frequencies = (data, locationInfo, climatologyStr) => {
             'extreme_danger':[125,1000000]
         }
     };
-    const [ windchillFrequencies, heatstressFrequencies ] = [windchillThresholds, heatStressThresholds].map(t => {
+    const [ windchillFrequencies, heatindexFrequencies ] = [windchillThresholds, heatindexThresholds].map(t => {
         // get date range to calculate from
         let { start, end } = climatologyOptions.find(({ value }) => value === climatologyStr);
         if (start === null || end === null) {
@@ -313,7 +313,7 @@ const calc_frequencies = (data, locationInfo, climatologyStr) => {
         }
         return outArrays;
     });
-    return { windchill: windchillFrequencies, heatstress: heatstressFrequencies };
+    return { windchill: windchillFrequencies, heatindex: heatindexFrequencies };
 }
 
 @inject('store') @observer
@@ -404,8 +404,8 @@ class HistoricalView extends Component {
     getIdxTypeLabel = (type) => {
         if (type==='windchill') {
             return 'Wind Chill'
-        } else if (type==='heatstress') {
-            return 'Heat Stress Index'
+        } else if (type==='heatindex') {
+            return 'Heat Index'
         } else {
             return ''
         }
@@ -422,9 +422,9 @@ class HistoricalView extends Component {
                     {'key':'alert','label':'Alert','color':'#A6D5FF','missingColor': '#AFAFAF'},
                 ]
             }
-        } else if (type==='heatstress') {
+        } else if (type==='heatindex') {
             return {
-                'typeLabel':'Heat Stress Index',
+                'typeLabel':'Heat Index',
                 'dataInfo': [
                     {'key':'extreme_danger','label':'Extreme Danger','color':'#CC0003','missingColor': '#1F1F1F'},
                     {'key':'danger','label':'Danger','color':'#FB6600','missingColor': '#434343'},
@@ -442,7 +442,7 @@ class HistoricalView extends Component {
       
       const climatologyOption = climatologyOptions.find(({ value }) => value === this.state.climatology);
       if (climatologyOption) {
-        if (climatologyOption.position === 'end') {
+        if (climatologyOption.titlePosition === 'end') {
           title = `${this.getIdxTypeLabel(app.windheat_getWindHeatType)} Frequencies in ${climatologyOption.label} (${this.state.timescale})`;
         } else if (climatologyOption.titlePosition === 'start') {
           title = `${climatologyOption.label} ${title}`;
@@ -496,6 +496,9 @@ class HistoricalView extends Component {
                     <Grid item container className="nothing" direction="column" justifyContent="flex-start" alignItems="flex-start" md={3}>
                         <Grid item>
                             {display_VarPicker}
+                        </Grid>
+                        <Grid item>
+                          {this.props.children}
                         </Grid>
                     </Grid>
                 </Hidden>

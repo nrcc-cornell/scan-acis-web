@@ -16,8 +16,8 @@ class NwsAlerts extends React.Component {
       this.state = {
         updated: '',
         windchill: [],
-        heatstress: [],
-        isLoading: true
+        heatindex: [],
+        isLoading: true,
       }
   }
 
@@ -27,7 +27,7 @@ class NwsAlerts extends React.Component {
         this.setState({
           updated: '',
           windchill: [],
-          heatstress: [],
+          heatindex: [],
           isLoading: false,
           ...response
         })
@@ -41,7 +41,7 @@ class NwsAlerts extends React.Component {
           this.setState({
             updated: '',
             windchill: [],
-            heatstress: [],
+            heatindex: [],
             isLoading: false,
             ...response
           })
@@ -49,8 +49,16 @@ class NwsAlerts extends React.Component {
     }
   }
 
+  handleExpand = (idx) => {
+    const newWindheatType = JSON.parse(JSON.stringify(this.state[app.windheat_windheatType]));
+    newWindheatType[idx].expanded = !newWindheatType[idx].expanded;
+    this.setState({
+      [app.windheat_windheatType]: newWindheatType
+    });
+  }
+
   render() {
-    const alertType = app.windheat_windheatType === 'windchill' ? 'Wind Chill' : 'Heat Stress';
+    const alertType = app.windheat_windheatType === 'windchill' ? 'Wind Chill' : 'Heat';
 
     return (
       <div id='nws-alerts'>
@@ -64,7 +72,7 @@ class NwsAlerts extends React.Component {
         </div>
         
         {this.state[app.windheat_windheatType].length ? (
-          this.state[app.windheat_windheatType].map(({ web, event, headline, description, instruction }, i) => 
+          this.state[app.windheat_windheatType].map(({ web, event, headline, description, instruction, expanded }, i) => 
             <div key={i} className='nws-alerts-alert'>
               <div className='nws-alerts-alert-divider'></div>
               <a className='nws-alerts-alert-title-link' href={web} target='_blank' rel='noreferrer'>
@@ -72,8 +80,17 @@ class NwsAlerts extends React.Component {
               </a>
               <div className='nws-alerts-alert-body'>
                 <p className='nws-alerts-alert-body-headline'>{headline}</p>
-                <pre className='nws-alerts-alert-body-description'>{description}</pre>
-                <pre className='nws-alerts-alert-body-instruction'>{instruction}</pre>
+                
+                {expanded ? (
+                  <React.Fragment>
+                    {description.split('*').map((text, i) => text === '' ? '' : <p key={i} className='nws-alerts-alert-body-description'>* {text}</p>)}
+                    <p className='nws-alerts-alert-body-instruction'>{instruction}</p>
+                  </React.Fragment>
+                ) : ''}
+                
+                <div className='nws-alerts-expand-btn-container'>
+                  <button className='nws-alerts-expand-btn' onClick={() => this.handleExpand(i)}>{expanded ? 'Less' : 'More'}</button>
+                </div>
               </div>
             </div>
         )) : (
@@ -82,6 +99,7 @@ class NwsAlerts extends React.Component {
             <p id='nws-alerts-no-alerts'>No alerts at this time.</p>
           </div>
         )}
+
       </div>
     );
   }

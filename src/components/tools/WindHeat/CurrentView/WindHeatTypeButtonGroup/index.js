@@ -41,9 +41,9 @@ class WindHeatTypeButtonGroup extends React.Component {
             labelPlacement="end"
           />
           <FormControlLabel
-            value="heatstress"
+            value="heatindex"
             control={<Radio color="primary" />}
-            label="Heat Stress Index"
+            label="Heat Index"
             labelPlacement="end"
           />
         </RadioGroup>

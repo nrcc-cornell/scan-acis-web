@@ -30,7 +30,7 @@ class WindHeatTables extends Component {
         let columns = [];
         columns.push({name:'Date/Time (*: Forecast)', options:{filter:true,sort:true,display:true,download:true}})
         columns.push({name:'Wind Chill', options:{filter:false,sort:true,display:true,download:true}})
-        columns.push({name:'Heat Stress Index', options:{filter:false,sort:true,display:true,download:true}})
+        columns.push({name:'Heat Index', options:{filter:false,sort:true,display:true,download:true}})
         columns.push({name:'Air Temp (°F)', options:{filter:false,sort:true,display:true,download:true}})
         columns.push({name:'Rel Humidity (%)', options:{filter:false,sort:true,display:true,download:true}})
         columns.push({name:'Wind Speed (mph)', options:{filter:false,sort:true,display:true,download:true}})
@@ -52,13 +52,13 @@ class WindHeatTables extends Component {
 
         let tableData = data.map(row => {
             if (row.avgt !== '--' && row.fcstAvgt === '--') {
-                return [row.date,row.windchill,row.heatstress,row.avgt,row.humid,row.wind];
+                return [row.date,row.windchill,row.heatindex,row.avgt,row.humid,row.wind];
             } else {
-                return [row.date + '*',row.fcstWindchill,row.fcstHeatstress,row.fcstAvgt,row.fcstHumid,row.fcstWind];
+                return [row.date + '*',row.fcstWindchill,row.fcstHeatindex,row.fcstAvgt,row.fcstHumid,row.fcstWind];
             }
         });
 
-        const tableTitle = 'Wind Chill & Heat Stress Index'
+        const tableTitle = 'Wind Chill & Heat Index'
 
         return (
                 <MUIDataTable

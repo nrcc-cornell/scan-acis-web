@@ -1,5 +1,5 @@
 //compute heat index for a single hour or all hours in a day
-export function heatindex(tempVals, rhumVals, missingValue, noHSIvalue) {
+export function heatindex(tempVals, rhumVals, missingValue, noHIvalue) {
   const hindx = [];
 
   // Allows single hour or array of hours to be passed in
@@ -18,7 +18,7 @@ export function heatindex(tempVals, rhumVals, missingValue, noHSIvalue) {
       let rhum = parseFloat(rhums[i]);
 
       // Calculate initial heat index
-      let hsi = Math.round(
+      let hi = Math.round(
         -42.379 +
           2.04901523 * temp +
           10.1433127 * rhum -
@@ -36,21 +36,21 @@ export function heatindex(tempVals, rhumVals, missingValue, noHSIvalue) {
           ((13.0 - rhum) / 4.0) *
           Math.sqrt((17.0 - Math.abs(temp - 95.0)) / 17.0);
 
-        hsi -= adj;
+        hi -= adj;
       }
 
       // Adjust if temperature is between 80-87°F and humidity is greater than than 85%
       if (rhum > 85 && temp >= 80 && temp <= 87) {
         const adj2 = ((rhum - 85.0) / 10.0) * ((87.0 - temp) / 5.0);
 
-        hsi -= adj2;
+        hi -= adj2;
       }
 
       // Add final heat index value to the return
-      hindx.push(hsi);
+      hindx.push(hi);
     } else {
       // If temperature is less than 80°F push nacode
-      hindx.push(noHSIvalue);
+      hindx.push(noHIvalue);
     }
   }
 

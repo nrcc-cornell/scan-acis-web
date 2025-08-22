@@ -46,7 +46,7 @@
 .nws-alerts-alert-title {
   font-size: 1.1rem;
   font-weight: bold;
-  margin: 18px 0px 8px;
+  margin: 18px 0px;
 }
 
 .nws-alerts-alert-body {
@@ -56,6 +56,10 @@
   flex-direction: column;
   gap: 24px;
   text-align: left;
+}
+
+.nws-alerts-alert-body > p {
+  margin: 0;
 }
 
 .nws-alerts-alert-body-description {

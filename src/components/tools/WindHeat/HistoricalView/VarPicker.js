@@ -15,7 +15,7 @@ const VarPicker = (props) => {
       <div>
         <Box padding={1} border={1} borderRadius={4} borderColor="primary.main" bgcolor="#f5f5dc">
           <Typography variant="h6">
-            Select "Feels Like" Measure
+            Select Temperature Measure
           </Typography>
           <WindHeatTypeButtonGroup />
           <div style={{margin:20}}></div>

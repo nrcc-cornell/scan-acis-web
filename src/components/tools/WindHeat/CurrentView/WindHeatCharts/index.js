@@ -26,6 +26,17 @@ class WindHeatCharts extends Component {
         app = this.props.store.app;
     }
 
+    generateSplitLine(obsFcstLinePosition, includeLabel=true) {
+      if (obsFcstLinePosition) {
+        return [
+          <ReferenceLine x={obsFcstLinePosition} label={includeLabel ? {value:"<-- Observed", position: 'insideTopRight', fontSize:12, fontFamily:"Roboto", fill: "#707070" } : {}} stroke="#707070" />,
+          <ReferenceLine x={obsFcstLinePosition} label={includeLabel ? {value:"Forecast -->", position: 'insideTopLeft', fontSize:12, fontFamily:"Roboto", fill: "#707070" } : {}} stroke="#707070" />
+        ];
+      } else {
+        return '';
+      }
+    }
+
     render() {
 
         let dataForChart = JSON.parse(JSON.stringify(app.windheat_getClimateSummary));
@@ -74,6 +85,11 @@ class WindHeatCharts extends Component {
             'scan_data.png'
         downloadFilename = downloadFilename.replace(' ','-');
 
+        let obsFcstLinePosition = dataForChart.find(obj => obj.fcstAvgt !== '--');
+        if (obsFcstLinePosition) {
+          obsFcstLinePosition = obsFcstLinePosition.date;
+        }
+
         return (
           <div id="windheat-charts">
 
@@ -85,10 +101,10 @@ class WindHeatCharts extends Component {
                  </Typography>
               </Grid>
             }
-            {typeToDisplay==='heatstress' &&
+            {typeToDisplay==='heatindex' &&
               <Grid item>
                  <Typography variant="h5">
-                     Heat Stress Index
+                     Heat Index
                  </Typography>
               </Grid>
             }
@@ -111,12 +127,6 @@ class WindHeatCharts extends Component {
                 <ResponsiveContainer width="100%" height={300} className={""}>
                   <AreaChart data={dataForChart} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>
-                    <defs>
-                      <pattern id="verticalStripes" width="10" height="10" patternUnits="userSpaceOnUse">
-                        <rect x="0" y="0" width="5" height="10" fill="#636363ff" />
-                        <rect x="5" y="0" width="5" height="10" fill="transparent" />
-                      </pattern>
-                    </defs>
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis
                       dataKey="date"
@@ -127,6 +137,7 @@ class WindHeatCharts extends Component {
                     <Tooltip
                       content={renderCustomTooltip}
                     />
+                    {this.generateSplitLine(obsFcstLinePosition)}
                     <ReferenceLine y={0} label={{position: "left", value:"0 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="black" isFront={true} />
                     <ReferenceLine y={-10} label={{position: "left", value:"-10 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#A6D5FF" isFront={true} />
                     <ReferenceLine y={-10} label={{position: "insideBottomLeft", value:" Alert ", offset:0, fontFamily:"Roboto"}} stroke="#A6D5FF" isFront={true} />
@@ -137,33 +148,28 @@ class WindHeatCharts extends Component {
                     <ReferenceLine y={-50} label={{position: "left", value:"-50 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#4A005A" isFront={true} />
                     <ReferenceLine y={-50} label={{position: "insideBottomLeft", value:" Emergency ", offset:0, fontFamily:"Roboto"}} stroke="#4A005A" isFront={true} />
                     <Area type='monotone' name={'Wind Chill'} dataKey='windchill' stroke='#D3D3D3' fill='#D3D3D3'/>
-                    <Area type='monotone' name={'Wind Chill Forecast'} dataKey='fcstWindchill' stroke='#636363ff' fill='url(#verticalStripes)'/>
+                    <Area type='monotone' name={'Wind Chill Forecast'} dataKey='fcstWindchill' stroke='#D3D3D3' fill='#D3D3D3'/>
                   </AreaChart>
                 </ResponsiveContainer>
               </Grid>
             }
 
-            {typeToDisplay==='heatstress' &&
+            {typeToDisplay==='heatindex' &&
               <Grid item xs={12}>
                 <ResponsiveContainer width="100%" height={300} className={""}>
                   <AreaChart data={dataForChart} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>
-                    <defs>
-                      <pattern id="verticalStripes" width="10" height="10" patternUnits="userSpaceOnUse">
-                        <rect x="0" y="0" width="5" height="10" fill="#636363ff" />
-                        <rect x="5" y="0" width="5" height="10" fill="transparent" />
-                      </pattern>
-                    </defs>
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis
                       dataKey="date"
                       tickFormatter={formatXAxisForDate}
                       interval={11}
                     />
-                    <YAxis tick={false} label={{ value: 'Heat Stress Index (°F)', angle: -90, position:'insideLeft', offset: -100 }} domain={[60, 150]}/>
+                    <YAxis tick={false} label={{ value: 'Heat Index (°F)', angle: -90, position:'insideLeft', offset: -100 }} domain={[60, 150]}/>
                     <Tooltip
                       content={renderCustomTooltip}
                     />
+                    {this.generateSplitLine(obsFcstLinePosition)}
                     <ReferenceLine y={80} label={{position: "left", value:"80 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#FFFF99" isFront={true} />
                     <ReferenceLine y={80} label={{position: "insideBottomLeft", value:" Caution ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#FFFF99" isFront={true} />
                     <ReferenceLine y={90} label={{position: "left", value:"90 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#FDD015" isFront={true} />
@@ -172,8 +178,8 @@ class WindHeatCharts extends Component {
                     <ReferenceLine y={103} label={{position: "insideBottomLeft", value:" Danger ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#FB6600" isFront={true} />
                     <ReferenceLine y={125} label={{position: "left", value:"125 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#CC0003" isFront={true} />
                     <ReferenceLine y={125} label={{position: "insideBottomLeft", value:" Extreme Danger ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#CC0003" isFront={true} />
-                    <Area type='monotone' name={'Heat Stress Index'} dataKey='heatstress' stroke='#D3D3D3' fill='#D3D3D3'/>
-                    <Area type='monotone' name={'Heat Stress Index Forecast'} dataKey='fcstHeatstress' stroke='#636363ff' fill='url(#verticalStripes)'/>
+                    <Area type='monotone' name={'Heat Index'} dataKey='heatindex' stroke='#D3D3D3' fill='#D3D3D3'/>
+                    <Area type='monotone' name={'Heat Index Forecast'} dataKey='fcstHeatindex' stroke='#D3D3D3' fill='#D3D3D3'/>
                   </AreaChart>
                 </ResponsiveContainer>
               </Grid>
@@ -201,13 +207,14 @@ class WindHeatCharts extends Component {
                   <Tooltip
                     content={renderCustomTooltip}
                   />
-                  <Line type='monotone' name={app.windheat_getVarLabels['airtemp_label']} dataKey='avgt' stroke='#8884d8' fill='#8884d8' />
-                  <Line type='monotone' name={app.windheat_getVarLabels['airtemp_label'] + ' Forecast'} dataKey='fcstAvgt' stroke='#0e0885ff' fill='#0e0885ff' strokeDasharray="5 5" />
+                  {this.generateSplitLine(obsFcstLinePosition, false)}
+                  <Line type='monotone' dot={false} name={app.windheat_getVarLabels['airtemp_label']} dataKey='avgt' stroke='#8884d8' fill='#8884d8' />
+                  <Line type='monotone' dot={false} name={app.windheat_getVarLabels['airtemp_label'] + ' Forecast'} dataKey='fcstAvgt' stroke='#8884d8' fill='#8884d8' strokeDasharray="5 5" />
                 </LineChart>
               </ResponsiveContainer>
             </Grid>
 
-            {typeToDisplay === 'heatstress' ? (
+            {typeToDisplay === 'heatindex' ? (
               <React.Fragment>
                 <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
                   <Grid item>
@@ -231,8 +238,9 @@ class WindHeatCharts extends Component {
                       <Tooltip
                         content={renderCustomTooltip}
                       />
-                      <Line type='monotone' name={app.windheat_getVarLabels['humidity_label']} dataKey='humid' stroke='#82ca9d' fill='#82ca9d' />
-                      <Line type='monotone' name={app.windheat_getVarLabels['humidity_label'] + ' Forecast'} dataKey='fcstHumid' stroke='#0d632eff' fill='#0d632eff' strokeDasharray="5 5" />
+                      {this.generateSplitLine(obsFcstLinePosition, false)}
+                      <Line type='monotone' dot={false} name={app.windheat_getVarLabels['humidity_label']} dataKey='humid' stroke='#82ca9d' fill='#82ca9d' />
+                      <Line type='monotone' dot={false} name={app.windheat_getVarLabels['humidity_label'] + ' Forecast'} dataKey='fcstHumid' stroke='#82ca9d' fill='#82ca9d' strokeDasharray="5 5" />
                     </LineChart>
                   </ResponsiveContainer>
                 </Grid>
@@ -264,8 +272,9 @@ class WindHeatCharts extends Component {
                       <Tooltip
                         content={renderCustomTooltip}
                       />
-                      <Line type='monotone' name={app.windheat_getVarLabels['wind_label']} dataKey='wind' stroke='#d88484ff' fill='#d88484ff' />
-                      <Line type='monotone' name={app.windheat_getVarLabels['wind_label'] + ' Forecast'} dataKey='fcstWind' stroke='#8f1313ff' fill='#8f1313ff' strokeDasharray="5 5" />
+                      {this.generateSplitLine(obsFcstLinePosition, false)}
+                      <Line type='monotone' dot={false} name={app.windheat_getVarLabels['wind_label']} dataKey='wind' stroke='#d88484ff' fill='#d88484ff' />
+                      <Line type='monotone' dot={false} name={app.windheat_getVarLabels['wind_label'] + ' Forecast'} dataKey='fcstWind' stroke='#d88484ff' fill='#d88484ff' strokeDasharray="5 5" />
                     </LineChart>
                   </ResponsiveContainer>
                 </Grid>

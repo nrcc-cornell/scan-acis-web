@@ -96,7 +96,7 @@ class App extends Component {
                     <Route path="/tools/weather-grapher" render={(props) => <ToolContents {...props} name={'wxgrapher'} />} />
                     <Route path="/tools/livestock-heat-index" render={(props) => <ToolContents {...props} name={'livestock'} />} />
                     <Route path="/tools/wind-rose" render={(props) => <ToolContents {...props} name={'windrose'} />} />
-                    <Route path="/tools/wind-chill-heat-stress-index" render={(props) => <ToolContents {...props} name={'windheat'} />} />
+                    <Route path="/tools/wind-chill-heat-index" render={(props) => <ToolContents {...props} name={'windheat'} />} />
                     <Route render={() => <Redirect to="/" />} />
                   </Switch>
                 </GAListener>

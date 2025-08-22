@@ -13,7 +13,7 @@ const windchillEvents = [
   "Wind Advisory"
 ];
 
-const heatstressEvents = [
+const heatindexEvents = [
   "Extreme Heat Warning",
   "Extreme Heat Watch",
   "Heat Advisory"
@@ -24,7 +24,7 @@ const LoadNwsAlerts = ({lat, lon}) => {
     .get(`https://api.weather.gov/alerts/active?point=${lat},${lon}`)
     .then(results => {
       const { updated, features } = results.data;
-      const { windchill, heatstress } = features.reduce((res, feat) => {
+      const { windchill, heatindex } = features.reduce((res, feat) => {
         const { event, headline, description, instruction, parameters } = feat.properties;
 
         let web = 'https://www.weather.gov/';
@@ -35,19 +35,19 @@ const LoadNwsAlerts = ({lat, lon}) => {
           web += parameters.AWIPSidentifier[0].slice(3).toLowerCase();
         }
 
-        const alert = { web, event, headline, description, instruction };
+        const alert = { web, event, headline, description, instruction, expanded: false };
         if (windchillEvents.includes(event)) {
           res.windchill.push(alert);
-        } else if (heatstressEvents.includes(event)) {
-          res.heatstress.push(alert);
+        } else if (heatindexEvents.includes(event)) {
+          res.heatindex.push(alert);
         }
         return res;
-      }, { windchill: [], heatstress: [] });
+      }, { windchill: [], heatindex: [] });
 
       return {
         updated: new Date(updated).toLocaleString(),
         windchill,
-        heatstress,
+        heatindex,
       };
     })
     .catch(err => {
