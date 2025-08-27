@@ -39,109 +39,127 @@ const styles = theme => ({
 const climatologyOptions = [{
   value: 'season',
   label: 'Local Season',
-  titlePosition: 'start',
+  titleType: 'range',
+  titleText: null,
   start: null,
   end: null
 },{
   value: 'annual',
   label: 'Annual',
-  titlePosition: 'start',
+  titleType: 'range',
+  titleText: 'Jan. - Dec.',
   start: '01-01',
   end: '12-31'
 },{
   value: 'winter',
   label: 'Winter',
-  titlePosition: 'start',
+  titleType: 'range',
+  titleText: 'Dec. - Feb.',
   start: '12-01',
   end: '02-29'
 },{
   value: 'spring',
   label: 'Spring',
-  titlePosition: 'start',
+  titleType: 'range',
+  titleText: 'Mar. - May',
   start: '03-01',
   end: '05-31'
 },{
   value: 'summer',
   label: 'Summer',
-  titlePosition: 'start',
+  titleType: 'range',
+  titleText: 'Jun. - Aug.',
   start: '06-01',
   end: '08-31'
 },{
   value: 'fall',
   label: 'Fall',
-  titlePosition: 'start',
+  titleType: 'range',
+  titleText: 'Sept. - Nov.',
   start: '09-01',
   end: '11-30'
 },{
   value: '01',
   label: 'January',
-  titlePosition: 'end',
+  titleType: 'single',
+  titleText: null,
   start: '01-01',
   end: '01-31'
 },{
   value: '02',
   label: 'February',
-  titlePosition: 'end',
+  titleType: 'single',
+  titleText: null,
   start: '02-01',
   end: '02-29'
 },{
   value: '03',
   label: 'March',
-  titlePosition: 'end',
+  titleType: 'single',
+  titleText: null,
   start: '03-01',
   end: '03-31'
 },{
   value: '04',
   label: 'April',
-  titlePosition: 'end',
+  titleType: 'single',
+  titleText: null,
   start: '04-01',
   end: '04-30'
 },{
   value: '05',
   label: 'May',
-  titlePosition: 'end',
+  titleType: 'single',
+  titleText: null,
   start: '05-01',
   end: '05-31'
 },{
   value: '06',
   label: 'June',
-  titlePosition: 'end',
+  titleType: 'single',
+  titleText: null,
   start: '06-01',
   end: '06-30'
 },{
   value: '07',
   label: 'July',
-  titlePosition: 'end',
+  titleType: 'single',
+  titleText: null,
   start: '07-01',
   end: '07-31'
 },{
   value: '08',
   label: 'August',
-  titlePosition: 'end',
+  titleType: 'single',
+  titleText: null,
   start: '08-01',
   end: '08-31'
 },{
   value: '09',
   label: 'September',
-  titlePosition: 'end',
+  titleType: 'single',
+  titleText: null,
   start: '09-01',
   end: '09-30'
 },{
   value: '10',
   label: 'October',
-  titlePosition: 'end',
+  titleType: 'single',
+  titleText: null,
   start: '10-01',
   end: '10-31'
 },{
   value: '11',
   label: 'November',
-  titlePosition: 'end',
+  titleType: 'single',
+  titleText: null,
   start: '11-01',
   end: '11-30'
 },{
   value: '12',
   label: 'December',
-  titlePosition: 'end',
+  titleType: 'single',
+  titleText: null,
   start: '12-01',
   end: '12-31'
 }];
@@ -438,14 +456,18 @@ class HistoricalView extends Component {
     }
 
     constructTitle = () => {
-      let title = this.getIdxTypeLabel(app.windheat_getWindHeatType)+' Frequencies ('+this.state.timescale+')';
+      let title = '';
       
+      const type = this.getIdxTypeLabel(app.windheat_getWindHeatType);
+      const timescale = this.state.timescale;
       const climatologyOption = climatologyOptions.find(({ value }) => value === this.state.climatology);
+      
       if (climatologyOption) {
-        if (climatologyOption.titlePosition === 'end') {
-          title = `${this.getIdxTypeLabel(app.windheat_getWindHeatType)} Frequencies in ${climatologyOption.label} (${this.state.timescale})`;
-        } else if (climatologyOption.titlePosition === 'start') {
-          title = `${climatologyOption.label} ${title}`;
+        if (climatologyOption.titleType === 'single') {
+          title = `${type} Frequencies in ${climatologyOption.label} (${timescale})`;
+        } else if (climatologyOption.titleType === 'range') {
+          const titleText = climatologyOption.titleText || getDateRangeForState(app.location_explorer.state, app.windheat_getWindHeatType).text;
+          title = `${climatologyOption.label} (${titleText}) ${type} Frequencies (${timescale})`;
         }
       }
 

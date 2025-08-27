@@ -1,9 +1,9 @@
 const dateRangeOptions = {
   'windchill': {
-    'default': { 'start': '10-01', 'end': '04-30' }
+    'default': { 'start': '10-01', 'end': '04-30', 'text': 'Oct. - Apr.' }
   },
   'heatindex': {
-    'default': { 'start': '01-01', 'end': '12-31' }
+    'default': { 'start': '01-01', 'end': '12-31', 'text': 'Jan. - Dec.' }
   }
 };
 
