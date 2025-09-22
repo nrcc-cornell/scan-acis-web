@@ -1,10 +1,11 @@
 #nws-alerts {
   border: 1px solid rgb(76, 175, 80);
-  padding: 8px;
   border-radius: 4px;
+  padding: 8px;
   background-color: rgb(245, 245, 220);
   text-align: center;
-  margin-top: 60px;
+  margin: 24px auto 0px;
+  width: 58%
 }
 
 #nws-alerts-info {

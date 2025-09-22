@@ -2,10 +2,12 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  margin-top: 0.5vw;
-  margin-bottom: 16vw;
+  margin-top: 24px;
+  /* margin-bottom: 16vw; */
+  margin-bottom: 75px;
   //width: 94vw;
-  width: 92vw;
+  /* width: 92vw; */
+  width: 100%;
   //min-width: 400px;
   height: 44vw;
   background-color: #fff;
@@ -19,7 +21,8 @@
   margin-top: 0.5vw;
   margin-bottom: 0.5vw;
   //margin-left: 10vw;
-  width: 94vw;
+  /* width: 94vw; */
+  width: 100%;
   height: calc(20px + 1.0vw);
   //height: 30px;
   background-color: #fff;

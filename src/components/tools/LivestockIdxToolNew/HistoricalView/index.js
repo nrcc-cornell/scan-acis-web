@@ -1,40 +1,15 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import LoadingOverlay from 'react-loading-overlay';
-import { withStyles } from '@material-ui/core/styles';
-//import Drawer from '@material-ui/core/Drawer';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 
 // Components
 import LoadStationData from './LoadStationData';
-import VarPopover from './VarPopover'
-import VarPicker from './VarPicker'
-import DisplayCharts from './DisplayCharts'
-import DisplayTables from './DisplayTables'
-
-// Styles
-//import '../../../styles/WxGraphTool.css';
-
-const drawerWidth = 240;
-
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  container: {
-    display: 'flex',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-});
+import VarPopover from '../../../VarPopover';
+import VarPicker from '../../../VarPicker';
+import DisplayCharts from './DisplayCharts';
+import DisplayTables from './DisplayTables';
 
 var app;
 
@@ -51,7 +26,6 @@ class HistoricalView extends Component {
           data: null,
           data_is_loading: false,
           timescale: 'hours',
-          //disabled: ['mild_discomfort'],
           disabled: [],
         }
     }
@@ -62,8 +36,6 @@ class HistoricalView extends Component {
             sid:this.props.station
         })
           .then(response => {
-            //console.log('Historical View : LoadStationData response');
-            //console.log(response);
             this.setState({
               data:response.data.data,
               data_is_loading:false,
@@ -106,8 +78,6 @@ class HistoricalView extends Component {
 
     calc_hourly_indices = (d) => {
         // d: data from acis call
-        //console.log('calc_hourly_indices: d')
-        //console.log(d)
         let iday,ihr
         let t,rh,s,w
         let thi,cbr
@@ -161,8 +131,6 @@ class HistoricalView extends Component {
         let t = this.get_heat_index_thresholds(app.livestock_getLivestockType)
         // heatIdxHourly: hourly heat index values by day
         let heatIdxHourly = this.calc_hourly_indices(this.state.data)
-        //console.log('calc_heat_index_frequencies_hourly: heatIdxHourly')
-        //console.log(heatIdxHourly)
         // construct list of all hours annually
         let iday,iyr
         let year=null
@@ -173,7 +141,7 @@ class HistoricalView extends Component {
             year_today = heatIdxHourly[iday]['date'].split('-')[0]
             // if just starting the loop, assigned year
             if (!year) { year = year_today }
-            //
+
             if (year_today===year) {
                 //same year - append arrays
                 temp_array.push(...heatIdxHourly[iday][t['idx_type']])
@@ -220,8 +188,6 @@ class HistoricalView extends Component {
             outArray.push(outObject)
         }
 
-        //console.log('calc_heat_index_frequencies_hourly')
-        //console.log(outArray)
         return outArray
     }
 
@@ -231,8 +197,6 @@ class HistoricalView extends Component {
         let t = this.get_heat_index_thresholds(app.livestock_getLivestockType)
         // heatIdxHourly: hourly heat index values by day
         let heatIdxHourly = this.calc_hourly_indices(this.state.data)
-        //console.log('calc_heat_index_frequencies_hourly: heatIdxHourly')
-        //console.log(heatIdxHourly)
         // construct an annual list of daily maximum indices.
         // This will be a list of daily values, and each value is the highest index for that day
         let iday,iyr
@@ -291,14 +255,12 @@ class HistoricalView extends Component {
             outArray.push(outObject)
         }
 
-        //console.log('calc_heat_index_frequencies_daily')
-        //console.log(outArray)
         return outArray
     }
 
-    handleChangeTimescale = (e) => {
+    handleChangeTimescale = (t) => {
       this.setState({
-        timescale: e.target.value
+        timescale: t
       })
     }
 
@@ -384,8 +346,6 @@ class HistoricalView extends Component {
     }
 
     render() {
-        //const { classes } = this.props;
-
         let display;
         if (this.props.outputtype==='chart') {
             display = <DisplayCharts
@@ -409,47 +369,65 @@ class HistoricalView extends Component {
                       />
         }
 
-        let display_VarPicker;
-        display_VarPicker = <VarPicker timescale={this.state.timescale} onchangeTimescale={this.handleChangeTimescale} />
-
-        let display_VarPopover;
-        display_VarPopover = <VarPopover
-                               contents={display_VarPicker}
-                             />
+        const options = [{
+            title: 'Heat Index',
+            name: 'livestock',
+            options: [
+                { label: 'Cattle', value: 'cattle' },
+                { label: 'Dairy Cow', value: 'cow' },
+                { label: 'Large Animal', value: 'biganimal' },
+                { label: 'Small Animal', value: 'smallanimal' }
+            ],
+            selected: app.livestock_livestockType,
+            onChange: app.livestock_setLivestockTypeFromRadioGroup,
+            type: 'radio'
+        },{
+          title: 'Timescale',
+          name: 'timescale',
+          options: [
+              { label: 'Hours', value: 'hours' },
+              { label: 'Days', value: 'days' }
+          ],
+          selected: this.state.timescale,
+          onChange: this.handleChangeTimescale,
+          type: 'radio'
+        }];
 
         return (
-            <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" xs={12}>
+            <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start">
                 <Hidden smDown>
-                    <Grid item container className="nothing" direction="column" justifyContent="flex-start" alignItems="flex-start" md={3}>
+                    <Grid item container className="nothing" direction="column" md={2}>
                         <Grid item>
-                            {display_VarPicker}
+                            <VarPicker options={options} />
                         </Grid>
                     </Grid>
                 </Hidden>
-                    <Grid item container className="nothing" direction="column" xs={12} md={9}>
-                        <Grid item container direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
-                          <Hidden mdUp>
+                <Grid item container className="nothing" direction="column" xs={12} md={10}>
+                    <Grid item container direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
+                        <Hidden mdUp>
                             <Grid item>
-                              {display_VarPopover}
+                                <VarPopover>
+                                    <VarPicker options={options} />
+                                </VarPopover>
                             </Grid>
-                          </Hidden>
-                        </Grid>
-                        <Grid item>
-                            <LoadingOverlay
-                              active={this.dataIsLoading()}
-                              spinner
-                              background={'rgba(255,255,255,1.0)'}
-                              color={'rgba(34,139,34,1.0)'}
-                              spinnerSize={'10vw'}
-                              >
-                                {display}
-                            </LoadingOverlay>
-                        </Grid>
+                        </Hidden>
                     </Grid>
+                    <Grid item>
+                        <LoadingOverlay
+                            active={this.dataIsLoading()}
+                            spinner
+                            background={'rgba(255,255,255,1.0)'}
+                            color={'rgba(34,139,34,1.0)'}
+                            spinnerSize={'10vw'}
+                        >
+                            {display}
+                        </LoadingOverlay>
+                    </Grid>
+                </Grid>
             </Grid>
         );
 
     }
 }
 
-export default withStyles(styles)(HistoricalView);
+export default HistoricalView;

@@ -233,7 +233,6 @@ class UserInput extends Component {
   }
 
   handleInfoClose = () => {
-    console.log('close button')
     this.setState({anchorEl: null})
   }
 

@@ -1,33 +1,26 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 import moment from 'moment';
 import Grid from '@material-ui/core/Grid';
-//import Typography from '@material-ui/core/Typography';
+import Hidden from '@material-ui/core/Hidden';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import green from '@material-ui/core/colors/green';
 
 import LoadStationData from './LoadStationData';
 import LoadSoilParameters from './LoadSoilParameters';
-import YearSelect from './YearSelect';
-//import DepthSelect from './DepthSelect';
-import DepthRangeSelect from './DepthRangeSelect';
 import WaterDeficitModel from './WaterDeficitModel';
 import DisplayWaterDeficitChart from './DisplayWaterDeficitChart';
 import DisplaySoilMoistureChart from './DisplaySoilMoistureChart';
 import DisplayPrecipChart from './DisplayPrecipChart';
 import DisplayTables from './DisplayTables';
-import DownloadCharts from './DownloadCharts'
-
-// Styles
-//import '../../../styles/WaterDefTool.css';
+import DownloadCharts from './DownloadCharts';
+import WaterdefDoc from './WaterdefDoc';
+import VarPicker from '../../VarPicker';
+import VarPopover from '../../VarPopover';
 
 const styles = theme => ({
   wrapper: {
-    //margin: theme.spacing(1),
     position: 'relative',
   },
   mapProgress: {
@@ -51,8 +44,6 @@ class WaterDefTool extends Component {
         app = this.props.store.app;
         app.setToolName('waterdef')
         this.state = {
-          //years: null,
-          //year: null,
           years: [moment().year()],
           year: moment().year(),
           depth_top: 0, // inches
@@ -72,7 +63,6 @@ class WaterDefTool extends Component {
         this.initStateForLoading()
         LoadStationData({sid:this.props.station, period:[this.state.year.toString()+'-01-01',this.state.year.toString()+'-12-31']})
           .then(response => {
-            //console.log(response);
             let yearStart = (response.data.meta && response.data.meta.valid_daterange && response.data.meta.valid_daterange[1][0]) ? parseInt(response.data.meta.valid_daterange[1][0].split('-')[0],10) : moment().year()
             let yearEnd = (response.data.meta && response.data.meta.valid_daterange && response.data.meta.valid_daterange[1][1]) ? parseInt(response.data.meta.valid_daterange[1][1].split('-')[0],10) : moment().year()
             let yearArr = Array.from({length: yearEnd-yearStart+1}, (v, k) => k+yearStart)
@@ -167,13 +157,13 @@ class WaterDefTool extends Component {
         return oseries
     }
 
-    handleYearChange = (e) => {
+    handleYearChange = (y) => {
         this.setState({
-          year: e.target.value,
+          year: y,
         })
     }
 
-    handleDepthChange = (e,newValue) => {
+    handleDepthChange = (newValue) => {
         this.setState({
           depth_top: newValue[0],
           depth_bottom: newValue[1],
@@ -206,135 +196,168 @@ class WaterDefTool extends Component {
             'scan_data.png'
         downloadFilename = downloadFilename.replace(' ','-');
 
+        const options = app.getOutputType === 'chart' ? [{
+          title: 'Year',
+          name: 'year',
+          options: this.state.years.map(v => ({ label: v, value: v })),
+          selected: this.state.year,
+          onChange: this.handleYearChange,
+          type: 'selector'
+        },{
+          title: 'Soil Depth (inches)',
+          name: 'soildepth',
+          options: [
+            {value:   0, label:   '0'},
+            {value:   6, label:   '6'},
+            {value:  12, label:  '12'},
+            {value:  18, label:  '18'},
+            {value:  24, label:  '24'},
+            {value:  30, label:  '30'},
+            {value:  36, label:  '36'},
+          ],
+          selected: [this.state.depth_top,this.state.depth_bottom],
+          onChange: this.handleDepthChange,
+          props: {
+            min: 0,
+            max: 36,
+            getAriaValueText: (v) => `Soil depth from ${v[0]} inches to ${v[1]} inches`
+          },
+          type: 'slider'
+        }] : [];
+
         return (
           <div>
-            <Grid item container direction="row" justifyContent="space-evenly" alignItems="flex-start">
-              <Grid item>
-              {this.state.depth_top!==null && this.state.depth_bottom!==null &&
-                <DepthRangeSelect
-                  value={[this.state.depth_top,this.state.depth_bottom]}
-                  onchange={this.handleDepthChange}
-                />
-              }
-              </Grid>
-              <Grid item>
-              {this.state.year && this.state.years &&
-                <YearSelect
-                  value={this.state.year}
-                  values={this.state.years}
-                  onchange={this.handleYearChange}
-                />
-              }
-              </Grid>
-              <Grid item>
-                {app.getOutputType==='chart' &&
-                  <DownloadCharts fname={downloadFilename} />
-                }
-              </Grid>
-            </Grid>
+            <Grid container direction="row" alignItems="flex-start">
+              <Hidden smDown>
+                <Grid item container className="nothing" direction="column" md={2}>
+                  <Grid item>
+                    <VarPicker options={options} />
+                  </Grid>
+                </Grid>
+              </Hidden>
+              <Grid item container className="nothing" direction="column" xs={12} md={10}>
+                <Grid item container direction="row" justifyContent="space-around" alignItems="center" spacing={1}>
+                  <Grid item>
+                    <Hidden mdUp>
+                      <VarPopover>
+                        <VarPicker options={options} />
+                      </VarPopover>
+                    </Hidden>
+                  </Grid>
 
-            {/* begin charts */}
-            {app.getOutputType==='chart' &&
-            <div id="waterdef-charts">
+                  <Grid item>
+                    {app.getOutputType==='chart' &&
+                      <DownloadCharts fname={downloadFilename} />
+                    }
+                  </Grid>
+                </Grid>
+                <Grid item>
+                  {/* begin charts */}
+                  {app.getOutputType==='chart' &&
+                  <div id="waterdef-charts">
 
-            <Grid item>
-              <div className={classes.wrapper}>
-              {this.state.data_soil_parameters && this.state.data_soil_moisture && this.state.depth_top!==null && this.state.depth_bottom!==null &&
-                <DisplayWaterDeficitChart
-                  data={
-                      WaterDeficitModel({
-                          soilm:this.state.data_soil_moisture,
-                          soilp:this.state.data_soil_parameters,
-                          depthRangeTop:Math.floor(parseInt(this.convert_in_to_cm(this.state.depth_top),10)),
-                          depthRangeBottom:Math.ceil(parseInt(this.convert_in_to_cm(this.state.depth_bottom),10)),
-                          unitsOutput:this.state.units
-                      })
+                  <Grid item>
+                    <div className={classes.wrapper}>
+                    {this.state.data_soil_parameters && this.state.data_soil_moisture && this.state.depth_top!==null && this.state.depth_bottom!==null &&
+                      <DisplayWaterDeficitChart
+                        data={
+                            WaterDeficitModel({
+                                soilm:this.state.data_soil_moisture,
+                                soilp:this.state.data_soil_parameters,
+                                depthRangeTop:Math.floor(parseInt(this.convert_in_to_cm(this.state.depth_top),10)),
+                                depthRangeBottom:Math.ceil(parseInt(this.convert_in_to_cm(this.state.depth_bottom),10)),
+                                unitsOutput:this.state.units
+                            })
+                        }
+                        depthRangeTop={this.state.depth_top}
+                        depthRangeBottom={this.state.depth_bottom}
+                        units={this.state.units}
+                        stnName={this.props.stnname}
+                        loading={this.state.soilp_is_loading || this.state.soilm_is_loading}
+                      />
+                    }
+                    {(!this.state.data_soil_parameters || !this.state.data_soil_moisture) &&
+                      <DisplayWaterDeficitChart
+                        data={{}}
+                        depthRangeTop={this.state.depth_top}
+                        depthRangeBottom={this.state.depth_bottom}
+                        units={this.state.units}
+                        stnName={this.props.stnname}
+                        loading={this.dataIsLoading()}
+                      />
+                    }
+                    {(this.state.soilp_is_loading || this.state.soilm_is_loading) &&
+                      <CircularProgress size={64} className={classes.mapProgress} />
+                    }
+                    </div>
+                  </Grid>
+                  <Grid item>
+                    <div className={classes.wrapper}>
+                    {this.state.data_soil_moisture &&
+                      <DisplaySoilMoistureChart
+                        data={this.state.data_soil_moisture}
+                        stnName={this.props.stnname}
+                        loading={this.state.soilm_is_loading}
+                      />
+                    }
+                    {!this.state.data_soil_moisture &&
+                      <DisplaySoilMoistureChart
+                        data={[]}
+                        stnName={this.props.stnname}
+                        loading={this.state.soilm_is_loading}
+                      />
+                    }
+                    {this.state.soilm_is_loading &&
+                      <CircularProgress size={64} className={classes.mapProgress} />
+                    }
+                    </div>
+                  </Grid>
+                  <Grid item>
+                    <div className={classes.wrapper}>
+                    {this.state.data_precip &&
+                      <DisplayPrecipChart
+                        data={this.state.data_precip}
+                        stnName={this.props.stnname}
+                        loading={this.state.precip_is_loading}
+                      />
+                    }
+                    {!this.state.data_precip &&
+                      <DisplayPrecipChart
+                        data={[]}
+                        stnName={this.props.stnname}
+                        loading={this.state.precip_is_loading}
+                      />
+                    }
+                    {this.state.precip_is_loading &&
+                      <CircularProgress size={64} className={classes.mapProgress} />
+                    }
+                    </div>
+                  </Grid>
+
+                  </div>
                   }
-                  depthRangeTop={this.state.depth_top}
-                  depthRangeBottom={this.state.depth_bottom}
-                  units={this.state.units}
-                  stnName={this.props.stnname}
-                  loading={this.state.soilp_is_loading || this.state.soilm_is_loading}
-                />
-              }
-              {(!this.state.data_soil_parameters || !this.state.data_soil_moisture) &&
-                <DisplayWaterDeficitChart
-                  data={{}}
-                  depthRangeTop={this.state.depth_top}
-                  depthRangeBottom={this.state.depth_bottom}
-                  units={this.state.units}
-                  stnName={this.props.stnname}
-                  loading={this.dataIsLoading()}
-                />
-              }
-              {(this.state.soilp_is_loading || this.state.soilm_is_loading) &&
-                <CircularProgress size={64} className={classes.mapProgress} />
-              }
-              </div>
-            </Grid>
-            <Grid item>
-              <div className={classes.wrapper}>
-              {this.state.data_soil_moisture &&
-                <DisplaySoilMoistureChart
-                  data={this.state.data_soil_moisture}
-                  stnName={this.props.stnname}
-                  loading={this.state.soilm_is_loading}
-                />
-              }
-              {!this.state.data_soil_moisture &&
-                <DisplaySoilMoistureChart
-                  data={[]}
-                  stnName={this.props.stnname}
-                  loading={this.state.soilm_is_loading}
-                />
-              }
-              {this.state.soilm_is_loading &&
-                <CircularProgress size={64} className={classes.mapProgress} />
-              }
-              </div>
-            </Grid>
-            <Grid item>
-              <div className={classes.wrapper}>
-              {this.state.data_precip &&
-                <DisplayPrecipChart
-                  data={this.state.data_precip}
-                  stnName={this.props.stnname}
-                  loading={this.state.precip_is_loading}
-                />
-              }
-              {!this.state.data_precip &&
-                <DisplayPrecipChart
-                  data={[]}
-                  stnName={this.props.stnname}
-                  loading={this.state.precip_is_loading}
-                />
-              }
-              {this.state.precip_is_loading &&
-                <CircularProgress size={64} className={classes.mapProgress} />
-              }
-              </div>
+                  {/* end charts */}
+
+                  {/* begin tables */}
+                  {app.getOutputType==='table' && this.state.data_soil_parameters && this.state.data_soil_moisture && this.state.depth_top!==null && this.state.depth_bottom!==null &&
+                    <DisplayTables
+                      data_wd = {
+                          WaterDeficitModel({
+                              soilm:this.state.data_soil_moisture,
+                              soilp:this.state.data_soil_parameters,
+                              depthRangeTop:Math.floor(parseInt(this.convert_in_to_cm(this.state.depth_top),10)),
+                              depthRangeBottom:Math.ceil(parseInt(this.convert_in_to_cm(this.state.depth_bottom),10)),
+                              unitsOutput:this.state.units
+                          })
+                      }
+                    />
+                  }
+                  {/* end tables */}
+                </Grid>
+              </Grid>
             </Grid>
 
-            </div>
-            }
-            {/* end charts */}
-
-            {/* begin tables */}
-            {app.getOutputType==='table' && this.state.data_soil_parameters && this.state.data_soil_moisture && this.state.depth_top!==null && this.state.depth_bottom!==null &&
-              <DisplayTables
-                data_wd = {
-                    WaterDeficitModel({
-                        soilm:this.state.data_soil_moisture,
-                        soilp:this.state.data_soil_parameters,
-                        depthRangeTop:Math.floor(parseInt(this.convert_in_to_cm(this.state.depth_top),10)),
-                        depthRangeBottom:Math.ceil(parseInt(this.convert_in_to_cm(this.state.depth_bottom),10)),
-                        unitsOutput:this.state.units
-                    })
-                }
-              />
-            }
-            {/* end tables */}
-
+            <WaterdefDoc />
           </div>
         );
     }

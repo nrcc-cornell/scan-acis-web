@@ -1,10 +1,6 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import moment from 'moment';
-//import { ResponsiveContainer, ComposedChart, AreaChart, LineChart, BarChart, Bar, Line, Area, XAxis, YAxis, Surface, Symbols, CartesianGrid, Tooltip, Legend, Brush, ReferenceLine } from 'recharts';
 import { ResponsiveContainer, AreaChart, LineChart, Line, Area, XAxis, YAxis, CartesianGrid, Tooltip, ReferenceLine } from 'recharts';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';

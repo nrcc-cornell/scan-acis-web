@@ -11,9 +11,6 @@ const WaterDeficitModel = ({soilm,soilp,depthRangeTop,depthRangeBottom,unitsOutp
         // depthRangeBottom: bottom of soil depth range (cm) - water deficit is calculated from depthRangeTop to depthRangeBottom
         // waterret: array of water retention parameters (qr and qs units: cm^3/cm^3)
         // output: array of dates and water deficit, value of field capacity, value of wilting point
-        //console.log('WaterDeficitModel params');
-        //console.log(soilm);
-        //console.log(depthRangeTop,depthRangeBottom);
 
         // units conversions
         let in_to_cm = (v) => { return v*2.54 }
@@ -96,8 +93,6 @@ const WaterDeficitModel = ({soilm,soilp,depthRangeTop,depthRangeBottom,unitsOutp
             // init soilInfoObs, where we hold fawc (and other soil info) at the observation depths
             // with valid data for this date
             soilInfoObs=[]
-            //console.log('soilm values');
-            //console.log(values);
 
             // soil moisture values start with the second index. date is index=0.
             // the sm value must be valid and not unrealistically low.
@@ -112,10 +107,6 @@ const WaterDeficitModel = ({soilm,soilp,depthRangeTop,depthRangeBottom,unitsOutp
                     });
                 }
             });
-
-            //if (moment.utc(values[0]).format('YYYYMMDD')==='20190429') {
-            //  console.log(soilInfoObs);
-            //}
 
             // calculate fawc and water deficit for each cm^3, to 1-meter depth
             // if only one observed depth, assume fawc is constant from surface to 1-meter depth.
@@ -137,28 +128,14 @@ const WaterDeficitModel = ({soilm,soilp,depthRangeTop,depthRangeBottom,unitsOutp
                 } else {
                     // if depth is less than first observation depth, set to same value as shallowest observation depth
                     if (depth<soilInfoObs[0].depth) {
-                        //if (moment.utc(values[0]).format('YYYYMMDD')==='20190429') {
-                        //  console.log('fawc method 1');
-                        //  console.log(fawc);
-                        //}
                         fawc = soilInfoObs[0].fawc
                     // if depth is more than last observation depth, set to same value as deepest observation depth
                     } else if (depth>soilInfoObs[soilInfoObs.length-1].depth) {
-                        //if (moment.utc(values[0]).format('YYYYMMDD')==='20190429') {
-                        //  console.log('fawc method 2');
-                        //  console.log(fawc);
-                        //}
                         fawc = soilInfoObs[soilInfoObs.length-1].fawc
                     // between observation points, we will interpolate
                     } else {
                         for (let j=0; j<soilInfoObs.length-1; j++) {
                             if (depth>soilInfoObs[j].depth && depth<=soilInfoObs[j+1].depth) {
-                                // linear interpolation between two closest observations
-                                //fawc = ( soilInfoObs[j].fawc*(soilInfoObs[j+1].depth-depth) + soilInfoObs[j+1].fawc*(depth-soilInfoObs[j].depth) ) / (soilInfoObs[j+1].depth - soilInfoObs[j].depth)
-                                //if (moment.utc(values[0]).format('YYYYMMDD')==='20190429') {
-                                //  console.log('fawc method 3');
-                                //  console.log(fawc);
-                                //}
                                 fawc = soilInfoObs[j].fawc + ( soilInfoObs[j].fawc*(soilInfoObs[j].depth-depth) + soilInfoObs[j+1].fawc*(depth-soilInfoObs[j].depth) ) / (soilInfoObs[j+1].depth - soilInfoObs[j].depth)
                                 break;
                             }
@@ -169,9 +146,6 @@ const WaterDeficitModel = ({soilm,soilp,depthRangeTop,depthRangeBottom,unitsOutp
                 // Calculate total water deficit from surface to selected depth by integrating through profile.
                 // We do so by calculating water deficit for this depth and adding it to the total.
                 wdTotal = wdTotal + (1.-fawc)*(soilInfo[k].fc-soilInfo[k].pwp)
-                //if (moment.utc(values[0]).format('YYYYMMDD')==='20190429') {
-                //  console.log(moment.utc(values[0]).format('YYYYMMDD'),depth,soilInfo[k].fc,soilInfo[k].pwp,fawc,(1.-fawc)*(soilInfo[k].fc-soilInfo[k].pwp),wdTotal);
-                //}
             }
 
             // array to be returned. An array of arrays [date, water deficit]

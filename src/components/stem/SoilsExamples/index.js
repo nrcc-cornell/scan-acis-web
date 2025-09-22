@@ -86,14 +86,14 @@ class SoilsExamples extends Component {
                 </Grid>
                 <Grid container item direction="row" alignItems="flex-end" xs={10}>
                     <Grid item xs={7}>
-                      <img className="doc-image" src={soilsexample11} alt="Map location of the Lower Brule Tribe TSCAN climate station in South Dakota" />
+                      <img className={classes.docImage} src={soilsexample11} alt="Map location of the Lower Brule Tribe TSCAN climate station in South Dakota" />
                     </Grid>
                     <Grid item xs={5}>
-                      <img className="doc-image" src={soilsexample12} alt="Soil profile from the Lower Brule Tribe TSCAN climate station location" />
+                      <img className={classes.docImage} src={soilsexample12} alt="Soil profile from the Lower Brule Tribe TSCAN climate station location" />
                     </Grid>
                 </Grid>
                 <Grid item xs={10}>
-                    <img className="doc-image" src={soilsexample13} alt="TSCAN climate station equipment at the Lower Brule Tribe location" />
+                    <img className={classes.docImage} src={soilsexample13} alt="TSCAN climate station equipment at the Lower Brule Tribe location" />
                 </Grid>
                 <Grid item xs={12}>
                   <Typography align="left" paragraph variant="body1">
@@ -109,14 +109,14 @@ class SoilsExamples extends Component {
                 </Grid>
                 <Grid container item direction="row" alignItems="flex-end" xs={10}>
                     <Grid item xs={7}>
-                      <img className="doc-image" src={soilsexample21} alt="Map location of the Tule River Tribe TSCAN climate station in California" />
+                      <img className={classes.docImage} src={soilsexample21} alt="Map location of the Tule River Tribe TSCAN climate station in California" />
                     </Grid>
                     <Grid item xs={5}>
-                      <img className="doc-image" src={soilsexample22} alt="Soil profile from the Tule River Tribe TSCAN climate station location" />
+                      <img className={classes.docImage} src={soilsexample22} alt="Soil profile from the Tule River Tribe TSCAN climate station location" />
                     </Grid>
                 </Grid>
                 <Grid item xs={10}>
-                    <img className="doc-image" src={soilsexample23} alt="Sloping landscape at the Tule River Tribe TSCAN location" />
+                    <img className={classes.docImage} src={soilsexample23} alt="Sloping landscape at the Tule River Tribe TSCAN location" />
                 </Grid>
                 <Grid item xs={12}>
                   <Typography align="left" paragraph variant="body1">

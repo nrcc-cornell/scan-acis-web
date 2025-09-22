@@ -10,8 +10,6 @@
 
 @media screen {
     html { height: 100%; }
-    //body { width: 1024px; height: 768px; }
-    body {}
 
     .ui-widget * { outline: none; }
 
@@ -20,9 +18,11 @@
         line-height: 1.0em;
         color: #000000;
         display: flex;
-        //height: 466px;
-        //width: 908px;
-        //width: 926px;
+    }
+
+    body.ReactModal__Body--open  {
+      overflow: hidden;
+      height: 100vh;
     }
 }
 

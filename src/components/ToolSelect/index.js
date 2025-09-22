@@ -44,8 +44,6 @@ class ToolSelect extends Component {
           this.props.history.push(t.value)
         }
 
-        //console.log(this.props);
-
         return (
             <Typography variant="subtitle2">
                 <Select

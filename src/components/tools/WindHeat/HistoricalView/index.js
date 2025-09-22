@@ -14,27 +14,12 @@ import { getDateRangeForState } from './windheatHistoricalDateRanges';
 
 // Components
 import LoadStationData from './LoadStationData';
-import VarPopover from './VarPopover'
-import VarPicker from './VarPicker'
-import DisplayCharts from './DisplayCharts'
-import DisplayTables from './DisplayTables'
+import VarPopover from '../../../VarPopover';
+import VarPicker from '../../../VarPicker';
+import DisplayCharts from './DisplayCharts';
+import DisplayTables from './DisplayTables';
 
-const drawerWidth = 240;
-
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  container: {
-    display: 'flex',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-});
+const styles = theme => ({});
 
 const climatologyOptions = [{
   value: 'season',
@@ -383,16 +368,16 @@ class HistoricalView extends Component {
         }
     }
 
-    handleChangeTimescale = (e) => {
+    handleChangeTimescale = (value) => {
       this.setState({
-        timescale: e.target.value
+        timescale: value
       })
     }
 
-    handleChangeClimatology = (e) => {
+    handleChangeClimatology = (value) => {
       this.setState({
-        climatology: e.target.value,
-        data: calc_frequencies(this.state.rawData, app.location_explorer, e.target.value),
+        climatology: value,
+        data: calc_frequencies(this.state.rawData, app.location_explorer, value),
       })
     }
 
@@ -475,9 +460,64 @@ class HistoricalView extends Component {
     } 
 
     render() {
-        let display;
-        if (this.props.outputtype==='chart') {
-            display = <DisplayCharts
+        const options = [{
+          title: 'Temperature Measure',
+          name: 'windheat',
+          options: [
+              { label: 'Wind Chill', value: 'windchill' },
+              { label: 'Heat Index', value: 'heatindex' }
+          ],
+          selected: app.windheat_windheatType,
+          onChange: app.windheat_setwindheatTypeFromRadioGroup,
+          type: 'radio'
+        },{
+          title: 'Timescale',
+          name: 'timescale',
+          options: [
+              { label: 'Hours', value: 'hours' },
+              { label: 'Days', value: 'days' }
+          ],
+          selected: this.state.timescale,
+          onChange: this.handleChangeTimescale,
+          type: 'radio'
+        },{
+          title: 'Climatology',
+          name: 'climatology',
+          options: climatologyOptions,
+          selected: this.state.climatology,
+          onChange: this.handleChangeClimatology,
+          type: 'selector'
+        }];
+
+        return (
+          <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" style={{ width: '100%' }}>
+            <Hidden smDown>
+              <Grid item container className="nothing" direction="column" md={2}>
+                <Grid item>
+                  <VarPicker options={options} />
+                </Grid>
+              </Grid>
+            </Hidden>
+            <Grid item container className="nothing" direction="column" xs={12} md={10}>
+              <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
+                <Hidden mdUp>
+                  <Grid item>
+                    <VarPopover>
+                      <VarPicker options={options} />
+                    </VarPopover>
+                  </Grid>
+                </Hidden>
+              </Grid>
+              <Grid item>
+                <LoadingOverlay
+                  active={this.dataIsLoading()}
+                  spinner
+                  background={'rgba(255,255,255,1.0)'}
+                  color={'rgba(34,139,34,1.0)'}
+                  spinnerSize={'10vw'}
+                >
+                    {this.props.outputtype==='chart' ? (
+                      <DisplayCharts
                         data={(this.state.data === null || !app.windheat_getWindHeatType) ? [] : this.state.data[app.windheat_getWindHeatType][this.state.timescale]}
                         stnName={this.props.stnname}
                         loading={this.state.data_is_loading}
@@ -487,67 +527,25 @@ class HistoricalView extends Component {
                         onClickLegend={this.handleClickLegend}
                         timescale={this.state.timescale}
                       />
-        }
-        if (this.props.outputtype==='table') {
-            display = <DisplayTables
+                    ) : (
+                      <DisplayTables
                         data={this.state.data ? this.state.data[app.windheat_getWindHeatType][this.state.timescale] : []}
                         stnName={this.props.stnname}
                         loading={this.state.data_is_loading}
                         tableTitle={this.constructTitle()}
                         tableInfo={this.getChartInfo(app.windheat_getWindHeatType)}
                       />
-        }
-
-        let display_VarPicker;
-        display_VarPicker = <VarPicker
-          timescale={this.state.timescale}
-          onchangeTimescale={this.handleChangeTimescale}
-          climatologyOptions={climatologyOptions}
-          climatology={this.state.climatology}
-          onchangeClimatology={this.handleChangeClimatology}
-        />
-
-        let display_VarPopover;
-        display_VarPopover = <VarPopover
-                               contents={display_VarPicker}
-                             />
-
-        return (
-            <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" xs={12}>
-                <Hidden smDown>
-                    <Grid item container className="nothing" direction="column" justifyContent="flex-start" alignItems="flex-start" md={3}>
-                        <Grid item>
-                            {display_VarPicker}
-                        </Grid>
-                        <Grid item>
-                          {this.props.children}
-                        </Grid>
-                    </Grid>
-                </Hidden>
-                    <Grid item container className="nothing" direction="column" xs={12} md={9}>
-                        <Grid item container direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
-                          <Hidden mdUp>
-                            <Grid item>
-                              {display_VarPopover}
-                            </Grid>
-                          </Hidden>
-                        </Grid>
-                        <Grid item>
-                            <LoadingOverlay
-                              active={this.dataIsLoading()}
-                              spinner
-                              background={'rgba(255,255,255,1.0)'}
-                              color={'rgba(34,139,34,1.0)'}
-                              spinnerSize={'10vw'}
-                              >
-                                {display}
-                            </LoadingOverlay>
-                        </Grid>
-                    </Grid>
+                    )}
+                </LoadingOverlay>
+              </Grid>
             </Grid>
+          </Grid>
         );
 
     }
 }
 
 export default withStyles(styles)(HistoricalView);
+
+
+// Change out the VarPicker and VarPopover here (Historical view of windheat), then everywhere else

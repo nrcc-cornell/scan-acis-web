@@ -302,7 +302,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['airtemp_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['airtemp_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {(app.wxgraph_getTimeFrame==='two_months') ? calcDomain(dataForChart,['avgt','mint','maxt'],[1,1],1) : calcDomain(dataForChart,['avgt'],[1,1],1)}
                     />
                     <Tooltip
@@ -334,7 +334,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['rainfall_units'], angle: -90, position:'insideBottomLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['rainfall_units'], angle: -90, position:'insideBottomLeft', offset: 25 }}
                         domain = {[0,'auto']}
                     />
                     <Tooltip
@@ -377,7 +377,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['soiltemp_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['soiltemp_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {calcDomain(dataForChart,['soilt40in','soilt20in','soilt8in','soilt4in','soilt2in'],[1,1],1)}
                     />
                     <Tooltip
@@ -431,7 +431,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['soilmoist_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['soilmoist_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {calcDomain(dataForChart,['soilm40in','soilm20in','soilm8in','soilm4in','soilm2in'],[1,1],1)}
                     />
                     <Tooltip
@@ -475,7 +475,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['humidity_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['humidity_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {[0,100]}
                     />
                     <Tooltip
@@ -506,7 +506,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['solarrad_units'], angle: -90, position:'insideBottomLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['solarrad_units'], angle: -90, position:'insideBottomLeft', offset: 25 }}
                         domain = {calcDomain(dataForChart,['solar'],[1,1],0)}
                     />
                     <Tooltip
@@ -549,7 +549,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['wind_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['wind_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {calcDomain(dataForChart,['windspdave','windspdmax'],[1,1],0)}
                     />
                     <Tooltip
@@ -591,7 +591,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['winddir_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['winddir_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {calcDomain(dataForChart,['winddirave'],[1,1],0)}
                     />
                     <Tooltip
@@ -624,7 +624,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['leafwet_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['leafwet_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {calcDomain(dataForChart,['leafwet'],[1,1],0)}
                     />
                     <Tooltip

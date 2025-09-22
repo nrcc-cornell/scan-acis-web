@@ -47,7 +47,7 @@ class LivestockIdxTables extends Component {
         columns.push({name:'Small Animal Heat Idx', options:{filter:false,sort:true,display:true,download:true}})
         columns.push({name:'Air Temp (°F)', options:{filter:false,sort:true,display:true,download:true}})
         columns.push({name:'Rel Humidity (%)', options:{filter:false,sort:true,display:false,download:true}})
-        columns.push({name:'Solar Rad (W/m2)', options:{filter:false,sort:true,display:false,download:true}})
+        columns.push({name:'Solar Rad (Wm⁻²)', options:{filter:false,sort:true,display:false,download:true}})
         columns.push({name:'Wind Speed (mph)', options:{filter:false,sort:true,display:false,download:true}})
 
         let data = JSON.parse(JSON.stringify(app.livestock_getClimateSummary));
@@ -80,12 +80,14 @@ class LivestockIdxTables extends Component {
         const tableTitle = 'Livestock Heat Stress'
 
         return (
+            <div style={{ padding: '0px 20px' }}>
                 <MUIDataTable
                     title={tableTitle}
                     data={tableData.reverse()}
                     columns={columns}
                     options={options}
                 />
+            </div>
         );
 
     }

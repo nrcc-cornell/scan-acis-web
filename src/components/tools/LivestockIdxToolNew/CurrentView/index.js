@@ -1,35 +1,14 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import LoadingOverlay from 'react-loading-overlay';
-import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Hidden from '@material-ui/core/Hidden';
 
 // Components
-import VarPopover from './VarPopover'
-import VarPicker from './VarPicker'
-import LivestockIdxCharts from './LivestockIdxCharts'
-import LivestockIdxTables from './LivestockIdxTables'
-
-const drawerWidth = 240;
-
-const styles = theme => ({
-  root: {
-    flexGrow: 1,
-  },
-  container: {
-    display: 'flex',
-  },
-  drawer: {
-    [theme.breakpoints.up('sm')]: {
-      width: drawerWidth,
-      flexShrink: 0,
-    },
-  },
-});
+import VarPopover from '../../../VarPopover';
+import VarPicker from '../../../VarPicker';
+import LivestockIdxCharts from './LivestockIdxCharts';
+import LivestockIdxTables from './LivestockIdxTables';
 
 var app;
 
@@ -50,74 +29,54 @@ class CurrentView extends Component {
     }
 
     render() {
-        //const { classes } = this.props;
+      const options = app.getOutputType === 'chart' ? [{
+        title: 'Heat Index',
+        name: 'livestock',
+        options: [
+            { label: 'Cattle', value: 'cattle' },
+            { label: 'Dairy Cow', value: 'cow' },
+            { label: 'Large Animal', value: 'biganimal' },
+            { label: 'Small Animal', value: 'smallanimal' }
+        ],
+        selected: app.livestock_livestockType,
+        onChange: app.livestock_setLivestockTypeFromRadioGroup,
+        type: 'radio'
+      }] : [];
 
-        let display;
-        if (app.getOutputType==='chart') { display = <LivestockIdxCharts /> }
-        if (app.getOutputType==='table') { display = <LivestockIdxTables /> }
-        let display_VarPicker;
-        if (app.getOutputType==='chart') { display_VarPicker = <VarPicker /> }
-        if (app.getOutputType==='table') { display_VarPicker = <VarPicker /> }
-        let display_VarPopover;
-        if (app.getOutputType==='chart') { display_VarPopover = <VarPopover /> }
-        if (app.getOutputType==='table') { display_VarPopover = <VarPopover /> }
-
-        if (app.getOutputType==='chart') {
-
-          return (
-            <Grid container direction="row" justifyContent="center" alignItems="flex-start">
-                <Hidden smDown>
-                    <Grid item container className="nothing" direction="column" md={3}>
-                        <Grid item>
-                            {display_VarPicker}
-                        </Grid>
-                    </Grid>
-                </Hidden>
-                    <Grid item container className="nothing" direction="column" xs={12} md={9}>
-                        <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
-                          <Hidden mdUp>
-                            <Grid item>
-                              {display_VarPopover}
-                            </Grid>
-                          </Hidden>
-                        </Grid>
-                        <Grid item>
-                            <LoadingOverlay
-                              active={app.livestock_dataIsLoading}
-                              spinner
-                              background={'rgba(255,255,255,1.0)'}
-                              color={'rgba(34,139,34,1.0)'}
-                              spinnerSize={'10vw'}
-                              >
-                                {display}
-                            </LoadingOverlay>
-                        </Grid>
-                    </Grid>
+      return (
+        <Grid container direction="row" alignItems="flex-start">
+          <Hidden smDown>
+            <Grid item container className="nothing" direction="column" md={2}>
+              <Grid item>
+                <VarPicker options={options} />
+              </Grid>
             </Grid>
-          );
-
-        } else {
-
-          return (
-            <Grid container direction="row" justifyContent="center" alignItems="flex-start">
-                    <Grid item container className="nothing" direction="column" xs={12}>
-                        <Grid item>
-                            <LoadingOverlay
-                              active={app.livestock_dataIsLoading}
-                              spinner
-                              background={'rgba(255,255,255,1.0)'}
-                              color={'rgba(34,139,34,1.0)'}
-                              spinnerSize={'10vw'}
-                              >
-                                {display}
-                            </LoadingOverlay>
-                        </Grid>
-                    </Grid>
+          </Hidden>
+          <Grid item container className="nothing" direction="column" xs={12} md={10}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
+              <Hidden mdUp>
+                <Grid item>
+                  <VarPopover>
+                    <VarPicker options={options} />
+                  </VarPopover>
+                </Grid>
+              </Hidden>
             </Grid>
-          );
-
-        }
+            <Grid item>
+              <LoadingOverlay
+                active={app.livestock_dataIsLoading}
+                spinner
+                background={'rgba(255,255,255,1.0)'}
+                color={'rgba(34,139,34,1.0)'}
+                spinnerSize={'10vw'}
+                >
+                  {app.getOutputType==='chart' ? <LivestockIdxCharts /> : <LivestockIdxTables />}
+              </LoadingOverlay>
+            </Grid>
+          </Grid>
+        </Grid>
+      );
     }
 }
 
-export default withStyles(styles)(CurrentView);
+export default CurrentView;

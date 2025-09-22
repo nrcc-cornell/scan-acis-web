@@ -1,105 +1,79 @@
 import React from 'react';
 import { withRouter } from "react-router-dom";
-import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Button from '@material-ui/core/Button';
-//import Icon from '@material-ui/core/Icon';
-//import IconButton from '@material-ui/core/IconButton';
-//import InfoIcon from '@material-ui/icons/Info';
+import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1,
+  linkCard: {
+    width: '200px',
+    height: '290px',
+    border: '2px solid #388e3c',
+    borderRadius: '5px',
+    transition: 'all 0.1s ease-out',
+    '&:hover': {
+      backgroundColor: 'rgba(0,0,0,0.01)',
+      transform: 'scale(1.03)'
+    }
   },
-  paper: {
-    margin: 'auto',
-    height: 320,
-    width: 240,
-    background: '#F1F1F1',
-    borderRadius: 16,
+  cardActionArea: {
+    height: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between'
   },
-  image: {
-    //width: 180,
-    //height: 90,
-    width: 220,
-    height: 110,
-  },
-  img: {
-    margin: 'auto',
-    display: 'block',
-    maxWidth: '100%',
-    maxHeight: '100%',
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-  input: {
-    display: 'none',
+  cardMedia: {
+    height: 140,
+    width: '100%',
+    borderTop: '2px solid rgb(200,200,200)',
+    backgroundSize: 'contain'
   },
   cardTitle: {
-    height: 70,
-  },
-  cardImage: {
-    height: 120,
+    height: '2.6rem',
+    lineHeight: '1.5rem',
   },
   cardDescription: {
-    height: 70,
-  },
-  cardButtons: {
-    height: 60,
-  },
+    marginTop: '1.0rem'
+  }
 });
 
-function ComplexGrid(props) {
-  const { classes,title,description,thumbnail,url,url_doc} = props;
-
+function ToolCard({ classes, title, description, url, thumbnail, history }) {
   return (
-    <div className={classes.root}>
-      <Paper className={classes.paper}>
-        <Grid container justifyContent="center">
-          <Grid item xs={12} className={classes.cardTitle}>
-            <Typography gutterBottom variant="h6">
-              {title}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} className={classes.cardImage}>
-            <ButtonBase className={classes.image} onClick={() => {props.history.push(url)}}>
-              <img className={classes.img} alt="Sample output from SCAN/TSCAN decision support tools" src={require(`${thumbnail}`)} />
-            </ButtonBase>
-          </Grid>
-          <Grid item xs={10} className={classes.cardDescription}>
-            <Typography variant="body2" align="left" color="textSecondary">
-              {description}
-            </Typography>
-          </Grid>
-          <Grid item container justifyContent="space-evenly" className={classes.cardButtons}>
-              <Grid item>
-                <Button variant="contained" color="primary" className={classes.button} onClick={() => {props.history.push(url)}}>
-                  Go
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button variant="outlined" color="primary" className={classes.button} onClick={() => {props.history.push(url_doc)}}>
-                  Docs
-                </Button>
-              </Grid>
-          </Grid>
-        </Grid>
-      </Paper>
-    </div>
+    <Card className={classes.linkCard}>
+      <CardActionArea
+        className={classes.cardActionArea}
+        onClick={() => history.push(url)}
+      >
+        <CardContent className={classes.cardContent}>
+          <Typography
+            variant="h6"
+            className={classes.cardTitle}
+          >
+            {title}
+          </Typography>
+
+          <Typography
+            className={classes.cardDescription}
+            variant="body2"
+            align="left"
+            color="textSecondary"
+          >
+            {description}
+          </Typography>
+        </CardContent>
+
+        <CardMedia
+          className={classes.cardMedia}
+          image={require(`${thumbnail}`)}
+          title="Sample output from SCAN/TSCAN decision support tools"
+        />
+      </CardActionArea>
+    </Card>
   );
 }
 
-ComplexGrid.propTypes = {
-  classes: PropTypes.object.isRequired,
-  title: PropTypes.string,
-  description: PropTypes.string,
-  thumbnail: PropTypes.string,
-  url: PropTypes.string,
-};
-
-export default withRouter(withStyles(styles)(ComplexGrid));
+export default withRouter(withStyles(styles)(ToolCard));

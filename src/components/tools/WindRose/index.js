@@ -1,11 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-//import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles'
 import green from '@material-ui/core/colors/green';
@@ -22,10 +18,8 @@ import Windrose from './Windrose.jsx'
 import WindroseTable from './WindroseTable.jsx'
 import WindroseEmpty from './WindroseEmpty.jsx'
 import WindroseTableEmpty from './WindroseTableEmpty.jsx'
+import WindroseDoc from './WindRoseDoc/index.js';
 import Footer from './Footer.jsx'
-
-// Styles
-//import '../../../styles/WindRose.css';
 
 const styles = theme => ({
   wrapper: {
@@ -228,13 +222,12 @@ class WindRose extends Component {
     }
 
     render() {
-
         const { classes } = this.props;
-        let url_doc = app.getToolInfo(this.props.name).url_doc
 
         return (
           <MuiThemeProvider theme={theme}>
 
+            <br/>
             <br/>
             {/* begin charts */}
             <Grid item container direction="column" justifyContent="center" alignItems="center" spacing={2} xs={12}>
@@ -247,11 +240,6 @@ class WindRose extends Component {
                   />
                   </Grid>
                 </Hidden>
-                <Grid item>
-                  <Button variant="outlined" color="primary" onClick={()=>{history.push(url_doc)}}>
-                    Documentation
-                  </Button>
-                </Grid>
               </Grid>
 
               <Grid item container direction="row" justifyContent="space-evenly" alignItems="center">
@@ -305,6 +293,8 @@ class WindRose extends Component {
 
             <Footer />
             {/* end charts */}
+
+            <WindroseDoc />
           </MuiThemeProvider>
         );
     }

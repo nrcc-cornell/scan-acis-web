@@ -82,7 +82,7 @@ class SoilsOverview extends Component {
                   </Typography>
                 </Grid>
                 <Grid item xs={8} lg={4}>
-                    <img className="doc-image" src={soilsoverview1} alt="Poster showing the 12 Orders of Soil Taxonomy" />
+                    <img className={classes.docImage} src={soilsoverview1} alt="Poster showing the 12 Orders of Soil Taxonomy" />
                     <Typography align="left" paragraph variant="caption">
                       Poster showing the 12 Orders of Soil Taxonomy.  Available for <a href="https://www.nrcs.usda.gov/wps/portal/nrcs/detail/soils/survey/class/data/?cid=nrcs142p2_053588" target="_blank" rel="noopener noreferrer">download here</a>.
                     </Typography>
@@ -99,7 +99,7 @@ class SoilsOverview extends Component {
                   </Typography>
                 </Grid>
                 <Grid item xs={8} lg={4}>
-                    <img className="doc-image" src={soilsoverview2} alt="Diagram of a soil profile showing the four primary soil horizons" />
+                    <img className={classes.docImage} src={soilsoverview2} alt="Diagram of a soil profile showing the four primary soil horizons" />
                     <Typography align="left" paragraph variant="caption">
                       Diagram of a soil profile showing the four primary soil horizons.  Many other subhorizons can be designated and described by soil scientists.
                     </Typography>

@@ -71,7 +71,7 @@ class DisplayTables extends Component {
           print: false,
           page: this.state.page,
           rowsPerPage: this.state.pageSize,
-          rowsPerPageOptions: [10,50,this.props.data_wd.length],
+          rowsPerPageOptions: [10,50,this.props.data_wd.data_series.length],
         };
 
         let tableData = this.props.data_wd.data_series.map(row => {
@@ -94,7 +94,7 @@ class DisplayTables extends Component {
 }
 
 DisplayTables.propTypes = {
-  data_wd: PropTypes.array.isRequired,
+  data_wd: PropTypes.object.isRequired,
   //data_soilm: PropTypes.array.isRequired,
   //data_precip: PropTypes.array.isRequired,
 };

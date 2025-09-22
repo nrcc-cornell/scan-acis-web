@@ -1,13 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-//import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
 const LoadStationData = ({sid,xthresh,nthresh,pthresh,xunits,nunits,punits,xcomp,ncomp,pcomp}) => {
-        //console.log('LoadStationData');
-        //console.log(sid);
+        const vN = sid.split(' ')[1] === '17' ? 23 : 24
+
         let params
         params = {
           "sid": sid,
@@ -15,12 +11,12 @@ const LoadStationData = ({sid,xthresh,nthresh,pthresh,xunits,nunits,punits,xcomp
           "sdate":"por",
           "edate":"por",
           "elems":[
-              {"vX":1,"units":xunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+xcomp+"_"+xthresh},"maxmissing":10},
-              {"vX":2,"units":nunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+ncomp+"_"+nthresh},"maxmissing":10},
-              {"vX":4,"units":punits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+pcomp+"_"+pthresh},"maxmissing":10},
-              {"vX":1,"units":xunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+xcomp+"_"+xthresh}}, // number of days > tmax threshold
-              {"vX":2,"units":nunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+ncomp+"_"+nthresh}}, // number of days < tmin threshold
-              {"vX":4,"units":punits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+pcomp+"_"+pthresh}}, // number of days > prcp threshold
+              {"vX":1,"vN":vN,"units":xunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+xcomp+"_"+xthresh},"maxmissing":10},
+              {"vX":2,"vN":vN,"units":nunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+ncomp+"_"+nthresh},"maxmissing":10},
+              {"vX":4,"vN":vN-1,"units":punits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+pcomp+"_"+pthresh},"maxmissing":10},
+              {"vX":1,"vN":vN,"units":xunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+xcomp+"_"+xthresh}}, // number of days > tmax threshold
+              {"vX":2,"vN":vN,"units":nunits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+ncomp+"_"+nthresh}}, // number of days < tmin threshold
+              {"vX":4,"vN":vN-1,"units":punits,"interval":[1],"duration":"yly","reduce":{"reduce":"cnt_"+pcomp+"_"+pthresh}}, // number of days > prcp threshold
             ]
         }
         return axios
@@ -29,7 +25,7 @@ const LoadStationData = ({sid,xthresh,nthresh,pthresh,xunits,nunits,punits,xcomp
             return res
           })
           .catch(err => {
-            console.log(
+            console.error(
               "Request Error: " + (err.response.data || err.response.statusText)
             );
           });

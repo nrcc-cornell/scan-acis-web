@@ -3,28 +3,18 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-//import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
-//import ArrowBack from '@material-ui/icons/ArrowBack';
-//import Assessment from '@material-ui/icons/Assessment';
-//import WbSunny from '@material-ui/icons/WbSunny';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom';
 import Box from '@material-ui/core/Box';
-
-//import StemMain from '../StemMain';
-//import '../../styles/StemContents.css';
 
 const styles = theme => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    //width: 240,
-    //minWidth: 400,
   },
   lists: {
-    //backgroundColor: theme.palette.background.paper,
     backgroundColor: '#f5f5dc',
   },
   listHeaders: {
@@ -87,18 +77,6 @@ function ComponentProperty(props) {
                   <ListItemLinkShorthand to="/stem/soils_reports" primary="Soil Reports on TSCAN sites" />
                   <ListItemLinkShorthand to="/stem/soils_manuals" primary="Manuals about KSSL Laboratory Data" />
                   <ListItemLinkShorthand to="/stem/soils_examples" primary="Example Pedons" />
-              </ul>
-            </List>
-            <Divider />
-            <List component="nav">
-              <ListHeaderItemLinkShorthand to="/stem/gddtool_doc" primary="Tools Documentation" />
-              <ul>
-                  <ListItemLinkShorthand to="/stem/gddtool_doc" primary="Growing Degree Day Calculator" />
-                  <ListItemLinkShorthand to="/stem/waterdef_doc" primary="Water Deficit Calculator" />
-                  <ListItemLinkShorthand to="/stem/wxgraph_doc" primary="Weather Grapher" />
-                  <ListItemLinkShorthand to="/stem/heatidx_doc" primary="Livestock Heat Index" />
-                  <ListItemLinkShorthand to="/stem/windrose_doc" primary="Wind Rose Diagram" />
-                  <ListItemLinkShorthand to="/stem/windheat_doc" primary="Wind Chill & Heat Index" />
               </ul>
             </List>
             <Divider />

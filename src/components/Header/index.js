@@ -1,16 +1,15 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 import React from 'react';
 import { withRouter } from "react-router-dom";
 import { inject, observer} from 'mobx-react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
+
+import ToolDropdown from './ToolDropdown';
+import LocationSelect from '../LocationSelect';
 
 function TabContainer({ children, dir }) {
   return (
@@ -32,9 +31,23 @@ const styles = theme => ({
   appBar: {
     marginLeft: 0,
   },
+  tabs: {
+    marginTop: '6px',
+    height: '30px',
+    minHeight: '30px',
+    borderLeft: '1px solid rgb(200,200,200)'
+  },
   tab: {
     minWidth: 120,
     width: 120,
+    border: '1px solid rgb(200,200,200)',
+    borderLeft: 'none',
+    padding: 0,
+    height: '30px',
+    minHeight: '30px',
+    '&:hover': {
+      backgroundColor: 'rgba(100,100,100,0.1)'
+    }
   },
   headerText: {
     color: 'green',
@@ -45,18 +58,6 @@ const styles = theme => ({
   subHeaderText: {
     color: 'green',
     fontSize: '16px'
-  },
-  rightToolbar: {
-    marginLeft: 'auto',
-    marginRight: 0,
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',
-    },
-  },
-  bottomToolbar: {
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
   },
   titleLong: {
     cursor: 'pointer',
@@ -71,21 +72,20 @@ const styles = theme => ({
     },
   },
   toolbar: theme.mixins.toolbar,
+  navContainer: {
+    display: 'flex',
+    justifyContent: 'space-between'
+  },
+  '@media (max-width: 810px)': {
+    navContainer: {
+      flexDirection: 'column'
+    }
+  }
 });
 
-//var app;
 
 @inject('store') @observer
 class FullWidthTabs extends React.Component {
-
-  //constructor(props) {
-  //    super(props);
-  //    app = this.props.store.app;
-  //}
-
-  state = {
-    value: 0,
-  };
 
   handleChange = (event, value) => {
     //this.setState({ value });
@@ -105,60 +105,49 @@ class FullWidthTabs extends React.Component {
     this.props.store.app.setActivePage(value);
   };
 
-  handleChangeIndex = index => {
-    this.setState({ value: index });
-  };
+  handleChangeFromDropdown = (index) => (url) => {
+    this.props.history.push(url);
+    this.props.store.app.setActivePage(index);
+  }
 
   render() {
-    //const { classes, theme } = this.props;
     const { classes } = this.props;
 
     return (
       <div className={classes.root}>
         <AppBar position="static" color="inherit">
-          <Toolbar>
-            <div className={classes.titleLong} onClick={() => {this.props.history.push('/')}}>
-                <Typography variant="h1" className={classes.headerText}>
-                        Decision Tools for the Soil Climate Analysis Network
-                </Typography>
-                <Typography variant="h2" className={classes.subHeaderText}>
-                        Powered by ACIS, the Applied Climate Information System
-                </Typography>
-            </div>
-            <div className={classes.titleShort} onClick={() => {this.props.history.push('/')}}>
-                <Typography variant="h1" className={classes.headerText}>
-                        SCAN Decision Tools
-                </Typography>
-                <Typography variant="h2" className={classes.subHeaderText}>
-                        Powered by ACIS
-                </Typography>
-            </div>
-            <section className={classes.rightToolbar}>
-              <Tabs
-                value={this.props.store.app.getActiveTabIndex}
-                onChange={this.handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                variant="standard"
-              >
-                <Tab classes={{ root: classes.tab }} label="HOME" value={0} />
-                <Tab classes={{ root: classes.tab }} label="ABOUT" value={1} />
-                <Tab classes={{ root: classes.tab }} label="SCAN 4 STEM" value={2} />
-              </Tabs>
-            </section>
-          </Toolbar>
-          <div className={classes.bottomToolbar}>
-              <Tabs
-                value={this.props.store.app.getActiveTabIndex}
-                onChange={this.handleChange}
-                indicatorColor="primary"
-                textColor="primary"
-                variant="standard"
-              >
-                <Tab label="HOME" value={0} />
-                <Tab label="ABOUT" value={1} />
-                <Tab label="SCAN 4 STEM" value={2} />
-              </Tabs>
+          <div className={classes.titleLong} onClick={() => {this.props.history.push('/')}}>
+              <Typography variant="h1" className={classes.headerText}>
+                      Decision Tools for the Soil Climate Analysis Network
+              </Typography>
+              <Typography variant="h2" className={classes.subHeaderText}>
+                      Powered by ACIS, the Applied Climate Information System
+              </Typography>
+          </div>
+          <div className={classes.titleShort} onClick={() => {this.props.history.push('/')}}>
+              <Typography variant="h1" className={classes.headerText}>
+                      SCAN Decision Tools
+              </Typography>
+              <Typography variant="h2" className={classes.subHeaderText}>
+                      Powered by ACIS
+              </Typography>
+          </div>
+          <div className={classes.navContainer}>
+            <Tabs
+              value={this.props.store.app.getActiveTabIndex}
+              onChange={this.handleChange}
+              indicatorColor="primary"
+              textColor="primary"
+              variant="standard"
+              classes={{ root: classes.tabs }}
+            >
+              <Tab classes={{ root: classes.tab }} label="HOME" value={0} />
+              <Tab classes={{ root: classes.tab }} value={3} component={ToolDropdown} groupName='TOOLS' isActiveTab={this.props.store.app.getActiveTabIndex === 3} handleChangeFromDropdown={this.handleChangeFromDropdown(3)} />
+              <Tab classes={{ root: classes.tab }} label="ABOUT" value={1} />
+              <Tab classes={{ root: classes.tab }} label="SCAN 4 STEM" value={2} />
+            </Tabs>
+
+            <LocationSelect />
           </div>
         </AppBar>
       </div>
@@ -168,7 +157,6 @@ class FullWidthTabs extends React.Component {
 
 FullWidthTabs.propTypes = {
   classes: PropTypes.object.isRequired,
-  //theme: PropTypes.object.isRequired,
 };
 
 export default withRouter(withStyles(styles)(FullWidthTabs));

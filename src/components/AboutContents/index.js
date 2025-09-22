@@ -1,8 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 import React, { Component } from 'react';
-//import { Link } from "react-router-dom";
 import { inject, observer} from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from "@material-ui/core/Grid";
@@ -11,9 +7,6 @@ import Button from '@material-ui/core/Button';
 
 // Components
 import StationAboutMap from '../../components/StationAboutMap';
-//import ToolLister from '../../components/ToolLister';
-
-//import scanmap from '../../assets/scan-station-map.png'
 
 // Styles
 import '../../styles/AboutContents.css';
@@ -84,18 +77,12 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/weather-grapher")}}>
                               Tool
                             </Button>
-                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/wxgraph_doc")}}>
-                              Docs
-                            </Button>
                             <br/>
                     </Typography>
                     <Typography component="span" align="justify" paragraph variant="button">
                             Growing Degree Day Calculator
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/growing-degree-day")}}>
                               Tool
-                            </Button>
-                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/gddtool_doc")}}>
-                              Docs
                             </Button>
                             <br/>
                     </Typography>
@@ -104,18 +91,12 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/water-deficit-calculator")}}>
                               Tool
                             </Button>
-                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/waterdef_doc")}}>
-                              Docs
-                            </Button>
                             <br/>
                     </Typography>
                     <Typography component="span" align="justify" paragraph variant="button">
                             Livestock Heat Index
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/livestock-heat-index")}}>
                               Tool
-                            </Button>
-                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/heatidx_doc")}}>
-                              Docs
                             </Button>
                             <br/>
                     </Typography>
@@ -124,18 +105,12 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/wind-rose")}}>
                               Tool
                             </Button>
-                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/windrose_doc")}}>
-                              Docs
-                            </Button>
                             <br/>
                     </Typography>
                     <Typography component="span" align="justify" paragraph variant="button">
                             Wind Chill & Heat Index
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/wind-heat")}}>
                               Tool
-                            </Button>
-                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/windheat_doc")}}>
-                              Docs
                             </Button>
                             <br/>
                     </Typography>

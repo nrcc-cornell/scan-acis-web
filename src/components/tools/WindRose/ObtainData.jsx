@@ -68,7 +68,7 @@ class ObtainData extends Component {
         let wkey = null
         if (j === 0) {
           if (cnt !== 0) {
-            console.log('Unexpected non-zero direction for calm wind speed')
+            console.warning('Unexpected non-zero direction for calm wind speed')
           }
         } else {
           let wd = this.props.userParams.directbincnt === 16 ? compass[j] : j * wdirint
@@ -205,7 +205,6 @@ class ObtainData extends Component {
   }
 
   render() {
-    console.log('in ObtainData')
     const { classes } = this.props 
     speedbins = [...this.props.userParams.speedbins.filter(e => e !== ""), 9999]  // remove empty speed bins and add an ending 9999
     return (

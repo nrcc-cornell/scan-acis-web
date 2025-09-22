@@ -88,7 +88,7 @@ class SoilsManuals extends Component {
                     <b>Soil Water Retention, Moisture Content, and Flow:</b>
                   </Typography>
                   <a href="https://www.youtube.com/watch?v=vmo0FRAVgkM&feature=youtu.be" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=vmo0FRAVgkM&feature=youtu.be</a><br/><br/>
-                    <img className="doc-image" src={soilsmanuals1} alt="Figures showing details about the soil-water relationship" />
+                    <img className={classes.docImage} src={soilsmanuals1} alt="Figures showing details about the soil-water relationship" />
                     <Typography align="left" paragraph variant="caption">
                       <b>Fig 1.</b> Soil-Water Relationship. Water can be held in three stages.
                     </Typography>

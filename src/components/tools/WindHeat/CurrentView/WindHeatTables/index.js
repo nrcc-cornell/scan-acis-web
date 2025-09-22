@@ -61,12 +61,14 @@ class WindHeatTables extends Component {
         const tableTitle = 'Wind Chill & Heat Index'
 
         return (
+            <div style={{ padding: '0px 20px' }}>
                 <MUIDataTable
                     title={tableTitle}
                     data={tableData.reverse()}
                     columns={columns}
                     options={options}
                 />
+            </div>
         );
 
     }

@@ -105,8 +105,6 @@ export default class Windrose extends Component {
       }
     }
     const options = {...this.options, ...this.props.options}
-    console.log('windrose series')
-    console.log(options)
     return (
       <div style={{margin: "0 0"}}>
         {options.series &&

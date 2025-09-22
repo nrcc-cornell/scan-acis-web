@@ -90,7 +90,7 @@ class SoilsReports extends Component {
                   </Typography>
                 </Grid>
                 <Grid item xs={10}>
-                    <img className="doc-image" src={soilsreports1} alt="Map showing all pedons with laboratory characterization from the NRCS Kellogg Soil Survey Laboratory" />
+                    <img className={classes.docImage} src={soilsreports1} alt="Map showing all pedons with laboratory characterization from the NRCS Kellogg Soil Survey Laboratory" />
                     <Typography align="left" paragraph variant="caption">
                       <b>Fig 1.</b> Map showing all pedons with laboratory characterization from the NRCS Kellogg Soil Survey Laboratory.  Interactive map is available <a href="https://nrcs.maps.arcgis.com/apps/webappviewer/index.html?id=956154f98fc94edeaa2dbad99bb224af" target="_blank" rel="noopener noreferrer">here</a>.
                     </Typography>
@@ -107,7 +107,7 @@ class SoilsReports extends Component {
                   </Typography>
                 </Grid>
                 <Grid item xs={10}>
-                    <img className="doc-image" src={soilsreports2} alt="Listing of reports from the National Soil Survey Center" />
+                    <img className={classes.docImage} src={soilsreports2} alt="Listing of reports from the National Soil Survey Center" />
                     <Typography align="left" paragraph variant="caption">
                       <b>Fig 2.</b> Sample report information available under "Station Information" on the front page of this site.
                     </Typography>
@@ -120,13 +120,13 @@ class SoilsReports extends Component {
                 </Grid>
                 <Grid container item direction="row" alignItems="flex-end" xs={10}>
                     <Grid item xs={7}>
-                      <img className="doc-image" src={soilsreports3} alt="Soil scientists in a pit dug to two meter depth" />
+                      <img className={classes.docImage} src={soilsreports3} alt="Soil scientists in a pit dug to two meter depth" />
                       <Typography align="left" paragraph variant="caption">
                         <b>Fig 3.</b> Soil scientists view exposed soil (above). Reference scale reveals depth, and markers delineate soil horizons (right).
                       </Typography>
                     </Grid>
                     <Grid item xs={5}>
-                      <img className="doc-image" src={soilsreports4} alt="Exposed soil from the side of a two meter deep pit" />
+                      <img className={classes.docImage} src={soilsreports4} alt="Exposed soil from the side of a two meter deep pit" />
                     </Grid>
                 </Grid>
                 <Grid item xs={12}>
@@ -135,13 +135,13 @@ class SoilsReports extends Component {
                   </Typography>
                 </Grid>
                 <Grid item xs={10}>
-                    <img className="doc-image" src={soilsreports5} alt="Two manuals used for describing soils" />
+                    <img className={classes.docImage} src={soilsreports5} alt="Two manuals used for describing soils" />
                     <Typography align="left" paragraph variant="caption">
                       <b>Fig 4.</b> Two manuals used for describing soils; the Munsell Soil-Color Charts, and the Field Book for Describing and Sampling Soils (a guide for terminology used).
                     </Typography>
                 </Grid>
                 <Grid item xs={10}>
-                    <img className="doc-image" src={soilsreports6} alt="A page from the Munsell Soil-Color Charts" />
+                    <img className={classes.docImage} src={soilsreports6} alt="A page from the Munsell Soil-Color Charts" />
                     <Typography align="left" paragraph variant="caption">
                       <b>Fig 5.</b> A page from the color book showing how colors are organized by hue, value, and chroma.
                     </Typography>

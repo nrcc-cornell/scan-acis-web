@@ -2,7 +2,6 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  //width: 92vw;
   width: 99%;
 }
 
@@ -10,14 +9,10 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  //padding: 20px;
   margin-top: 0.5vw;
   margin-bottom: 0.5vw;
-  //margin-left: 10vw;
-  //width: 94vw;
   width: 99%;
   height: calc(20px + 1.0vw);
-  //height: 30px;
   background-color: #fff;
   font-size: calc(10px + 0.8vw);
   font-family: Roboto;
@@ -41,10 +36,6 @@
   line-height: calc(1em + 0.5vw);
 }
 
-.tooltip-item {
-//  margin: 2vw;
-}
-
 .legend-item-windheat {
   margin: 1vw;
 }
@@ -53,7 +44,6 @@
   margin: 0 10 0 0;
 }
 
-//.recharts-cartesian-axis { font-size: calc(8px+1.0vw); font-family: sans-serif; }
 .recharts-cartesian-axis { font-size: calc(10px + 0.2vw); font-family: sans-serif; }
 
 .isHidden {

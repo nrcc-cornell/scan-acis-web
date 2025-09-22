@@ -18,7 +18,7 @@ const LoadStationData = ({sid,period,wsunits}) => {
             return res
           })
           .catch(err => {
-            console.log(
+            console.error(
               "Request Error: " + (err.response.data || err.response.statusText)
             );
           });

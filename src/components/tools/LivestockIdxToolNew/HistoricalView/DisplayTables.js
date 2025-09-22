@@ -44,12 +44,14 @@ const DisplayTables = ({data,stnName,loading,tableTitle,tableInfo}) => {
         }
 
         return (
+            <div style={{ padding: '0px 20px' }}>
                 <MUIDataTable
                     title={tableTitle}
                     data={tableData.reverse()}
                     columns={columns}
                     options={options}
                 />
+            </div>
         );
 
 }
