@@ -18,6 +18,16 @@ const styles = theme => ({
   },
   selected: {
     backgroundColor: theme.palette.primary.main
+  },
+  btn: {
+    borderRightWidth: '1px',
+    borderTopWidth: '1px',
+    borderBottomWidth: '1px',
+    minHeight: '30px',
+    paddingTop: '0px',
+    paddingBottom: '0px',
+    borderStyle: 'solid',
+    borderColor: 'rgb(200,200,200)'
   }
 })
 
@@ -50,7 +60,7 @@ class ToolDropdown extends Component {
         onMouseLeave={this.handleClose}
       >
         <button
-          className={'MuiButtonBase-root MuiTab-root inject-with-store(FullWidthTabs)-tab-5 MuiTab-textColorPrimary' + (isActiveTab ? ' Mui-selected' : '')}
+          className={'MuiButtonBase-root MuiTab-root inject-with-store(FullWidthTabs)-tab-5 MuiTab-textColorPrimary ' + classes.btn + (isActiveTab ? ' Mui-selected' : '')}
           id={`${groupName}-button`}
           aria-controls={open ? `${groupName}-menu` : undefined}
           aria-haspopup='true'
