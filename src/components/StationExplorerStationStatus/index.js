@@ -17,14 +17,14 @@ const statusPages = [
     { name: 'Wind Speed', keys: ['windspdmax_last','windspdave_last'] },
     { name: 'Wind Direction', keys: ['winddirave_last'] },
   ],[
-    { name: 'Soil Temperature', keys: [] },
+    { name: 'Soil Temperature', keys: ['soilt_last'] },
     { name: '    2 inch', keys: ['soilt2in_last'] },
     { name: '    4 inch', keys: ['soilt4in_last'] },
     { name: '    8 inch', keys: ['soilt8in_last'] },
     { name: '    20 inch', keys: ['soilt20in_last'] },
     { name: '    40 inch', keys: ['soilt40in_last'] },
   ],[
-    { name: 'Soil Moisture', keys: [] },
+    { name: 'Soil Moisture', keys: ['soilm_last'] },
     { name: '    2 inch', keys: ['soilm2in_last'] },
     { name: '    4 inch', keys: ['soilm4in_last'] },
     { name: '    8 inch', keys: ['soilm8in_last'] },
@@ -44,34 +44,42 @@ class StationExplorerStationStatus extends Component {
     app.setExplorer_status_page((currPage + 1) % 3)
   };
 
-  construct_table_info = (pageNum, data) => {
-    if (data && 'avgt_last' in data) {
-      console.log(data, statusPages[pageNum]);
-      return statusPages[pageNum].map(({ name, keys }) => {
-        const latestReport = keys.reduce((earliest, k) => {
-          const newDt = data[k];
-          if (earliest === 'M' || newDt < earliest) {
-            earliest = newDt;
-          }
-          return earliest;
-        }, 'M');
+  get_earliest_report_date_string = (keys, data, now) => {
+    const lastReportDateString = keys.reduce((earliest, k) => {
+      const newDt = data[k];
+      if (earliest === 'M' || earliest === '--' || newDt < earliest) {
+        earliest = newDt;
+      }
+      return earliest;
+    }, 'M');
 
-        let dotColor = 'rgba(0,0,0,0)';
-        if (latestReport) {
-          const hoursSinceLastReport = moment.duration(moment().diff(latestReport)).asHours();
-          if (latestReport === 'M' || hoursSinceLastReport >= 720) {
-            // 30 days or more since last report = red
-            dotColor = 'rgb(211,44,44)';
-          } else if (hoursSinceLastReport >= 24) {
-            // 1 day or more since last report = yellow
-            dotColor = 'rgba(232,247,33,1)';
-          } else {
-            // Less than one day since last report = green
-            dotColor = 'rgba(49,155,35,1)';
-          }
+    let daysSinceLastReport = null;
+    if (lastReportDateString !== 'M' && lastReportDateString !== '--') {
+        daysSinceLastReport = now.diff(lastReportDateString, 'days');
+    }
+    return { lastReportDateString, daysSinceLastReport };
+  }
+
+  construct_table_info = (pageNum, hrlyData, dlyData) => {
+    if (hrlyData && dlyData && 'avgt_last' in hrlyData && 'avgt_last' in dlyData) {
+      const now = moment();
+      return statusPages[pageNum].map(({ name, keys }) => {
+        const { lastReportDateString: hrlyLatestReport, daysSinceLastReport: daysSinceLastHrlyReport } = this.get_earliest_report_date_string(keys, hrlyData, now);
+        const { lastReportDateString: dlyLatestReport, daysSinceLastReport: daysSinceLastDlyReport } = this.get_earliest_report_date_string(keys, dlyData, now);
+
+        let dotColor = 'rgba(0,0,0,0)';;
+        if (hrlyLatestReport === 'M' || dlyLatestReport === 'M' || 30 < daysSinceLastHrlyReport || 30 < daysSinceLastDlyReport) {
+          // More than 30 days since last report = red
+          dotColor = 'rgb(211,44,44)';
+        } else if (1 < daysSinceLastHrlyReport || 1 < daysSinceLastDlyReport) {
+          // 1 - 30 days since last report = yellow
+          dotColor = 'rgba(232,247,33,1)';
+        } else if (daysSinceLastHrlyReport <= 1 || daysSinceLastDlyReport <= 1) {
+          // One day or less since last report = green
+          dotColor = 'rgba(49,155,35,1)';
         }
   
-        return [dotColor, name, latestReport];
+        return [dotColor, name, hrlyLatestReport, dlyLatestReport];
       });
     } else {
       return [];
@@ -95,7 +103,7 @@ class StationExplorerStationStatus extends Component {
     return (
       <div id="station_status">
         <LoadingOverlay
-          active={app.explorer_dataIsLoading}
+          active={app.explorer_dataIsLoading || app.explorer_dailyDataIsLoading}
           spinner
           background={'rgba(255,255,255,1.0)'}
           color={'rgba(34,139,34,1.0)'}
@@ -108,15 +116,17 @@ class StationExplorerStationStatus extends Component {
             <table cellPadding="1"><tbody>
               <tr>
                 <td className='dot-column'>{this.make_dot('rgba(0,0,0,0)')}</td>
-                <td style={{ textDecoration: 'underline', fontWeight: 'bold' }}>Variable</td>
-                <td style={{ textDecoration: 'underline', fontWeight: 'bold' }}>Latest Report</td>
+                <td style={{ textDecoration: 'underline', fontWeight: 'bold', minWidth: '116px' }}>Variable</td>
+                <td style={{ textDecoration: 'underline', fontWeight: 'bold' }}>Latest Hourly Report</td>
+                <td style={{ textDecoration: 'underline', fontWeight: 'bold' }}>Latest Daily Report</td>
                 <td></td>
               </tr>
-              {this.construct_table_info(app.getExplorer_status_page, app.explorer_latestConditions).map(([dotColor, rowName, latestReport], i) => (
+              {this.construct_table_info(app.getExplorer_status_page, app.explorer_latestConditions, app.explorer_latestDailyConditions).map(([dotColor, rowName, hrlyLatestReport, dlyLatestReport], i) => (
                 <tr key={rowName}>
                   <td>{this.make_dot(dotColor)}</td>
-                  <td style={{ fontWeight: 'bold', whiteSpace: 'pre', width: '122px' }}>{rowName}</td>
-                  <td>{latestReport === 'M' ? '>60 days ago' : latestReport.slice(0,10)}</td>
+                  <td style={{ fontWeight: 'bold', whiteSpace: 'pre' }}>{rowName}</td>
+                  <td style={{ whiteSpace: 'pre' }}>{hrlyLatestReport === 'M' ? '>60 days ago' : (hrlyLatestReport === '--' ? '  --' : hrlyLatestReport)}</td>
+                  <td style={{ whiteSpace: 'pre' }}>{dlyLatestReport === 'M' ? '>60 days ago' : (dlyLatestReport === '--' ? '  --' : dlyLatestReport)}</td>
                   {i === 0 ? (
                     <td rowSpan='100'>
                       <Button

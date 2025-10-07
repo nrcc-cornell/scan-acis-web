@@ -24,7 +24,7 @@ const styles = theme => ({
     maxWidth: '800px'
   },
   docImage2: {
-    width: '40%',
+    width: '30%',
     maxWidth: '800px'
   }
 });
@@ -97,15 +97,16 @@ class HeatIdxDoc extends Component {
                     <Typography align="left" paragraph variant="body1">
                       <i>1. User Options</i><br/><br/>
                       Once your site is selected, there are two different types of data views to select from, <i>Current Heat Indices</i> and <i>Historical Frequencies</i>.<br/><br/>
-                      <b>a) Current Heat Indices</b> provide hourly heat index conditions over the past 24-48 hours.<br/>
-                      <b>b) Historical Frequencies</b> provide the number of hours or days during each year in which the selected heat index surpassed significant heat stress thresholds.<br/><br/>
+                      <b>a) Output Type :</b> Choose 'chart' or 'table' to change the tool view between graphical and tabular versions.<br/><br/>
+                      <b>b) Current Heat Indices</b> provide hourly heat index conditions over the past 24-48 hours.<br/>
+                      <b>c) Historical Frequencies</b> provide the number of hours or days during each year in which the selected heat index surpassed significant heat stress thresholds.<br/><br/>
                       Finally, the type of heat index must be selected, based on the animal of interest. Below represents what these user interfaces look like in the tool:<br/>
                       <img className={classes.docImage} src={viewselection} alt="View Selection for the SCAN/TSCAN Livestock Heat Index" /><br/>
                       <img className={classes.docImage2} src={userinput} alt="User input for the SCAN/TSCAN Livestock Heat Index" /><br/><br/>
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <i>2. Output</i><br/><br/>
-                      Data in this tool can be viewed in either graphical or tabular form by selecting 'chart' or 'table' above each tool. Charts can also be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
+                      Charts can be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
                       <b>a) Current Heat Indices</b><br/><br/>
                       Time series of heat indices that correspond to your selections will appear within the tool. Below is a sample chart showing a sample of the features. Horizontal reference lines indicate significant heat stress levels for the selected animal. Gray shading represents the calculated heat index each hour over the visible time span. Also available are associated weather variables used in the heat index calculation. Moving your cursor over the charts in the live tool will show the actual heat index values for the selected hour.<br/><br/>
                       <img className={classes.docImage} src={livestockoutput1} alt="Output for the SCAN/TSCAN Livestock Heat Index" /><br/><br/>

@@ -19,7 +19,7 @@ const styles = theme => ({
     maxWidth: '800px'
   },
   docImage2: {
-    width: '40%',
+    width: '25%',
     maxWidth: '800px'
   }
 });
@@ -86,15 +86,16 @@ class GddtoolDoc extends Component {
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <i>1. User Options</i><br/><br/>
-                      Once your site is selected, there are two options to choose from at the top of the tool.<br/><br/>
-                      <b>a) Planting/Budbreak Date :</b> Click on the calendar icon to select a date from the dropdown calendar. This is the date from which you would like to start GDD accumulation. The current year is selected by default, however previous years can be selected if data at your location of interest is available.<br/><br/>
-                      <b>b) GDD Base :</b> Enter the base value you would like to use for calculating GDDs. After editing this value, an "Update" button will appear to allow you set this value as the new base.<br/><br/>
+                      Once your site is selected, there are three options to choose from to the side of the tool.<br/><br/>
+                      <b>a) Output Type :</b> Choose 'chart' or 'table' to change the tool view between graphical and tabular versions.<br/><br/>
+                      <b>b) Planting/Budbreak Date :</b> Click on the calendar icon to select a date from the dropdown calendar. This is the date from which you would like to start GDD accumulation. The current year is selected by default, however previous years can be selected if data at your location of interest is available.<br/><br/>
+                      <b>c) GDD Base :</b> Enter the base value you would like to use for calculating GDDs. After editing this value, an "Update" button will appear to allow you set this value as the new base.<br/><br/>
                       Changing either of these user options will automatically cause the output charts and tables to update with current settings.<br/><br/>
-                      <img className={classes.docImage} src={userinput} alt="User input for the SCAN/TSCAN Growing Degree Day Calculator" />
+                      <img className={classes.docImage2} src={userinput} alt="User input for the SCAN/TSCAN Growing Degree Day Calculator" />
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <i>2. Output</i><br/><br/>
-                      Data in this tool can be viewed in either graphical or tabular form by selecting 'chart' or 'table' above each tool. Charts can also be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
+                      Charts can be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
                       Accumulated GDD values that correspond to your selections will appear below the user options. Below is a sample chart showing all of the features.<br/><br/>
                       <b>a) Green Line : </b> The season-to-date accumulation for the selected year.<br/><br/>
                       <b>b) Blue Line : </b> The average season-to-date accumulation for the most recent 15-year period.<br/><br/>

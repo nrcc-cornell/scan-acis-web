@@ -209,6 +209,7 @@ export class AppStore {
         // download data for table
         this.explorerClimateSummary_downloadData()
         this.explorer_downloadData()
+        this.explorer_downloadDailyData()
     }
     // set location from select menu
     @action setSelectedLocation_explorer = (t) => {
@@ -222,6 +223,7 @@ export class AppStore {
             // download data for table
             this.explorerClimateSummary_downloadData()
             this.explorer_downloadData()
+            this.explorer_downloadDailyData()
         };
     @computed get getLocation_explorer() { return this.location_explorer };
 
@@ -1721,6 +1723,14 @@ export class AppStore {
         return this.explorer_climateData
     }
 
+    @observable explorer_dailyClimateData = null;
+    @action explorer_setDailyClimateData = (res) => {
+        this.explorer_dailyClimateData = res
+    }
+    @computed get explorer_getDailyClimateData() {
+        return this.explorer_dailyClimateData
+    }
+
     // climate data saved
     // - the full climate summary request downloaded from ACIS
     @observable explorerClimateSummary_climateData = null;
@@ -1826,7 +1836,9 @@ export class AppStore {
                 'solar_last': 'M',
                 'windspdmax_last': 'M',
                 'windspdave_last': 'M',
-                'winddirave_last': 'M'
+                'winddirave_last': 'M',
+                'soilm_last': '--',
+                'soilt_last': '--',
             };
         this.explorer_latestConditions = dataObjOut
     }
@@ -1873,7 +1885,9 @@ export class AppStore {
                 'solar_last': 'M',
                 'windspdmax_last': 'M',
                 'windspdave_last': 'M',
-                'winddirave_last': 'M'
+                'winddirave_last': 'M',
+                'soilm_last': '--',
+                'soilt_last': '--',
             };
         let i, dateToday, numHours, numFutureMissingHours;
         let formattedHourString
@@ -1944,6 +1958,8 @@ export class AppStore {
                       'windspdmax_last':(d[17][i]==='M') ? ('windspdmax_last' in dataObjOut ? dataObjOut.windspdmax_last : 'M') : formattedHourString,
                       'windspdave_last':(d[18][i]==='M') ? ('windspdave_last' in dataObjOut ? dataObjOut.windspdave_last : 'M') : formattedHourString,
                       'winddirave_last':(d[19][i]==='M') ? ('winddirave_last' in dataObjOut ? dataObjOut.winddirave_last : 'M') : formattedHourString,
+                      'soilm_last': '--',
+                      'soilt_last': '--',
                   }
               }
         })
@@ -1952,6 +1968,118 @@ export class AppStore {
 
     @computed get explorer_getLatestConditions() {
         return this.explorer_latestConditions
+    }
+
+    @observable explorer_latestDailyConditions = {
+            'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+            'avgt_last': 'M',
+            'maxt_last': 'M',
+            'mint_last': 'M',
+            'pcpn_last': 'M',
+            'soilm_last': 'M',
+            'soilt_last': 'M',
+            'soilt2in_last': '--',
+            'soilt4in_last': '--',
+            'soilt8in_last': '--',
+            'soilt20in_last': '--',
+            'soilt40in_last': '--',
+            'soilm2in_last': '--',
+            'soilm4in_last': '--',
+            'soilm8in_last': '--',
+            'soilm20in_last': '--',
+            'soilm40in_last': '--',
+            'humid_last': 'M',
+            'solar_last': 'M',
+            'windspdmax_last': 'M',
+            'windspdave_last': 'M',
+            'winddirave_last': 'M'
+    };
+
+    @action explorer_initLatestDailyConditions = () => {
+        let dataObjOut = {
+            'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+            'avgt_last': 'M',
+            'maxt_last': 'M',
+            'mint_last': 'M',
+            'pcpn_last': 'M',
+            'soilm_last': 'M',
+            'soilt_last': 'M',
+            'soilt2in_last': '--',
+            'soilt4in_last': '--',
+            'soilt8in_last': '--',
+            'soilt20in_last': '--',
+            'soilt40in_last': '--',
+            'soilm2in_last': '--',
+            'soilm4in_last': '--',
+            'soilm8in_last': '--',
+            'soilm20in_last': '--',
+            'soilm40in_last': '--',
+            'humid_last': 'M',
+            'solar_last': 'M',
+            'windspdmax_last': 'M',
+            'windspdave_last': 'M',
+            'winddirave_last': 'M'
+        };
+        this.explorer_latestDailyConditions = dataObjOut
+    }
+
+    @action explorer_setLatestDailyConditions = () => {
+        let data = this.explorer_getDailyClimateData;
+        let dataObjOut = {
+            'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+            'avgt_last': 'M',
+            'maxt_last': 'M',
+            'mint_last': 'M',
+            'pcpn_last': 'M',
+            'soilm_last': 'M',
+            'soilt_last': 'M',
+            'soilt2in_last': '--',
+            'soilt4in_last': '--',
+            'soilt8in_last': '--',
+            'soilt20in_last': '--',
+            'soilt40in_last': '--',
+            'soilm2in_last': '--',
+            'soilm4in_last': '--',
+            'soilm8in_last': '--',
+            'soilm20in_last': '--',
+            'soilm40in_last': '--',
+            'humid_last': 'M',
+            'solar_last': 'M',
+            'windspdmax_last': 'M',
+            'windspdave_last': 'M',
+            'winddirave_last': 'M'
+        };
+
+        data.forEach(function (d) {
+            dataObjOut = {
+                'avgt_last':(d[1]==='M') ? ('avgt_last' in dataObjOut ? dataObjOut.avgt_last : 'M') : d[0],
+                'maxt_last':(d[2]==='M') ? ('maxt_last' in dataObjOut ? dataObjOut.maxt_last : 'M') : d[0],
+                'mint_last':(d[3]==='M') ? ('mint_last' in dataObjOut ? dataObjOut.mint_last : 'M') : d[0],
+                'pcpn_last':(d[4]==='M') ? ('pcpn_last' in dataObjOut ? dataObjOut.pcpn_last : 'M') : d[0],
+                'soilm_last':(d[5]==='M') ? ('soilm_last' in dataObjOut ? dataObjOut.soilm_last : 'M') : d[0],
+                'soilt_last':(d[6]==='M') ? ('soilt_last' in dataObjOut ? dataObjOut.soilt_last : 'M') : d[0],
+                'humid_last':(d[7]==='M') ? ('humid_last' in dataObjOut ? dataObjOut.humid_last : 'M') : d[0],
+                'solar_last':(d[8]==='M') ? ('solar_last' in dataObjOut ? dataObjOut.solar_last : 'M') : d[0],
+                'windspdmax_last':(d[9]==='M') ? ('windspdmax_last' in dataObjOut ? dataObjOut.windspdmax_last : 'M') : d[0],
+                'windspdave_last':(d[10]==='M') ? ('windspdave_last' in dataObjOut ? dataObjOut.windspdave_last : 'M') : d[0],
+                'winddirave_last':(d[11]==='M') ? ('winddirave_last' in dataObjOut ? dataObjOut.winddirave_last : 'M') : d[0],
+                'soilt2in_last': '--',
+                'soilt4in_last': '--',
+                'soilt8in_last': '--',
+                'soilt20in_last': '--',
+                'soilt40in_last': '--',
+                'soilm2in_last': '--',
+                'soilm4in_last': '--',
+                'soilm8in_last': '--',
+                'soilm20in_last': '--',
+                'soilm40in_last': '--',
+            }
+        })
+        this.explorer_latestDailyConditions = dataObjOut;
+    }
+
+    @computed get explorer_getLatestDailyConditions() {
+        return this.explorer_latestDailyConditions
     }
 
     // station climate summary saved here: to be used in station explorer table
@@ -2117,6 +2245,60 @@ export class AppStore {
             }
     }
 
+    // ACIS parameters: daily call for last few days
+    @computed get explorer_getDailyAcisParams() {
+            let elems
+            let numdays
+            elems = [
+                {"vX":43}, //daily temp, ave
+                {"vX":1,"vN":23}, //daily temp, max
+                {"vX":2,"vN":23}, //daily temp, min
+                {"vX":4,"vN":22}, //daily pcpn, sum
+                {"vX":68,"vN":1}, //daily soil moisture, ave
+                {"vX":69,"vN":3}, //daily soil temperature, ave
+                {"vX":71}, //daily relative humidity, ave
+                {"vX":70,"vN":5}, //daily solar radiation, sum
+                {"vX":77,"vN":5}, //daily wind speed, peak, max
+                {"vX":89,"vN":6}, //daily wind speed, average, ave
+                {"vX":101,"vN":1}, //daily wind direction, average, ave
+            ]
+            numdays=-60
+            return {
+                "sid":this.getLocation.sid,
+                "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                "elems":elems,
+                "meta":""
+            }
+    }
+
+    // ACIS parameters: daily call for last few days
+    @computed get explorer_getDailyAcisParams_tscan() {
+            let elems
+            let numdays
+            elems = [
+                {"vX":43}, //daily temp, ave
+                {"vX":1,"vN":24}, //daily temp, max
+                {"vX":2,"vN":24}, //daily temp, min
+                {"vX":4,"vN":23}, //daily pcpn, sum
+                {"vX":68,"vN":2}, //daily soil moisture, ave
+                {"vX":69,"vN":4}, //daily soil temperature, ave
+                {"vX":71}, //daily relative humidity, ave
+                {"vX":70,"vN":6}, //daily solar radiation, sum
+                {"vX":77,"vN":6}, //daily wind speed, peak, max
+                {"vX":89,"vN":7}, //daily wind speed, average, ave
+                {"vX":101,"vN":2}, //daily wind direction, average, ave
+            ]
+            numdays=-60
+            return {
+                "sid":this.getLocation.sid,
+                "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                "elems":elems,
+                "meta":""
+            }
+    }
+
     // ACIS parameters: climate summary call
     @action explorerClimateSummary_getAcisParams = (isTSCAN) => {
         const pcpnMinor = isTSCAN ? 23 : 22;
@@ -2150,6 +2332,14 @@ export class AppStore {
         return this.explorer_dataIsLoading;
     }
 
+    @observable explorer_dailyDataIsLoading = false
+    @action explorer_setDailyDataIsLoading = (b) => {
+        this.explorer_dailyDataIsLoading = b;
+    }
+    @computed get explorer_getDailyDataIsLoading() {
+        return this.explorer_dailyDataIsLoading;
+    }
+
     // data is loading - boolean - to control the spinner
     @observable explorerClimateSummary_dataIsLoading = false
     @action explorerClimateSummary_setDataIsLoading = (b) => {
@@ -2176,6 +2366,31 @@ export class AppStore {
                 this.explorer_setLatestConditions()
             }
             this.explorer_setDataIsLoading(false);
+          })
+          .catch(err => {
+            console.error(
+              "Request Error: " + (err.response.data || err.response.statusText)
+            );
+          });
+    }
+
+    // Station explorer daily data (latest conditions) download
+    @action explorer_downloadDailyData = () => {
+        let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.explorer_getDailyAcisParams : this.explorer_getDailyAcisParams_tscan
+        this.explorer_initLatestDailyConditions();
+        this.explorer_setDailyDataIsLoading(true);
+        return axios
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
+          .then(res => {
+            if (res.data.hasOwnProperty('error')) {
+                console.error('Error: resetting data to null');
+                this.explorer_setDailyClimateData(null);
+                this.explorer_initLatestDailyConditions()
+            } else {
+                this.explorer_setDailyClimateData(res.data.data.slice(0));
+                this.explorer_setLatestDailyConditions()
+            }
+            this.explorer_setDailyDataIsLoading(false);
           })
           .catch(err => {
             console.error(

@@ -23,7 +23,7 @@ class StationExplorerStationInfo extends Component {
         return (
             <div id="station_info">
               <LoadingOverlay
-                active={app.explorer_dataIsLoading}
+                active={app.explorer_dataIsLoading || app.explorer_dailyDataIsLoading}
                 spinner
                 background={'rgba(255,255,255,1.0)'}
                 color={'rgba(34,139,34,1.0)'}

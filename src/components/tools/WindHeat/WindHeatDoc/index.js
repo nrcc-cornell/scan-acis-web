@@ -27,7 +27,7 @@ const styles = theme => ({
     maxWidth: '800px'
   },
   docImage2: {
-    width: '40%',
+    width: '30%',
     maxWidth: '800px'
   }
 });
@@ -101,13 +101,13 @@ class WindHeatDoc extends Component {
                       Once your site is selected, there are two different types of data views to select from, <i>Current & Forecast</i> and <i>Historical Frequencies</i>.<br/><br/>
                       <b>a) Current & Forecast</b> provide hourly heat index or wind chill conditions over the past 24-48 hours.<br/>
                       <b>b) Historical Frequencies</b> provide the number of hours or days during each year in which the selected measure surpassed significant thresholds.<br/><br/>
-                      Finally, the type of measure must be selected. Below represents what these user interfaces look like in the tool:<br/>
+                      Finally, the output type and the type of measure must be selected. Below represents what these user interfaces look like in the tool:<br/>
                       <img className={classes.docImage} style={{ width: '500px', margin: '0 auto' }} src={viewselection} alt="View Selection for the SCAN/TSCAN Wind Chill & Heat Index" /><br/>
                       <img className={classes.docImage2} src={userinput} alt="User input for the SCAN/TSCAN Wind Chill & Heat Index" /><br/><br/>
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <i>2. Output</i><br/><br/>
-                      Data in this tool can be viewed in either graphical or tabular form by selecting 'chart' or 'table' above each tool. Charts can also be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
+                      Charts can be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
                       <b>a) Current & Forecast</b><br/><br/>
                       Time series of heat index or wind chill that corresponds to your selections will appear within the tool. Below is a sample chart showing a sample of the features. Horizontal reference lines indicate significant levels for the selected measure. Gray shading represents the calculated temperature each hour over the visible time span. Also available are associated weather variables used in the calculation. Moving your cursor over the charts in the live tool will show the actual values for the selected hour.<br/><br/>
                       <img className={classes.docImage} src={output1} alt="Output for the SCAN/TSCAN Wind Chill & Heat Index" /><br/><br/>
