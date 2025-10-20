@@ -18,17 +18,22 @@ const styles = theme => ({
   }
 });
 
-var app;
-
 @inject('store') @observer
 class CustomNumberInput extends Component {
   constructor(props) {
     super(props);
-    app = this.props.store.app;
     this.state = {
       value: this.props.value,
     }
   };
+
+  componentDidUpdate(prevProps) {
+    if (this.props.value !== prevProps.value) {
+      this.setState({
+        value: this.props.value
+      })
+    }
+  }
 
   updateValue = (v) => {
     this.setState({

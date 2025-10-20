@@ -81,7 +81,7 @@ export class AppStore {
     /// -     description (one sentence description of tool)
     /// -     thumbnail (thumbnail image for tool card)
     //////////////////////////////////////////////
-    toolNameArray = ['gddtool','waterdef','wxgrapher','livestock','windrose','windheat']
+    toolNameArray = ['gddtool','waterdef','wxgrapher','livestock','windrose','windheat','pawpaw','blueberryGrowth','blueberryHarvest']
     @observable toolName = this.toolNameArray[0]
     // set toolName from tool card
     @action setToolName = (n) => {
@@ -128,9 +128,26 @@ export class AppStore {
                 description = 'Visualize year to date wind chill and heat index.'
                 thumbnail = pathToImages+'WindHeat-thumbnail.png'
                 url = '/tools/wind-chill-heat-index'
+            } else if (name==='pawpaw') {
+                title = 'Pawpaw Growth'
+                description = 'See year to date and historic information about Pawpaw fruit growth.'
+                thumbnail = pathToImages+'Pawpaw-thumbnail.png'
+                url = '/tools/fruit-tool'
+                onclick = () => this.fruittool_handleFruitSelect('pawpaw')
+            } else if (name==='blueberryGrowth') {
+                title = 'Lowbush Blueberry Growth'
+                description = 'See year to date and historic information about Lowbush Blueberry fruit growth.'
+                thumbnail = pathToImages+'Lowbush-Blueberry-Growth-thumbnail.png'
+                url = '/tools/fruit-tool'
+                onclick = () => this.fruittool_handleFruitSelect('blueberryGrowth')
+            } else if (name==='blueberryHarvest') {
+                title = 'Lowbush Blueberry Harvest'
+                description = 'See year to date and historic information about Lowbush Blueberry harvest.'
+                thumbnail = pathToImages+'Lowbush-Blueberry-Harvest-thumbnail.png'
+                url = '/tools/fruit-tool'
+                onclick = () => this.fruittool_handleFruitSelect('blueberryHarvest')
             } else {
             }
-            onclick = () => {this.setActivePage(3); this.setToolName(name)}
             return {'name':name, 'title':title, 'description':description, 'thumbnail':thumbnail, 'url':url, 'onclick':onclick}
         };
 
@@ -155,15 +172,6 @@ export class AppStore {
         type: 'radio',
     };
         
-
-    // data is loading - boolean - to control disabling of outputType
-    // - return combined loading status for data in all tools
-    //@computed get dataIsLoading() {
-    //    return this.gddtool_getDataIsLoading;
-    //}
-
-
-
     //////////////////////////////////////////////
     /// StationPicker
     //////////////////////////////////////////////
@@ -178,6 +186,7 @@ export class AppStore {
             if (this.getToolName==='wxgrapher' && this.toolIsSelected) { this.wxgraph_downloadData() }
             if (this.getToolName==='livestock' && this.toolIsSelected) { this.livestock_downloadData() }
             if (this.getToolName==='windheat' && this.toolIsSelected) { this.windheat_downloadData() }
+            if (['pawpaw','blueberryGrowth','blueberryHarvest'].includes(this.getToolName) && this.toolIsSelected) { this.fruittool_downloadData() }
             // save location to local storage
             localStorage.setItem("SCAN-ACIS-TOOLS.uid",l.toString())
         };
@@ -190,6 +199,7 @@ export class AppStore {
                 if (this.getToolName==='wxgrapher' && this.toolIsSelected) { this.wxgraph_downloadData() }
                 if (this.getToolName==='livestock' && this.toolIsSelected) { this.livestock_downloadData() }
                 if (this.getToolName==='windheat' && this.toolIsSelected) { this.windheat_downloadData() }
+                if (['pawpaw','blueberryGrowth','blueberryHarvest'].includes(this.getToolName) && this.toolIsSelected) { this.fruittool_downloadData() }
                 // save location to local storage
                 localStorage.setItem("SCAN-ACIS-TOOLS.uid",t.value)
             }
@@ -380,6 +390,7 @@ export class AppStore {
                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
                if (this.getToolName==='livestock') {this.livestock_downloadData()}
                if (this.getToolName==='windheat') {this.windheat_downloadData()}
+               if (['pawpaw','blueberryGrowth','blueberryHarvest'].includes(this.getToolName)) {this.fruittool_downloadData()}
              });
     }
 
@@ -423,27 +434,6 @@ export class AppStore {
         return this.explorer_status_page
     }
 
-
-    // action for changing map setting via buttons
-    // - this will center and zoom map on Alaska, Hawaii or PR
-    //@observable mapSettings = {'mapCenter':[37.0, -95.7], 'zoomLevel':4}
-    //@action updateMapSettings = (loc) => {
-    //    if (loc==='puerto_rico') {
-    //        this.mapSettings = {'mapCenter':[18.25, -66.0], 'zoomLevel':6}
-    //    } else if (loc==='alaska') {
-    //        this.mapSettings = {'mapCenter':[64.20, -149.50], 'zoomLevel':4}
-    //    } else if (loc==='hawaii') {
-    //        this.mapSettings = {'mapCenter':[19.90, -155.60], 'zoomLevel':6}
-    //    } else {
-    //        this.mapSettings = {'mapCenter':[37.0, -95.7], 'zoomLevel':4}
-    //    }
-    //}
-    //@action updateMapSettingsManually = (s) => {
-    //    this.mapSettings = s; 
-    //}
-    //@computed get getMapSettings() {
-    //    return this.mapSettings
-    //}
 
     //////////////////////////////////////////////
     /// TOOL: GDD Calculator
@@ -817,6 +807,464 @@ export class AppStore {
             );
           });
     }
+
+
+    //////////////////////////////////////////////
+    /// TOOL: Fruit tool
+    //////////////////////////////////////////////
+    // Fruit information needed for calculations
+    @observable fruit_info={
+        'pawpaw': {
+            name: 'pawpaw',
+            label: 'Pawpaw',
+            startDateStr: '04-01',
+            seasonStart: [4,1],
+            gddBase: '50'
+        },
+        'blueberryGrowth': {
+            name: 'blueberryGrowth',
+            label: 'Lowbush Blueberry Growth',
+            startDateStr: '04-01',
+            seasonStart: [4,1],
+            gddBase: '32'
+        },
+        'blueberryHarvest': {
+            name: 'blueberryHarvest',
+            label: 'Lowbush Blueberry Harvest',
+            startDateStr: '05-01',
+            seasonStart: [5,1],
+            gddBase: '41'
+        }
+    };
+
+    // Fruit tool Gdd base selection
+    @observable fruittool_base='50';
+    @action fruittool_setBase = (e) => {
+            this.fruittool_base = e.target.value
+            this.fruittool_downloadData()
+        }
+    @action fruittool_setBaseManually = (v) => {
+            this.fruittool_base = v
+            this.fruittool_downloadData()
+        }
+    @computed get fruittool_getBase() {
+        return this.fruittool_base
+    }
+
+    @action fruittool_handleFruitSelect = (fruitName) => {
+        this.setToolName(fruitName);
+        this.fruittool_setBaseManually(this.fruit_info[fruitName].gddBase);
+    }
+
+    @action fruittool_setFruitFromRadioGroup = (t) => {
+        // only update it fruit changed
+        if (this.toolName !== t) {
+            this.fruittool_handleFruitSelect(t);
+        }
+    }
+
+    // climate data saved in this var
+    // - the full request downloaded from ACIS
+    @observable fruittool_climateData = {};
+    @action fruittool_setClimateData = (startDate, gddBase, res) => {
+        if (!this.fruittool_climateData.hasOwnProperty(startDate)) {
+            this.fruittool_climateData[startDate] = {};
+        }
+
+        this.fruittool_climateData[startDate][gddBase] = res
+    }
+    @computed get fruittool_getClimateData() {
+        const startDate = this.fruit_info[this.getToolName].startDateStr;
+        const gddBase = this.fruittool_getBase;
+
+        if (this.fruittool_climateData.hasOwnProperty(startDate) && this.fruittool_climateData[startDate].hasOwnProperty(gddBase)) {
+            return this.fruittool_climateData[startDate][gddBase];
+        } else {
+            return null;
+        }
+    }
+
+    // selected year in fruit tool
+    @observable fruittool_selectedYear = this.latestSelectableYear;
+    @action fruittool_setSelectedYear = (res) => {
+        this.fruittool_selectedYear = res
+    }
+    @computed get fruittool_getSelectedYear() {
+        return this.fruittool_selectedYear
+    }
+
+    @computed get fruittool_selectedYearMissing() {
+        const selectedYear = this.fruittool_selectedYear;
+        const selectedYearData = this.fruittool_climateSummary.data_by_year[selectedYear];
+        return selectedYearData ? { percentMissing: selectedYearData.percentMissing, missing: selectedYearData.missing, days: selectedYearData.gddObs.length } : { percentMissing: 0, missing: 0, days: 0 };
+    }
+
+    @observable fruittool_climateSummary = {
+        years_missing: [],
+        years_included: [],
+        data_by_year: {},
+        summary_data: [{
+            'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+            'ave': NaN,
+            'max_por': NaN,
+            'min_por': NaN,
+            'max_minus_min': NaN,
+        }]
+    };
+    @action fruittool_initClimateSummary = () => {
+        this.fruittool_climateSummary = {
+            years_missing: [],
+            years_included: [],
+            data_by_year: {},
+            summary_data: [{
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+                'ave': NaN,
+                'max_por': NaN,
+                'min_por': NaN,
+                'max_minus_min': NaN,
+            }]
+        }
+    }
+    @action fruittool_setClimateSummary = () => {
+        const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+        const periodLen = 15;
+        
+        const data = this.fruittool_getClimateData;
+        if (data === null) {
+            this.fruittool_initClimateSummary();
+            return;
+        }
+
+        const seasonStart = this.fruit_info[this.getToolName].startDateStr;
+        
+        const data_by_date = {};
+        const data_by_year = {};
+        const years_missing = [];
+        
+        // This flag is used to skip days until we get to the first full year of data
+        let startCollecting = false;
+
+        let currentYear = data[0][0].slice(0,4);
+        let currentMissing = 0;
+        let readyForFirstFreeze = false;
+        data.forEach(([dateStr, [gddStr, numMissing], mintStr], i) => {
+            const year = dateStr.slice(0,4);
+            const mmdd = dateStr.slice(5);
+
+            // On seasonStart reset flags and trackers and determine if the finished season is "missing"
+            if (mmdd === seasonStart) {
+                if (startCollecting) {
+                    // If the last numMissing before the first freeze was more than 10, consider year missing
+                    //      This pattern effectively only considers the active season
+                    if (currentMissing > 10) {
+                        years_missing.push(currentYear);
+                    }
+                    data_by_year[currentYear].missing = currentMissing;
+                    const ffi = data_by_year[currentYear].firstFreezeIdx
+                    data_by_year[currentYear].percentMissing = currentMissing / (ffi === null ? data_by_year[currentYear].gddObs.length : ffi) * 100;
+                    currentMissing = 0;
+                    readyForFirstFreeze = false;
+                } else {
+                    startCollecting = true;
+                }
+                currentYear = year;
+            }
+            
+            // One and after seasonStart
+            if (startCollecting && mmdd >= seasonStart) {
+                // Make sure day is in object
+                if (!Object.keys(data_by_date).includes(mmdd)) {
+                    data_by_date[mmdd] = {};
+                }
+
+                // Make sure the year is in object
+                if (!Object.keys(data_by_year).includes(year)) {
+                    data_by_year[year] = { firstFreezeDate: null, firstFreezeIdx: null, gddObs: [], missing: null };
+                }
+    
+                // Parse GDD from ACIS into NaN or float
+                const gdd = (gddStr === -999 || gddStr === 'M') ? NaN : parseFloat(gddStr);
+
+                // If we have not yet passed the first freeze, find out how many days are missing
+                if (data_by_year[year].firstFreezeDate === null) {
+                    currentMissing = numMissing;
+                }
+    
+                // Add GDD to date if not current year (because this object is used for calculating POR and Recent stats where we do not include the current year)
+                if (year.toString() !== this.latestSelectableYear.toString()) {
+                    data_by_date[mmdd][year] = gdd;
+                }
+                
+                // Check if we should start looking for freezing temperatures
+                if (mmdd === '07-01') {
+                    readyForFirstFreeze = true;
+                }
+                
+                // Parse mint and determine if first freeze, store date if yes
+                const mint = parseFloat(mintStr);
+                if (readyForFirstFreeze && data_by_year[year].firstFreezeDate === null && mint < 32) {
+                    data_by_year[year].firstFreezeDate = year + '-' + mmdd;
+                    data_by_year[year].firstFreezeIdx = data_by_year[year].gddObs.length;
+                }
+
+                data_by_year[year].gddObs.push(gdd);
+            }
+
+            if (i === data.length - 1) {
+                data_by_year[currentYear].missing = currentMissing;
+                const ffi = data_by_year[currentYear].firstFreezeIdx
+                data_by_year[currentYear].percentMissing = currentMissing / (ffi === null ? data_by_year[currentYear].gddObs.length : ffi) * 100;
+            }
+        });        
+        
+        // get a sorted array of keys
+        const datesArray = Object.keys(data_by_date)
+        datesArray.sort();
+
+        
+        const years_included = Array.from({ length: periodLen }, (_, i) => parseInt(this.latestSelectableYear) - i - 1).filter(y => !years_missing.includes(y))
+        const summary_data = [];
+        datesArray.forEach(function (d) {
+            // skip until seasonStart
+            if (d < seasonStart) { return }
+
+            const annualDayData = [];
+            const ys = [];
+            years_included.forEach(function (y) {
+                if (!years_missing.includes(String(y)) && isNaN(data_by_date[d][y])===false) {
+                    ys.push(y);
+                    annualDayData.push(data_by_date[d][y]);
+                }
+            });
+
+            let por_min, por_max, por_avg, por_max_minus_min;
+            if (annualDayData.length<5) {
+                por_min = NaN;
+                por_max = NaN;
+                por_avg = NaN;
+                por_max_minus_min = NaN;
+            } else {
+                por_min = Math.min(...annualDayData);
+                por_max = Math.max(...annualDayData);
+                por_max_minus_min = por_max - por_min;
+                por_avg = average(annualDayData);
+            }
+
+            // data summary
+            summary_data.push({
+                'date': d,
+                'ave': parseInt(por_avg,10),
+                'max_por': parseInt(por_max,10),
+                'min_por': parseInt(por_min,10),
+                'max_minus_min': parseInt(por_max_minus_min,10),
+            })
+        });
+
+        // // Change selected year if the currently selected year is missing
+        // if (years_missing.includes(this.fruittool_getSelectedYear)) {
+        //     const years = Object.keys(data_by_year);
+        //     years.sort((a,b) => b-a);
+        //     this.fruittool_setSelectedYear(years[0]);
+        // }
+        this.fruittool_climateSummary = {
+            summary_data,
+            years_missing,
+            years_included,
+            data_by_year
+        };
+    }
+    @computed get fruittool_getClimateSummaryYearsInPOR() {
+        return this.fruittool_climateSummary.years_included;
+    }
+    
+    @computed get fruittool_getClimateSummary() {
+        const selectedYear = this.fruittool_selectedYear;
+        const selectedYearObs = selectedYear in this.fruittool_climateSummary.data_by_year ? this.fruittool_climateSummary.data_by_year[selectedYear].gddObs : [];
+        const dataWithObs = this.fruittool_climateSummary.summary_data.map((summary_obj, i) => {
+          const newObj = {...summary_obj};
+          newObj.date = selectedYear + '-' + newObj.date;
+          newObj.obs = selectedYearObs.length <= i ? NaN : selectedYearObs[i];
+          return newObj;
+        });
+        
+        return dataWithObs
+    }
+
+    @computed get fruittool_getHistoricalSummary() {
+        const fruitInfo = {
+            pawpaw: [{
+                key: 'veryEarly',
+                range: [2400,2499],
+            },{
+                key: 'early',
+                range: [2500,2599],
+            },{
+                key: 'middle',
+                range: [2600,2699],
+            },{
+                key: 'late',
+                range: [2700,2799],
+            },{
+                key: 'veryLate',
+                range: [2800,2899],
+            }],
+            blueberryGrowth: [{
+                key: 'flowering',
+                range: [390,599],
+            },{
+                key: 'fruiting',
+                range: [600,Infinity],
+            }],
+            blueberryHarvest: [{
+                key: 'optimal',
+                range: [1000,1300],
+            }]
+        };
+        
+        const data = this.fruittool_climateSummary.data_by_year;
+        const info = fruitInfo[this.getToolName];
+        const years = Object.keys(data);
+        years.sort();
+        
+        const results = years.map(year => {
+            const { firstFreezeDate, firstFreezeIdx, gddObs, percentMissing } = data[year];
+            
+            let categories = {};
+            if (percentMissing >= 25) {
+                categories['transparent'] = 0;
+                for (const infoObj of info) {
+                    categories[infoObj.key] = 0;
+                }
+            } else {
+                let lastIdx = gddObs.findIndex(v => info[0].range[0] <= v);
+                categories['transparent'] = lastIdx;
+    
+                for (const infoObj of info) {
+                    const v = infoObj.range[1] === Infinity ? gddObs.length - 1 : gddObs.findIndex(v => infoObj.range[1] <= v);
+                    if (firstFreezeIdx !== null && (v < 0 || firstFreezeIdx < v)) {
+                        categories[infoObj.key] = firstFreezeIdx - lastIdx;
+                        lastIdx = firstFreezeIdx;
+                    } else if (firstFreezeIdx === null && v < 0) {
+                        categories[infoObj.key] = gddObs.length - 1 - lastIdx;
+                        lastIdx = gddObs.length - 1;
+                    } else {
+                        categories[infoObj.key] = v - lastIdx;
+                        lastIdx = v;
+                    }
+                }
+            }
+
+            return {
+                year,
+                firstFreezeDate: percentMissing >= 25 ? null : firstFreezeDate,
+                firstFreezeIdx: percentMissing >= 25 ? null : firstFreezeIdx,
+                isComplete: gddObs.length === 275,
+                isMissing: percentMissing >= 2.5,
+                percentMissing: percentMissing,
+                categories
+            };
+        });
+
+        const firstToShow = results.findIndex(d => d.percentMissing < 25);
+        return results.slice(firstToShow);
+    }
+
+    @computed get fruittool_getSelectedYearFirstFreeze() {
+        const selectedYear = this.fruittool_selectedYear;
+        const selectedYearFirstFreeze = selectedYear in this.fruittool_climateSummary.data_by_year ? this.fruittool_climateSummary.data_by_year[selectedYear].firstFreezeDate : null;
+        return selectedYearFirstFreeze;
+    }
+
+    @computed get fruittool_getYearOptions() {
+        const years = Object.keys(this.fruittool_climateSummary.data_by_year).filter(year => this.fruittool_climateSummary.data_by_year[year].percentMissing < 25);
+        years.sort((a,b) => b-a);
+        return years;
+    }
+
+    // Fruit tool data download - set parameters
+    @computed get fruit_getAcisParams() {
+        const seasonStart = this.fruit_info[this.getToolName].seasonStart;
+        
+        let elems = [{
+                "name":"gdd",
+                "vN":23,
+                "base":parseInt(this.fruittool_getBase,10),
+                "interval":[0,0,1],
+                "duration":"std",
+                "season_start":seasonStart,
+                "reduce":{"add": "mcnt", "reduce": "sum"},
+            },{
+                "vX":2,"vN":23,"interval":[0,0,1],"duration":"dly" // daily mint
+            }]
+
+            return {
+                    "sid":this.getLocation.sid,
+                    "sdate":"por",
+                    "edate": "por",
+                    "elems":elems
+                }
+        }
+
+    // Fruit tool data download - set parameters
+    @computed get fruit_getAcisParams_tscan() {
+            const seasonStart = this.fruit_info[this.getToolName].seasonStart;
+
+
+            let elems = [{
+                "name":"gdd",
+                "vN":24,
+                "base":parseInt(this.fruittool_getBase,10),
+                "interval":[0,0,1],
+                "duration":"std",
+                "season_start":seasonStart,
+                "reduce":"sum",
+            },{
+                "vX":2,"vN":24,"interval":[0,0,1],"duration":"dly" // daily mint
+            }]
+
+            return {
+                    "sid":this.getLocation.sid,
+                    "sdate":"por",
+                    "edate":"por",
+                    "elems":elems
+                }
+        }
+
+    // data is loading - boolean - to control the spinner
+    @observable fruittool_dataIsLoading = false
+    @action fruittool_setDataIsLoading = (b) => {
+        this.fruittool_dataIsLoading = b;
+    }
+    @computed get fruittool_getDataIsLoading() {
+        return this.fruittool_dataIsLoading;
+    }
+
+    // Fruit tool data download - download data using parameters
+    @action fruittool_downloadData = () => {
+        if (this.fruit_info.hasOwnProperty(this.getToolName)) {
+            const startDate = this.fruit_info[this.getToolName].startDateStr;
+            const gddBase = this.fruittool_getBase;
+    
+            this.fruittool_setDataIsLoading(true);
+            let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.fruit_getAcisParams : this.fruit_getAcisParams_tscan
+            return axios
+                .post('https://data.nrcc.rcc-acis.org/StnData', params)
+                .then(res => {
+                if (res.data.hasOwnProperty('error')) {
+                    this.fruittool_setClimateData(startDate, gddBase, null);
+                    this.fruittool_initClimateSummary()
+                } else {
+                    this.fruittool_setClimateData(startDate, gddBase, res.data.data.slice(0));
+                    this.fruittool_setClimateSummary()
+                }
+                this.fruittool_setDataIsLoading(false);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        }
+    }
+
 
     //////////////////////////////////////////////
     /// TOOL: Weather Grapher
@@ -2156,17 +2604,17 @@ export class AppStore {
             mtd_start,
             date,
             'p_ytd_o':(p_ytd_o==='M' || too_much_missing(p_ytd_n - p_today_adjustment, ytd_days - p_today_adjustment) || parseFloat(p_ytd_o)<0.0) ? 'M' : ((p_ytd_o==='T') ? 'T' : parseFloat(p_ytd_o)).toFixed(2).toString()+'"',
-            'p_ytd_n':(p_ytd_n==='M') ? 'M' : parseInt(p_ytd_n - p_today_adjustment),
+            'p_ytd_n':(p_ytd_n==='M') ? 'M' : parseInt(p_ytd_n - p_today_adjustment, 10),
             'p_std_o':(p_std_o==='M' || too_much_missing(p_std_n - p_today_adjustment, std_days - p_today_adjustment) || parseFloat(p_std_o)<0.0) ? 'M' : ((p_std_o==='T') ? 'T' : parseFloat(p_std_o)).toFixed(2).toString()+'"',
-            'p_std_n':(p_std_n==='M') ? 'M' : parseInt(p_std_n - p_today_adjustment),
+            'p_std_n':(p_std_n==='M') ? 'M' : parseInt(p_std_n - p_today_adjustment, 10),
             'p_mtd_o':(p_mtd_o==='M' || too_much_missing(p_mtd_n - p_today_adjustment, mtd_days - p_today_adjustment) || parseFloat(p_mtd_o)<0.0) ? 'M' : ((p_mtd_o==='T') ? 'T' : parseFloat(p_mtd_o)).toFixed(2).toString()+'"',
-            'p_mtd_n':(p_mtd_n==='M') ? 'M' : parseInt(p_mtd_n - p_today_adjustment),
+            'p_mtd_n':(p_mtd_n==='M') ? 'M' : parseInt(p_mtd_n - p_today_adjustment, 10),
             't_ytd_o':(t_ytd_o==='M' || too_much_missing(t_ytd_n - t_today_adjustment, ytd_days - t_today_adjustment)) ? 'M' : parseFloat(t_ytd_o).toFixed(1).toString()+String.fromCharCode(176)+'F',
-            't_ytd_n':(t_ytd_n==='M') ? 'M' : parseInt(t_ytd_n - t_today_adjustment),
+            't_ytd_n':(t_ytd_n==='M') ? 'M' : parseInt(t_ytd_n - t_today_adjustment, 10),
             't_std_o':(t_std_o==='M' || too_much_missing(t_std_n - t_today_adjustment, std_days - t_today_adjustment)) ? 'M' : parseFloat(t_std_o).toFixed(1).toString()+String.fromCharCode(176)+'F',
-            't_std_n':(t_std_n==='M') ? 'M' : parseInt(t_std_n - t_today_adjustment),
+            't_std_n':(t_std_n==='M') ? 'M' : parseInt(t_std_n - t_today_adjustment, 10),
             't_mtd_o':(t_mtd_o==='M' || too_much_missing(t_mtd_n - t_today_adjustment, mtd_days - t_today_adjustment)) ? 'M' : parseFloat(t_mtd_o).toFixed(1).toString()+String.fromCharCode(176)+'F',
-            't_mtd_n':(t_mtd_n==='M') ? 'M' : parseInt(t_mtd_n - t_today_adjustment),
+            't_mtd_n':(t_mtd_n==='M') ? 'M' : parseInt(t_mtd_n - t_today_adjustment, 10),
         }
         this.explorer_climateSummary = dataObjOut
     }
@@ -2979,7 +3427,7 @@ export class AppStore {
         if (forecastRes !== null) {
             // Calculate hour offset difference between locHrly timezone (-4 or -5) and station local timezone (precalculated in scan_stations.json)
             const stationTzo = this.getLocation.tzo;
-            const locHrlyTzo = parseInt(forecastRes.data.hrlyData[0][0].slice(-6,-3));
+            const locHrlyTzo = parseInt(forecastRes.data.hrlyData[0][0].slice(-6,-3), 10);
             const tzoDiff = locHrlyTzo - stationTzo;
     
             // Combine locHrly data, it will all be considered forecast data by this tool
@@ -2995,7 +3443,7 @@ export class AppStore {
     
             // If forecast data is available, add it to the return object
             if (lastObservedIdx >= 0) {
-                hrlyFcst.slice(lastObservedIdx + 1 + tzoDiff).map(([date, tvar, hvar, wvar]) => {
+                hrlyFcst.slice(lastObservedIdx + 1 + tzoDiff).forEach(([date, tvar, hvar, wvar]) => {
                     // Parse into usable form
                     tvar = (tvar === MISSING) ? MISSING : Math.round(parseFloat(tvar));
                     hvar = (hvar === MISSING || parseFloat(hvar)<0.0 || parseFloat(hvar)>100.0) ? MISSING : Math.round(parseFloat(hvar));

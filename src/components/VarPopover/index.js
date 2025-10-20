@@ -15,15 +15,8 @@ const styles = theme => ({
   },
 });
 
-var app;
-
 @inject('store') @observer
 class VarPopover extends React.Component {
-  constructor(props) {
-    super(props);
-    app = this.props.store.app;
-  }
-
   state = {
     anchorEl: null,
   };

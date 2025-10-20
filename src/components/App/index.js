@@ -70,6 +70,7 @@ class App extends Component {
                     <Route path="/tools/livestock-heat-index" render={(props) => <ToolContents {...props} name={'livestock'} />} />
                     <Route path="/tools/wind-rose" render={(props) => <ToolContents {...props} name={'windrose'} />} />
                     <Route path="/tools/wind-chill-heat-index" render={(props) => <ToolContents {...props} name={'windheat'} />} />
+                    <Route path="/tools/fruit-tool" render={(props) => <ToolContents {...props} name={'fruit-tool'} />} />
                     <Route render={() => <Redirect to="/" />} />
                   </Switch>
                 </GAListener>

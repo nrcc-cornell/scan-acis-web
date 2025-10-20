@@ -1,0 +1,23 @@
+.fruit-table {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  margin-top: 1vw;
+  //margin-left: 10vw;
+  margin-left: auto;
+  margin-right: auto;
+  //display: inline-block;
+  width: 82vw;
+  //min-width: 400px;
+  //max-width: 750px;
+  //height: 40vw;
+  background-color: #fff;
+  text-align: center;
+}
+
+.scrollable {
+  height: 500px;
+  overflow-y: scroll;
+  overflow-x: scroll;
+}
+

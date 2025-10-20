@@ -30,18 +30,8 @@ const styles = theme => ({
   }
 });
 
-var app;
-var history;
-
 @inject('store') @observer
 class WindRoseDoc extends Component {
-
-    constructor(props) {
-        super(props);
-        app = this.props.store.app;
-        history = this.props.history;
-    }
-
     render() {
         const { classes } = this.props;
 

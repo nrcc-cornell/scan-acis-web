@@ -35,6 +35,12 @@ class AboutContents extends Component {
         app.setActivePage(1);
     }
 
+    handleNestedToolClick = (toolName) => {
+      const toolInfo = app.getToolInfo(toolName);
+      toolInfo.onclick();
+      this.props.history.push(toolInfo.url);
+    };
+
     render() {
 
         const { classes } = this.props;
@@ -110,6 +116,27 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                     <Typography component="span" align="justify" paragraph variant="button">
                             Wind Chill & Heat Index
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/wind-heat")}}>
+                              Tool
+                            </Button>
+                            <br/>
+                    </Typography>
+                     <Typography component="span" align="justify" paragraph variant="button">
+                            Pawpaw
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => this.handleNestedToolClick('pawpaw')}>
+                              Tool
+                            </Button>
+                            <br/>
+                    </Typography>
+                     <Typography component="span" align="justify" paragraph variant="button">
+                            Lowbush Blueberry Growth
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => this.handleNestedToolClick('blueberryGrowth')}>
+                              Tool
+                            </Button>
+                            <br/>
+                    </Typography>
+                     <Typography component="span" align="justify" paragraph variant="button">
+                            Lowbush Blueberry Harvest
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => this.handleNestedToolClick('blueberryHarvest')}>
                               Tool
                             </Button>
                             <br/>

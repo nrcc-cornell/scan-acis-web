@@ -16,6 +16,7 @@ class CustomSelector extends Component {
             )}
           </Select>
         </FormControl>
+        {this.props.children}
       </div>
     );
   }

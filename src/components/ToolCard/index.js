@@ -41,12 +41,19 @@ const styles = theme => ({
   }
 });
 
-function ToolCard({ classes, title, description, url, thumbnail, history }) {
+function ToolCard({ classes, title, description, url, thumbnail, history, onclick }) {
+  const handleClick = () => {
+    if (onclick) {
+      onclick();
+    }
+    history.push(url);
+  }
+  
   return (
     <Card className={classes.linkCard}>
       <CardActionArea
         className={classes.cardActionArea}
-        onClick={() => history.push(url)}
+        onClick={handleClick}
       >
         <CardContent className={classes.cardContent}>
           <Typography

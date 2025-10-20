@@ -6,7 +6,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles'
 import green from '@material-ui/core/colors/green';
 import grey from '@material-ui/core/colors/grey'
-import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Hidden from '@material-ui/core/Hidden';
 
@@ -97,7 +96,6 @@ const theme = createTheme({
 })
 
 var app;
-var history;
 
 @inject('store') @observer
 class WindRose extends Component {
@@ -108,7 +106,6 @@ class WindRose extends Component {
         const dmonth = ('0' + (today.getMonth() + 1)).slice(-2)
         const ddate = ('0' + today.getDate()).slice(-2)
         app = this.props.store.app;
-        history = this.props.history;
         app.setToolName('windrose')
         this.state = {
           highChartOptions: { series: null },

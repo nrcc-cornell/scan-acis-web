@@ -105,7 +105,8 @@ class FullWidthTabs extends React.Component {
     this.props.store.app.setActivePage(value);
   };
 
-  handleChangeFromDropdown = (index) => (url) => {
+  handleChangeFromDropdown = (index) => (url, onclick) => {
+    onclick();
     this.props.history.push(url);
     this.props.store.app.setActivePage(index);
   }

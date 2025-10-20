@@ -23,15 +23,8 @@ const styles = theme => ({
   formControl: {},
 });
 
-var app;
-
 @inject('store') @observer
 class CustomCheckboxes extends Component {
-  constructor(props) {
-    super(props);
-    app = this.props.store.app;
-  }
-
   render() {
     const { classes } = this.props;
 

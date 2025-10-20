@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { inject, observer} from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles'
 import Popper from '@material-ui/core/Popper';
 import Grow from '@material-ui/core/Grow';
@@ -31,7 +32,15 @@ const styles = theme => ({
   }
 })
 
+var app;
+
+@inject('store') @observer
 class ToolDropdown extends Component {
+  constructor(props) {
+        super(props);
+        app = this.props.store.app;
+    }
+  
   state = {
     anchorEl: null,
   };
@@ -44,8 +53,8 @@ class ToolDropdown extends Component {
     this.setState({ anchorEl: null });
   };
 
-  handleSelect = (selectedUrl) => {
-    this.props.handleChangeFromDropdown(selectedUrl);
+  handleSelect = (selectedUrl, onclick=() => null) => {
+    this.props.handleChangeFromDropdown(selectedUrl, onclick);
     this.handleClose();
   }
 
@@ -90,6 +99,9 @@ class ToolDropdown extends Component {
                 <MenuItem className={activeTool === '/tools/livestock-heat-index' ? classes.selected : classes.notSelected} onClick={() => this.handleSelect('/tools/livestock-heat-index')}>Livestock Heat Index</MenuItem>
                 <MenuItem className={activeTool === '/tools/wind-rose' ? classes.selected : classes.notSelected} onClick={() => this.handleSelect('/tools/wind-rose')}>Wind Rose Diagram</MenuItem>
                 <MenuItem className={activeTool === '/tools/wind-chill-heat-index' ? classes.selected : classes.notSelected} onClick={() => this.handleSelect('/tools/wind-chill-heat-index')}>Wind Chill & Heat Index</MenuItem>
+                <MenuItem className={(activeTool === '/tools/fruit-tool' && app.getToolName === 'pawpaw') ? classes.selected : classes.notSelected} onClick={() => this.handleSelect('/tools/fruit-tool', () => app.fruittool_handleFruitSelect('pawpaw'))}>Pawpaw</MenuItem>
+                <MenuItem className={(activeTool === '/tools/fruit-tool' && app.getToolName === 'blueberryGrowth') ? classes.selected : classes.notSelected} onClick={() => this.handleSelect('/tools/fruit-tool', () => app.fruittool_handleFruitSelect('blueberryGrowth'))}>Lowbush Blueberry Growth</MenuItem>
+                <MenuItem className={(activeTool === '/tools/fruit-tool' && app.getToolName === 'blueberryHarvest') ? classes.selected : classes.notSelected} onClick={() => this.handleSelect('/tools/fruit-tool', () => app.fruittool_handleFruitSelect('blueberryHarvest'))}>Lowbush Blueberry Harvest</MenuItem>
               </MenuList>
             </Grow>
           )}
