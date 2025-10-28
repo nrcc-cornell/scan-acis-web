@@ -75,7 +75,7 @@ class FruittoolDoc extends Component {
                       <b>d) GDD Base :</b> Enter the base value you would like to use for calculating GDDs. After editing this value, an "Update" button will appear to allow you set this value as the new base.<br/><br/>
                       <b>e) Variety :</b> If present, click the checkboxes to toggle varieties of the selected fruit. This will add/remove horizontal lines on the chart that indicate the amount of GDDs for optimal harvest.<br/><br/>
                       Changing either of these user options will automatically cause the output charts and tables to update with current settings.<br/><br/>
-                      <img className={classes.docImage2} src={userinput} alt="User input for the SCAN/TSCAN Growing Degree Day Calculator" />
+                      <img className={classes.docImage2} src={userinput} alt="User input for the SCAN/TSCAN Fruit Tool" />
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <i>2. Output</i><br/><br/>
@@ -84,7 +84,7 @@ class FruittoolDoc extends Component {
                       <b>a) Green Line : </b> The season-to-date accumulation for the selected year.<br/><br/>
                       <b>b) Purple Line : </b> The average season-to-date accumulation for the entire period of record.<br/><br/>
                       <b>c) Gray Shading : </b> The extreme season-to-date accumulations observed throughout the entire period of record.<br/><br/>
-                      <img className={classes.docImage} src={fruittooloutput} alt="Sample output for the SCAN/TSCAN Growing Degree Day Calculator" /><br/><br/>
+                      <img className={classes.docImage} src={fruittooloutput} alt="Sample output for the SCAN/TSCAN Fruit Tool" /><br/><br/>
                     </Typography>
               </Grid>
             </Grid>

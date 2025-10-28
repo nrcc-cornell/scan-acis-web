@@ -979,7 +979,7 @@ export class AppStore {
 
                 // Make sure the year is in object
                 if (!Object.keys(data_by_year).includes(year)) {
-                    data_by_year[year] = { firstFreezeDate: null, firstFreezeIdx: null, gddObs: [], missing: null };
+                    data_by_year[year] = { firstFreezeDate: null, firstFreezeIdx: null, lastSpringFreezeDate: null, lastSpringFreezeIdx: null, gddObs: [], missing: null };
                 }
     
                 // Parse GDD from ACIS into NaN or float
@@ -1005,6 +1005,11 @@ export class AppStore {
                 if (readyForFirstFreeze && data_by_year[year].firstFreezeDate === null && mint < 32) {
                     data_by_year[year].firstFreezeDate = year + '-' + mmdd;
                     data_by_year[year].firstFreezeIdx = data_by_year[year].gddObs.length;
+                }
+
+                if (!readyForFirstFreeze && mint < 32) {
+                    data_by_year[year].lastSpringFreezeDate = year + '-' + mmdd;
+                    data_by_year[year].lastSpringFreezeIdx = data_by_year[year].gddObs.length;
                 }
 
                 data_by_year[year].gddObs.push(gdd);
@@ -1060,12 +1065,6 @@ export class AppStore {
             })
         });
 
-        // // Change selected year if the currently selected year is missing
-        // if (years_missing.includes(this.fruittool_getSelectedYear)) {
-        //     const years = Object.keys(data_by_year);
-        //     years.sort((a,b) => b-a);
-        //     this.fruittool_setSelectedYear(years[0]);
-        // }
         this.fruittool_climateSummary = {
             summary_data,
             years_missing,
@@ -1078,10 +1077,17 @@ export class AppStore {
     }
     
     @computed get fruittool_getClimateSummary() {
+        const springFreezes = this.fruittool_getLastSpringFreezes;
+        console.log(springFreezes);
         const selectedYear = this.fruittool_selectedYear;
         const selectedYearObs = selectedYear in this.fruittool_climateSummary.data_by_year ? this.fruittool_climateSummary.data_by_year[selectedYear].gddObs : [];
         const dataWithObs = this.fruittool_climateSummary.summary_data.map((summary_obj, i) => {
           const newObj = {...summary_obj};
+          if (springFreezes && newObj.date in springFreezes) {
+            newObj.springFreezes = { num: -springFreezes[newObj.date].length, label: springFreezes[newObj.date].toSorted().join(',\u00A0') };
+          } else {
+            newObj.springFreezes = { num: 0, label: '' };
+          }
           newObj.date = selectedYear + '-' + newObj.date;
           newObj.obs = selectedYearObs.length <= i ? NaN : selectedYearObs[i];
           return newObj;
@@ -1110,10 +1116,10 @@ export class AppStore {
             }],
             blueberryGrowth: [{
                 key: 'flowering',
-                range: [390,599],
+                range: [390,390],
             },{
                 key: 'fruiting',
-                range: [600,Infinity],
+                range: [600,600],
             }],
             blueberryHarvest: [{
                 key: 'optimal',
@@ -1123,6 +1129,7 @@ export class AppStore {
         
         const data = this.fruittool_climateSummary.data_by_year;
         const info = fruitInfo[this.getToolName];
+        const isScatter = this.getToolName === 'blueberryGrowth';
         const years = Object.keys(data);
         years.sort();
         
@@ -1141,7 +1148,9 @@ export class AppStore {
     
                 for (const infoObj of info) {
                     const v = infoObj.range[1] === Infinity ? gddObs.length - 1 : gddObs.findIndex(v => infoObj.range[1] <= v);
-                    if (firstFreezeIdx !== null && (v < 0 || firstFreezeIdx < v)) {
+                    if (isScatter && v >= 0) {
+                        categories[infoObj.key] = v;
+                    } else if (firstFreezeIdx !== null && (v < 0 || firstFreezeIdx < v)) {
                         categories[infoObj.key] = firstFreezeIdx - lastIdx;
                         lastIdx = firstFreezeIdx;
                     } else if (firstFreezeIdx === null && v < 0) {
@@ -1161,6 +1170,7 @@ export class AppStore {
                 isComplete: gddObs.length === 275,
                 isMissing: percentMissing >= 2.5,
                 percentMissing: percentMissing,
+                isScatter,
                 categories
             };
         });
@@ -1169,18 +1179,33 @@ export class AppStore {
         return results.slice(firstToShow);
     }
 
-    @computed get fruittool_getSelectedYearFirstFreeze() {
-        const selectedYear = this.fruittool_selectedYear;
-        const selectedYearFirstFreeze = selectedYear in this.fruittool_climateSummary.data_by_year ? this.fruittool_climateSummary.data_by_year[selectedYear].firstFreezeDate : null;
-        return selectedYearFirstFreeze;
-    }
-
     @computed get fruittool_getYearOptions() {
         const years = Object.keys(this.fruittool_climateSummary.data_by_year).filter(year => this.fruittool_climateSummary.data_by_year[year].percentMissing < 25);
         years.sort((a,b) => b-a);
         return years;
     }
-
+    
+    @computed get fruittool_getSelectedYearFirstFreeze() {
+        const selectedYear = this.fruittool_selectedYear;
+        const selectedYearFirstFreeze = selectedYear in this.fruittool_climateSummary.data_by_year ? this.fruittool_climateSummary.data_by_year[selectedYear].firstFreezeDate : null;
+        return selectedYearFirstFreeze;
+    }
+    
+    @computed get fruittool_getLastSpringFreezes() {
+        const years = this.fruittool_getYearOptions;
+        return years.reduce((acc,y) => {
+            const yearLastSpringFreezeDate = this.fruittool_climateSummary.data_by_year[y].lastSpringFreezeDate;
+            if (yearLastSpringFreezeDate) {
+                const mmdd = yearLastSpringFreezeDate.slice(5);
+                if (!(mmdd in acc)) {
+                    acc[mmdd] = [];
+                }
+                acc[mmdd].push(y)
+            }
+            return acc;
+        }, {});
+    }
+    
     // Fruit tool data download - set parameters
     @computed get fruit_getAcisParams() {
         const seasonStart = this.fruit_info[this.getToolName].seasonStart;
@@ -1217,7 +1242,7 @@ export class AppStore {
                 "interval":[0,0,1],
                 "duration":"std",
                 "season_start":seasonStart,
-                "reduce":"sum",
+                "reduce":{"add": "mcnt", "reduce": "sum"},
             },{
                 "vX":2,"vN":24,"interval":[0,0,1],"duration":"dly" // daily mint
             }]

@@ -3,13 +3,9 @@
   -moz-box-sizing: border-box;
   box-sizing: border-box;
   margin-top: 24px;
-  /* margin-bottom: 16vw; */
   margin-bottom: 75px;
-  //width: 94vw;
-  /* width: 92vw; */
   width: 100%;
-  //min-width: 400px;
-  height: 46vw;
+  height: 75vh;
   background-color: #fff;
 }
 
@@ -17,14 +13,10 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  //padding: 20px;
   margin-top: 0.5vw;
   margin-bottom: 1vw;
-  //margin-left: 10vw;
-  /* width: 94vw; */
   width: 100%;
   height: calc(20px + 1.0vw);
-  //height: 30px;
   background-color: #fff;
   font-size: calc(10px + 0.8vw);
   font-family: Roboto;
@@ -40,18 +32,12 @@
 }
 
 .customized-tooltip-fruittool {
-  //margin-top: 6vw;
-  //font-size: calc(6px + 0.7vw);
   font-family: Roboto;
   line-height: calc(1em + 0.5vw);
   background-color: #ffffff;
   padding: 6px;
   border-color: #000000;
   border: 1px solid;
-}
-
-.tooltip-item {
-//  margin: 2vw;
 }
 
 .legend-item {
@@ -62,13 +48,12 @@
   margin: 0 10 0 0;
 }
 
-//.recharts-cartesian-axis { font-size: calc(10px + 0.2vw); font-family: sans-serif; }
 .recharts-cartesian-axis { font-size: calc(10px + 0.2vw); font-family: Roboto; }
 
 #missing-data-disclaimer-container {
   position: absolute;
-  bottom: 45px;
-  right: 1vw;
+  top: 110px;
+  left: 110px;
   width: 200px;
   background-color: rgb(255,165,165);
   padding: 6px;

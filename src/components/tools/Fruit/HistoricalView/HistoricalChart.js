@@ -15,6 +15,7 @@ import {
   ComposedChart,
   Scatter,
   Rectangle,
+  Dot
 } from 'recharts';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -48,7 +49,7 @@ const FreezeBar = (props) => {
 };
 
 const CustomCell = (props) => {
-  const { x, y, width, height, radius, isMissing, info, categories, firstFreezeIdx, isActive } = props;
+  const { x, y, width, height, radius, isMissing, info, categories, firstFreezeIdx } = props;
   let r = radius;
   if (info.isLast) {
     const catSum = Object.values(categories).reduce((a,b) => a+b, 0);
@@ -58,6 +59,12 @@ const CustomCell = (props) => {
   }
   const fill = info.isActive ? (isMissing ? info.missingColor : info.color) : 'transparent';
   return <Rectangle x={x} y={y} width={width} height={height} radius={r} fill={fill} />;
+};
+
+const CustomDot = (props) => {
+  const { cx, cy, isActive, isMissing, info } = props;
+  const fill = info.isActive ? (isMissing ? info.missingColor : info.color) : 'transparent';
+  return <Dot cx={cx} cy={cy} r={4} fill={fill} />;
 };
 
 @inject('store') @observer
@@ -139,7 +146,8 @@ class HistoricalChart extends Component {
     const { payload, label } = props
     if (!payload || payload.length === 0) return '';
     const freezeObj = payload.find(p => p.name === 'firstFreezeIdx');
-    const freezeDate = (freezeObj && freezeObj.value) ? this.idxToDate(freezeObj.value) : '--'
+    const freezeDate = (freezeObj && freezeObj.value) ? this.idxToDate(freezeObj.value) : '--';
+
     return (
         <div className="customized-tooltip-fruit">
           {
@@ -160,6 +168,8 @@ class HistoricalChart extends Component {
                 let valueDate;
                 if (isNaN(value) || value === 0) {
                   valueDate = '--';
+                } else if (payload.isScatter){
+                  valueDate = this.idxToDate(payload.categories[this.props.chartInfo.dataInfo[catInfoIndex].key]);
                 } else {
                   let prevSum = 0;
                   let valueSum = 0;
@@ -182,13 +192,15 @@ class HistoricalChart extends Component {
               }
             })
           }
-          <React.Fragment>
-            <span className="tooltip-item">
-              <br/>
-              <span style={{ color: 'red' }}>First Frost : </span>
-              <span>{freezeDate}</span>
-            </span>
-          </React.Fragment>
+          {app.getToolName === 'pawpaw' &&
+            <React.Fragment>
+              <span className="tooltip-item">
+                <br/>
+                <span style={{ color: 'red' }}>First Frost : </span>
+                <span>{freezeDate}</span>
+              </span>
+            </React.Fragment>
+          }
         </div>
     )
   }
@@ -226,27 +238,29 @@ class HistoricalChart extends Component {
           );
         })}
 
-        <div
-          key='freeze-bar-item'
-          className="legend-item"
-          align="center"
-          onClick={() => this.onClickLegend('firstFreezeIdx')}
-          style={{ color: this.state.disabled.includes('firstFreezeIdx') ? '#AAA' : FREEZE_BAR_COLOR }}
-        >
-          <Surface width={10} height={10} viewBox="0 0 10 10">
-            <Symbols cx={5} cy={5} type="square" size={100} fill={FREEZE_BAR_COLOR} />
-            {this.state.disabled.includes('firstFreezeIdx') && (
-              <Symbols
-                cx={5}
-                cy={5}
-                type="square"
-                size={25}
-                fill={"#FFF"}
-              />
-            )}
-          </Surface>
-          <span>&nbsp;First Freeze</span>
-        </div>
+        {app.getToolName === 'pawpaw' &&
+          <div
+            key='freeze-bar-item'
+            className="legend-item"
+            align="center"
+            onClick={() => this.onClickLegend('firstFreezeIdx')}
+            style={{ color: this.state.disabled.includes('firstFreezeIdx') ? '#AAA' : FREEZE_BAR_COLOR }}
+          >
+            <Surface width={10} height={10} viewBox="0 0 10 10">
+              <Symbols cx={5} cy={5} type="square" size={100} fill={FREEZE_BAR_COLOR} />
+              {this.state.disabled.includes('firstFreezeIdx') && (
+                <Symbols
+                  cx={5}
+                  cy={5}
+                  type="square"
+                  size={25}
+                  fill={"#FFF"}
+                />
+              )}
+            </Surface>
+            <span>&nbsp;First Freeze</span>
+          </div>
+        }
       </div>
     );
   };
@@ -257,10 +271,26 @@ class HistoricalChart extends Component {
     downloadFilename = downloadFilename.split(' ').join('-');
 
     const fruitSeasonStartMonth = app.fruit_info[app.getToolName].seasonStart[0];
-    const ticks = fruitSeasonStartMonth === 4 ? [0,30,61,91,122,153,183,214,245,275] : [0,31,61,92,123,153,184,215,245];
+    let ticks = fruitSeasonStartMonth === 4 ? [0,30,61,91,122,153,183,214,245,275] : [0,31,61,92,123,153,184,215,245];
 
     const firstToShow = this.props.data.findIndex(d => d.percentMissing < 25);
     const data = this.props.data.slice(firstToShow);
+
+    let lastIdxOnX = ticks[ticks.length - 1];
+    if (app.getToolName.includes('blueberry')) {
+      const lastValues = data.map(d => {
+        if (d.isScatter) {
+          return Math.max(...Object.values(d.categories));
+        } else {
+          return Object.values(d.categories).reduce((a,b) => a+b,0);
+        }
+      });
+      const lastVal = Math.max(...lastValues) + 31;
+      if (lastVal < lastIdxOnX) {
+        lastIdxOnX = lastVal;
+      }
+      ticks = ticks.filter(t => t <= lastIdxOnX);
+    }
     return (
       <div id="fruit-chart">
         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
@@ -298,7 +328,7 @@ class HistoricalChart extends Component {
                     type="number"
                     tickFormatter={this.idxToDate}
                     ticks={ticks}
-                    domain={[ticks[0],ticks[ticks.length - 1]]}
+                    domain={[ticks[0],lastIdxOnX]}
                     label={this.createXAxisLabel(data)}
                   />
                   <YAxis
@@ -315,7 +345,7 @@ class HistoricalChart extends Component {
                     />
                   </YAxis>
 
-                  {this.state.disabled && !this.state.disabled.includes('firstFreezeIdx') &&
+                  {app.getToolName === 'pawpaw' && this.state.disabled && !this.state.disabled.includes('firstFreezeIdx') &&
                     <Scatter dataKey="firstFreezeIdx" shape={<FreezeBar />} />
                   }
 
@@ -323,16 +353,27 @@ class HistoricalChart extends Component {
                     this.props.chartInfo.dataInfo
                       .map((info, index) => {
                         const isActive = !this.state.disabled.includes(info.key);
-                        return (
-                          <Bar
-                            name={info.label}
-                            stackId="a"
-                            key={info.key}
-                            dataKey={(d) => d['categories'][info.key]}
-                            radius={this.getRadius(index)}
-                            shape={<CustomCell info={{...info, isActive, isLast: index === this.props.chartInfo.dataInfo.length - 1}} />}
-                          ></Bar>
-                        );
+                        if (app.getToolName === 'blueberryGrowth') {
+                          return (
+                            <Scatter
+                              name={info.label}
+                              key={info.key}
+                              dataKey={(d) => d['categories'][info.key]}
+                              shape={<CustomDot info={{...info, isActive}} />}
+                            />
+                          );
+                        } else {
+                          return (
+                            <Bar
+                              name={info.label}
+                              stackId="a"
+                              key={info.key}
+                              dataKey={(d) => d['categories'][info.key]}
+                              radius={this.getRadius(index)}
+                              shape={<CustomCell info={{...info, isActive, isLast: index === this.props.chartInfo.dataInfo.length - 1}} />}
+                            ></Bar>
+                          );
+                        }
                       })
                   }
 

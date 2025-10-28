@@ -189,7 +189,7 @@ class CurrentView extends Component {
       return (
         <ViewBase
           options={options}
-          chart={<CurrentChart vertLines={this.state[app.getToolName].filter(obj => obj.checked).toSorted((a,b) => b.gdds - a.gdds)} />}
+          chart={<CurrentChart horizontalLines={this.state[app.getToolName].filter(obj => obj.checked).toSorted((a,b) => b.gdds - a.gdds)} />}
           table={<CurrentTable />}
         />
       );
@@ -197,4 +197,3 @@ class CurrentView extends Component {
 }
 
 export default CurrentView;
-

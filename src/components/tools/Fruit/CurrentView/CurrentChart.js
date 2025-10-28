@@ -1,13 +1,24 @@
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import moment from 'moment';
-import { ResponsiveContainer, ComposedChart, Line, Area, XAxis, YAxis, Surface, Symbols, CartesianGrid, Tooltip, Legend, ReferenceLine, Label } from 'recharts';
+import { ResponsiveContainer, ComposedChart, Line, Area, XAxis, YAxis, Surface, Symbols, CartesianGrid, Tooltip, Legend, ReferenceLine, Label, ReferenceArea, Bar, LabelList } from 'recharts';
 
 //Components
 import FruitChartTitle from '../FruitChartTitle'
 
 // Styles
 import '../../../../styles/FruitChart.css';
+
+const Disclaimer = (props) => {
+  const { isMissingData } = props;
+  return (
+    <foreignObject x="70" y="8" width="200" height="50">
+      <div style={{ backgroundColor: 'rgb(255,165,165)', border: '1px solid rgb(255,72,72)', borderRadius: '5px', padding: '5px', width: '100%', height: '100%', boxSizing: 'border-box', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <p style={{ margin: 0, fontSize: '12px' }}><b>WARNING</b>: This year is missing ~{Math.round(isMissingData.percentMissing)}% ({isMissingData.missing} days) of daily data.</p>
+      </div>
+    </foreignObject>
+  );
+}
 
 var app;
 
@@ -75,12 +86,13 @@ class CurrentChart extends Component {
                 if (dataKey!=='min_por') {
                   return (
                     <span
+                      key={dataKey}
                       className="legend-item-wxgraph"
                       onClick={() => this.onClickLegend(dataKey)}
                       align="center"
                       style={style}
                     >
-                      <Surface width={10} height={10} viewBox="0 0 10 10">
+                      <Surface width={10} height={10}>
                         <Symbols cx={5} cy={5} type="square" size={100} fill={color} />
                         {active && (
                           <Symbols
@@ -125,6 +137,9 @@ class CurrentChart extends Component {
 
     renderCustomTooltip = (props) => {
       const { payload, label } = props
+      console.log(payload);
+      const springFreezesPayload = payload.find(p => ('springFreezes' in p.payload));
+      console.log(springFreezesPayload);
       return (
           <div className="customized-tooltip-fruittool">
             {
@@ -172,6 +187,14 @@ class CurrentChart extends Component {
                     }
                 })
             }
+
+            {app.getToolName === 'blueberryGrowth' && springFreezesPayload && springFreezesPayload.payload.springFreezes.num !== 0 && (
+              <span className="tooltip-item">
+                <br/>
+                <span>Date of Last Spring Freeze for : </span>
+                <span>{springFreezesPayload.payload.springFreezes.label}</span>
+              </span>
+            )}
           </div>
       )
     }
@@ -182,11 +205,26 @@ class CurrentChart extends Component {
 
     render() {
         let chartInfo_fruit = this.getChartInfo('fruit')
-        const data = app.fruittool_getClimateSummary;
+        let data = app.fruittool_getClimateSummary;
+
+        if (app.getToolName !== 'pawpaw') {
+          const highestLineGdds = Math.max(...this.props.horizontalLines.map(vl => vl.gdds));
+          const minPOR = data.findIndex(d => d.min_por >= highestLineGdds);
+          const obs = data.findIndex(d => d.obs >= highestLineGdds);
+          if (obs > 0 && minPOR > 0) {
+            const endIdx = Math.max(minPOR, obs) + 15;
+            if (endIdx < data.length - 1) {
+              data = data.slice(0,endIdx);
+            }
+          }
+        }
+
         const isMissingData = app.fruittool_selectedYearMissing;
+        const firstFallFreeze = app.fruittool_getSelectedYearFirstFreeze;
         return (
             <div id="fruit-chart">
             <FruitChartTitle/>
+
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={data}>
                 {chartInfo_fruit.dataInfo && this.state.disabled &&
@@ -219,7 +257,27 @@ class CurrentChart extends Component {
                         }
                       )
                 }
-                <CartesianGrid stroke="#ccc" />
+
+                {app.getToolName === 'blueberryGrowth' ? (
+                  [
+                    <CartesianGrid
+                      stroke="#ccc"
+                      horizontalCoordinatesGenerator={(props) => [props.offset.top]}
+                      verticalCoordinatesGenerator={(props) => [props.width - props.offset.right]}
+                    />,
+                    <YAxis yAxisId={1} domain={[-10,0]} hide={true} />,
+                    <Bar
+                      yAxisId={1}
+                      dataKey={(d) => d['springFreezes']['num']}
+                      radius={[5,5,0,0]}
+                      fill='#5b7ff7'
+                    >
+                      <LabelList dataKey={(d) => d['springFreezes']['label']} position="insideEnd" angle={-90} fill='white' style={{ fontWeight: 'bold', fontSize: '14px' }} />
+                    </Bar>
+                  ]
+                ) : (
+                  <CartesianGrid stroke="#ccc" />
+                )}
                 <Tooltip
                     labelFormatter={(name) => moment(name,"YYYY-MM-DD").format("MMM D, YYYY")}
                     content={this.renderCustomTooltip}
@@ -237,27 +295,31 @@ class CurrentChart extends Component {
                     content={this.renderCustomizedLegend}
                   />
                 }
-                <XAxis dataKey="date" tickFormatter={this.formatXAxisForDate} label={{ value: "Date in "+app.fruittool_getSelectedYear, position: "insideBottom", dy: 10}} />
+                <XAxis xAxisId={0} dataKey="date" tickFormatter={this.formatXAxisForDate} label={{ value: "Date in "+app.fruittool_getSelectedYear, position: "insideBottom", dy: 10}} />
                 <YAxis label={{ value: 'Acc GDD (base '+app.fruittool_getBase+'°F)', angle: -90, position:'insideLeft', dy: 60, offset: 10 }} />
-                <ReferenceLine x={app.fruittool_getSelectedYearFirstFreeze} stroke="#176fb2" strokeDasharray="3 3">
+                
+                <ReferenceLine x={firstFallFreeze} stroke="#176fb2" strokeDasharray="6 4" strokeWidth={2}>
                   <Label value="First Freeze" angle={-90} position="insideTopRight" offset={14} style={{ fill: '#176fb2' }} />
                 </ReferenceLine>
+                {firstFallFreeze &&
+                  <ReferenceArea ifOverflow='hidden' x1={firstFallFreeze} x2={app.fruittool_getSelectedYear + '-12-31'} y1={0} y2={100000} fill="#176fb2" fillOpacity={0.1} strokeOpacity={0} />
+                }
 
-                {this.props.vertLines.map(({ label, gdds }, i) =>
+                {/* {app.getToolName === 'blueberryGrowth' && app.fruittool_getLastSpringFreezes.map(([x,year]) => (
+                  <ReferenceLine x={x} stroke="#176fb2" strokeDasharray="3 3">
+                    <Label value={year} angle={-90} position="insideTopRight" offset={14} style={{ fill: '#176fb2' }} />
+                  </ReferenceLine>
+                ))} */}
+
+                {this.props.horizontalLines.map(({ label, gdds }, i) =>
                   <ReferenceLine y={gdds} stroke="#5e6c77ff" strokeDasharray="3 3" label={(v) => this.renderCustomLabel(v, label, i % 2 === 1)}/>
                 )}
 
+                {isMissingData.missing > 10 &&
+                  <ReferenceArea shape={<Disclaimer isMissingData={isMissingData} />} />
+                }
               </ComposedChart>
             </ResponsiveContainer>
-            
-            {isMissingData.missing > 10 &&
-              <div id='missing-data-disclaimer-container'>
-                <span id='missing-data-disclaimer'>
-                  WARNING: This year is missing ~{Math.round(isMissingData.percentMissing)}% ({isMissingData.missing} days) of daily data.
-                </span>
-              </div>
-            }
-
             </div>
         );
 
