@@ -137,9 +137,7 @@ class CurrentChart extends Component {
 
     renderCustomTooltip = (props) => {
       const { payload, label } = props
-      console.log(payload);
       const springFreezesPayload = payload.find(p => ('springFreezes' in p.payload));
-      console.log(springFreezesPayload);
       return (
           <div className="customized-tooltip-fruittool">
             {
@@ -219,6 +217,8 @@ class CurrentChart extends Component {
           }
         }
 
+        console.log(JSON.parse(JSON.stringify(data)));
+
         const isMissingData = app.fruittool_selectedYearMissing;
         const firstFallFreeze = app.fruittool_getSelectedYearFirstFreeze;
         return (
@@ -267,6 +267,7 @@ class CurrentChart extends Component {
                     />,
                     <YAxis yAxisId={1} domain={[-10,0]} hide={true} />,
                     <Bar
+                      isAnimationActive={false}
                       yAxisId={1}
                       dataKey={(d) => d['springFreezes']['num']}
                       radius={[5,5,0,0]}

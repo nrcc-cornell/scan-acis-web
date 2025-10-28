@@ -1078,7 +1078,6 @@ export class AppStore {
     
     @computed get fruittool_getClimateSummary() {
         const springFreezes = this.fruittool_getLastSpringFreezes;
-        console.log(springFreezes);
         const selectedYear = this.fruittool_selectedYear;
         const selectedYearObs = selectedYear in this.fruittool_climateSummary.data_by_year ? this.fruittool_climateSummary.data_by_year[selectedYear].gddObs : [];
         const dataWithObs = this.fruittool_climateSummary.summary_data.map((summary_obj, i) => {
