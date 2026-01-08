@@ -2,7 +2,6 @@
   "name": "nrcc-scan-acis",
   "version": "1.2.3",
   "private": true,
-  "homepage": "https://pages.github.coecis.cornell.edu/be99/scan-temp/",
   "devDependencies": {
     "custom-react-scripts": "0.2.2",
     "gh-pages": "^2.0.1"
