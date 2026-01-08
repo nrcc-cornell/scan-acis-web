@@ -179,6 +179,7 @@ class HistoricalView extends Component {
                 for (prop in t) {
                     filteredArr = []
                     if (prop!=='idx_type' && Object.prototype.hasOwnProperty.call(t, prop)) {
+                        // eslint-disable-next-line
                         filteredArr = heatIdxHourly_byYear[iyr]['idx'].filter(v => v>=t[prop][0] && v<t[prop][1])
                         outObject[prop] = filteredArr.length
                     }
@@ -246,6 +247,7 @@ class HistoricalView extends Component {
                 for (prop in t) {
                     filteredArr = []
                     if (prop!=='idx_type' && Object.prototype.hasOwnProperty.call(t, prop)) {
+                        // eslint-disable-next-line
                         filteredArr = heatIdxDaily_byYear[iyr]['idx'].filter(v => v>=t[prop][0] && v<t[prop][1])
                         outObject[prop] = filteredArr.length
                     }

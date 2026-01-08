@@ -1027,7 +1027,7 @@ export class AppStore {
         datesArray.sort();
 
         
-        const years_included = Array.from({ length: periodLen }, (_, i) => parseInt(this.latestSelectableYear) - i - 1).filter(y => !years_missing.includes(y))
+        const years_included = Array.from({ length: periodLen }, (_, i) => parseInt(this.latestSelectableYear, 10) - i - 1).filter(y => !years_missing.includes(y))
         const summary_data = [];
         datesArray.forEach(function (d) {
             // skip until seasonStart

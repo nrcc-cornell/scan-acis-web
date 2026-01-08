@@ -62,7 +62,7 @@ const CustomCell = (props) => {
 };
 
 const CustomDot = (props) => {
-  const { cx, cy, isActive, isMissing, info } = props;
+  const { cx, cy, isMissing, info } = props;
   const fill = info.isActive ? (isMissing ? info.missingColor : info.color) : 'transparent';
   return <Dot cx={cx} cy={cy} r={4} fill={fill} />;
 };

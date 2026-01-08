@@ -29,3 +29,8 @@ app-store.js.*
 *.old
 *.pyc
 /utils/scan_stations*
+
+/bu-*
+/xnode_*
+base.env
+cf_project_deployment.sh

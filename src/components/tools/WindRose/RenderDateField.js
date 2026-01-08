@@ -40,6 +40,7 @@ export default function RenderDateField(props) {
                         </InputAdornment>
                     ),
                 }}
+                // eslint-disable-next-line
                 inputProps={{style:{border:"none",fontFamily:"Roboto"}}}
             />
             {showDatepicker &&
