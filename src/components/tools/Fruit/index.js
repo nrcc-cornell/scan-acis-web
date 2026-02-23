@@ -156,7 +156,7 @@ class FruitTool extends Component {
     render() {
       let options;
       if (this.state.tooltype==='current') {
-        if (parseInt(app.fruittool_getYearOptions[0]) < parseInt(app.fruittool_selectedYear)) {
+        if (parseInt(app.fruittool_getYearOptions[0], 10) < parseInt(app.fruittool_selectedYear, 10)) {
           app.fruittool_setSelectedYear(app.fruittool_getYearOptions[0]);
         }
   
