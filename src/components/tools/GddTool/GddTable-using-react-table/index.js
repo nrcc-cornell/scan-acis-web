@@ -44,8 +44,8 @@ class GddTable extends Component {
         let columns = [];
         columns.push({Header:'Date', accessor:'date', sortable:true})
         columns.push({Header:'Observed', accessor:'obs', sortable:false})
-        columns.push({Header:'15-yr ave', accessor:'recent', sortable:false})
-        columns.push({Header:'Period ave', accessor:'ave', sortable:false})
+        columns.push({Header:'15-yr average', accessor:'recent', sortable:false})
+        columns.push({Header:'Period average', accessor:'ave', sortable:false})
         columns.push({Header:'Period min', accessor:'min_por', sortable:false})
         columns.push({Header:'Period max', accessor:'max_por', sortable:false})
 

@@ -58,20 +58,20 @@ const DisplaySoilMoistureChart = ({data,stnName}) => {
               crosshairs: { width:1, color:"#ff0000", snap:true }},
           credits: { text:"Powered by ACIS", href:"https://www.rcc-acis.org/", color:"#000000" },
           xAxis: { type: 'datetime', gridLineWidth: 1, crosshair: true, startOnTick: true, endOnTick: false, labels: { align: 'center', x: 0, y: 20 },
-                     dateTimeLabelFormats:{ day:'%d %b', week:'%d %b', month:'%b<br/>%Y', year:'%Y' },
-                 },
+                      dateTimeLabelFormats:{ day:'%d %b', week:'%d %b', month:'%b<br/>%Y', year:'%Y' },
+                  },
           yAxis: {
               title:{ text:"Soil Moisture (%)", style:{"font-size":"14px", color:"#000000"}},
             },
           series: [{
             name:'Soil Moisture (2in)',
             type: 'line',
-            color: '#134960',
+            color: '#33C2FF',
             data: createSeries(data,1),
           },{
             name:'Soil Moisture (4in)',
             type: 'line',
-            color: '#1A6180',
+            color: '#2DAADF',
             data: createSeries(data,2),
           },{
             name:'Soil Moisture (8in)',
@@ -81,12 +81,12 @@ const DisplaySoilMoistureChart = ({data,stnName}) => {
           },{
             name:'Soil Moisture (20in)',
             type: 'line',
-            color: '#2DAADF',
+            color: '#1A6180',
             data: createSeries(data,4),
           },{
             name:'Soil Moisture (40in)',
             type: 'line',
-            color: '#33C2FF',
+            color: '#134960',
             data: createSeries(data,5),
           }]
         }

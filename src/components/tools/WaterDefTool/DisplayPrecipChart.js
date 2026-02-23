@@ -66,7 +66,7 @@ const DisplayPrecipChart = ({data,stnName}) => {
           series: [{
             name:'Precipitation',
             type: 'column',
-            color: 'green',
+            color: '#82ca9d',
             data: createSeries(data,1),
           }]
         }

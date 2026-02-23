@@ -9,11 +9,12 @@
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
-  margin-top: 0.5vw;
-  margin-bottom: 0.5vw;
-  width: 99%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.7vw;
+  margin-bottom: 0.7vw;
   height: calc(20px + 1.0vw);
-  background-color: #fff;
   font-size: calc(10px + 0.8vw);
   font-family: Roboto;
   line-height: calc(1em + 0.5vw);
@@ -44,7 +45,7 @@
   margin: 0 10 0 0;
 }
 
-.recharts-cartesian-axis { font-size: calc(10px + 0.2vw); font-family: sans-serif; }
+.recharts-cartesian-axis { font-size: calc(10px + 0.2vw); font-family: "Roboto",Helvetica,sans-serif; }
 
 .isHidden {
   display: none;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
-import { Typography, Grid } from '@material-ui/core';
+import { Grid, Button } from '@material-ui/core';
 
 // Components
 import CurrentView from './CurrentView'
@@ -20,7 +20,8 @@ class WindHeat extends Component {
         app = this.props.store.app;
         app.setToolName('windheat')
         this.state = {
-            tooltype: 'current'
+            tooltype: 'current',
+            showDocs: false
         }
     }
 
@@ -30,17 +31,23 @@ class WindHeat extends Component {
         })
     }
 
+    handleToggleDocs = () => {
+        this.setState({
+            showDocs: !this.state.showDocs
+        })
+    }
+
     render() {
         return (
             <div>
                 <Grid container direction="column" justifyContent="flex-start" alignItems="center" spacing={3}>
-                    <Grid item>
+                    <Grid item xs={12}>
                         <ToolTypeSelect
                             value={this.state.tooltype}
                             onchange={this.handleChangeTooltype}
                         />
                     </Grid>
-                    <Grid item>
+                    <Grid item xs={12} style={{ width: '100%' }}>
                         {this.state.tooltype==='current' &&
                             <CurrentView
                                 station={this.props.station}
@@ -56,19 +63,20 @@ class WindHeat extends Component {
                             />
                         }
                     </Grid>
-
-                    <div className="about-contents">
-                        <NwsAlerts
-                            station={this.props.station}
-                            stnname={this.props.stnname}
-                            stncoords={this.props.stncoords}
-                        />
-
-                        <Typography align="justify" paragraph variant="body1">
-                            <WindHeatDoc />
-                        </Typography>
-                    </div>
                 </Grid>
+
+                <NwsAlerts
+                    station={this.props.station}
+                    stnname={this.props.stnname}
+                    stncoords={this.props.stncoords}
+                />
+
+                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '12px' }}>
+                    <Button variant={this.state.showDocs ? "outlined" : "contained"} color="primary" onClick={this.handleToggleDocs} style={{ color: this.state.showDocs ? 'rgb(76, 175, 80)' : "white" }}>
+                        {this.state.showDocs ? 'Hide' : 'Show'} Documentation and Tutorial
+                    </Button>
+                </div>
+                {this.state.showDocs ? <WindHeatDoc /> : ''}
             </div>
         )
     }

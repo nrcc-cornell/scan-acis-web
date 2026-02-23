@@ -135,14 +135,14 @@ class WindHeatCharts extends Component {
                     />
                     {this.generateSplitLine(obsFcstLinePosition)}
                     <ReferenceLine y={0} label={{position: "left", value:"0 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="black" isFront={true} />
-                    <ReferenceLine y={-10} label={{position: "left", value:"-10 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#A6D5FF" isFront={true} />
-                    <ReferenceLine y={-10} label={{position: "insideBottomLeft", value:" Alert ", offset:0, fontFamily:"Roboto"}} stroke="#A6D5FF" isFront={true} />
-                    <ReferenceLine y={-20} label={{position: "left", value:"-20 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#5B73C2" isFront={true} />
-                    <ReferenceLine y={-20} label={{position: "insideBottomLeft", value:" Danger ", offset:0, fontFamily:"Roboto"}} stroke="#5B73C2" isFront={true} />
-                    <ReferenceLine y={-35} label={{position: "left", value:"-35 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#613684" isFront={true} />
-                    <ReferenceLine y={-35} label={{position: "insideBottomLeft", value:" Extreme Danger ", offset:0, fontFamily:"Roboto"}} stroke="#613684" isFront={true} />
-                    <ReferenceLine y={-50} label={{position: "left", value:"-50 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#4A005A" isFront={true} />
-                    <ReferenceLine y={-50} label={{position: "insideBottomLeft", value:" Emergency ", offset:0, fontFamily:"Roboto"}} stroke="#4A005A" isFront={true} />
+                    <ReferenceLine y={-10} label={{position: "left", value:"-10 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#33C2FF" isFront={true} />
+                    <ReferenceLine y={-10} label={{position: "insideBottomLeft", value:" Alert ", offset:0, fontFamily:"Roboto"}} stroke="#33C2FF" isFront={true} />
+                    <ReferenceLine y={-20} label={{position: "left", value:"-20 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#2692BF" isFront={true} />
+                    <ReferenceLine y={-20} label={{position: "insideBottomLeft", value:" Danger ", offset:0, fontFamily:"Roboto"}} stroke="#2692BF" isFront={true} />
+                    <ReferenceLine y={-35} label={{position: "left", value:"-35 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#1A6180" isFront={true} />
+                    <ReferenceLine y={-35} label={{position: "insideBottomLeft", value:" Extreme Danger ", offset:0, fontFamily:"Roboto"}} stroke="#2692BF" isFront={true} />
+                    <ReferenceLine y={-50} label={{position: "left", value:"-50 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#134960" isFront={true} />
+                    <ReferenceLine y={-50} label={{position: "insideBottomLeft", value:" Emergency ", offset:0, fontFamily:"Roboto"}} stroke="#134960" isFront={true} />
                     <Area type='monotone' name={'Wind Chill'} dataKey='windchill' stroke='#D3D3D3' fill='#D3D3D3'/>
                     <Area type='monotone' name={'Wind Chill Forecast'} dataKey='fcstWindchill' stroke='#D3D3D3' fill='#D3D3D3'/>
                   </AreaChart>
@@ -204,8 +204,8 @@ class WindHeatCharts extends Component {
                     content={renderCustomTooltip}
                   />
                   {this.generateSplitLine(obsFcstLinePosition, false)}
-                  <Line type='monotone' dot={false} name={app.windheat_getVarLabels['airtemp_label']} dataKey='avgt' stroke='#8884d8' fill='#8884d8' />
-                  <Line type='monotone' dot={false} name={app.windheat_getVarLabels['airtemp_label'] + ' Forecast'} dataKey='fcstAvgt' stroke='#8884d8' fill='#8884d8' strokeDasharray="5 5" />
+                  <Line type='monotone' dot={false} name={app.windheat_getVarLabels['airtemp_label']} dataKey='avgt' stroke='#C70039' fill='#C70039' />
+                  <Line type='monotone' dot={false} name={app.windheat_getVarLabels['airtemp_label'] + ' Forecast'} dataKey='fcstAvgt' stroke='#C70039' fill='#C70039' strokeDasharray="5 5" />
                 </LineChart>
               </ResponsiveContainer>
             </Grid>
@@ -269,8 +269,8 @@ class WindHeatCharts extends Component {
                         content={renderCustomTooltip}
                       />
                       {this.generateSplitLine(obsFcstLinePosition, false)}
-                      <Line type='monotone' dot={false} name={app.windheat_getVarLabels['wind_label']} dataKey='wind' stroke='#d88484ff' fill='#d88484ff' />
-                      <Line type='monotone' dot={false} name={app.windheat_getVarLabels['wind_label'] + ' Forecast'} dataKey='fcstWind' stroke='#d88484ff' fill='#d88484ff' strokeDasharray="5 5" />
+                      <Line type='monotone' dot={false} name={app.windheat_getVarLabels['wind_label']} dataKey='wind' stroke='#2692BF' fill='#2692BF' />
+                      <Line type='monotone' dot={false} name={app.windheat_getVarLabels['wind_label'] + ' Forecast'} dataKey='fcstWind' stroke='#2692BF' fill='#2692BF' strokeDasharray="5 5" />
                     </LineChart>
                   </ResponsiveContainer>
                 </Grid>

@@ -63,8 +63,8 @@ class CurrentChart extends Component {
                 'dataInfo': [
                     {'key':'min_por','label':'Period extremes','color':'#342E37'},
                     {'key':'max_minus_min','label':'Period extremes','color':'#342E37'},
-                    {'key':'obs','label':'Season to date','color':'green'},
-                    {'key':'ave','label':'Period ave','color':'purple'},
+                    {'key':'obs','label':'Season to date','color':'#82ca9d'},
+                    {'key':'ave','label':'Period average','color':'#C70039'},
                 ]
             }
         } else {
@@ -217,8 +217,6 @@ class CurrentChart extends Component {
           }
         }
 
-        console.log(JSON.parse(JSON.stringify(data)));
-
         const isMissingData = app.fruittool_selectedYearMissing;
         const firstFallFreeze = app.fruittool_getSelectedYearFirstFreeze;
         return (
@@ -271,9 +269,9 @@ class CurrentChart extends Component {
                       yAxisId={1}
                       dataKey={(d) => d['springFreezes']['num']}
                       radius={[5,5,0,0]}
-                      fill='#5b7ff7'
+                      fill='#33C2FF'
                     >
-                      <LabelList dataKey={(d) => d['springFreezes']['label']} position="insideEnd" angle={-90} fill='white' style={{ fontWeight: 'bold', fontSize: '14px' }} />
+                      <LabelList dataKey={(d) => d['springFreezes']['label']} position="insideEnd" angle={-90} fill='#1A6180' style={{ fontWeight: 'bold', fontSize: '12px' }} />
                     </Bar>
                   ]
                 ) : (
@@ -299,11 +297,11 @@ class CurrentChart extends Component {
                 <XAxis xAxisId={0} dataKey="date" tickFormatter={this.formatXAxisForDate} label={{ value: "Date in "+app.fruittool_getSelectedYear, position: "insideBottom", dy: 10}} />
                 <YAxis label={{ value: 'Acc GDD (base '+app.fruittool_getBase+'°F)', angle: -90, position:'insideLeft', dy: 60, offset: 10 }} />
                 
-                <ReferenceLine x={firstFallFreeze} stroke="#176fb2" strokeDasharray="6 4" strokeWidth={2}>
-                  <Label value="First Freeze" angle={-90} position="insideTopRight" offset={14} style={{ fill: '#176fb2' }} />
+                <ReferenceLine x={firstFallFreeze} stroke="#2692BF" strokeDasharray="6 4" strokeWidth={2}>
+                  <Label value="First Freeze" angle={-90} position="insideTopRight" offset={14} style={{ fill: '#2692BF' }} />
                 </ReferenceLine>
                 {firstFallFreeze &&
-                  <ReferenceArea ifOverflow='hidden' x1={firstFallFreeze} x2={app.fruittool_getSelectedYear + '-12-31'} y1={0} y2={100000} fill="#176fb2" fillOpacity={0.1} strokeOpacity={0} />
+                  <ReferenceArea ifOverflow='hidden' x1={firstFallFreeze} x2={app.fruittool_getSelectedYear + '-12-31'} y1={0} y2={100000} fill="#2692BF" fillOpacity={0.1} strokeOpacity={0} />
                 }
 
                 {/* {app.getToolName === 'blueberryGrowth' && app.fruittool_getLastSpringFreezes.map(([x,year]) => (

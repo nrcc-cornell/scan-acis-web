@@ -1,0 +1,7 @@
+.next-button {
+    background-color: rgba(0,0,0,0.15) !important;
+}
+
+.next-button:hover {
+    background-color: rgba(0,0,0,0.3)  !important;
+}

@@ -419,20 +419,20 @@ class HistoricalView extends Component {
             return {
                 'typeLabel':'Wind Chill',
                 'dataInfo': [
-                    {'key':'emergency','label':'Emergency','color':'#4A005A','missingColor': '#1F1F1F'},
-                    {'key':'extreme_danger','label':'Extreme Danger','color':'#613684','missingColor': '#434343'},
-                    {'key':'danger','label':'Danger','color':'#5B73C2','missingColor': '#676767'},
-                    {'key':'alert','label':'Alert','color':'#A6D5FF','missingColor': '#AFAFAF'},
+                    {'key':'emergency','label':'Emergency','color':'#134960','missingColor': '#1F1F1F'},
+                    {'key':'extreme_danger','label':'Extreme Danger','color':'#1A6180','missingColor': '#434343'},
+                    {'key':'danger','label':'Danger','color':'#2692BF','missingColor': '#676767'},
+                    {'key':'alert','label':'Alert','color':'#33C2FF','missingColor': '#AFAFAF'},
                 ]
             }
         } else if (type==='heatindex') {
             return {
                 'typeLabel':'Heat Index',
                 'dataInfo': [
-                    {'key':'extreme_danger','label':'Extreme Danger','color':'#CC0003','missingColor': '#1F1F1F'},
-                    {'key':'danger','label':'Danger','color':'#FB6600','missingColor': '#434343'},
-                    {'key':'extreme_caution','label':'Extreme Caution','color':'#FDD015','missingColor': '#676767'},
-                    {'key':'caution','label':'Caution','color':'#FFFF99','missingColor': '#AFAFAF'},
+                    {'key':'extreme_danger','label':'Extreme Danger','color':'#900C3F','missingColor': '#1F1F1F'},
+                    {'key':'danger','label':'Danger','color':'#C70039','missingColor': '#434343'},
+                    {'key':'extreme_caution','label':'Extreme Caution','color':'#FF5733','missingColor': '#676767'},
+                    {'key':'caution','label':'Caution','color':'#FFC300','missingColor': '#AFAFAF'},
                 ]
             }
         } else {

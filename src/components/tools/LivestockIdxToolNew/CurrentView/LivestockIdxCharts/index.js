@@ -144,14 +144,14 @@ class LivestockIdxCharts extends Component {
           <Tooltip
             content={renderCustomTooltip}
           />
-          <ReferenceLine y={40} label={{position: "left", value:"40 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="black" isFront={true} />
-          <ReferenceLine y={40} label={{position: "insideBottomLeft", value:" Normal ", offset:0,fontFamily:"Roboto"}} stroke="black" isFront={true} />
-          <ReferenceLine y={90} label={{position: "left", value:"90 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="yellow" isFront={true} />
-          <ReferenceLine y={90} label={{position: "insideBottomLeft", value:" Alert ", offset:0, fontFamily:"Roboto"}} stroke="yellow" isFront={true} />
-          <ReferenceLine y={110} label={{position: "left", value:"110 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="orange" isFront={true} />
-          <ReferenceLine y={110} label={{position: "insideBottomLeft", value:" Danger ", offset:0, fontFamily:"Roboto"}} stroke="orange" isFront={true} />
-          <ReferenceLine y={130} label={{position: "left", value:"130 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="red" isFront={true} />
-          <ReferenceLine y={130} label={{position: "insideBottomLeft", value:" Emergency ", offset:0, fontFamily:"Roboto"}} stroke="red" isFront={true} />
+          <ReferenceLine y={40} label={{position: "left", value:"40 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#342E37" isFront={true} />
+          <ReferenceLine y={40} label={{position: "insideBottomLeft", value:" Normal ", offset:0,fontFamily:"Roboto"}} stroke="#342E37" isFront={true} />
+          <ReferenceLine y={90} label={{position: "left", value:"90 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#FFC300" isFront={true} />
+          <ReferenceLine y={90} label={{position: "insideBottomLeft", value:" Alert ", offset:0, fontFamily:"Roboto"}} stroke="#FFC300" isFront={true} />
+          <ReferenceLine y={110} label={{position: "left", value:"110 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#FF5733" isFront={true} />
+          <ReferenceLine y={110} label={{position: "insideBottomLeft", value:" Danger ", offset:0, fontFamily:"Roboto"}} stroke="#FF5733" isFront={true} />
+          <ReferenceLine y={130} label={{position: "left", value:"130 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#C70039" isFront={true} />
+          <ReferenceLine y={130} label={{position: "insideBottomLeft", value:" Emergency ", offset:0, fontFamily:"Roboto"}} stroke="#C70039" isFront={true} />
           <Area type='monotone' name={'Cattle Heat Index'} dataKey='cattle' stroke='#D3D3D3' fill='#D3D3D3'/>
         </AreaChart>
       </ResponsiveContainer>
@@ -176,16 +176,16 @@ class LivestockIdxCharts extends Component {
           <Tooltip
             content={renderCustomTooltip}
           />
-          <ReferenceLine y={68} label={{position: "left", value:"68 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="black" isFront={true} />
-          <ReferenceLine y={68} label={{position: "insideBottomLeft", value:" Mild Discomfort ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="black" isFront={true} />
-          <ReferenceLine y={72} label={{position: "left", value:"72 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="yellow" isFront={true} />
-          <ReferenceLine y={72} label={{position: "insideBottomLeft", value:" Discomfort ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="yellow" isFront={true} />
-          <ReferenceLine y={75} label={{position: "left", value:"75 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="orange" isFront={true} />
-          <ReferenceLine y={75} label={{position: "insideBottomLeft", value:" Alert ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="orange" isFront={true} />
-          <ReferenceLine y={79} label={{position: "left", value:"79 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="brown" isFront={true} />
-          <ReferenceLine y={79} label={{position: "insideBottomLeft", value:" Danger ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="brown" isFront={true} />
-          <ReferenceLine y={84} label={{position: "left", value:"84 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="red" isFront={true} />
-          <ReferenceLine y={84} label={{position: "insideBottomLeft", value:" Emergency ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="red" isFront={true} />
+          <ReferenceLine y={68} label={{position: "left", value:"68 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#342E37" isFront={true} />
+          <ReferenceLine y={68} label={{position: "insideBottomLeft", value:" Mild Discomfort ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#342E37" isFront={true} />
+          <ReferenceLine y={72} label={{position: "left", value:"72 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#FFC300" isFront={true} />
+          <ReferenceLine y={72} label={{position: "insideBottomLeft", value:" Discomfort ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#FFC300" isFront={true} />
+          <ReferenceLine y={75} label={{position: "left", value:"75 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#FF5733" isFront={true} />
+          <ReferenceLine y={75} label={{position: "insideBottomLeft", value:" Alert ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#FF5733" isFront={true} />
+          <ReferenceLine y={79} label={{position: "left", value:"79 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#C70039" isFront={true} />
+          <ReferenceLine y={79} label={{position: "insideBottomLeft", value:" Danger ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#C70039" isFront={true} />
+          <ReferenceLine y={84} label={{position: "left", value:"84 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#900C3F" isFront={true} />
+          <ReferenceLine y={84} label={{position: "insideBottomLeft", value:" Emergency ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#900C3F" isFront={true} />
           <Area type='monotone' name={'Dairy Cow Heat Index'} dataKey='cow' stroke='#D3D3D3' fill='#D3D3D3'/>
         </AreaChart>
       </ResponsiveContainer>
@@ -210,12 +210,12 @@ class LivestockIdxCharts extends Component {
           <Tooltip
             content={renderCustomTooltip}
           />
-          <ReferenceLine y={72} label={{position: "left", value:"72 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="yellow" isFront={true} />
-          <ReferenceLine y={72} label={{position: "insideBottomLeft", value:" Moderate ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="yellow" isFront={true} />
-          <ReferenceLine y={74} label={{position: "left", value:"74 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="orange" isFront={true} />
-          <ReferenceLine y={74} label={{position: "insideBottomLeft", value:" Severe ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="orange" isFront={true} />
-          <ReferenceLine y={78} label={{position: "left", value:"78 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="brown" isFront={true} />
-          <ReferenceLine y={78} label={{position: "insideBottomLeft", value:" Very Severe ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="brown" isFront={true} />
+          <ReferenceLine y={72} label={{position: "left", value:"72 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#FFC300" isFront={true} />
+          <ReferenceLine y={72} label={{position: "insideBottomLeft", value:" Moderate ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#FFC300" isFront={true} />
+          <ReferenceLine y={74} label={{position: "left", value:"74 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#FF5733" isFront={true} />
+          <ReferenceLine y={74} label={{position: "insideBottomLeft", value:" Severe ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#FF5733" isFront={true} />
+          <ReferenceLine y={78} label={{position: "left", value:"78 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#C70039" isFront={true} />
+          <ReferenceLine y={78} label={{position: "insideBottomLeft", value:" Very Severe ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#C70039" isFront={true} />
           <Area type='monotone' name={'Large Animal Heat Index'} dataKey='biganimal' stroke='#D3D3D3' fill='#D3D3D3'/>
         </AreaChart>
       </ResponsiveContainer>
@@ -240,12 +240,12 @@ class LivestockIdxCharts extends Component {
           <Tooltip
             content={renderCustomTooltip}
           />
-          <ReferenceLine y={82} label={{position: "left", value:"82 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="yellow" isFront={true} />
-          <ReferenceLine y={82} label={{position: "insideBottomLeft", value:" Moderate ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="yellow" isFront={true} />
-          <ReferenceLine y={84} label={{position: "left", value:"84 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="orange" isFront={true} />
-          <ReferenceLine y={84} label={{position: "insideBottomLeft", value:" Severe ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="orange" isFront={true} />
-          <ReferenceLine y={86} label={{position: "left", value:"86 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="brown" isFront={true} />
-          <ReferenceLine y={86} label={{position: "insideBottomLeft", value:" Very Severe ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="brown" isFront={true} />
+          <ReferenceLine y={82} label={{position: "left", value:"82 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#FFC300" isFront={true} />
+          <ReferenceLine y={82} label={{position: "insideBottomLeft", value:" Moderate ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#FFC300" isFront={true} />
+          <ReferenceLine y={84} label={{position: "left", value:"84 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#FF5733" isFront={true} />
+          <ReferenceLine y={84} label={{position: "insideBottomLeft", value:" Severe ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#FF5733" isFront={true} />
+          <ReferenceLine y={86} label={{position: "left", value:"86 ", offset:4, fontSize:12, fontFamily:"Roboto"}} stroke="#C70039" isFront={true} />
+          <ReferenceLine y={86} label={{position: "insideBottomLeft", value:" Very Severe ", offset:0, fontSize:16, fontFamily:"Roboto"}} stroke="#C70039" isFront={true} />
           <Area type='monotone' name={'Small Animal Heat Index'} dataKey='smallanimal' stroke='#D3D3D3' fill='#D3D3D3'/>
         </AreaChart>
       </ResponsiveContainer>
@@ -276,7 +276,7 @@ class LivestockIdxCharts extends Component {
           <Tooltip
             content={renderCustomTooltip}
           />
-          <Line type='monotone' name={app.livestock_getVarLabels['airtemp_label']} dataKey='avgt' stroke='#8884d8' fill='#8884d8' />
+          <Line type='monotone' name={app.livestock_getVarLabels['airtemp_label']} dataKey='avgt' stroke='#C70039' fill='#C70039' />
         </LineChart>
       </ResponsiveContainer>
             </Grid>
@@ -369,7 +369,7 @@ class LivestockIdxCharts extends Component {
           <Tooltip
             content={renderCustomTooltip}
           />
-          <Line type='monotone' name={app.livestock_getVarLabels['wind_label']} dataKey='wind' stroke='#8884d8' fill='#8884d8' />
+          <Line type='monotone' name={app.livestock_getVarLabels['wind_label']} dataKey='wind' stroke='#2692BF' fill='#2692BF' />
         </LineChart>
       </ResponsiveContainer>
             </Grid>

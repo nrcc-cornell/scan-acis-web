@@ -38,12 +38,12 @@ class HeatIdxDoc extends Component {
           <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
             <Grid item container className={classes.root} spacing={4} xs={10} md={8} lg={9}>
               <Grid item>
-                <Typography variant="h5">
+                <Typography variant="h4">
                   About the Livestock Heat Index
                 </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       What does this tool do?
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
@@ -52,7 +52,7 @@ class HeatIdxDoc extends Component {
                     </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       Sources of data
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
@@ -81,11 +81,13 @@ class HeatIdxDoc extends Component {
                     </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       How to use this tool
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      <i>1. User Options</i><br/><br/>
+                      <Typography variant="h6">
+                        1. User Options
+                      </Typography>
                       Once your site is selected, there are two different types of data views to select from, <i>Current Heat Indices</i> and <i>Historical Frequencies</i>.<br/><br/>
                       <b>a) Output Type :</b> Choose 'chart' or 'table' to change the tool view between graphical and tabular versions.<br/><br/>
                       <b>b) Current Heat Indices</b> provide hourly heat index conditions over the past 24-48 hours.<br/>
@@ -95,7 +97,9 @@ class HeatIdxDoc extends Component {
                       <img className={classes.docImage2} src={userinput} alt="User input for the SCAN/TSCAN Livestock Heat Index" /><br/><br/>
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      <i>2. Output</i><br/><br/>
+                      <Typography variant="h6">
+                        2. Output
+                      </Typography>
                       Charts can be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
                       <b>a) Current Heat Indices</b><br/><br/>
                       Time series of heat indices that correspond to your selections will appear within the tool. Below is a sample chart showing a sample of the features. Horizontal reference lines indicate significant heat stress levels for the selected animal. Gray shading represents the calculated heat index each hour over the visible time span. Also available are associated weather variables used in the heat index calculation. Moving your cursor over the charts in the live tool will show the actual heat index values for the selected hour.<br/><br/>

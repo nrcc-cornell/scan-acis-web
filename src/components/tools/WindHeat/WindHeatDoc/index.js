@@ -24,11 +24,11 @@ const styles = theme => ({
   },
   docImage: {
     width: '100%',
-    maxWidth: '800px'
+    maxWidth: '500px'
   },
   docImage2: {
-    width: '30%',
-    maxWidth: '800px'
+    width: '50%',
+    maxWidth: '400px'
   }
 });
 
@@ -41,30 +41,27 @@ class WindHeatDoc extends Component {
           <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
             <Grid item container direction="column" className={classes.root} spacing={4} xs={10} md={8} lg={9}>
               <Grid item>
-                <Typography variant="h5">
+                <Typography variant="h4">
                   About the Wind Chill and Heat Charts
                 </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       What does this tool do?
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      <p>
-                        This tool monitors environmental conditions in order to estimate the coincident heat index and wind chill experienced. 
+                        This tool monitors environmental conditions in order to estimate the heat index and wind chill experienced. 
                         A combination of air temperature and humidity are used to determine heat index, while temperature and wind speed are used to determine wind chill.
-                      </p>
-                      <p>
+                    </Typography>
+                    <Typography align="left" paragraph variant="body1">
                         Current conditions are monitored and data from the past 24-48 hours (through the last hour) are presented. 
-                        Additionally, heat index and wind chill indices are calculated for each hour throughout all years of available weather observations. 
-                        Using these data, the historical frequency of each heat index category can be viewed for each SCAN location.
-                        In years where more than 2.5% of hourly data is missing the historical frequencies are grayed out.
-                      </p>
-                      <br/>
+                        Additionally, heat and wind chill indices are calculated for each hour throughout all years of available weather observations. 
+                        Using these data, the historical frequency of each heat or wind chill index category can be viewed for each SCAN location.
+                        In years where more than 2.5% of hourly data is missing, the historical frequencies are grayed out.
                     </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       Sources of data
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
@@ -75,35 +72,47 @@ class WindHeatDoc extends Component {
                     <Typography align="left" paragraph variant="body1">
                       The heat index categories used in this tool match the definitions provided by the <a href='https://www.weather.gov/ama/heatindex' rel="noopener noreferrer" target='_blank'>National Weather Service</a>.
                     </Typography>
-                    <a href='https://www.weather.gov/ama/heatindex' rel="noopener noreferrer" target='_blank'><img className={classes.docImage} style={{ width: '600px', margin: '0 auto' }} src={heatindex1} alt="National Weather Service Heat Index chart" /></a><br/>
-                    <a href='https://www.weather.gov/ama/heatindex' rel="noopener noreferrer" target='_blank'><img className={classes.docImage} style={{ width: '500px', margin: '0 auto' }} src={heatindex2} alt="National Weather Service Heat Index category descriptions" /></a><br/>
+                    <a href='https://www.weather.gov/ama/heatindex' rel="noopener noreferrer" target='_blank'><img className={classes.docImage} src={heatindex1} alt="National Weather Service Heat Index chart" /></a><br/>
+                    <a href='https://www.weather.gov/ama/heatindex' rel="noopener noreferrer" target='_blank'><img className={classes.docImage} src={heatindex2} alt="National Weather Service Heat Index category descriptions" /></a><br/>
                     <Typography align="left" paragraph variant="body1">
                       The wind chill categories used in this tool attempt to follow the definitions provided by the <a href='https://www.weather.gov/bou/windchill' rel="noopener noreferrer" target='_blank'>National Weather Service</a>.
                     </Typography>
-                    <a href='https://www.weather.gov/bou/windchill' rel="noopener noreferrer" target='_blank'><img className={classes.docImage} style={{ width: '600px', margin: '0 auto' }} src={windchill1} alt="National Weather Service Wind Chill chart" /><br/></a>
+                    <a href='https://www.weather.gov/bou/windchill' rel="noopener noreferrer" target='_blank'><img className={classes.docImage} src={windchill1} alt="National Weather Service Wind Chill chart" /><br/></a>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       How to use this tool
                     </Typography>
+
+                    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+                      <iframe width="80%" style={{ aspectRatio: '16/9' }} src="https://www.youtube.com/embed/KLSwgLG7xPw?si=TJ5qXrr2Oud6oNHJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                      <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}></div>
+                    </div>
+
                     <Typography align="left" paragraph variant="body1">
-                      <i>1. User Options</i><br/><br/>
+                      <Typography variant="h6">
+                        1. User Options
+                      </Typography>
                       Once your site is selected, there are two different types of data views to select from, <i>Current & Forecast</i> and <i>Historical Frequencies</i>.<br/><br/>
                       <b>a) Current & Forecast</b> provide hourly heat index or wind chill conditions over the past 24-48 hours.<br/>
                       <b>b) Historical Frequencies</b> provide the number of hours or days during each year in which the selected measure surpassed significant thresholds.<br/><br/>
                       Finally, the output type and the type of measure must be selected. Below represents what these user interfaces look like in the tool:<br/>
-                      <img className={classes.docImage} style={{ width: '500px', margin: '0 auto' }} src={viewselection} alt="View Selection for the SCAN/TSCAN Wind Chill & Heat Index" /><br/>
+                      <img className={classes.docImage} src={viewselection} alt="View Selection for the SCAN/TSCAN Wind Chill & Heat Index" /><br/>
                       <img className={classes.docImage2} src={userinput} alt="User input for the SCAN/TSCAN Wind Chill & Heat Index" /><br/><br/>
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      <i>2. Output</i><br/><br/>
+                      <Typography variant="h6">
+                        2. Output
+                      </Typography>
                       Charts can be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
                       <b>a) Current & Forecast</b><br/><br/>
                       Time series of heat index or wind chill that corresponds to your selections will appear within the tool. Below is a sample chart showing a sample of the features. Horizontal reference lines indicate significant levels for the selected measure. Gray shading represents the calculated temperature each hour over the visible time span. Also available are associated weather variables used in the calculation. Moving your cursor over the charts in the live tool will show the actual values for the selected hour.<br/><br/>
-                      <img className={classes.docImage} src={output1} alt="Output for the SCAN/TSCAN Wind Chill & Heat Index" /><br/><br/>
+                      <img className={classes.docImage} src={output1} alt="Output for the SCAN/TSCAN Wind Chill & Heat Index" />
+                      <p style={{ fontStyle: 'italic', margin: 0 }}>Fig. 1 An example of the Current & Forecast charts</p><br/><br/>
                       <b>b) Historical Frequencies</b><br/><br/>
                       Time series charts provide the number of hours or days during each year that surpassed significant thresholds. Below is a sample chart showing a sample of the features. Moving your cursor over the chart in the live tool will show the actual number of hours for each category. The visibility of specific categories can be toggled by clicking on the category names in the chart legend.<br/><br/>
-                      <img className={classes.docImage} src={output2} alt="Output for the SCAN/TSCAN Wind Chill & Heat Index" /><br/><br/>
+                      <img className={classes.docImage} src={output2} alt="Output for the SCAN/TSCAN Wind Chill & Heat Index" />
+                      <p style={{ fontStyle: 'italic', margin: 0 }}>Fig. 2 An example of the Historical Frequencies chart</p><br/><br/>
                     </Typography>
               </Grid>
             </Grid>

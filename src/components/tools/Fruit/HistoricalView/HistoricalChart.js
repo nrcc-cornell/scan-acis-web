@@ -57,14 +57,23 @@ const CustomCell = (props) => {
       r = [0,0,0,0];
     }
   }
-  const fill = info.isActive ? (isMissing ? info.missingColor : info.color) : 'transparent';
-  return <Rectangle x={x} y={y} width={width} height={height} radius={r} fill={fill} />;
+
+  if (isMissing) {
+    return <Rectangle x={x} y={y} width={width} height={height} radius={r} fill='white' stroke={info.color} strokeWidth={2} />;
+  } else {
+    const fill = info.isActive ? (isMissing ? info.missingColor : info.color) : 'transparent';
+    return <Rectangle x={x} y={y} width={width} height={height} radius={r} fill={fill} />;
+  }
 };
 
 const CustomDot = (props) => {
   const { cx, cy, isMissing, info } = props;
-  const fill = info.isActive ? (isMissing ? info.missingColor : info.color) : 'transparent';
-  return <Dot cx={cx} cy={cy} r={4} fill={fill} />;
+  if (isMissing) {
+    return <Dot cx={cx} cy={cy} r={4} fill='white' stroke={info.color} strokeWidth={2} />;
+  } else {
+    const fill = info.isActive ? info.color : 'transparent';
+    return <Dot cx={cx} cy={cy} r={4} fill={fill} />;
+  }
 };
 
 @inject('store') @observer
@@ -103,10 +112,6 @@ class HistoricalChart extends Component {
     return moment(date).format('M/D');
   };
 
-  yAxisTickFormatter = (year) => {
-    return year + (this.yearIsMissing(year) ? '⁰' : '');
-  }
-
   createXAxisLabel = (data) => {
     let label = null;
     if (
@@ -114,7 +119,8 @@ class HistoricalChart extends Component {
       data.length > 0 &&
       data.some(d => d.isMissing)
     ) {
-      label = { value: '⁰ : Missing data', position: 'insideBottomLeft', offset: 0 };
+      label = { value: 'Inverted Colors: Missing data', position: 'insideBottomLeft', offset: 0 };
+      // label = { value: '⁰ : Missing data', position: 'insideBottomLeft', offset: 0 };
     }
     return label;
   }
@@ -334,7 +340,6 @@ class HistoricalChart extends Component {
                   <YAxis
                     dataKey="year"
                     type="category"
-                    tickFormatter={this.yAxisTickFormatter}
                   >
                     <Label
                       value="Year"
@@ -394,11 +399,13 @@ class HistoricalChart extends Component {
                   }
                 </ComposedChart>
               </ResponsiveContainer>
-              <Grid item>
-                <Typography variant="caption">
-                  {'(click legend to toggle categories)'}
-                </Typography>
-              </Grid>
+              {app.getToolName !== 'blueberryHarvest' &&
+                <Grid item>
+                  <Typography variant="caption">
+                    {'(click legend to toggle categories)'}
+                  </Typography>
+                </Grid>
+              }
           </Grid>
         </Grid>
       </div>

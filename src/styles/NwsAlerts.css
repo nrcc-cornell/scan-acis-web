@@ -5,7 +5,8 @@
   background-color: rgb(245, 245, 220);
   text-align: center;
   margin: 24px auto 0px;
-  width: 58%
+  width: 30%;
+  min-width: 400px;
 }
 
 #nws-alerts-info {
@@ -51,7 +52,7 @@
 }
 
 .nws-alerts-alert-body {
-  width: 80%;
+  width: 90%;
   margin: 0px auto;
   display: flex;
   flex-direction: column;
@@ -71,5 +72,5 @@
 .nws-alerts-alert-body-headline,
 .nws-alerts-alert-body-description,
 .nws-alerts-alert-body-instruction {
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-family: "Roboto",Helvetica,sans-serif;
 }

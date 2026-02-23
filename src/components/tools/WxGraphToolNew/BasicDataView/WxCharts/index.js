@@ -44,27 +44,31 @@ class WxCharts extends Component {
         }
     }
 
+
+                                                                              // #82ca9d   Green
+                                                                              // #342E37   Gray
+
     getChartInfo = (type) => {
         if (type==='soilt') {
             return {
                 'typeLabel':'Soil Temperature',
                 'dataInfo': [
-                    {'key':'soilt2in','label':'SoilT @ 2"','color':'#FFC300'},
-                    {'key':'soilt4in','label':'SoilT @ 4"','color':'#FF5733'},
-                    {'key':'soilt8in','label':'SoilT @ 8"','color':'#C70039'},
-                    {'key':'soilt20in','label':'SoilT @ 20"','color':'#900C3F'},
-                    {'key':'soilt40in','label':'SoilT @ 40"','color':'#581845'},
+                    {'key':'soilt2in','label':'SoilT @ 2"','color':'#FFC300'},    // Yellow
+                    {'key':'soilt4in','label':'SoilT @ 4"','color':'#FF5733'},    // Light red
+                    {'key':'soilt8in','label':'SoilT @ 8"','color':'#C70039'},    // Dark red
+                    {'key':'soilt20in','label':'SoilT @ 20"','color':'#900C3F'},  // Burgundy
+                    {'key':'soilt40in','label':'SoilT @ 40"','color':'#581845'},  // Purple
                 ]
             }
         } else if (type==='soilm') {
             return {
                 'typeLabel':'Soil Moisture',
                 'dataInfo': [
-                    {'key':'soilm2in','label':'SoilM @ 2"','color':'#33C2FF'},
-                    {'key':'soilm4in','label':'SoilM @ 4"','color':'#2DAADF'},
-                    {'key':'soilm8in','label':'SoilM @ 8"','color':'#2692BF'},
-                    {'key':'soilm20in','label':'SoilM @ 20"','color':'#1A6180'},
-                    {'key':'soilm40in','label':'SoilM @ 40"','color':'#134960'},
+                    {'key':'soilm2in','label':'SoilM @ 2"','color':'#33C2FF'},    // Lightest blue
+                    {'key':'soilm4in','label':'SoilM @ 4"','color':'#2DAADF'},    // Light blue
+                    {'key':'soilm8in','label':'SoilM @ 8"','color':'#2692BF'},    // Medium blue
+                    {'key':'soilm20in','label':'SoilM @ 20"','color':'#1A6180'},  // Dark blue
+                    {'key':'soilm40in','label':'SoilM @ 40"','color':'#134960'},  // Darkest blue
                     //{'key':'soilm2in','label':'SoilM @ 2"','color':'#006837'},
                     //{'key':'soilm4in','label':'SoilM @ 4"','color':'#31a354'},
                     //{'key':'soilm8in','label':'SoilM @ 8"','color':'#41b6c4'},
@@ -309,7 +313,7 @@ class WxCharts extends Component {
                         content={this.renderCustomTooltip}
                     />
                     {app.wxgraph_getTimeFrame==='two_months' && <Area type='monotone' name='Air Temp Range' dataKey='temprange' stroke='' fill='#D3D3D3' />}
-                    <Line type='monotone' name='Air Temp Ave' dataKey='avgt' stroke='#8884d8' fill='#8884d8'/>
+                    <Line type='monotone' name='Air Temp Ave' dataKey='avgt' stroke='#2692BF' fill='#2692BF'/>
                   </ComposedChart>
                 </ResponsiveContainer>
             </Grid>

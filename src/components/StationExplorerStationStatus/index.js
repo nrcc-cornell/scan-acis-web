@@ -6,6 +6,8 @@ import LoadingOverlay from 'react-loading-overlay';
 import moment from 'moment';
 import { Button } from '@material-ui/core';
 
+import '../../styles/StationExplorerStationStatus.css';
+
 var app;
 
 const statusPages = [
@@ -131,6 +133,7 @@ class StationExplorerStationStatus extends Component {
                     <td rowSpan='100'>
                       <Button
                         onClick={() => this.change_page(app.getExplorer_status_page)}
+                        className='next-button'
                         style={{
                           height: '140px',
                           width: '45px',
@@ -158,6 +161,28 @@ class StationExplorerStationStatus extends Component {
                 </tr>
               ))}
             </tbody></table>
+          </Typography>
+          <Typography style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '6px',
+            marginTop: '8px',
+            border: '1px solid rgb(225,225,225)',
+            borderRadius: '4px',
+            padding: '4px 0px',
+          }}>
+            <div style={{ display: 'flex', alignItems: 'center', fontSize: '12px' }}>
+              {this.make_dot('rgba(49,155,35,1)')}
+              <span>: ≤1 Day Out of Date</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', fontSize: '12px' }}>
+              {this.make_dot('rgba(232,247,33,1)')}
+              <span>: 1-30 Days Out of Date</span>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', fontSize: '12px' }}>
+              {this.make_dot('rgb(211,44,44)')}
+              <span>: ≥30 Days Out of Date</span>
+            </div>
           </Typography>
         </LoadingOverlay>
       </div>

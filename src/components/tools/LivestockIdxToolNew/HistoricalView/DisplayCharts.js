@@ -76,7 +76,8 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
                 const style = {
                   //marginRight: 10,
                   //color: active ? "#AAA" : "#000"
-                  color: active ? "#AAA" : color
+                  color: active ? "#AAA" : color,
+                  marginLeft: '10px'
                 };
 
                 return (

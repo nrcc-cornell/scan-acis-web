@@ -70,7 +70,7 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
                   label:{
                       text:'No Plant Stress',
                       style: {
-                        color: '#0000FF',
+                        color: '#2692BF',
                         fontWeight: 'bold'
                       }
                   }
@@ -83,7 +83,7 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
                   label:{
                       text:'Plant Stress',
                       style: {
-                        color: '#FF0000',
+                        color: '#C70039',
                         fontWeight: 'bold'
                       },
                   }
@@ -96,7 +96,7 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
                   label:{
                       text:'Wilting Point',
                       style: {
-                        color: 'black',
+                        color: '#342E37',
                         fontWeight: 'bold'
                       },
                   }
@@ -105,12 +105,12 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
           series: [{
             name:'Water Deficit',
             type: 'line',
-            color: 'black',
+            color: '#342E37',
             zones: [{
               value: (data.fc_ref - data.pwp_ref)/2.,
-              color: '#0000FF'
+              color: '#2692BF'
             },{
-              color: '#FF0000'
+              color: '#C70039'
             }],
             data: data.data_series,
             zIndex: 102,

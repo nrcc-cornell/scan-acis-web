@@ -16,7 +16,8 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
           ...d,
           categories: Object.keys(d.categories).reduce((acc, catName) => {
             const catInfo = chartInfo.dataInfo.find(obj => obj.key === catName);
-            acc[catName] = { value: d.categories[catName], fill: d.isMissing ? catInfo.missingColor : catInfo.color}
+            acc[catName] = { value: d.categories[catName], fill: d.isMissing ? 'transparent' : catInfo.color, stroke: catInfo.color}
+            // acc[catName] = { value: d.categories[catName], fill: d.isMissing ? catInfo.missingColor : catInfo.color}
             return acc;
           }, {})
         }));
@@ -26,10 +27,11 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
         const createXAxisLabel = () => {
           let labels = [];
           if (data && data.length > 0) {
-            if (someMissing) labels.push('⁰ : Missing data');
+            if (someMissing) labels.push('Inverted Colors: Missing data');
+            // if (someMissing) labels.push('⁰ : Missing data');
             if (someIncomplete) labels.push('*: Year-to-date');
           }
-          return labels.length === 0 ? null : { value: labels.join('  '), position: 'insideBottomRight', offset: 0 }
+          return labels.length === 0 ? null : { value: labels.join('  '), position: 'insideBottomRight', dy: 40 }
         }
   
         let yearIsComplete = (y) => {
@@ -37,17 +39,11 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
           return yearData ? yearData.isComplete : false;
         }
 
-        let yearIsMissing = (y) => {
-          const yearData = data.find(d => d.year === y);
-          return yearData ? yearData.isMissing : false;
-        }
-
         let formatXAxisForDate = (tickItem) => {
           let tickYear = moment(tickItem).add(1,'days').format('YYYY');
           let date = moment(tickItem).add(1,'days').format('YYYY');
           
           const dateAdditions = [];
-          if (yearIsMissing(tickYear)) dateAdditions.push('⁰');
           if (!yearIsComplete(tickYear)) dateAdditions.push('*');
 
           return date + dateAdditions.join('');
@@ -69,11 +65,11 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
                   payload.map((entry,index) => {
                     const { payload, value, name } = entry
                     const catInfo = chartInfo.dataInfo.find(obj => obj.label === name);
-                    const fillColor = payload.categories[catInfo.key].fill;
+                    const strokeColor = payload.categories[catInfo.key].stroke;
                     return (
                         <span key={index} className="tooltip-item">
                         <br/>
-                        <span style={{ color: fillColor }}>{name} : </span>
+                        <span style={{ color: strokeColor }}>{name} : </span>
                         <span>{(isNaN(value)) ? '--' : value}</span>
                         </span>
                     )
@@ -86,37 +82,39 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
         let renderCustomizedLegend = ({ payload }) => {
           return (
             <div className="customized-legend-windheat">
-              {payload.map((entry, i) => {
-                const { dataKey, dataLabel, color } = entry;
-                const active = disabled.includes(dataKey);
-                const style = {
-                  color: active ? "#AAA" : color
-                };
-
-                return (
-                  <span
-                    key={i}
-                    className="legend-item"
-                    onClick={() => onClickLegend(dataKey)}
-                    align="center"
-                    style={style}
-                  >
-                    <Surface width={10} height={10} viewBox="0 0 10 10">
-                      <Symbols cx={5} cy={5} type="square" size={100} fill={color} />
-                      {active && (
-                        <Symbols
-                          cx={5}
-                          cy={5}
-                          type="square"
-                          size={25}
-                          fill={"#FFF"}
-                        />
-                      )}
-                    </Surface>
-                    <span>&nbsp;{dataLabel}</span>
-                  </span>
-                );
-              })}
+              <div className="customized-legend-windheat-inner">
+                {payload.map((entry, i) => {
+                  const { dataKey, dataLabel, color } = entry;
+                  const active = disabled.includes(dataKey);
+                  const style = {
+                    color: active ? "#AAA" : color,
+                    marginLeft: '10px'
+                  };
+                  return (
+                    <span
+                      key={i}
+                      className="legend-item"
+                      onClick={() => onClickLegend(dataKey)}
+                      align="center"
+                      style={style}
+                    >
+                      <Surface width={10} height={10} viewBox="0 0 10 10">
+                        <Symbols cx={5} cy={5} type="square" size={100} fill={color} />
+                        {active && (
+                          <Symbols
+                            cx={5}
+                            cy={5}
+                            type="square"
+                            size={25}
+                            fill={"#FFF"}
+                          />
+                        )}
+                      </Surface>
+                      <span>&nbsp;{dataLabel}</span>
+                    </span>
+                  );
+                })}
+              </div>
             </div>
           );
         };
@@ -157,18 +155,18 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
             </Grid>
 
             <Grid item container direction="row" justifyContent="center" alignItems="center" xs={12}>
-                <ResponsiveContainer width="100%" height={300}>
-                  <BarChart data={chartData} syncId="anyId"
-                        margin={{top: 0, right: 30, left: 0, bottom: 0}}>
+                <ResponsiveContainer width="100%" height={325}>
+                  <BarChart data={chartData} syncId="anyId" margin={{top: 0, right: 30, left: 0, bottom: 0}}>
                     {chartInfo.dataInfo && disabled &&
                         chartInfo.dataInfo
                           .filter(info => !disabled.includes(info.key))
-                          .map(info => 
+                          .map((info, i) => 
                             <Bar name={info.label} stackId="a" key={info.key} dataKey={(d) => d['categories'][info.key].value}>
-                              {chartData.map((d, i) => <Cell key={`cell-${i}`} fill={d.categories[info.key].fill} />)}
+                              {chartData.map((d, i) => <Cell key={`cell-${i}`} fill={d.categories[info.key].fill} stroke={d.categories[info.key].stroke} />)}
                             </Bar>
                           )
                     }
+
                     <CartesianGrid strokeDasharray="3 3"/>
                     <XAxis
                       dataKey="year"
@@ -176,6 +174,8 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
                       interval={'preserveEnd'}
                       minTickGap={-10}
                       label={createXAxisLabel()}
+                      angle={-45}
+                      dy={10}
                     />
                     <YAxis label={{ value: timescale.slice(0,1).toUpperCase() + timescale.slice(1), angle: -90, position:'insideLeft', offset: 20 }} />
                     {chartData.length === 0 ? '' : <Tooltip

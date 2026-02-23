@@ -33,12 +33,12 @@ class GddtoolDoc extends Component {
           <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
             <Grid item container className={classes.root} spacing={4} xs={10} md={8} lg={9}>
               <Grid item>
-                <Typography variant="h5">
+                <Typography variant="h4">
                   About the Growing Degree Day Calculator
                 </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       What does this tool do?
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
@@ -63,7 +63,7 @@ class GddtoolDoc extends Component {
                     </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       Sources of data
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
@@ -71,11 +71,13 @@ class GddtoolDoc extends Component {
                     </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       How to use this tool
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      <i>1. User Options</i><br/><br/>
+                      <Typography variant="h6">
+                        1. User Options
+                      </Typography>
                       Once your site is selected, there are three options to choose from to the side of the tool.<br/><br/>
                       <b>a) Output Type :</b> Choose 'chart' or 'table' to change the tool view between graphical and tabular versions.<br/><br/>
                       <b>b) Planting/Budbreak Date :</b> Click on the calendar icon to select a date from the dropdown calendar. This is the date from which you would like to start GDD accumulation. The current year is selected by default, however previous years can be selected if data at your location of interest is available.<br/><br/>
@@ -84,7 +86,9 @@ class GddtoolDoc extends Component {
                       <img className={classes.docImage2} src={userinput} alt="User input for the SCAN/TSCAN Growing Degree Day Calculator" />
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      <i>2. Output</i><br/><br/>
+                      <Typography variant="h6">
+                        2. Output
+                      </Typography>
                       Charts can be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
                       Accumulated GDD values that correspond to your selections will appear below the user options. Below is a sample chart showing all of the features.<br/><br/>
                       <b>a) Green Line : </b> The season-to-date accumulation for the selected year.<br/><br/>

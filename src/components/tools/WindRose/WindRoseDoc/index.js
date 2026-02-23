@@ -39,12 +39,12 @@ class WindRoseDoc extends Component {
           <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
             <Grid item container direction="column" className={classes.root} spacing={4} xs={10} md={8} lg={9}>
               <Grid item>
-                <Typography variant="h5">
+                <Typography variant="h4">
                   About the Wind Rose Diagram
                 </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       What does this tool do?
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
@@ -54,7 +54,7 @@ class WindRoseDoc extends Component {
                     </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       Sources of data
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
@@ -62,11 +62,13 @@ class WindRoseDoc extends Component {
                     </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       How to use this tool
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      <i>1. User Options</i><br/><br/>
+                      <Typography variant="h6">
+                        1. User Options
+                      </Typography>
                       The utility of a wind rose is enhanced when it is customized for a particular application. Flexibility with regards to data summarization, units and filtering within the tool's user interface provides a high level of customization. Once your station is selected, user options are available either from an 'UPDATE OPTIONS' button (small screens), or from a user interface box on the left-hand side of the tool (large screens).<br/><br/>
                       <b>a) Data units and summaries</b><br/><br/>
                       Before a wind rose can be constructed, wind speed and direction data for each hour must be categorized into discrete bins. For wind direction, two options are available: a 36-point compass and a 16-point compass. For wind speed, some common bin thresholds are provided under the 'SHORTCUTS' button, but you can type in custom values to suit your needs. <br/><br/>
@@ -84,7 +86,9 @@ class WindRoseDoc extends Component {
                       <img className={classes.docImage} src={userinput2} alt="Sample user input from the SCAN/TSCAN Wind Rose Diagram" /><br/><br/>
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      <i>2. Output</i><br/><br/>
+                      <Typography variant="h6">
+                        2. Output
+                      </Typography>
                       The summarized wind data is available in both graphical and tabular forms. The chart can be saved as an image file, or the data can be downloaded for use in a spreadsheet, by clicking on the right-hand corner of the wind rose diagram.<br/><br/>
                       <b>a) Wind Rose Diagram</b><br/><br/>
                       The wind rose diagram is presented in a circular format, with bars showing how often winds are blowing <b>from</b> particular directions. Concentric circles represent different frequencies (either as percentages or counts), starting from zero at the center and increasing outward. Colored sections within each bar allows you to see how wind speeds are distributed when winds are blowing from a specific direction.<br/><br/>

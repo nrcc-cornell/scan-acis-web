@@ -41,12 +41,12 @@ class WxgraphDoc extends Component {
           <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
             <Grid item container className={classes.root} spacing={4} xs={10} md={8} lg={9}>
               <Grid item>
-                <Typography variant="h5">
+                <Typography variant="h4">
                   About the Weather Grapher
                 </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       What does this tool do?
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
@@ -54,7 +54,7 @@ class WxgraphDoc extends Component {
                     </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       Sources of data
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
@@ -62,11 +62,13 @@ class WxgraphDoc extends Component {
                     </Typography>
               </Grid>
               <Grid item>
-                    <Typography align="left" paragraph variant="h6">
+                    <Typography align="left" paragraph variant="h5">
                       How to use this tool
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      <i>1. User Options</i><br/><br/>
+                      <Typography variant="h6">
+                        1. User Options
+                      </Typography>
                       Once your site is selected, there are two different types of data views to select from, <i>Weather Data Summaries</i> and <i>Threshold Exceedences</i>.<br/><br/>
                       <b>a) Weather Data Summaries</b> provide a side-by-side view of multiple variables at multiple timescales. Options to select include variables, units, ending date of data, and the length of time series.<br/>
                       <img className={classes.docImage} src={viewselection1} alt="View selection for data summaries in the SCAN/TSCAN Weather Grapher" /><br/>
@@ -77,7 +79,9 @@ class WxgraphDoc extends Component {
                       <img className={classes.docImage2} src={userinput2} alt="Weather Grapher User Input For Threshold Exceedences" /><br/><br/>
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      <i>2. Output</i><br/><br/>
+                      <Typography variant="h6">
+                        2. Output
+                      </Typography>
                       Data in this tool can be viewed in either graphical or tabular form by selecting 'chart' or 'table' next to each tool. Charts can also be downloaded as an image, and tables can be downloaded as a CSV file, by clicking in the download icon. Below, the chart views and features are highlighted.<br/><br/>
                       <b>a) Weather Data Summaries</b><br/><br/>
                       Time series of weather observations that correspond to your selections will appear within the tool. Below is a sample chart showing a sample of the features. Moving the cursor over the charts in the live tool displays data for each variable displayed.<br/><br/>

@@ -36,7 +36,7 @@ class CurrentTable extends Component {
         let columns = [];
         columns.push({name:'Date', options:{filter:true,sort:true,display:true}})
         columns.push({name:'Observed', options:{filter:false,sort:true,display:true}})
-        columns.push({name:'Period ave', options:{filter:false,sort:true,display:false}})
+        columns.push({name:'Period average', options:{filter:false,sort:true,display:false}})
         columns.push({name:'Period min', options:{filter:false,sort:true,display:false}})
         columns.push({name:'Period max', options:{filter:false,sort:true,display:false}})
 
