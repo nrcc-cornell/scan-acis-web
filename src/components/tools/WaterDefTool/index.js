@@ -19,6 +19,8 @@ import WaterdefDoc from './WaterdefDoc';
 import VarPicker from '../../VarPicker';
 import VarPopover from '../../VarPopover';
 
+import CollapsibleDocumentation from '../../CollapsibleDocumentation';
+
 const styles = theme => ({
   wrapper: {
     position: 'relative',
@@ -357,7 +359,9 @@ class WaterDefTool extends Component {
               </Grid>
             </Grid>
 
-            <WaterdefDoc />
+            <CollapsibleDocumentation
+              docsProp={<WaterdefDoc />}
+            />
           </div>
         );
     }

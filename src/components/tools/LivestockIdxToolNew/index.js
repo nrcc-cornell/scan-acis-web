@@ -8,6 +8,8 @@ import HistoricalView from './HistoricalView'
 import ToolTypeSelect from './ToolTypeSelect'
 import HeatidxDoc from './HeatidxDoc';
 
+import CollapsibleDocumentation from '../../CollapsibleDocumentation';
+
 var app;
 
 @inject('store') @observer
@@ -56,7 +58,9 @@ class LivestockIdxTool extends Component {
                     </Grid>
                 </Grid>
                 
-                <HeatidxDoc />
+                <CollapsibleDocumentation
+                    docsProp={<HeatidxDoc />}
+                />
             </div>
         )
     }

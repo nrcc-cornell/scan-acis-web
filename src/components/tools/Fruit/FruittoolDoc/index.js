@@ -66,6 +66,12 @@ class FruittoolDoc extends Component {
                   <Typography align="left" paragraph variant="h5">
                     How to use this tool
                   </Typography>
+
+                    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+                      <iframe width="80%" style={{ aspectRatio: '16/9' }} src="https://www.youtube.com/embed/KLSwgLG7xPw?si=TJ5qXrr2Oud6oNHJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+                      <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}></div>
+                    </div>          
+
                   <Typography align="left" paragraph variant="body1">
                     <Typography variant="h6">
                       1. User Options

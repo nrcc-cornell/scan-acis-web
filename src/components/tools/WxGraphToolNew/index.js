@@ -8,6 +8,8 @@ import ExtremeDataView from './ExtremeDataView'
 import ToolTypeSelect from './ToolTypeSelect'
 import WxgraphDoc from './WxgraphDoc';
 
+import CollapsibleDocumentation from '../../CollapsibleDocumentation';
+
 var app;
 
 @inject('store') @observer
@@ -57,7 +59,9 @@ class WxGraphTool extends Component {
                     </Grid>
                 </Grid>
 
-                <WxgraphDoc />
+                <CollapsibleDocumentation
+                    docsProp={<WxgraphDoc />}
+                />
             </div>
         )
     }

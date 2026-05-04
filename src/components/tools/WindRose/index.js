@@ -20,6 +20,8 @@ import WindroseTableEmpty from './WindroseTableEmpty.jsx'
 import WindroseDoc from './WindRoseDoc/index.js';
 import Footer from './Footer.jsx'
 
+import CollapsibleDocumentation from '../../CollapsibleDocumentation';
+
 const styles = theme => ({
   wrapper: {
     //margin: theme.spacing(1),
@@ -291,7 +293,9 @@ class WindRose extends Component {
             <Footer />
             {/* end charts */}
 
-            <WindroseDoc />
+            <CollapsibleDocumentation
+              docsProp={<WindroseDoc />}
+            />
           </MuiThemeProvider>
         );
     }

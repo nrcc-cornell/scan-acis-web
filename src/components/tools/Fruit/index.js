@@ -9,6 +9,8 @@ import FruittoolDoc from './FruittoolDoc';
 import ToolTypeSelect from './ToolTypeSelect';
 import VarPicker from '../../VarPicker';
 
+import CollapsibleDocumentation from '../../CollapsibleDocumentation';
+
 var app;
 
 @inject('store') @observer
@@ -256,7 +258,9 @@ class FruitTool extends Component {
                           />
                       }
                       
-                      <FruittoolDoc />
+                      <CollapsibleDocumentation
+                        docsProp={<FruittoolDoc />}
+                      />
                     </Grid>
                 </Grid>
             </Grid>

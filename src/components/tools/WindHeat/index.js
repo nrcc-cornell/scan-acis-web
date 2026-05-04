@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
-import { Grid, Button } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 
 // Components
 import CurrentView from './CurrentView'
@@ -8,6 +8,8 @@ import HistoricalView from './HistoricalView'
 import ToolTypeSelect from './ToolTypeSelect'
 import NwsAlerts from './NwsAlerts';
 import WindHeatDoc from './WindHeatDoc';
+
+import CollapsibleDocumentation from '../../CollapsibleDocumentation';
 
 
 var app;
@@ -20,20 +22,13 @@ class WindHeat extends Component {
         app = this.props.store.app;
         app.setToolName('windheat')
         this.state = {
-            tooltype: 'current',
-            showDocs: false
+            tooltype: 'current'
         }
     }
 
     handleChangeTooltype = (e) => {
         this.setState({
           tooltype: e.target.value,
-        })
-    }
-
-    handleToggleDocs = () => {
-        this.setState({
-            showDocs: !this.state.showDocs
         })
     }
 
@@ -71,12 +66,9 @@ class WindHeat extends Component {
                     stncoords={this.props.stncoords}
                 />
 
-                <div style={{ display: 'flex', justifyContent: 'center', marginTop: '12px' }}>
-                    <Button variant={this.state.showDocs ? "outlined" : "contained"} color="primary" onClick={this.handleToggleDocs} style={{ color: this.state.showDocs ? 'rgb(76, 175, 80)' : "white" }}>
-                        {this.state.showDocs ? 'Hide' : 'Show'} Documentation and Tutorial
-                    </Button>
-                </div>
-                {this.state.showDocs ? <WindHeatDoc /> : ''}
+                <CollapsibleDocumentation
+                    docsProp={<WindHeatDoc/>}
+                />
             </div>
         )
     }

@@ -10,6 +10,8 @@ import GddtoolDoc from './GddtoolDoc';
 import VarPicker from '../../VarPicker';
 import VarPopover from '../../VarPopover';
 
+import CollapsibleDocumentation from '../../CollapsibleDocumentation';
+
 var app;
 
 @inject('store') @observer
@@ -83,7 +85,9 @@ class GddTool extends Component {
               </Grid>
             </Grid>
 
-            <GddtoolDoc />
+            <CollapsibleDocumentation
+              docsProp={<GddtoolDoc />}
+            />
         </div>
       );
         // return (
