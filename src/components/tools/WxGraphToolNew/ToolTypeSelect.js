@@ -31,7 +31,7 @@ const ToolTypeSelect = (props) => {
                   <FormControlLabel
                     value="extreme"
                     control={<Radio color="primary" />}
-                    label={<Typography variant="h6">Threshold Exceedences</Typography>}
+                    label={<Typography variant="h6">Threshold Exceedances</Typography>}
                     labelPlacement="end"
                   />
                 </RadioGroup>

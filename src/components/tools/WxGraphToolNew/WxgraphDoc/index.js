@@ -50,7 +50,7 @@ class WxgraphDoc extends Component {
                       What does this tool do?
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
-                      This tool allows for viewing of data from all SCAN sensors in a variety of ways. The <b>Weather Data Summaries</b> view allows you to display multiple variables side-by-side for multiple timescales (hourly, daily, monthly, annual). The <b>Threshold Exceedences</b> view provides the number of days during each year on which weather observations surpassed user-defined values.<br/>
+                      This tool allows for viewing of data from all SCAN sensors in a variety of ways. The <b>Weather Data Summaries</b> view allows you to display multiple variables side-by-side for multiple timescales (hourly, daily, monthly, annual). The <b>Threshold Exceedances</b> view provides the number of days during each year on which weather observations surpassed user-defined values.<br/>
                     </Typography>
               </Grid>
               <Grid item>
@@ -66,23 +66,23 @@ class WxgraphDoc extends Component {
                       How to use this tool
                     </Typography>
 
-                    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
+                    {/* <div style={{ position: 'relative', display: 'flex', justifyContent: 'center' }}>
                       <iframe width="80%" style={{ aspectRatio: '16/9' }} src="https://www.youtube.com/embed/KLSwgLG7xPw?si=TJ5qXrr2Oud6oNHJ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
                       <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, right: 0 }}></div>
-                    </div>
+                    </div> */}
 
                     <Typography align="left" paragraph variant="body1">
                       <Typography variant="h6">
                         1. User Options
                       </Typography>
-                      Once your site is selected, there are two different types of data views to select from, <i>Weather Data Summaries</i> and <i>Threshold Exceedences</i>.<br/><br/>
+                      Once your site is selected, there are two different types of data views to select from, <i>Weather Data Summaries</i> and <i>Threshold Exceedances</i>.<br/><br/>
                       <b>a) Weather Data Summaries</b> provide a side-by-side view of multiple variables at multiple timescales. Options to select include variables, units, ending date of data, and the length of time series.<br/>
                       <img className={classes.docImage} src={viewselection1} alt="View selection for data summaries in the SCAN/TSCAN Weather Grapher" /><br/>
                       <img className={classes.docImage3} src={userinput1} alt="User input for data summaries in the SCAN/TSCAN Weather Grapher" /><br/><br/>
-                      <b>b) Threshold Exceedences</b> provide the number of days during each year on which weather observations surpassed user-defined values. Options include the type of variable to analyze, a comparison operator, threshold value, and units.<br/><br/>
+                      <b>b) Threshold Exceedances</b> provide the number of days during each year on which weather observations surpassed user-defined values. Options include the type of variable to analyze, a comparison operator, threshold value, and units.<br/><br/>
                       The example user interface given below would produce two charts showing: 1) the number of days during each year on which daily maximum temperatures exceeded 90°F, and 2) the number of days during each year on which daily minimum temperatures were less than 32°F. In this example, analysis of total precipitation is toggled off.
-                      <img className={classes.docImage} src={viewselection2} alt="View selection for threshold exceedences in the SCAN/TSCAN Weather Grapher" /><br/>
-                      <img className={classes.docImage2} src={userinput2} alt="Weather Grapher User Input For Threshold Exceedences" /><br/><br/>
+                      <img className={classes.docImage} src={viewselection2} alt="View selection for threshold exceedances in the SCAN/TSCAN Weather Grapher" /><br/>
+                      <img className={classes.docImage2} src={userinput2} alt="Weather Grapher User Input For Threshold Exceedances" /><br/><br/>
                     </Typography>
                     <Typography align="left" paragraph variant="body1">
                       <Typography variant="h6">
@@ -92,7 +92,7 @@ class WxgraphDoc extends Component {
                       <b>a) Weather Data Summaries</b><br/><br/>
                       Time series of weather observations that correspond to your selections will appear within the tool. Below is a sample chart showing a sample of the features. Moving the cursor over the charts in the live tool displays data for each variable displayed.<br/><br/>
                       <img className={classes.docImage} src={wxgraphoutput1} alt="Sample output from the SCAN/TSCAN Weather Grapher" /><br/><br/>
-                      <b>b) Threshold Exceedences</b><br/><br/>
+                      <b>b) Threshold Exceedances</b><br/><br/>
                       Time series charts provide the number of days each year that surpassed user-defined thresholds. Below is a sample chart showing a sample of the features. Moving the cursor over the charts in the live tool displays the number of days each year.<br/><br/>
                       <img className={classes.docImage} src={wxgraphoutput2} alt="Sample output from the SCAN/TSCAN Weather Grapher" /><br/><br/>
                     </Typography>

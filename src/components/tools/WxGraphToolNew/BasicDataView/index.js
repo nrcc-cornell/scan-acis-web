@@ -101,13 +101,13 @@ class BasicDataView extends Component {
     return (
       <Grid container direction="row" alignItems="flex-start">
         <Hidden smDown>
-          <Grid item container className="nothing" direction="column" md={2}>
+          <Grid item container className="nothing" direction="column" md={3} style={{ maxWidth: '240px' }}>
             <Grid item>
               <VarPicker options={options} />
             </Grid>
           </Grid>
         </Hidden>
-        <Grid item container className="nothing" direction="column" xs={12} md={10}>
+        <Grid item container className="nothing" direction="column" xs={12} md={9}>
           <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
             <Hidden mdUp>
               <Grid item>

@@ -41,7 +41,7 @@ class WxGraphTool extends Component {
                         onchange={this.handleChangeTooltype}
                     />
                     </Grid>
-                    <Grid item xs={12} >
+                    <Grid item xs={12} style={{ width: '100%' }}>
                     {this.state.tooltype==='basic' &&
                         <BasicDataView
                             station={this.props.station}

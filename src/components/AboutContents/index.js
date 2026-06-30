@@ -61,9 +61,9 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                     <Typography component="span" align="justify" paragraph variant="body2">
                       More information about these networks is available at the NRCS website:
                       <ul>
-                        <li><a href="https://www.wcc.nrcs.usda.gov/scan/" target="_blank" rel="noopener noreferrer">SCAN / Tribal SCAN documentation</a></li>
-                        <li><a href="https://www.wcc.nrcs.usda.gov/scan/scan_brochure.pdf" target="_blank" rel="noopener noreferrer">SCAN brochure</a></li>
-                        <li><a href="https://www.wcc.nrcs.usda.gov/tribalscan/tribalscan_brochure.pdf" target="_blank" rel="noopener noreferrer">Tribal SCAN brochure</a></li>
+                        <li><a href="https://www.nrcs.usda.gov/resources/data-and-reports/soil-climate-analysis-network" target="_blank" rel="noopener noreferrer">SCAN / Tribal SCAN documentation</a></li>
+                        {/* <li><a href="https://www.wcc.nrcs.usda.gov/scan/scan_brochure.pdf" target="_blank" rel="noopener noreferrer">SCAN brochure</a></li>
+                        <li><a href="https://www.wcc.nrcs.usda.gov/tribalscan/tribalscan_brochure.pdf" target="_blank" rel="noopener noreferrer">Tribal SCAN brochure</a></li> */}
                       </ul>
                     </Typography>
                     { this.props.store.app.getLocations && (<StationAboutMap />)}

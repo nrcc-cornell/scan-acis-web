@@ -111,7 +111,7 @@ class WxTables extends Component {
                     return [row.date,row.cnt_t_gt_100,row.cnt_t_gt_90,row.cnt_t_gt_80,row.cnt_p_gt_4,row.cnt_p_gt_3,row.cnt_p_gt_2,row.cnt_p_gt_1]
                 })
 
-            tableTitle = 'Number of exceedences @ '+app.getLocation_explorer.name+', '+app.getLocation_explorer.state
+            tableTitle = 'Number of exceedances @ '+app.getLocation_explorer.name+', '+app.getLocation_explorer.state
         } else {
             tableData = data.map(row => {
                     row.avgt = !isNaN(row.avgt) ? row.avgt : '--'
