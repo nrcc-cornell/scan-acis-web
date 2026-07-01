@@ -9,7 +9,7 @@ except ImportError :
 	import simplejson as json
 
 def acis_ws(method,params) :
-	acis_url = 'http://data.rcc-acis.org/'
+	acis_url = 'https://data.rcc-acis.org/'
 	req = urllib2.Request(acis_url+method,
 		urllib.urlencode({'params':json.dumps(params)}),
 		{'Accept':'application/json'})

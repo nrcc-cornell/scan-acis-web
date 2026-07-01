@@ -35,7 +35,7 @@ class GddChartTitle extends Component {
 
         return (
             <div className="gdd-chart-title">
-              <Grid item container justify="center" alignItems="center" spacing={0}>
+              <Grid item container justifyContent="center" alignItems="center" spacing={0}>
                 <Grid item>
                   <Typography variant="h6">
                     <span>{'Accumulated GDD ('+base_label+') since '+app.getPlantingDate.format("YYYY-MM-DD")+''}</span>
@@ -46,7 +46,7 @@ class GddChartTitle extends Component {
                 </Grid>
               </Grid>
 
-              <Grid item container justify="center" alignItems="center" spacing={0}>
+              <Grid item container justifyContent="center" alignItems="center" spacing={0}>
                   <Grid item>
                      <Typography variant="subtitle1">
                          {(app.getLocation) ? app.getLocation.name+', '+app.getLocation.state : ''}

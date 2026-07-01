@@ -8,7 +8,6 @@ import classNames from 'classnames'
 //import Link from 'next/link'
 import React, { Component } from 'react'
 //import InvertedButton from './InvertedButton'
-import Button from '@material-ui/core/Button';
 
 import acislogo from '../../assets/acis-transparent.png'
 import nrcslogo from '../../assets/NRCS-Logo.png'
@@ -31,16 +30,17 @@ class Footer extends Component {
                             This site provides decision tools and resources using data from weather stations in the SCAN and Tribal SCAN Networks. This project is a collaboration between the following partners.
                         </Typography>
           </Grid>
-          <Grid item xs={12} sm={5}>
+          {/* <Grid item xs={12} sm={5}> */}
+          <Grid item xs={12} sm={3}>
                         <a href="https://www.usda.gov" target="_blank" rel="noopener noreferrer"><img src={usdalogo} alt="Logo for USDA" /></a>
                         {' '}
                         <a href="https://www.nrcs.usda.gov/wps/portal/nrcs/site/national/home/" target="_blank" rel="noopener noreferrer"><img src={nrcslogo} alt="Logo for NRCS" /></a>
                         {' '}
-                        <a href="http://www.rcc-acis.org" target="_blank" rel="noopener noreferrer"><img src={acislogo} alt="Logo for the Applied Climate Information System (ACIS)" /></a>
+                        <a href="https://www.rcc-acis.org" target="_blank" rel="noopener noreferrer"><img src={acislogo} alt="Logo for the Applied Climate Information System (ACIS)" /></a>
                         {' '}
                         <a href="https://www.climatehubs.usda.gov" target="_blank" rel="noopener noreferrer"><img width="60%" src={hublogo} alt="Logo for USDA Climate Hubs" /></a>
           </Grid>
-          <Grid container item direction="column" spacing={1} xs={12} sm={4}>
+          {/* <Grid container item direction="column" spacing={1} xs={12} sm={4}>
               <Grid item>
                     <Button variant="contained" size="small" href="https://www.wcc.nrcs.usda.gov/about/mon_scan.html">
                       {"About SCAN"}
@@ -56,7 +56,7 @@ class Footer extends Component {
                       {"Tribal SCAN Brochure"}
                     </Button>
               </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
         <Grid className={classes.subFooter} item xs={12}>
           <Typography
@@ -90,7 +90,8 @@ const styles = theme => ({
     overflowX: 'hidden'
   },
   footerSections: {
-    margin: '0 16px'
+    margin: '0 16px',
+    justifyContent: 'center'
   },
   subFooter: {
     //backgroundColor: 'rgba(0, 0, 0, 0.15)',

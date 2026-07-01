@@ -21,8 +21,6 @@ import '../../../../styles/LivestockCharts.css';
 
 const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onClickLegend,timescale}) => {
 
-        //console.log('DisplayCharts: data')
-        //console.log(data)
         let year = new Date().getFullYear()
 
         let yearHasValidData = (y) => {
@@ -78,7 +76,8 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
                 const style = {
                   //marginRight: 10,
                   //color: active ? "#AAA" : "#000"
-                  color: active ? "#AAA" : color
+                  color: active ? "#AAA" : color,
+                  marginLeft: '10px'
                 };
 
                 return (
@@ -124,7 +123,7 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
         return (
           <div id="livestock-charts">
 
-          <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
+          <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
             <Grid item>
               <Typography variant="h6">
                 {superChartTitle}
@@ -135,8 +134,8 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
             </Grid>
           </Grid>
 
-          <Grid container justify="left" alignItems="flexStart">
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+          <Grid container justifyContent="left" alignItems="flexStart">
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {stnName}
@@ -144,7 +143,7 @@ const DisplayCharts = ({data,stnName,loading,chartTitle,chartInfo,disabled,onCli
               </Grid>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" xs={12}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" xs={12}>
                 <ResponsiveContainer width="100%" height={300}>
                   <BarChart data={data} syncId="anyId"
                         margin={{top: 0, right: 30, left: 0, bottom: 0}}>

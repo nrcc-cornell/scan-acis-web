@@ -1,5 +1,7 @@
 # scan-acis-web
-SCAN-ACIS Tools: Decision Tools for the Soil Climate Analysis Network\
+
+SCAN-ACIS Tools: Decision Tools for the Soil Climate Analysis Network
+
 (in production at https://scantools.rcc-acis.org/)
 
 To update SCAN stations:
@@ -11,3 +13,6 @@ To update SCAN stations:
 
 ## WARNING
 If you push an update you must either manually replace `/public/data/scan_stations.json` with an updated version of the file or run `/utils/updateStationDataOnWeb.py` after the update is complete to ensure that the stations listed are up-to-date.
+
+## Installation/Usage
+Use node v14.21.3 to install dependencies and to run locally.

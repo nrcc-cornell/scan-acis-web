@@ -1,15 +1,14 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
-//import Drawer from '@material-ui/core/Drawer';
 import Grid from '@material-ui/core/Grid';
 
 // Components
 import BasicDataView from './BasicDataView'
 import ExtremeDataView from './ExtremeDataView'
 import ToolTypeSelect from './ToolTypeSelect'
+import WxgraphDoc from './WxgraphDoc';
+
+import CollapsibleDocumentation from '../../CollapsibleDocumentation';
 
 var app;
 
@@ -34,32 +33,36 @@ class WxGraphTool extends Component {
     render() {
 
         return (
-
-            <Grid container direction="column" justify="flex-start" alignItems="center" spacing={3}>
-                <Grid item xs={12}>
-                  <ToolTypeSelect
-                      value={this.state.tooltype}
-                      onchange={this.handleChangeTooltype}
-                  />
+            <div>
+                <Grid container direction="column" justifyContent="flex-start" alignItems="center" spacing={3}>
+                    <Grid item xs={12}>
+                    <ToolTypeSelect
+                        value={this.state.tooltype}
+                        onchange={this.handleChangeTooltype}
+                    />
+                    </Grid>
+                    <Grid item xs={12} style={{ width: '100%' }}>
+                    {this.state.tooltype==='basic' &&
+                        <BasicDataView
+                            station={this.props.station}
+                            stnname={this.props.stnname}
+                            outputtype={this.props.outputtype}
+                        />
+                    }
+                    {this.state.tooltype==='extreme' &&
+                        <ExtremeDataView
+                            station={this.props.station}
+                            stnname={this.props.stnname}
+                            outputtype={this.props.outputtype}
+                        />
+                    }
+                    </Grid>
                 </Grid>
-                <Grid item xs={12} >
-                  {this.state.tooltype==='basic' &&
-                      <BasicDataView
-                          station={this.props.station}
-                          stnname={this.props.stnname}
-                          outputtype={this.props.outputtype}
-                      />
-                  }
-                  {this.state.tooltype==='extreme' &&
-                      <ExtremeDataView
-                          station={this.props.station}
-                          stnname={this.props.stnname}
-                          outputtype={this.props.outputtype}
-                      />
-                  }
-                </Grid>
-            </Grid>
 
+                <CollapsibleDocumentation
+                    docsProp={<WxgraphDoc />}
+                />
+            </div>
         )
     }
 }

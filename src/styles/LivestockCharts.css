@@ -53,8 +53,8 @@
   margin: 0 10 0 0;
 }
 
-//.recharts-cartesian-axis { font-size: calc(8px+1.0vw); font-family: sans-serif; }
-.recharts-cartesian-axis { font-size: calc(10px + 0.2vw); font-family: sans-serif; }
+//.recharts-cartesian-axis { font-size: calc(8px+1.0vw); font-family: "Roboto",Helvetica,sans-serif; }
+.recharts-cartesian-axis { font-size: calc(10px + 0.2vw); font-family: "Roboto",Helvetica,sans-serif; }
 
 .isHidden {
   display: none;

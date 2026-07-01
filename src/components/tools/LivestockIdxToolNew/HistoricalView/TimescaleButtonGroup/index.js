@@ -27,13 +27,13 @@ const TimescaleButtonGroup = (props) => {
             value="hours"
             control={<Radio color="primary" />}
             label="Hours"
-            labelPlacement="right"
+            labelPlacement="end"
           />
           <FormControlLabel
             value="days"
             control={<Radio color="primary" />}
             label="Days"
-            labelPlacement="right"
+            labelPlacement="end"
           />
         </RadioGroup>
       </FormControl>

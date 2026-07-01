@@ -51,8 +51,8 @@ class SoilsManuals extends Component {
         const { classes } = this.props;
 
         return (
-          <Grid container direction="row" justify="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
-            <Grid item container justify="flex-start" alignItems="flex-start" direction="row" xs={2} md={4} lg={3}>
+          <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" className={classes.root} spacing={4}>
+            <Grid item container justifyContent="flex-start" alignItems="flex-start" direction="row" xs={2} md={4} lg={3}>
               <Grid item>
                 <Hidden mdUp>
                   <MenuPopover/>
@@ -88,7 +88,7 @@ class SoilsManuals extends Component {
                     <b>Soil Water Retention, Moisture Content, and Flow:</b>
                   </Typography>
                   <a href="https://www.youtube.com/watch?v=vmo0FRAVgkM&feature=youtu.be" target="_blank" rel="noopener noreferrer">https://www.youtube.com/watch?v=vmo0FRAVgkM&feature=youtu.be</a><br/><br/>
-                    <img className="doc-image" src={soilsmanuals1} alt="Figures showing details about the soil-water relationship" />
+                    <img className={classes.docImage} src={soilsmanuals1} alt="Figures showing details about the soil-water relationship" />
                     <Typography align="left" paragraph variant="caption">
                       <b>Fig 1.</b> Soil-Water Relationship. Water can be held in three stages.
                     </Typography>

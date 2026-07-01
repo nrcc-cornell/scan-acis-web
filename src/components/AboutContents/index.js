@@ -1,8 +1,4 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 import React, { Component } from 'react';
-//import { Link } from "react-router-dom";
 import { inject, observer} from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from "@material-ui/core/Grid";
@@ -11,9 +7,6 @@ import Button from '@material-ui/core/Button';
 
 // Components
 import StationAboutMap from '../../components/StationAboutMap';
-//import ToolLister from '../../components/ToolLister';
-
-//import scanmap from '../../assets/scan-station-map.png'
 
 // Styles
 import '../../styles/AboutContents.css';
@@ -42,6 +35,12 @@ class AboutContents extends Component {
         app.setActivePage(1);
     }
 
+    handleNestedToolClick = (toolName) => {
+      const toolInfo = app.getToolInfo(toolName);
+      toolInfo.onclick();
+      this.props.history.push(toolInfo.url);
+    };
+
     render() {
 
         const { classes } = this.props;
@@ -62,9 +61,9 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                     <Typography component="span" align="justify" paragraph variant="body2">
                       More information about these networks is available at the NRCS website:
                       <ul>
-                        <li><a href="https://www.wcc.nrcs.usda.gov/scan/" target="_blank" rel="noopener noreferrer">SCAN / Tribal SCAN documentation</a></li>
-                        <li><a href="https://www.wcc.nrcs.usda.gov/scan/scan_brochure.pdf" target="_blank" rel="noopener noreferrer">SCAN brochure</a></li>
-                        <li><a href="https://www.wcc.nrcs.usda.gov/tribalscan/tribalscan_brochure.pdf" target="_blank" rel="noopener noreferrer">Tribal SCAN brochure</a></li>
+                        <li><a href="https://www.nrcs.usda.gov/resources/data-and-reports/soil-climate-analysis-network" target="_blank" rel="noopener noreferrer">SCAN / Tribal SCAN documentation</a></li>
+                        {/* <li><a href="https://www.wcc.nrcs.usda.gov/scan/scan_brochure.pdf" target="_blank" rel="noopener noreferrer">SCAN brochure</a></li>
+                        <li><a href="https://www.wcc.nrcs.usda.gov/tribalscan/tribalscan_brochure.pdf" target="_blank" rel="noopener noreferrer">Tribal SCAN brochure</a></li> */}
                       </ul>
                     </Typography>
                     { this.props.store.app.getLocations && (<StationAboutMap />)}
@@ -84,18 +83,12 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/weather-grapher")}}>
                               Tool
                             </Button>
-                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/wxgraph_doc")}}>
-                              Docs
-                            </Button>
                             <br/>
                     </Typography>
                     <Typography component="span" align="justify" paragraph variant="button">
                             Growing Degree Day Calculator
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/growing-degree-day")}}>
                               Tool
-                            </Button>
-                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/gddtool_doc")}}>
-                              Docs
                             </Button>
                             <br/>
                     </Typography>
@@ -104,18 +97,12 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/water-deficit-calculator")}}>
                               Tool
                             </Button>
-                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/waterdef_doc")}}>
-                              Docs
-                            </Button>
                             <br/>
                     </Typography>
                     <Typography component="span" align="justify" paragraph variant="button">
                             Livestock Heat Index
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/livestock-heat-index")}}>
                               Tool
-                            </Button>
-                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/heatidx_doc")}}>
-                              Docs
                             </Button>
                             <br/>
                     </Typography>
@@ -124,8 +111,33 @@ In addition to the original SCAN project, NRCS also operates a soil moisture and
                             <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/wind-rose")}}>
                               Tool
                             </Button>
-                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/stem/windrose_doc")}}>
-                              Docs
+                            <br/>
+                    </Typography>
+                    <Typography component="span" align="justify" paragraph variant="button">
+                            Wind Chill & Heat Index
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => {this.props.history.push("/tools/wind-chill-heat-index")}}>
+                              Tool
+                            </Button>
+                            <br/>
+                    </Typography>
+                     <Typography component="span" align="justify" paragraph variant="button">
+                            Pawpaw
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => this.handleNestedToolClick('pawpaw')}>
+                              Tool
+                            </Button>
+                            <br/>
+                    </Typography>
+                     <Typography component="span" align="justify" paragraph variant="button">
+                            Lowbush Blueberry Growth
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => this.handleNestedToolClick('blueberryGrowth')}>
+                              Tool
+                            </Button>
+                            <br/>
+                    </Typography>
+                     <Typography component="span" align="justify" paragraph variant="button">
+                            Lowbush Blueberry Harvest
+                            <Button className={classes.button} variant="outlined" color="primary" onClick={() => this.handleNestedToolClick('blueberryHarvest')}>
+                              Tool
                             </Button>
                             <br/>
                     </Typography>

@@ -60,9 +60,9 @@ class GddChart extends Component {
                 'dataInfo': [
                     {'key':'min_por','label':'Period extremes','color':'#342E37'},
                     {'key':'max_minus_min','label':'Period extremes','color':'#342E37'},
-                    {'key':'obs','label':'Season to date','color':'green'},
-                    {'key':'recent','label':'15-yr ave','color':'blue'},
-                    {'key':'ave','label':'Period ave','color':'purple'},
+                    {'key':'obs','label':'Season to date','color':'#82ca9d'},
+                    {'key':'recent','label':'15-yr average','color':'#2692BF'},
+                    {'key':'ave','label':'Period average','color':'#C70039'},
                 ]
             }
         } else {

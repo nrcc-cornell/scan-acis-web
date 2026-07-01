@@ -20,15 +20,12 @@ import '../../../../styles/WxCharts.css';
 
 const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxSelected,tminSelected,prcpSelected}) => {
 
-        //console.log('DATA');
-        //console.log(data);
-
         let year = new Date().getFullYear()
 
         let yearHasValidData = (y,v) => {
             // year
             // variable type (cnt_x, cnt_n, cnt_p)
-            if (data[data.length-1]['date']===y && data[data.length-1][v]!=='M') {
+            if (data.length && data[data.length-1]['date']===y && data[data.length-1][v]!=='M') {
                 return true
             } else {
                 return false
@@ -46,28 +43,32 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
 
         let renderCustomTooltip = (props) => {
           const { payload, label } = props
-          return (
-              <div className="customized-tooltip-wxgraph">
-                {
-                    label
-                }
-                {
-                    payload.map((entry,index) => {
-                        //const { dataKey, color, value, name } = entry
-                        const { color, value, name } = entry
-                        let style = {}
-                        style = { color: color }
-                        return (
-                            <span key={index} className="tooltip-item">
-                            <br/>
-                            <span style={style}>{name} : </span>
-                            <span>{(isNaN(value)) ? '--' : value}</span>
-                            </span>
-                        )
-                    })
-                }
-              </div>
-          )
+          if (payload) {
+            return (
+                <div className="customized-tooltip-wxgraph">
+                  {
+                      label
+                  }
+                  {
+                      payload.map((entry,index) => {
+                          //const { dataKey, color, value, name } = entry
+                          const { color, value, name } = entry
+                          let style = {}
+                          style = { color: color }
+                          return (
+                              <span key={index} className="tooltip-item">
+                              <br/>
+                              <span style={style}>{name} : </span>
+                              <span>{(isNaN(value)) ? '--' : value}</span>
+                              </span>
+                          )
+                      })
+                  }
+                </div>
+            )
+          } else {
+            return '';
+          }
         }
 
         let firstDate = (data && data[0]) ? data[0]['date'] : ''
@@ -87,7 +88,7 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
 
           { (tmaxSelected || tminSelected || prcpSelected) &&
 
-          <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
+          <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
             <Grid item>
               <Typography variant="h6">
                 {superChartTitle}
@@ -101,8 +102,8 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
           }
           { tmaxSelected &&
 
-          <Grid container justify="left" alignItems="flexStart">
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+          <Grid container justifyContent="left" alignItems="flexStart">
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {tmaxTitle}
@@ -137,8 +138,8 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
           }
           { tminSelected &&
 
-          <Grid container justify="left" alignItems="flexStart">
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+          <Grid container justifyContent="left" alignItems="flexStart">
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {tminTitle}
@@ -173,8 +174,8 @@ const DisplayCharts = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
           }
           { prcpSelected &&
 
-          <Grid container justify="left" alignItems="flexStart">
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+          <Grid container justifyContent="left" alignItems="flexStart">
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {prcpTitle}

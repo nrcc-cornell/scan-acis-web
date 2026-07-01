@@ -27,7 +27,7 @@ class ToolLister extends Component {
         return (
             <div className="tool-lister">
             <Grid container direction="column" spacing={2}>
-             <Grid item container justify="space-evenly" spacing={3}>
+             <Grid item container justifyContent="center" spacing={3}>
               <Grid item>
                 <ToolCard {...app.getToolInfo('gddtool')} />
               </Grid>
@@ -42,6 +42,18 @@ class ToolLister extends Component {
               </Grid>
               <Grid item>
                 <ToolCard {...app.getToolInfo('windrose')} />
+              </Grid>
+              <Grid item>
+                <ToolCard {...app.getToolInfo('windheat')} />
+              </Grid>
+              <Grid item>
+                <ToolCard {...app.getToolInfo('pawpaw')} />
+              </Grid>
+              <Grid item>
+                <ToolCard {...app.getToolInfo('blueberryGrowth')} />
+              </Grid>
+              <Grid item>
+                <ToolCard {...app.getToolInfo('blueberryHarvest')} />
               </Grid>
              </Grid>
             </Grid>

@@ -44,27 +44,31 @@ class WxCharts extends Component {
         }
     }
 
+
+                                                                              // #82ca9d   Green
+                                                                              // #342E37   Gray
+
     getChartInfo = (type) => {
         if (type==='soilt') {
             return {
                 'typeLabel':'Soil Temperature',
                 'dataInfo': [
-                    {'key':'soilt2in','label':'SoilT @ 2"','color':'#FFC300'},
-                    {'key':'soilt4in','label':'SoilT @ 4"','color':'#FF5733'},
-                    {'key':'soilt8in','label':'SoilT @ 8"','color':'#C70039'},
-                    {'key':'soilt20in','label':'SoilT @ 20"','color':'#900C3F'},
-                    {'key':'soilt40in','label':'SoilT @ 40"','color':'#581845'},
+                    {'key':'soilt2in','label':'SoilT @ 2"','color':'#FFC300'},    // Yellow
+                    {'key':'soilt4in','label':'SoilT @ 4"','color':'#FF5733'},    // Light red
+                    {'key':'soilt8in','label':'SoilT @ 8"','color':'#C70039'},    // Dark red
+                    {'key':'soilt20in','label':'SoilT @ 20"','color':'#900C3F'},  // Burgundy
+                    {'key':'soilt40in','label':'SoilT @ 40"','color':'#581845'},  // Purple
                 ]
             }
         } else if (type==='soilm') {
             return {
                 'typeLabel':'Soil Moisture',
                 'dataInfo': [
-                    {'key':'soilm2in','label':'SoilM @ 2"','color':'#33C2FF'},
-                    {'key':'soilm4in','label':'SoilM @ 4"','color':'#2DAADF'},
-                    {'key':'soilm8in','label':'SoilM @ 8"','color':'#2692BF'},
-                    {'key':'soilm20in','label':'SoilM @ 20"','color':'#1A6180'},
-                    {'key':'soilm40in','label':'SoilM @ 40"','color':'#134960'},
+                    {'key':'soilm2in','label':'SoilM @ 2"','color':'#33C2FF'},    // Lightest blue
+                    {'key':'soilm4in','label':'SoilM @ 4"','color':'#2DAADF'},    // Light blue
+                    {'key':'soilm8in','label':'SoilM @ 8"','color':'#2692BF'},    // Medium blue
+                    {'key':'soilm20in','label':'SoilM @ 20"','color':'#1A6180'},  // Dark blue
+                    {'key':'soilm40in','label':'SoilM @ 40"','color':'#134960'},  // Darkest blue
                     //{'key':'soilm2in','label':'SoilM @ 2"','color':'#006837'},
                     //{'key':'soilm4in','label':'SoilM @ 4"','color':'#31a354'},
                     //{'key':'soilm8in','label':'SoilM @ 8"','color':'#41b6c4'},
@@ -270,7 +274,7 @@ class WxCharts extends Component {
 
         return (
           <div id="wx-charts">
-          <Grid container direction="row" justify="center" alignItems="center" spacing={2}>
+          <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
             <Grid item>
               <Typography variant="subtitle1">
                 {superChartTitle}
@@ -280,9 +284,9 @@ class WxCharts extends Component {
               <DownloadCharts fname={downloadFilename} />
             </Grid>
           </Grid>
-          <Grid container justify="center" alignItems="center">
+          <Grid container justifyContent="center" alignItems="center">
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('airtemp','Air Temperature')}
@@ -302,19 +306,19 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['airtemp_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['airtemp_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {(app.wxgraph_getTimeFrame==='two_months') ? calcDomain(dataForChart,['avgt','mint','maxt'],[1,1],1) : calcDomain(dataForChart,['avgt'],[1,1],1)}
                     />
                     <Tooltip
                         content={this.renderCustomTooltip}
                     />
                     {app.wxgraph_getTimeFrame==='two_months' && <Area type='monotone' name='Air Temp Range' dataKey='temprange' stroke='' fill='#D3D3D3' />}
-                    <Line type='monotone' name='Air Temp Ave' dataKey='avgt' stroke='#8884d8' fill='#8884d8'/>
+                    <Line type='monotone' name='Air Temp Ave' dataKey='avgt' stroke='#2692BF' fill='#2692BF'/>
                   </ComposedChart>
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('rainfall','Total Precipitation')}
@@ -334,7 +338,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['rainfall_units'], angle: -90, position:'insideBottomLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['rainfall_units'], angle: -90, position:'insideBottomLeft', offset: 25 }}
                         domain = {[0,'auto']}
                     />
                     <Tooltip
@@ -345,7 +349,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('soiltemp','Soil Temperature')}
@@ -377,7 +381,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['soiltemp_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['soiltemp_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {calcDomain(dataForChart,['soilt40in','soilt20in','soilt8in','soilt4in','soilt2in'],[1,1],1)}
                     />
                     <Tooltip
@@ -399,7 +403,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('soilmoist','Soil Moisture')}
@@ -431,7 +435,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['soilmoist_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['soilmoist_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {calcDomain(dataForChart,['soilm40in','soilm20in','soilm8in','soilm4in','soilm2in'],[1,1],1)}
                     />
                     <Tooltip
@@ -454,7 +458,7 @@ class WxCharts extends Component {
             </Grid>
 
             {app.wxgraph_getVars['humidity'] && app.wxgraph_getTimeFrame==='two_days' &&
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('humidity',app.wxgraph_getVarLabels['humidity_label'])}
@@ -475,7 +479,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['humidity_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['humidity_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {[0,100]}
                     />
                     <Tooltip
@@ -486,7 +490,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('solarrad',app.wxgraph_getVarLabels['solarrad_label'])}
@@ -506,7 +510,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['solarrad_units'], angle: -90, position:'insideBottomLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['solarrad_units'], angle: -90, position:'insideBottomLeft', offset: 25 }}
                         domain = {calcDomain(dataForChart,['solar'],[1,1],0)}
                     />
                     <Tooltip
@@ -517,7 +521,7 @@ class WxCharts extends Component {
                 </ResponsiveContainer>
             </Grid>
 
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('wind',app.wxgraph_getVarLabels['wind_label'])}
@@ -549,7 +553,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['wind_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['wind_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {calcDomain(dataForChart,['windspdave','windspdmax'],[1,1],0)}
                     />
                     <Tooltip
@@ -570,7 +574,7 @@ class WxCharts extends Component {
             </Grid>
 
             {app.wxgraph_getVars['winddir'] && app.wxgraph_getTimeFrame==='two_days' &&
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('winddir',app.wxgraph_getVarLabels['winddir_label'])}
@@ -591,7 +595,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['winddir_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['winddir_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {calcDomain(dataForChart,['winddirave'],[1,1],0)}
                     />
                     <Tooltip
@@ -603,7 +607,7 @@ class WxCharts extends Component {
             </Grid>
 
             {app.wxgraph_getVars['leafwet'] && app.wxgraph_getTimeFrame==='two_days' && app.getLocation.sid.split(' ')[1]==='19' &&
-            <Grid item container direction="row" justify="center" alignItems="center" spacing={1}>
+            <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
               <Grid item>
                 <Typography variant="subtitle2">
                   {createChartTitle('leafwet',app.wxgraph_getVarLabels['leafwet_label'])}
@@ -624,7 +628,7 @@ class WxCharts extends Component {
                       interval={(app.wxgraph_getTimeFrame==='two_days') ? 11 : 'preserveEnd'}
                     />
                     <YAxis
-                        label={{ value: app.wxgraph_getVarUnits['leafwet_units'], angle: -90, position:'insideLeft', offset: 10 }}
+                        label={{ value: app.wxgraph_getVarUnits['leafwet_units'], angle: -90, position:'insideLeft', offset: 25 }}
                         domain = {calcDomain(dataForChart,['leafwet'],[1,1],0)}
                     />
                     <Tooltip

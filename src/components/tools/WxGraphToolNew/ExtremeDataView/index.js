@@ -294,15 +294,15 @@ class ExtremeDataView extends Component {
         if (this.props.outputtype==='chart') {
 
           return (
-            <Grid container direction="row" justify="flex-start" alignItems="flex-start" xs={12}>
+            <Grid container direction="row" justifyContent="flex-start" alignItems="flex-start" xs={12}>
                 <Hidden smDown>
-                    <Grid item container direction="column" justify="flex-start" alignItems="flex-start" md={3}>
+                    <Grid item container direction="column" justifyContent="flex-start" alignItems="flex-start" md={3}>
                             {display_VarPicker}
                     </Grid>
                 </Hidden>
                     <Grid item container direction="column" xs={12} md={9}>
                         <Hidden mdUp>
-                          <Grid item container direction="row" justify="flex-start" alignItems="flex-start" spacing={1}>
+                          <Grid item container direction="row" justifyContent="flex-start" alignItems="flex-start" spacing={1}>
                               {display_VarPopover}
                           </Grid>
                         </Hidden>
@@ -324,7 +324,7 @@ class ExtremeDataView extends Component {
         } else {
 
           return (
-            <Grid container direction="column" justify="flex-start" alignItems="flex-start" xs={12}>
+            <Grid container direction="column" justifyContent="flex-start" alignItems="flex-start" xs={12}>
                         <Grid item xs={12}>
                             {display_VarPopover}
                         </Grid>

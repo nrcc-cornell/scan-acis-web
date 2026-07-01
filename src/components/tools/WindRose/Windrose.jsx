@@ -77,7 +77,7 @@ export default class Windrose extends Component {
         }
       },
       credits: {
-        href: "http://www.rcc-acis.org",
+        href: "https://www.rcc-acis.org",
         text: "Powered by ACIS"
       },
       // Following are expected, but not required, to be provided via this.props.options
@@ -105,8 +105,6 @@ export default class Windrose extends Component {
       }
     }
     const options = {...this.options, ...this.props.options}
-    console.log('windrose series')
-    console.log(options)
     return (
       <div style={{margin: "0 0"}}>
         {options.series &&

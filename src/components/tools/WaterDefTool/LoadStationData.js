@@ -1,15 +1,7 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-//import React from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
-const protocol = window.location.protocol;
-
 const LoadStationData = ({sid,period}) => {
-        //console.log('LoadStationData params');
-        //console.log(sid,period);
         let params
         let network = sid.split(' ')[1]
         if (network==='17') {
@@ -44,12 +36,12 @@ const LoadStationData = ({sid,period}) => {
           }
         }
         return axios
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
           .then(res => {
             return res
           })
           .catch(err => {
-            console.log(
+            console.error(
               "Request Error: " + (err.response.data || err.response.statusText)
             );
           });

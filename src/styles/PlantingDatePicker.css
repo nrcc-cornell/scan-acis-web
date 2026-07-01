@@ -80,7 +80,7 @@
     }
 
     .planting-datepicker-input-div {
-        font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-family: "Roboto",Helvetica,sans-serif;
         //margin: 6px 0px 10px 0px;
         //margin: 2px 0px 10px 0px;
         margin: 1vw;
@@ -155,7 +155,7 @@
         color: rgb(0,0,0);
         font-size: 0.8em;
         border: 1px solid rgb(192,192,192);
-        font-family: 'times';
+        font-family: "Roboto",Helvetica,sans-serif;
         background-color: rgb(255,255,255);
     }
 

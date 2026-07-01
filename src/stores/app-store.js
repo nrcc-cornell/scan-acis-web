@@ -1,16 +1,10 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
-//import React from 'react';
 import { observable, computed, action } from 'mobx';
 import axios from 'axios';
 import moment from 'moment';
-
-const protocol = window.location.protocol;
+import { parse, format, subHours } from 'date-fns';
+import { heatindex as calculateHeatIndex, windchill as calculateWindChill } from '../components/tools/WindHeat/windheatModels';
 
 //utils
-//const arrSum = arr => arr.reduce((a,b) => a + b, 0)
-//const arrAvg = arr => arr.reduce((a,b) => a + b, 0) / arr.length
 const getMtdStartLabel = (s) => { return moment(s,"YYYY-MM-DD").format("MMM")+' 1' }
 const getStdStartLabel = (s) => {
         let month = moment(s,'YYYY-MM-DD').month() + 1
@@ -64,14 +58,12 @@ export class AppStore {
         let tabIndex = null;
         if (this.getActivePage==='home') {
             tabIndex = 0;
-            //tabIndex = false;
         } else if (this.getActivePage==='about') {
             tabIndex = 1;
         } else if (this.getActivePage==='stem') {
             tabIndex = 2;
         } else if (this.getActivePage==='tool') {
-            //tabIndex = 3;
-            tabIndex = false;
+            tabIndex = 3;
         } else {
         }
         return tabIndex
@@ -89,7 +81,7 @@ export class AppStore {
     /// -     description (one sentence description of tool)
     /// -     thumbnail (thumbnail image for tool card)
     //////////////////////////////////////////////
-    toolNameArray = ['gddtool','waterdef','wxgrapher','livestock','windrose']
+    toolNameArray = ['gddtool','waterdef','wxgrapher','livestock','windrose','windheat','pawpaw','blueberryGrowth','blueberryHarvest']
     @observable toolName = this.toolNameArray[0]
     // set toolName from tool card
     @action setToolName = (n) => {
@@ -104,65 +96,82 @@ export class AppStore {
     @computed get getToolName() { return this.toolName };
 
     getToolInfo = (name) => {
-            let title, description, thumbnail, url, url_doc, onclick
+            let title, description, thumbnail, url, onclick
             let pathToImages = './thumbnails/'
             if (name==='gddtool') {
                 title = 'Growing Degree Day Calculator'
                 description = 'Monitor heat accumulation throughout the growing season.'
                 thumbnail = pathToImages+'GddTool-thumbnail.png'
                 url = '/tools/growing-degree-day'
-                url_doc = '/stem/gddtool_doc'
             } else if (name==='waterdef') {
                 title = 'Water Deficit Calculator'
                 description = 'Track changes in the available soil water content.'
                 thumbnail = pathToImages+'WaterDeficitCalc-thumbnail.png'
                 url = '/tools/water-deficit-calculator'
-                url_doc = '/stem/waterdef_doc'
             } else if (name==='wxgrapher') {
                 title = 'Weather Grapher'
                 description = 'View data for multiple variables and timescales.'
                 thumbnail = pathToImages+'WxGrapher-thumbnail.png'
                 url = '/tools/weather-grapher'
-                url_doc = '/stem/wxgraph_doc'
             } else if (name==='livestock') {
                 title = 'Livestock Heat Index'
                 description = 'Assess dangerous conditions for livestock by the hour.'
                 thumbnail = pathToImages+'Livestock-thumbnail.png'
                 url = '/tools/livestock-heat-index'
-                url_doc = '/stem/heatidx_doc'
             } else if (name==='windrose') {
                 title = 'Wind Rose Diagram'
                 description = 'Summarize wind speed and direction over time.'
                 thumbnail = pathToImages+'WindRose-thumbnail.png'
                 url = '/tools/wind-rose'
-                url_doc = '/stem/windrose_doc'
+            } else if (name==='windheat') {
+                title = 'Wind Chill & Heat Index'
+                description = 'Visualize year to date wind chill and heat index.'
+                thumbnail = pathToImages+'WindHeat-thumbnail.png'
+                url = '/tools/wind-chill-heat-index'
+            } else if (name==='pawpaw') {
+                title = 'Pawpaw Growth'
+                description = 'See year to date and historic information about Pawpaw fruit growth.'
+                thumbnail = pathToImages+'Pawpaw-thumbnail.png'
+                url = '/tools/fruit-tool'
+                onclick = () => this.fruittool_handleFruitSelect('pawpaw')
+            } else if (name==='blueberryGrowth') {
+                title = 'Lowbush Blueberry Growth'
+                description = 'See year to date and historic information about Lowbush Blueberry fruit growth.'
+                thumbnail = pathToImages+'Lowbush-Blueberry-Growth-thumbnail.png'
+                url = '/tools/fruit-tool'
+                onclick = () => this.fruittool_handleFruitSelect('blueberryGrowth')
+            } else if (name==='blueberryHarvest') {
+                title = 'Lowbush Blueberry Harvest'
+                description = 'See year to date and historic information about Lowbush Blueberry harvest.'
+                thumbnail = pathToImages+'Lowbush-Blueberry-Harvest-thumbnail.png'
+                url = '/tools/fruit-tool'
+                onclick = () => this.fruittool_handleFruitSelect('blueberryHarvest')
             } else {
             }
-            onclick = () => {this.setActivePage(3); this.setToolName(name)}
-            return {'name':name, 'title':title, 'description':description, 'thumbnail':thumbnail, 'url':url, 'url_doc':url_doc, 'onclick':onclick}
+            return {'name':name, 'title':title, 'description':description, 'thumbnail':thumbnail, 'url':url, 'onclick':onclick}
         };
 
-    @observable outputType = 'chart';
-    @action setOutputType = (changeEvent) => {
-        //console.log('Changing output type to ', changeEvent.target.value)
-        this.outputType = changeEvent.target.value
+        @observable outputType = 'chart';
+        @action setOutputType = (changeEvent) => {
+            this.outputType = changeEvent.target.value
     }
     // set outputType from select menu
     @action setSelectedOutputType = (t) => {
-            if (this.getOutputType !== t) {
-                this.outputType = t.value;
+        if (this.getOutputType !== t) {
+            this.outputType = t;
             }
         };
     @computed get getOutputType() { return this.outputType };
-
-    // data is loading - boolean - to control disabling of outputType
-    // - return combined loading status for data in all tools
-    //@computed get dataIsLoading() {
-    //    return this.gddtool_getDataIsLoading;
-    //}
-
-
-
+    @observable outputTypePickerInfo = {
+        title: 'Output Type',
+        name: 'output type',
+        options: [
+            { label: 'Chart', value: 'chart' },
+            { label: 'Table', value: 'table' }
+        ],
+        type: 'radio',
+    };
+        
     //////////////////////////////////////////////
     /// StationPicker
     //////////////////////////////////////////////
@@ -176,6 +185,8 @@ export class AppStore {
             if (this.getToolName==='gddtool' && this.toolIsSelected) { this.gddtool_downloadData() }
             if (this.getToolName==='wxgrapher' && this.toolIsSelected) { this.wxgraph_downloadData() }
             if (this.getToolName==='livestock' && this.toolIsSelected) { this.livestock_downloadData() }
+            if (this.getToolName==='windheat' && this.toolIsSelected) { this.windheat_downloadData() }
+            if (['pawpaw','blueberryGrowth','blueberryHarvest'].includes(this.getToolName) && this.toolIsSelected) { this.fruittool_downloadData() }
             // save location to local storage
             localStorage.setItem("SCAN-ACIS-TOOLS.uid",l.toString())
         };
@@ -187,6 +198,8 @@ export class AppStore {
                 if (this.getToolName==='gddtool' && this.toolIsSelected) { this.gddtool_downloadData() }
                 if (this.getToolName==='wxgrapher' && this.toolIsSelected) { this.wxgraph_downloadData() }
                 if (this.getToolName==='livestock' && this.toolIsSelected) { this.livestock_downloadData() }
+                if (this.getToolName==='windheat' && this.toolIsSelected) { this.windheat_downloadData() }
+                if (['pawpaw','blueberryGrowth','blueberryHarvest'].includes(this.getToolName) && this.toolIsSelected) { this.fruittool_downloadData() }
                 // save location to local storage
                 localStorage.setItem("SCAN-ACIS-TOOLS.uid",t.value)
             }
@@ -206,6 +219,7 @@ export class AppStore {
         // download data for table
         this.explorerClimateSummary_downloadData()
         this.explorer_downloadData()
+        this.explorer_downloadDailyData()
     }
     // set location from select menu
     @action setSelectedLocation_explorer = (t) => {
@@ -219,20 +233,15 @@ export class AppStore {
             // download data for table
             this.explorerClimateSummary_downloadData()
             this.explorer_downloadData()
-            // update data view for station explorer
-            //this.setDataView_explorer('climate');
+            this.explorer_downloadDailyData()
         };
     @computed get getLocation_explorer() { return this.location_explorer };
 
     // all locations
-    //@observable locations = []
     @observable locations = null;
     @action setLocations = (l) => {
         if (this.getLocations) { this.locations.clear() };
         this.locations = l
-        //this.locations.replace(l)
-        //console.log('setting locations');
-        //console.log(this.getLocations);
     }
     @computed get getLocations() { return this.locations };
 
@@ -244,7 +253,6 @@ export class AppStore {
             click: () => {
                 this.setLocation(feature.id);
                 this.setLocation_explorer(feature.id);
-                //this.setDataView_explorer('climate');
                 if (this.getShowModalMap) { this.setShowModalMap(false) };
             },
             mouseover: () => {
@@ -256,7 +264,6 @@ export class AppStore {
         });
     }
     @action stationOnEachFeature_explorer = (feature, layer) => {
-        //console.log(feature);
         let porStart,porEnd
         if (feature.properties && feature.properties.name) {
             porStart = feature.properties.sdate;
@@ -351,11 +358,6 @@ export class AppStore {
     @observable showModalMap=false;
     @action setShowModalMap = (b) => {
             this.showModalMap=b
-            //if (!this.getShowModalMap) {
-            //    if (this.getToolName==='gddtool') { this.gddtool_downloadData() }
-            //    if (this.getToolName==='wxgrapher') { this.wxgraph_downloadData() }
-            //    if (this.getToolName==='livestock') { this.livestock_downloadData() }
-            //}
         }
     @computed get getShowModalMap() {
         return this.showModalMap
@@ -366,7 +368,6 @@ export class AppStore {
         fetch(process.env.PUBLIC_URL + "/data/scan_stations.json")
              .then(r => r.json())
              .then(data => {
-               //console.log(locs);
                this.setLocations(data['locs']);
 
                // set saved location from local storage if it exists, otherwise set default station
@@ -381,12 +382,15 @@ export class AppStore {
                }
 
                this.setDataView_explorer('weather');
+               this.setInfoView_explorer('info');
                this.setDatesForLocations({'date':data['date'],'ytd_start':data['ytd_start'],'std_start':data['std_start'],'mtd_start':data['mtd_start']});
-               // download of data for water deficit calculator is done within tool
+               // download of data for water deficit calculator and wind chill/heat index are done within tool
                // here are initial downloads for others:
                if (this.getToolName==='gddtool') {this.gddtool_downloadData()}
                if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
                if (this.getToolName==='livestock') {this.livestock_downloadData()}
+               if (this.getToolName==='windheat') {this.windheat_downloadData()}
+               if (['pawpaw','blueberryGrowth','blueberryHarvest'].includes(this.getToolName)) {this.fruittool_downloadData()}
              });
     }
 
@@ -410,27 +414,26 @@ export class AppStore {
         return this.dataView_explorer
     }
 
+    // station explorer info view
+    // 'info': show station information
+    // 'status': show station status
+    @observable infoView_explorer = 'info';
+    @action setInfoView_explorer = (d) => {
+            this.infoView_explorer=d
+        }
+    @computed get getInfoView_explorer() {
+        return this.infoView_explorer
+    }
 
-    // action for changing map setting via buttons
-    // - this will center and zoom map on Alaska, Hawaii or PR
-    //@observable mapSettings = {'mapCenter':[37.0, -95.7], 'zoomLevel':4}
-    //@action updateMapSettings = (loc) => {
-    //    if (loc==='puerto_rico') {
-    //        this.mapSettings = {'mapCenter':[18.25, -66.0], 'zoomLevel':6}
-    //    } else if (loc==='alaska') {
-    //        this.mapSettings = {'mapCenter':[64.20, -149.50], 'zoomLevel':4}
-    //    } else if (loc==='hawaii') {
-    //        this.mapSettings = {'mapCenter':[19.90, -155.60], 'zoomLevel':6}
-    //    } else {
-    //        this.mapSettings = {'mapCenter':[37.0, -95.7], 'zoomLevel':4}
-    //    }
-    //}
-    //@action updateMapSettingsManually = (s) => {
-    //    this.mapSettings = s; 
-    //}
-    //@computed get getMapSettings() {
-    //    return this.mapSettings
-    //}
+    // station explorer status page
+    @observable explorer_status_page = 0;
+    @action setExplorer_status_page = (d) => {
+            this.explorer_status_page=d
+        }
+    @computed get getExplorer_status_page() {
+        return this.explorer_status_page
+    }
+
 
     //////////////////////////////////////////////
     /// TOOL: GDD Calculator
@@ -471,7 +474,7 @@ export class AppStore {
     @action setPlantingDate = (v) => {
       this.planting_date = v
       //this.gddtool_setChartData()
-      //this.gddtool_setClimateSummary()
+      this.gddtool_setClimateSummary()
     };
     @computed get getPlantingDate() {
       return this.planting_date
@@ -623,7 +626,6 @@ export class AppStore {
         let min_por=[]
         let max_minus_min=[]
         let summary_data = []
-        //console.log(datesArray)
         datesArray.forEach(function (d) {
             // skip 2/29 if its not a leap year
             if (d==='02-29' && !isLeapYear) { return }
@@ -645,12 +647,8 @@ export class AppStore {
             // get ave array: POR ave
             let ave_data = []
             yearsArray.forEach(function (y) {
-                //if (y!=='2018') {
-                //if (y!==this_year) {
                 if (y!==this_year.toString()) {
                     if (isNaN(data_by_date[d][y])===false) { ave_data.push(data_by_date[d][y]) }
-                    //if (data_by_date[d][y]) { ave_data.push(data_by_date[d][y]) }
-                    //ave_data.push(data_by_date[d][y])
                 }
             });
             ave = (ave_data.length<5) ? NaN : average(ave_data);
@@ -658,28 +656,20 @@ export class AppStore {
             // get recent array: 15-year ave
             let recent_data = []
             yearsArray.forEach(function (y) {
-                //if (y<='2017' && y>='2003') {
-                if (y<=(parseInt(this_year,10)-1).toString() && y>=(parseInt(this_year,10)-15).toString()) {
+                if (y<=(parseInt(this_year,10)-1).toString()) {
                     if (isNaN(data_by_date[d][y])===false) { recent_data.push(data_by_date[d][y]) }
-                    //if (data_by_date[d][y]) { recent_data.push(data_by_date[d][y]) }
-                    //recent_data.push(data_by_date[d][y])
                 }
             });
-            recent = (recent_data.length!==15) ? NaN : average(recent_data);
+            recent = (recent_data.length < 15) ? NaN : average(recent_data.slice(0,15));
+            // recent = (recent_data.length!==15) ? NaN : average(recent_data);
 
             // all year values (except current year) for this date
-            //let valArray = Object.values(data_by_date[d])
             let valArray = []
             yearsArray.forEach(function (y) {
-                //if (y!=='2018') {
-                //if (y!==this_year) {
                 if (y!==this_year.toString()) {
                     if (isNaN(data_by_date[d][y])===false) { valArray.push(data_by_date[d][y]) }
-                    //if (data_by_date[d][y]) { valArray.push(data_by_date[d][y]) }
-                    //valArray.push(data_by_date[d][y])
                 }
             });
-            //console.log(d,valArray);
             if (valArray.length>=5) {
                 // get max_por array: max value in POR
                 max_por = Math.max(...valArray);
@@ -735,7 +725,7 @@ export class AppStore {
             let elems = [{
                 //"name":"gdd"+this.gddtool_getBase,
                 "name":"gdd",
-		"vN":23,
+                "vN":23,
                 "base":parseInt(this.gddtool_getBase,10),
                 "interval":[0,0,1],
                 "duration":"std",
@@ -797,16 +787,11 @@ export class AppStore {
 
     // GDD tool data download - download data using parameters
     @action gddtool_downloadData = () => {
-        //console.log("Call gddtool_downloadData")
 	let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.getAcisParams : this.getAcisParams_tscan
         this.gddtool_setDataIsLoading(true);
         return axios
-          //.post(`${protocol}//grid2.rcc-acis.org/GridData`, this.getAcisParams)
-          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.getAcisParams)
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
           .then(res => {
-            //console.log('SUCCESS downloading from ACIS');
-            //console.log(res);
             if (res.data.hasOwnProperty('error')) {
                 this.gddtool_setClimateData(null);
                 this.gddtool_initClimateSummary()
@@ -817,11 +802,493 @@ export class AppStore {
             this.gddtool_setDataIsLoading(false);
           })
           .catch(err => {
-            console.log(
+            console.error(
               "Request Error: " + (err.response.data || err.response.statusText)
             );
           });
     }
+
+
+    //////////////////////////////////////////////
+    /// TOOL: Fruit tool
+    //////////////////////////////////////////////
+    // Fruit information needed for calculations
+    @observable fruit_info={
+        'pawpaw': {
+            name: 'pawpaw',
+            label: 'Pawpaw',
+            startDateStr: '04-01',
+            seasonStart: [4,1],
+            gddBase: '50'
+        },
+        'blueberryGrowth': {
+            name: 'blueberryGrowth',
+            label: 'Lowbush Blueberry Growth',
+            startDateStr: '04-01',
+            seasonStart: [4,1],
+            gddBase: '32'
+        },
+        'blueberryHarvest': {
+            name: 'blueberryHarvest',
+            label: 'Lowbush Blueberry Harvest',
+            startDateStr: '05-01',
+            seasonStart: [5,1],
+            gddBase: '41'
+        }
+    };
+
+    // Fruit tool Gdd base selection
+    @observable fruittool_base='50';
+    @action fruittool_setBase = (e) => {
+            this.fruittool_base = e.target.value
+            this.fruittool_downloadData()
+        }
+    @action fruittool_setBaseManually = (v) => {
+            this.fruittool_base = v
+            this.fruittool_downloadData()
+        }
+    @computed get fruittool_getBase() {
+        return this.fruittool_base
+    }
+
+    @action fruittool_handleFruitSelect = (fruitName) => {
+        this.setToolName(fruitName);
+        this.fruittool_setBaseManually(this.fruit_info[fruitName].gddBase);
+    }
+
+    @action fruittool_setFruitFromRadioGroup = (t) => {
+        // only update it fruit changed
+        if (this.toolName !== t) {
+            this.fruittool_handleFruitSelect(t);
+        }
+    }
+
+    // climate data saved in this var
+    // - the full request downloaded from ACIS
+    @observable fruittool_climateData = {};
+    @action fruittool_setClimateData = (startDate, gddBase, res) => {
+        if (!this.fruittool_climateData.hasOwnProperty(startDate)) {
+            this.fruittool_climateData[startDate] = {};
+        }
+
+        this.fruittool_climateData[startDate][gddBase] = res
+    }
+    @computed get fruittool_getClimateData() {
+        const startDate = this.fruit_info[this.getToolName].startDateStr;
+        const gddBase = this.fruittool_getBase;
+
+        if (this.fruittool_climateData.hasOwnProperty(startDate) && this.fruittool_climateData[startDate].hasOwnProperty(gddBase)) {
+            return this.fruittool_climateData[startDate][gddBase];
+        } else {
+            return null;
+        }
+    }
+
+    // selected year in fruit tool
+    @observable fruittool_selectedYear = this.latestSelectableYear;
+    @action fruittool_setSelectedYear = (res) => {
+        this.fruittool_selectedYear = res
+    }
+    @computed get fruittool_getSelectedYear() {
+        return this.fruittool_selectedYear
+    }
+
+    @computed get fruittool_selectedYearMissing() {
+        const selectedYear = this.fruittool_selectedYear;
+        const selectedYearData = this.fruittool_climateSummary.data_by_year[selectedYear];
+        return selectedYearData ? { percentMissing: selectedYearData.percentMissing, missing: selectedYearData.missing, days: selectedYearData.gddObs.length } : { percentMissing: 0, missing: 0, days: 0 };
+    }
+
+    @observable fruittool_climateSummary = {
+        years_missing: [],
+        years_included: [],
+        data_by_year: {},
+        summary_data: [{
+            'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+            'ave': NaN,
+            'max_por': NaN,
+            'min_por': NaN,
+            'max_minus_min': NaN,
+        }]
+    };
+    @action fruittool_initClimateSummary = () => {
+        this.fruittool_climateSummary = {
+            years_missing: [],
+            years_included: [],
+            data_by_year: {},
+            summary_data: [{
+                'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+                'ave': NaN,
+                'max_por': NaN,
+                'min_por': NaN,
+                'max_minus_min': NaN,
+            }]
+        }
+    }
+    @action fruittool_setClimateSummary = () => {
+        const average = arr => arr.reduce( ( p, c ) => p + c, 0 ) / arr.length;
+        const periodLen = 15;
+        
+        const data = this.fruittool_getClimateData;
+        if (data === null) {
+            this.fruittool_initClimateSummary();
+            return;
+        }
+
+        const seasonStart = this.fruit_info[this.getToolName].startDateStr;
+        
+        const data_by_date = {};
+        const data_by_year = {};
+        const years_missing = [];
+        
+        // This flag is used to skip days until we get to the first full year of data
+        let startCollecting = false;
+
+        let currentYear = data[0][0].slice(0,4);
+        let currentMissing = 0;
+        let readyForFirstFreeze = false;
+        data.forEach(([dateStr, [gddStr, numMissing], mintStr], i) => {
+            const year = dateStr.slice(0,4);
+            const mmdd = dateStr.slice(5);
+
+            // On seasonStart reset flags and trackers and determine if the finished season is "missing"
+            if (mmdd === seasonStart) {
+                if (startCollecting) {
+                    // If the last numMissing before the first freeze was more than 10, consider year missing
+                    //      This pattern effectively only considers the active season
+                    if (currentMissing > 10) {
+                        years_missing.push(currentYear);
+                    }
+                    data_by_year[currentYear].missing = currentMissing;
+                    const ffi = data_by_year[currentYear].firstFreezeIdx
+                    data_by_year[currentYear].percentMissing = currentMissing / (ffi === null ? data_by_year[currentYear].gddObs.length : ffi) * 100;
+                    currentMissing = 0;
+                    readyForFirstFreeze = false;
+                } else {
+                    startCollecting = true;
+                }
+                currentYear = year;
+            }
+            
+            // One and after seasonStart
+            if (startCollecting && mmdd >= seasonStart) {
+                // Make sure day is in object
+                if (!Object.keys(data_by_date).includes(mmdd)) {
+                    data_by_date[mmdd] = {};
+                }
+
+                // Make sure the year is in object
+                if (!Object.keys(data_by_year).includes(year)) {
+                    data_by_year[year] = { firstFreezeDate: null, firstFreezeIdx: null, lastSpringFreezeDate: null, lastSpringFreezeIdx: null, gddObs: [], missing: null };
+                }
+    
+                // Parse GDD from ACIS into NaN or float
+                const gdd = (gddStr === -999 || gddStr === 'M') ? NaN : parseFloat(gddStr);
+
+                // If we have not yet passed the first freeze, find out how many days are missing
+                if (data_by_year[year].firstFreezeDate === null) {
+                    currentMissing = numMissing;
+                }
+    
+                // Add GDD to date if not current year (because this object is used for calculating POR and Recent stats where we do not include the current year)
+                if (year.toString() !== this.latestSelectableYear.toString()) {
+                    data_by_date[mmdd][year] = gdd;
+                }
+                
+                // Check if we should start looking for freezing temperatures
+                if (mmdd === '07-01') {
+                    readyForFirstFreeze = true;
+                }
+                
+                // Parse mint and determine if first freeze, store date if yes
+                const mint = parseFloat(mintStr);
+                if (readyForFirstFreeze && data_by_year[year].firstFreezeDate === null && mint < 32) {
+                    data_by_year[year].firstFreezeDate = year + '-' + mmdd;
+                    data_by_year[year].firstFreezeIdx = data_by_year[year].gddObs.length;
+                }
+
+                if (!readyForFirstFreeze && mint < 32) {
+                    data_by_year[year].lastSpringFreezeDate = year + '-' + mmdd;
+                    data_by_year[year].lastSpringFreezeIdx = data_by_year[year].gddObs.length;
+                }
+
+                data_by_year[year].gddObs.push(gdd);
+            }
+
+            if (i === data.length - 1) {
+                data_by_year[currentYear].missing = currentMissing;
+                const ffi = data_by_year[currentYear].firstFreezeIdx
+                data_by_year[currentYear].percentMissing = currentMissing / (ffi === null ? data_by_year[currentYear].gddObs.length : ffi) * 100;
+            }
+        });        
+        
+        // get a sorted array of keys
+        const datesArray = Object.keys(data_by_date)
+        datesArray.sort();
+
+        
+        const years_included = Array.from({ length: periodLen }, (_, i) => parseInt(this.latestSelectableYear, 10) - i - 1).filter(y => !years_missing.includes(y))
+        const summary_data = [];
+        datesArray.forEach(function (d) {
+            // skip until seasonStart
+            if (d < seasonStart) { return }
+
+            const annualDayData = [];
+            const ys = [];
+            years_included.forEach(function (y) {
+                if (!years_missing.includes(String(y)) && isNaN(data_by_date[d][y])===false) {
+                    ys.push(y);
+                    annualDayData.push(data_by_date[d][y]);
+                }
+            });
+
+            let por_min, por_max, por_avg, por_max_minus_min;
+            if (annualDayData.length<5) {
+                por_min = NaN;
+                por_max = NaN;
+                por_avg = NaN;
+                por_max_minus_min = NaN;
+            } else {
+                por_min = Math.min(...annualDayData);
+                por_max = Math.max(...annualDayData);
+                por_max_minus_min = por_max - por_min;
+                por_avg = average(annualDayData);
+            }
+
+            // data summary
+            summary_data.push({
+                'date': d,
+                'ave': parseInt(por_avg,10),
+                'max_por': parseInt(por_max,10),
+                'min_por': parseInt(por_min,10),
+                'max_minus_min': parseInt(por_max_minus_min,10),
+            })
+        });
+
+        this.fruittool_climateSummary = {
+            summary_data,
+            years_missing,
+            years_included,
+            data_by_year
+        };
+    }
+    @computed get fruittool_getClimateSummaryYearsInPOR() {
+        return this.fruittool_climateSummary.years_included;
+    }
+    
+    @computed get fruittool_getClimateSummary() {
+        const springFreezes = this.fruittool_getLastSpringFreezes;
+        const selectedYear = this.fruittool_selectedYear;
+        const selectedYearObs = selectedYear in this.fruittool_climateSummary.data_by_year ? this.fruittool_climateSummary.data_by_year[selectedYear].gddObs : [];
+        const dataWithObs = this.fruittool_climateSummary.summary_data.map((summary_obj, i) => {
+          const newObj = {...summary_obj};
+          if (springFreezes && newObj.date in springFreezes) {
+            newObj.springFreezes = { num: -springFreezes[newObj.date].length, label: springFreezes[newObj.date].toSorted().join(',\u00A0') };
+          } else {
+            newObj.springFreezes = { num: 0, label: '' };
+          }
+          newObj.date = selectedYear + '-' + newObj.date;
+          newObj.obs = selectedYearObs.length <= i ? NaN : selectedYearObs[i];
+          return newObj;
+        });
+        
+        return dataWithObs
+    }
+
+    @computed get fruittool_getHistoricalSummary() {
+        const fruitInfo = {
+            pawpaw: [{
+                key: 'veryEarly',
+                range: [2400,2499],
+            },{
+                key: 'early',
+                range: [2500,2599],
+            },{
+                key: 'middle',
+                range: [2600,2699],
+            },{
+                key: 'late',
+                range: [2700,2799],
+            },{
+                key: 'veryLate',
+                range: [2800,2899],
+            }],
+            blueberryGrowth: [{
+                key: 'flowering',
+                range: [390,390],
+            },{
+                key: 'fruiting',
+                range: [600,600],
+            }],
+            blueberryHarvest: [{
+                key: 'optimal',
+                range: [1000,1300],
+            }]
+        };
+        
+        const data = this.fruittool_climateSummary.data_by_year;
+        const info = fruitInfo[this.getToolName];
+        const isScatter = this.getToolName === 'blueberryGrowth';
+        const years = Object.keys(data);
+        years.sort();
+        
+        const results = years.map(year => {
+            const { firstFreezeDate, firstFreezeIdx, gddObs, percentMissing } = data[year];
+            
+            let categories = {};
+            if (percentMissing >= 25) {
+                categories['transparent'] = 0;
+                for (const infoObj of info) {
+                    categories[infoObj.key] = 0;
+                }
+            } else {
+                let lastIdx = gddObs.findIndex(v => info[0].range[0] <= v);
+                categories['transparent'] = lastIdx;
+    
+                for (const infoObj of info) {
+                    const v = infoObj.range[1] === Infinity ? gddObs.length - 1 : gddObs.findIndex(v => infoObj.range[1] <= v);
+                    if (isScatter && v >= 0) {
+                        categories[infoObj.key] = v;
+                    } else if (firstFreezeIdx !== null && (v < 0 || firstFreezeIdx < v)) {
+                        categories[infoObj.key] = firstFreezeIdx - lastIdx;
+                        lastIdx = firstFreezeIdx;
+                    } else if (firstFreezeIdx === null && v < 0) {
+                        categories[infoObj.key] = gddObs.length - 1 - lastIdx;
+                        lastIdx = gddObs.length - 1;
+                    } else {
+                        categories[infoObj.key] = v - lastIdx;
+                        lastIdx = v;
+                    }
+                }
+            }
+
+            return {
+                year,
+                firstFreezeDate: percentMissing >= 25 ? null : firstFreezeDate,
+                firstFreezeIdx: percentMissing >= 25 ? null : firstFreezeIdx,
+                isComplete: gddObs.length === 275,
+                isMissing: percentMissing >= 2.5,
+                percentMissing: percentMissing,
+                isScatter,
+                categories
+            };
+        });
+
+        const firstToShow = results.findIndex(d => d.percentMissing < 25);
+        return results.slice(firstToShow);
+    }
+
+    @computed get fruittool_getYearOptions() {
+        const years = Object.keys(this.fruittool_climateSummary.data_by_year).filter(year => this.fruittool_climateSummary.data_by_year[year].percentMissing < 25);
+        years.sort((a,b) => b-a);
+        return years;
+    }
+    
+    @computed get fruittool_getSelectedYearFirstFreeze() {
+        const selectedYear = this.fruittool_selectedYear;
+        const selectedYearFirstFreeze = selectedYear in this.fruittool_climateSummary.data_by_year ? this.fruittool_climateSummary.data_by_year[selectedYear].firstFreezeDate : null;
+        return selectedYearFirstFreeze;
+    }
+    
+    @computed get fruittool_getLastSpringFreezes() {
+        const years = this.fruittool_getYearOptions;
+        return years.reduce((acc,y) => {
+            const yearLastSpringFreezeDate = this.fruittool_climateSummary.data_by_year[y].lastSpringFreezeDate;
+            if (yearLastSpringFreezeDate) {
+                const mmdd = yearLastSpringFreezeDate.slice(5);
+                if (!(mmdd in acc)) {
+                    acc[mmdd] = [];
+                }
+                acc[mmdd].push(y)
+            }
+            return acc;
+        }, {});
+    }
+    
+    // Fruit tool data download - set parameters
+    @computed get fruit_getAcisParams() {
+        const seasonStart = this.fruit_info[this.getToolName].seasonStart;
+        
+        let elems = [{
+                "name":"gdd",
+                "vN":23,
+                "base":parseInt(this.fruittool_getBase,10),
+                "interval":[0,0,1],
+                "duration":"std",
+                "season_start":seasonStart,
+                "reduce":{"add": "mcnt", "reduce": "sum"},
+            },{
+                "vX":2,"vN":23,"interval":[0,0,1],"duration":"dly" // daily mint
+            }]
+
+            return {
+                    "sid":this.getLocation.sid,
+                    "sdate":"por",
+                    "edate": "por",
+                    "elems":elems
+                }
+        }
+
+    // Fruit tool data download - set parameters
+    @computed get fruit_getAcisParams_tscan() {
+            const seasonStart = this.fruit_info[this.getToolName].seasonStart;
+
+
+            let elems = [{
+                "name":"gdd",
+                "vN":24,
+                "base":parseInt(this.fruittool_getBase,10),
+                "interval":[0,0,1],
+                "duration":"std",
+                "season_start":seasonStart,
+                "reduce":{"add": "mcnt", "reduce": "sum"},
+            },{
+                "vX":2,"vN":24,"interval":[0,0,1],"duration":"dly" // daily mint
+            }]
+
+            return {
+                    "sid":this.getLocation.sid,
+                    "sdate":"por",
+                    "edate":"por",
+                    "elems":elems
+                }
+        }
+
+    // data is loading - boolean - to control the spinner
+    @observable fruittool_dataIsLoading = false
+    @action fruittool_setDataIsLoading = (b) => {
+        this.fruittool_dataIsLoading = b;
+    }
+    @computed get fruittool_getDataIsLoading() {
+        return this.fruittool_dataIsLoading;
+    }
+
+    // Fruit tool data download - download data using parameters
+    @action fruittool_downloadData = () => {
+        if (this.fruit_info.hasOwnProperty(this.getToolName)) {
+            const startDate = this.fruit_info[this.getToolName].startDateStr;
+            const gddBase = this.fruittool_getBase;
+    
+            this.fruittool_setDataIsLoading(true);
+            let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.fruit_getAcisParams : this.fruit_getAcisParams_tscan
+            return axios
+                .post('https://data.nrcc.rcc-acis.org/StnData', params)
+                .then(res => {
+                if (res.data.hasOwnProperty('error')) {
+                    this.fruittool_setClimateData(startDate, gddBase, null);
+                    this.fruittool_initClimateSummary()
+                } else {
+                    this.fruittool_setClimateData(startDate, gddBase, res.data.data.slice(0));
+                    this.fruittool_setClimateSummary()
+                }
+                this.fruittool_setDataIsLoading(false);
+                })
+                .catch(err => {
+                    console.error(err);
+                });
+        }
+    }
+
 
     //////////////////////////////////////////////
     /// TOOL: Weather Grapher
@@ -936,7 +1403,7 @@ export class AppStore {
             soiltemp_units : (this.wxgraph_getUnitsTemp==='degreeF') ? '°F' : '°C',
             soilmoist_units : '%',
             humidity_units : '%',
-            solarrad_units : (this.wxgraph_getTimeFrame==='two_days') ? 'W/m2' : 'langleys',
+            solarrad_units : (this.wxgraph_getTimeFrame==='two_days') ? 'Wm⁻²' : 'langleys',
             wind_units : 'mph',
             winddir_units : 'deg',
             leafwet_units : 'min',
@@ -963,7 +1430,7 @@ export class AppStore {
     //     soilt : average temperature for day (F)
     //     soilm : average soil moisture for day (%)
     //     humid : average humidity for day (%)
-    //     solar : total solar radiation for day (W/m2 for hourly inst, langleys for daily sum)
+    //     solar : total solar radiation for day Wm⁻² for hourly inst, langleys for daily sum)
     //     wind : average wind speed for day (mph)
     //     leafwet : average leaf wetness for day (minutes)
     @observable wxgraph_climateSummary = {'por':[{
@@ -1022,9 +1489,6 @@ export class AppStore {
         this.wxgraph_climateSummary = {'por':dataObjArray,'two_years':dataObjArray,'two_months':dataObjArray,'two_days':dataObjArray}
     }
     @action wxgraph_setClimateSummary = () => {
-        //console.log('wxgraph_setClimateSummary');
-        //console.log(this.getLocation.sid.split(' ')[1]);
-        //console.log(this.getLocation.sid.split(' ')[1]==='17');
         let data = this.wxgraph_getClimateData;
         let dataObjArray_hours = [];
         let dataObjArray_days = [];
@@ -1346,8 +1810,7 @@ export class AppStore {
             if (this.getToolName==='wxgrapher') { this.wxgraph_downloadData() }
         }
     }
-    @action wxgraph_setTimeFrameFromRadioGroup = (e) => {
-        let t = e.target.value;
+    @action wxgraph_setTimeFrameFromRadioGroup = (t) => {
         // has the time frame changed?
         let changed = (this.wxgraph_getTimeFrame===t) ? false : true
         // make sure ext switch is off if new time period is not POR
@@ -1373,8 +1836,7 @@ export class AppStore {
                 if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
             }
         };
-    @action wxgraph_setUnitsTempFromRadioGroup = (e) => {
-        let t = e.target.value;
+    @action wxgraph_setUnitsTempFromRadioGroup = (t) => {
         // have the units changed?
         let changed = (this.wxgraph_getUnitsTemp===t) ? false : true
         // only update and download data if time frame has changed
@@ -1398,8 +1860,7 @@ export class AppStore {
                 if (this.getToolName==='wxgrapher') {this.wxgraph_downloadData()}
             }
         };
-    @action wxgraph_setUnitsPrcpFromRadioGroup = (e) => {
-        let u = e.target.value;
+    @action wxgraph_setUnitsPrcpFromRadioGroup = (u) => {
         // have the units changed?
         let changed = (this.wxgraph_getUnitsPrcp===u) ? false : true
         // only update and download data if time frame has changed
@@ -1699,30 +2160,22 @@ export class AppStore {
 
     // Wx Grapher tool daily data download - download data using parameters
     @action wxgraph_downloadData = () => {
-        //console.log("Call wxgraph_downloadData")
-        //console.log(this.getLocation.sid.split(' ')[1]);
         let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.wxgraph_getAcisParams : this.wxgraph_getAcisParams_tscan
         this.wxgraph_setDataIsLoading(true);
         return axios
-          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
-          //.post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
           .then(res => {
-            //console.log('SUCCESS downloading from ACIS');
-            //console.log(res);
             if (res.data.hasOwnProperty('error')) {
-                //console.log('Error: resetting data to null');
                 this.wxgraph_setClimateData(null);
                 this.wxgraph_initClimateSummary()
             } else {
-                //console.log('processing wxgraph ACIS data');
                 this.wxgraph_setClimateData(res.data.data.slice(0));
                 this.wxgraph_setClimateSummary()
             }
             this.wxgraph_setDataIsLoading(false);
           })
           .catch(err => {
-            console.log(
+            console.error(
               "Request Error: " + (err.response.data || err.response.statusText)
             );
           });
@@ -1740,6 +2193,14 @@ export class AppStore {
     }
     @computed get explorer_getClimateData() {
         return this.explorer_climateData
+    }
+
+    @observable explorer_dailyClimateData = null;
+    @action explorer_setDailyClimateData = (res) => {
+        this.explorer_dailyClimateData = res
+    }
+    @computed get explorer_getDailyClimateData() {
+        return this.explorer_dailyClimateData
     }
 
     // climate data saved
@@ -1760,66 +2221,149 @@ export class AppStore {
     //     soilt : average temperature for day (F)
     //     soilm : average soil moisture for day (%)
     //     humid : average humidity for day (%)
-    //     solar : total solar radiation for day (W/m2 for hourly inst, langleys for daily sum)
+    //     solar : total solar radiation for day (Wm⁻² for hourly inst, langleys for daily sum)
     //     wind : average wind speed for day (mph)
     //     leafwet : average leaf wetness for day (minutes)
     @observable explorer_latestConditions = {
                 'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
-                'avgt':NaN,
-                'maxt':NaN,
-                'mint':NaN,
-                'pcpn':NaN,
-                'soilt2in':NaN,
-                'soilt4in':NaN,
-                'soilt8in':NaN,
-                'soilt20in':NaN,
-                'soilt40in':NaN,
-                'soilm2in':NaN,
-                'soilm4in':NaN,
-                'soilm8in':NaN,
-                'soilm20in':NaN,
-                'soilm40in':NaN,
-                'humid':NaN,
-                'solar':NaN,
-                'windspdmax':NaN,
-                'windspdave':NaN,
-                'winddirave':NaN,
-                'leafwet':NaN,
+                'avgt':'M',
+                'maxt':'M',
+                'mint':'M',
+                'pcpn':'M',
+                'soilt2in':'M',
+                'soilt4in':'M',
+                'soilt8in':'M',
+                'soilt20in':'M',
+                'soilt40in':'M',
+                'soilm2in':'M',
+                'soilm4in':'M',
+                'soilm8in':'M',
+                'soilm20in':'M',
+                'soilm40in':'M',
+                'humid':'M',
+                'solar':'M',
+                'windspdmax':'M',
+                'windspdave':'M',
+                'winddirave':'M',
+                'leafwet':'M',
+                'avgt_last': 'M',
+                'maxt_last': 'M',
+                'mint_last': 'M',
+                'pcpn_last': 'M',
+                'soilt2in_last': 'M',
+                'soilt4in_last': 'M',
+                'soilt8in_last': 'M',
+                'soilt20in_last': 'M',
+                'soilt40in_last': 'M',
+                'soilm2in_last': 'M',
+                'soilm4in_last': 'M',
+                'soilm8in_last': 'M',
+                'soilm20in_last': 'M',
+                'soilm40in_last': 'M',
+                'humid_last': 'M',
+                'solar_last': 'M',
+                'windspdmax_last': 'M',
+                'windspdave_last': 'M',
+                'winddirave_last': 'M'
         };
 
     @action explorer_initLatestConditions = () => {
         let dataObjOut = {
                 'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
-                'avgt':NaN,
-                'maxt':NaN,
-                'mint':NaN,
-                'pcpn':NaN,
-                'soilt2in':NaN,
-                'soilt4in':NaN,
-                'soilt8in':NaN,
-                'soilt20in':NaN,
-                'soilt40in':NaN,
-                'soilm2in':NaN,
-                'soilm4in':NaN,
-                'soilm8in':NaN,
-                'soilm20in':NaN,
-                'soilm40in':NaN,
-                'humid':NaN,
-                'solar':NaN,
-                'windspdmax':NaN,
-                'windspdave':NaN,
-                'winddirave':NaN,
-                'leafwet':NaN,
+                'avgt':'M',
+                'maxt':'M',
+                'mint':'M',
+                'pcpn':'M',
+                'soilt2in':'M',
+                'soilt4in':'M',
+                'soilt8in':'M',
+                'soilt20in':'M',
+                'soilt40in':'M',
+                'soilm2in':'M',
+                'soilm4in':'M',
+                'soilm8in':'M',
+                'soilm20in':'M',
+                'soilm40in':'M',
+                'humid':'M',
+                'solar':'M',
+                'windspdmax':'M',
+                'windspdave':'M',
+                'winddirave':'M',
+                'leafwet':'M',
+                'avgt_last': 'M',
+                'maxt_last': 'M',
+                'mint_last': 'M',
+                'pcpn_last': 'M',
+                'soilt2in_last': 'M',
+                'soilt4in_last': 'M',
+                'soilt8in_last': 'M',
+                'soilt20in_last': 'M',
+                'soilt40in_last': 'M',
+                'soilm2in_last': 'M',
+                'soilm4in_last': 'M',
+                'soilm8in_last': 'M',
+                'soilm20in_last': 'M',
+                'soilm40in_last': 'M',
+                'humid_last': 'M',
+                'solar_last': 'M',
+                'windspdmax_last': 'M',
+                'windspdave_last': 'M',
+                'winddirave_last': 'M',
+                'soilm_last': '--',
+                'soilt_last': '--',
             };
         this.explorer_latestConditions = dataObjOut
     }
 
     @action explorer_setLatestConditions = () => {
         let data = this.explorer_getClimateData;
-        let dataObjOut = {};
+        let dataObjOut = {
+                'date': 'M',
+                'avgt':'M',
+                'maxt':'M',
+                'mint':'M',
+                'pcpn':'M',
+                'soilt2in':'M',
+                'soilt4in':'M',
+                'soilt8in':'M',
+                'soilt20in':'M',
+                'soilt40in':'M',
+                'soilm2in':'M',
+                'soilm4in':'M',
+                'soilm8in':'M',
+                'soilm20in':'M',
+                'soilm40in':'M',
+                'humid':'M',
+                'solar':'M',
+                'windspdmax':'M',
+                'windspdave':'M',
+                'winddirave':'M',
+                'leafwet':'M',
+                'avgt_last': 'M',
+                'maxt_last': 'M',
+                'mint_last': 'M',
+                'pcpn_last': 'M',
+                'soilt2in_last': 'M',
+                'soilt4in_last': 'M',
+                'soilt8in_last': 'M',
+                'soilt20in_last': 'M',
+                'soilt40in_last': 'M',
+                'soilm2in_last': 'M',
+                'soilm4in_last': 'M',
+                'soilm8in_last': 'M',
+                'soilm20in_last': 'M',
+                'soilm40in_last': 'M',
+                'humid_last': 'M',
+                'solar_last': 'M',
+                'windspdmax_last': 'M',
+                'windspdave_last': 'M',
+                'winddirave_last': 'M',
+                'soilm_last': '--',
+                'soilt_last': '--',
+            };
         let i, dateToday, numHours, numFutureMissingHours;
         let formattedHourString
-        data.forEach(function (d) {
+        data.forEach(function (d, idx) {
               dateToday = d[0]
               numHours = d[1].length
               numFutureMissingHours = 0
@@ -1841,8 +2385,8 @@ export class AppStore {
                       formattedHourString = dateToday+' '+(i+1).toString()+':00'
                   } else if (i===23) {
                       formattedHourString = moment(dateToday,"YYYY-MM-DD").add(1,'days').format("YYYY-MM-DD")+' 00:00'
-                  } else {
                   }
+
                   // assign this hour to dataObjOut
                   // We'll keep overwriting this object. The last hour written to this object is the last hour of available data.
                   dataObjOut = {
@@ -1862,19 +2406,152 @@ export class AppStore {
                       'soilm20in':(d[13][i]==='M' || parseFloat(d[13][i])<0.0) ? 'M' : parseFloat(d[13][i]).toFixed(0).toString()+'%',
                       'soilm40in':(d[14][i]==='M' || parseFloat(d[14][i])<0.0) ? 'M' : parseFloat(d[14][i]).toFixed(0).toString()+'%',
                       'humid':(d[15][i]==='M' || parseFloat(d[15][i])<0.0 || parseFloat(d[15][i])>100.0) ? 'M' : parseFloat(d[15][i]).toFixed(0).toString()+'%',
-                      'solar':(d[16][i]==='M' || parseFloat(d[16][i])<0.0) ? 'M' : parseFloat(d[16][i]).toFixed(1).toString()+' W/m2',
+                      'solar':(d[16][i]==='M' || parseFloat(d[16][i])<0.0) ? 'M' : parseFloat(d[16][i]).toFixed(1).toString()+' Wm⁻²',
                       'windspdmax':(d[17][i]==='M' || parseFloat(d[17][i])<0.0) ? 'M' : parseFloat(d[17][i]).toFixed(1).toString()+' mph',
                       'windspdave':(d[18][i]==='M' || parseFloat(d[18][i])<0.0) ? 'M' : parseFloat(d[18][i]).toFixed(1).toString()+' mph',
                       'winddirave':(d[19][i]==='M' || parseFloat(d[19][i])<0.0 || parseFloat(d[4][i])>360.0) ? 'M' : parseFloat(d[19][i]).toFixed(0).toString()+String.fromCharCode(176),
                       'leafwet':'M',
+                      'avgt_last':(d[1][i]==='M') ? ('avgt_last' in dataObjOut ? dataObjOut.avgt_last : 'M') : formattedHourString,
+                      'maxt_last':(d[2][i]==='M') ? ('maxt_last' in dataObjOut ? dataObjOut.maxt_last : 'M') : formattedHourString,
+                      'mint_last':(d[3][i]==='M') ? ('mint_last' in dataObjOut ? dataObjOut.mint_last : 'M') : formattedHourString,
+                      'pcpn_last':(d[4][i]==='M') ? ('pcpn_last' in dataObjOut ? dataObjOut.pcpn_last : 'M') : formattedHourString,
+                      'soilt2in_last':(d[5][i]==='M') ? ('soilt2in_last' in dataObjOut ? dataObjOut.soilt2in_last : 'M') : formattedHourString,
+                      'soilt4in_last':(d[6][i]==='M') ? ('soilt4in_last' in dataObjOut ? dataObjOut.soilt4in_last : 'M') : formattedHourString,
+                      'soilt8in_last':(d[7][i]==='M') ? ('soilt8in_last' in dataObjOut ? dataObjOut.soilt8in_last : 'M') : formattedHourString,
+                      'soilt20in_last':(d[8][i]==='M') ? ('soilt20in_last' in dataObjOut ? dataObjOut.soilt20in_last : 'M') : formattedHourString,
+                      'soilt40in_last':(d[9][i]==='M') ? ('soilt40in_last' in dataObjOut ? dataObjOut.soilt40in_last : 'M') : formattedHourString,
+                      'soilm2in_last':(d[10][i]==='M') ? ('soilm2in_last' in dataObjOut ? dataObjOut.soilm2in_last : 'M') : formattedHourString,
+                      'soilm4in_last':(d[11][i]==='M') ? ('soilm4in_last' in dataObjOut ? dataObjOut.soilm4in_last : 'M') : formattedHourString,
+                      'soilm8in_last':(d[12][i]==='M') ? ('soilm8in_last' in dataObjOut ? dataObjOut.soilm8in_last : 'M') : formattedHourString,
+                      'soilm20in_last':(d[13][i]==='M') ? ('soilm20in_last' in dataObjOut ? dataObjOut.soilm20in_last : 'M') : formattedHourString,
+                      'soilm40in_last':(d[14][i]==='M') ? ('soilm40in_last' in dataObjOut ? dataObjOut.soilm40in_last : 'M') : formattedHourString,
+                      'humid_last':(d[15][i]==='M') ? ('humid_last' in dataObjOut ? dataObjOut.humid_last : 'M') : formattedHourString,
+                      'solar_last':(d[16][i]==='M') ? ('solar_last' in dataObjOut ? dataObjOut.solar_last : 'M') : formattedHourString,
+                      'windspdmax_last':(d[17][i]==='M') ? ('windspdmax_last' in dataObjOut ? dataObjOut.windspdmax_last : 'M') : formattedHourString,
+                      'windspdave_last':(d[18][i]==='M') ? ('windspdave_last' in dataObjOut ? dataObjOut.windspdave_last : 'M') : formattedHourString,
+                      'winddirave_last':(d[19][i]==='M') ? ('winddirave_last' in dataObjOut ? dataObjOut.winddirave_last : 'M') : formattedHourString,
+                      'soilm_last': '--',
+                      'soilt_last': '--',
                   }
               }
         })
-        this.explorer_latestConditions = dataObjOut
+        this.explorer_latestConditions = dataObjOut;
     }
 
     @computed get explorer_getLatestConditions() {
         return this.explorer_latestConditions
+    }
+
+    @observable explorer_latestDailyConditions = {
+            'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+            'avgt_last': 'M',
+            'maxt_last': 'M',
+            'mint_last': 'M',
+            'pcpn_last': 'M',
+            'soilm_last': 'M',
+            'soilt_last': 'M',
+            'soilt2in_last': '--',
+            'soilt4in_last': '--',
+            'soilt8in_last': '--',
+            'soilt20in_last': '--',
+            'soilt40in_last': '--',
+            'soilm2in_last': '--',
+            'soilm4in_last': '--',
+            'soilm8in_last': '--',
+            'soilm20in_last': '--',
+            'soilm40in_last': '--',
+            'humid_last': 'M',
+            'solar_last': 'M',
+            'windspdmax_last': 'M',
+            'windspdave_last': 'M',
+            'winddirave_last': 'M'
+    };
+
+    @action explorer_initLatestDailyConditions = () => {
+        let dataObjOut = {
+            'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+            'avgt_last': 'M',
+            'maxt_last': 'M',
+            'mint_last': 'M',
+            'pcpn_last': 'M',
+            'soilm_last': 'M',
+            'soilt_last': 'M',
+            'soilt2in_last': '--',
+            'soilt4in_last': '--',
+            'soilt8in_last': '--',
+            'soilt20in_last': '--',
+            'soilt40in_last': '--',
+            'soilm2in_last': '--',
+            'soilm4in_last': '--',
+            'soilm8in_last': '--',
+            'soilm20in_last': '--',
+            'soilm40in_last': '--',
+            'humid_last': 'M',
+            'solar_last': 'M',
+            'windspdmax_last': 'M',
+            'windspdave_last': 'M',
+            'winddirave_last': 'M'
+        };
+        this.explorer_latestDailyConditions = dataObjOut
+    }
+
+    @action explorer_setLatestDailyConditions = () => {
+        let data = this.explorer_getDailyClimateData;
+        let dataObjOut = {
+            'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+            'avgt_last': 'M',
+            'maxt_last': 'M',
+            'mint_last': 'M',
+            'pcpn_last': 'M',
+            'soilm_last': 'M',
+            'soilt_last': 'M',
+            'soilt2in_last': '--',
+            'soilt4in_last': '--',
+            'soilt8in_last': '--',
+            'soilt20in_last': '--',
+            'soilt40in_last': '--',
+            'soilm2in_last': '--',
+            'soilm4in_last': '--',
+            'soilm8in_last': '--',
+            'soilm20in_last': '--',
+            'soilm40in_last': '--',
+            'humid_last': 'M',
+            'solar_last': 'M',
+            'windspdmax_last': 'M',
+            'windspdave_last': 'M',
+            'winddirave_last': 'M'
+        };
+
+        data.forEach(function (d) {
+            dataObjOut = {
+                'avgt_last':(d[1]==='M') ? ('avgt_last' in dataObjOut ? dataObjOut.avgt_last : 'M') : d[0],
+                'maxt_last':(d[2]==='M') ? ('maxt_last' in dataObjOut ? dataObjOut.maxt_last : 'M') : d[0],
+                'mint_last':(d[3]==='M') ? ('mint_last' in dataObjOut ? dataObjOut.mint_last : 'M') : d[0],
+                'pcpn_last':(d[4]==='M') ? ('pcpn_last' in dataObjOut ? dataObjOut.pcpn_last : 'M') : d[0],
+                'soilm_last':(d[5]==='M') ? ('soilm_last' in dataObjOut ? dataObjOut.soilm_last : 'M') : d[0],
+                'soilt_last':(d[6]==='M') ? ('soilt_last' in dataObjOut ? dataObjOut.soilt_last : 'M') : d[0],
+                'humid_last':(d[7]==='M') ? ('humid_last' in dataObjOut ? dataObjOut.humid_last : 'M') : d[0],
+                'solar_last':(d[8]==='M') ? ('solar_last' in dataObjOut ? dataObjOut.solar_last : 'M') : d[0],
+                'windspdmax_last':(d[9]==='M') ? ('windspdmax_last' in dataObjOut ? dataObjOut.windspdmax_last : 'M') : d[0],
+                'windspdave_last':(d[10]==='M') ? ('windspdave_last' in dataObjOut ? dataObjOut.windspdave_last : 'M') : d[0],
+                'winddirave_last':(d[11]==='M') ? ('winddirave_last' in dataObjOut ? dataObjOut.winddirave_last : 'M') : d[0],
+                'soilt2in_last': '--',
+                'soilt4in_last': '--',
+                'soilt8in_last': '--',
+                'soilt20in_last': '--',
+                'soilt40in_last': '--',
+                'soilm2in_last': '--',
+                'soilm4in_last': '--',
+                'soilm8in_last': '--',
+                'soilm20in_last': '--',
+                'soilm40in_last': '--',
+            }
+        })
+        this.explorer_latestDailyConditions = dataObjOut;
+    }
+
+    @computed get explorer_getLatestDailyConditions() {
+        return this.explorer_latestDailyConditions
     }
 
     // station climate summary saved here: to be used in station explorer table
@@ -1915,25 +2592,53 @@ export class AppStore {
     }
 
     @action explorer_setClimateSummary = () => {
-        let d = this.explorerClimateSummary_getClimateData;
-        let dataObjOut = {};
-        dataObjOut = {
-            'ytd_start':'Jan 1',
-            'std_start':getStdStartLabel(d[0]),
-            'mtd_start':getMtdStartLabel(d[0]),
-            'date':d[0],
-            'p_ytd_o':(d[1]==='M' || parseFloat(d[1])<0.0) ? 'M' : ((d[1]==='T') ? 'T' : parseFloat(d[1])).toFixed(2).toString()+'"',
-            'p_ytd_n':(d[2]==='M' || parseFloat(d[2])<0.0) ? 'M' : ((d[2]==='T') ? 'T' : parseFloat(d[2])).toFixed(2).toString()+'"',
-            'p_std_o':(d[3]==='M' || parseFloat(d[3])<0.0) ? 'M' : ((d[3]==='T') ? 'T' : parseFloat(d[3])).toFixed(2).toString()+'"',
-            'p_std_n':(d[4]==='M' || parseFloat(d[4])<0.0) ? 'M' : ((d[4]==='T') ? 'T' : parseFloat(d[4])).toFixed(2).toString()+'"',
-            'p_mtd_o':(d[5]==='M' || parseFloat(d[5])<0.0) ? 'M' : ((d[5]==='T') ? 'T' : parseFloat(d[5])).toFixed(2).toString()+'"',
-            'p_mtd_n':(d[6]==='M' || parseFloat(d[6])<0.0) ? 'M' : ((d[6]==='T') ? 'T' : parseFloat(d[6])).toFixed(2).toString()+'"',
-            't_ytd_o':(d[7]==='M') ? 'M' : parseFloat(d[7]).toFixed(1).toString()+String.fromCharCode(176)+'F',
-            't_ytd_n':(d[8]==='M') ? 'M' : parseFloat(d[8]).toFixed(1).toString()+String.fromCharCode(176)+'F',
-            't_std_o':(d[9]==='M') ? 'M' : parseFloat(d[9]).toFixed(1).toString()+String.fromCharCode(176)+'F',
-            't_std_n':(d[10]==='M') ? 'M' : parseFloat(d[10]).toFixed(1).toString()+String.fromCharCode(176)+'F',
-            't_mtd_o':(d[11]==='M') ? 'M' : parseFloat(d[11]).toFixed(1).toString()+String.fromCharCode(176)+'F',
-            't_mtd_n':(d[12]==='M') ? 'M' : parseFloat(d[12]).toFixed(1).toString()+String.fromCharCode(176)+'F',
+        const [
+            date,
+            p_today,
+            [p_ytd_o, p_ytd_n],
+            [p_std_o, p_std_n],
+            [p_mtd_o, p_mtd_n],
+            t_today,
+            [t_ytd_o, t_ytd_n],
+            [t_std_o, t_std_n],
+            [t_mtd_o, t_mtd_n]
+        ] = this.explorerClimateSummary_getClimateData;
+
+        const p_today_adjustment = p_today === 'M' ? 1 : 0;
+        const t_today_adjustment = t_today === 'M' ? 1 : 0;
+        
+        const missing_percent_threshold = 5;
+        const too_much_missing = (num_missing, total) => {
+            // Return true if (<10 days and any missing) or (<20 days and >1 missing) or (<30 days and >2 missing) or (>=30 days and >5% missing)
+            return  (total < 10 && num_missing > 0) ||
+                    (total < 20 && num_missing > 1) ||
+                    (total < 30 && num_missing > 2) ||
+                    (30 <= total && (num_missing / total * 100) >= missing_percent_threshold)
+        };
+        const ytd_start = 'Jan 1';
+        const ytd_days = moment(date, 'YYYY-MM-DD').diff(moment(`${date.slice(0,4)} ${ytd_start}`, 'YYYY MMM D'), 'days') + 1;
+        const std_start = getStdStartLabel(date);
+        const std_days = moment(date, 'YYYY-MM-DD').diff(moment(`${date.slice(0,4)} ${std_start}`, 'YYYY MMM D'), 'days') + 1;
+        const mtd_start = getMtdStartLabel(date);
+        const mtd_days = moment(date, 'YYYY-MM-DD').diff(moment(`${date.slice(0,4)} ${mtd_start}`, 'YYYY MMM D'), 'days') + 1;
+
+        const dataObjOut = {
+            ytd_start,
+            std_start,
+            mtd_start,
+            date,
+            'p_ytd_o':(p_ytd_o==='M' || too_much_missing(p_ytd_n - p_today_adjustment, ytd_days - p_today_adjustment) || parseFloat(p_ytd_o)<0.0) ? 'M' : ((p_ytd_o==='T') ? 'T' : parseFloat(p_ytd_o)).toFixed(2).toString()+'"',
+            'p_ytd_n':(p_ytd_n==='M') ? 'M' : parseInt(p_ytd_n - p_today_adjustment, 10),
+            'p_std_o':(p_std_o==='M' || too_much_missing(p_std_n - p_today_adjustment, std_days - p_today_adjustment) || parseFloat(p_std_o)<0.0) ? 'M' : ((p_std_o==='T') ? 'T' : parseFloat(p_std_o)).toFixed(2).toString()+'"',
+            'p_std_n':(p_std_n==='M') ? 'M' : parseInt(p_std_n - p_today_adjustment, 10),
+            'p_mtd_o':(p_mtd_o==='M' || too_much_missing(p_mtd_n - p_today_adjustment, mtd_days - p_today_adjustment) || parseFloat(p_mtd_o)<0.0) ? 'M' : ((p_mtd_o==='T') ? 'T' : parseFloat(p_mtd_o)).toFixed(2).toString()+'"',
+            'p_mtd_n':(p_mtd_n==='M') ? 'M' : parseInt(p_mtd_n - p_today_adjustment, 10),
+            't_ytd_o':(t_ytd_o==='M' || too_much_missing(t_ytd_n - t_today_adjustment, ytd_days - t_today_adjustment)) ? 'M' : parseFloat(t_ytd_o).toFixed(1).toString()+String.fromCharCode(176)+'F',
+            't_ytd_n':(t_ytd_n==='M') ? 'M' : parseInt(t_ytd_n - t_today_adjustment, 10),
+            't_std_o':(t_std_o==='M' || too_much_missing(t_std_n - t_today_adjustment, std_days - t_today_adjustment)) ? 'M' : parseFloat(t_std_o).toFixed(1).toString()+String.fromCharCode(176)+'F',
+            't_std_n':(t_std_n==='M') ? 'M' : parseInt(t_std_n - t_today_adjustment, 10),
+            't_mtd_o':(t_mtd_o==='M' || too_much_missing(t_mtd_n - t_today_adjustment, mtd_days - t_today_adjustment)) ? 'M' : parseFloat(t_mtd_o).toFixed(1).toString()+String.fromCharCode(176)+'F',
+            't_mtd_n':(t_mtd_n==='M') ? 'M' : parseInt(t_mtd_n - t_today_adjustment, 10),
         }
         this.explorer_climateSummary = dataObjOut
     }
@@ -2012,26 +2717,54 @@ export class AppStore {
             }
     }
 
-    // ACIS parameters: climate summary call
-    @computed get explorerClimateSummary_getAcisParams() {
+    // ACIS parameters: daily call for last few days
+    @computed get explorer_getDailyAcisParams() {
             let elems
-            elems=[
-                {"name":"pcpn","vN":22,"duration":"ytd","reduce":"sum","prec":2,"maxmissing":"1"},
-                {"name":"pcpn","vN":22,"duration":"ytd","reduce":"sum","prec":2,"maxmissing":"1","normal":"departure"},
-                {"name":"pcpn","vN":22,"duration":"std","reduce":"sum","season_start":getStdStartString(date_current),"prec":2,"maxmissing":"1"},
-                {"name":"pcpn","vN":22,"duration":"std","reduce":"sum","season_start":getStdStartString(date_current),"prec":2,"maxmissing":"1","normal":"departure"},
-                {"name":"pcpn","vN":22,"duration":"mtd","reduce":"sum","prec":2,"maxmissing":"1"},
-                {"name":"pcpn","vN":22,"duration":"mtd","reduce":"sum","prec":2,"maxmissing":"1","normal":"departure"},
-                {"name":"avgt","vN":23,"duration":"ytd","reduce":"mean","prec":1,"maxmissing":"1"},
-                {"name":"avgt","vN":23,"duration":"ytd","reduce":"mean","prec":1,"maxmissing":"1","normal":"departure"},
-                {"name":"avgt","vN":23,"duration":"std","reduce":"mean","season_start":getStdStartString(date_current),"prec":1,"maxmissing":"1"},
-                {"name":"avgt","vN":23,"duration":"std","reduce":"mean","season_start":getStdStartString(date_current),"prec":1,"maxmissing":"1","normal":"departure"},
-                {"name":"avgt","vN":23,"duration":"mtd","reduce":"mean","prec":1,"maxmissing":"1"},
-                {"name":"avgt","vN":23,"duration":"mtd","reduce":"mean","prec":1,"maxmissing":"1","normal":"departure"},
+            let numdays
+            elems = [
+                {"vX":43}, //daily temp, ave
+                {"vX":1,"vN":23}, //daily temp, max
+                {"vX":2,"vN":23}, //daily temp, min
+                {"vX":4,"vN":22}, //daily pcpn, sum
+                {"vX":68,"vN":1}, //daily soil moisture, ave
+                {"vX":69,"vN":3}, //daily soil temperature, ave
+                {"vX":71}, //daily relative humidity, ave
+                {"vX":70,"vN":5}, //daily solar radiation, sum
+                {"vX":77,"vN":5}, //daily wind speed, peak, max
+                {"vX":89,"vN":6}, //daily wind speed, average, ave
+                {"vX":101,"vN":1}, //daily wind direction, average, ave
             ]
+            numdays=-60
             return {
                 "sid":this.getLocation.sid,
-                "sdate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                "elems":elems,
+                "meta":""
+            }
+    }
+
+    // ACIS parameters: daily call for last few days
+    @computed get explorer_getDailyAcisParams_tscan() {
+            let elems
+            let numdays
+            elems = [
+                {"vX":43}, //daily temp, ave
+                {"vX":1,"vN":24}, //daily temp, max
+                {"vX":2,"vN":24}, //daily temp, min
+                {"vX":4,"vN":23}, //daily pcpn, sum
+                {"vX":68,"vN":2}, //daily soil moisture, ave
+                {"vX":69,"vN":4}, //daily soil temperature, ave
+                {"vX":71}, //daily relative humidity, ave
+                {"vX":70,"vN":6}, //daily solar radiation, sum
+                {"vX":77,"vN":6}, //daily wind speed, peak, max
+                {"vX":89,"vN":7}, //daily wind speed, average, ave
+                {"vX":101,"vN":2}, //daily wind direction, average, ave
+            ]
+            numdays=-60
+            return {
+                "sid":this.getLocation.sid,
+                "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
                 "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
                 "elems":elems,
                 "meta":""
@@ -2039,30 +2772,28 @@ export class AppStore {
     }
 
     // ACIS parameters: climate summary call
-    @computed get explorerClimateSummary_getAcisParams_tscan() {
-            let elems
-            elems=[
-                {"name":"pcpn","vN":23,"duration":"ytd","reduce":"sum","prec":2,"maxmissing":"1"},
-                {"name":"pcpn","vN":23,"duration":"ytd","reduce":"sum","prec":2,"maxmissing":"1","normal":"departure"},
-                {"name":"pcpn","vN":23,"duration":"std","reduce":"sum","season_start":getStdStartString(date_current),"prec":2,"maxmissing":"1"},
-                {"name":"pcpn","vN":23,"duration":"std","reduce":"sum","season_start":getStdStartString(date_current),"prec":2,"maxmissing":"1","normal":"departure"},
-                {"name":"pcpn","vN":23,"duration":"mtd","reduce":"sum","prec":2,"maxmissing":"1"},
-                {"name":"pcpn","vN":23,"duration":"mtd","reduce":"sum","prec":2,"maxmissing":"1","normal":"departure"},
-                {"name":"avgt","vN":24,"duration":"ytd","reduce":"mean","prec":1,"maxmissing":"1"},
-                {"name":"avgt","vN":24,"duration":"ytd","reduce":"mean","prec":1,"maxmissing":"1","normal":"departure"},
-                {"name":"avgt","vN":24,"duration":"std","reduce":"mean","season_start":getStdStartString(date_current),"prec":1,"maxmissing":"1"},
-                {"name":"avgt","vN":24,"duration":"std","reduce":"mean","season_start":getStdStartString(date_current),"prec":1,"maxmissing":"1","normal":"departure"},
-                {"name":"avgt","vN":24,"duration":"mtd","reduce":"mean","prec":1,"maxmissing":"1"},
-                {"name":"avgt","vN":24,"duration":"mtd","reduce":"mean","prec":1,"maxmissing":"1","normal":"departure"},
-            ]
-            return {
-                "sid":this.getLocation.sid,
-                "sdate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
-                "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
-                "elems":elems,
-                "meta":""
-            }
-    }
+    @action explorerClimateSummary_getAcisParams = (isTSCAN) => {
+        const pcpnMinor = isTSCAN ? 23 : 22;
+        const avgtMinor = isTSCAN ? 24 : 23;
+
+        const elems=[
+            {"name":"pcpn","vN":pcpnMinor},
+            {"name":"pcpn","vN":pcpnMinor,"duration":"ytd","reduce":{"reduce":"sum", "add":"mcnt"},"prec":2},
+            {"name":"pcpn","vN":pcpnMinor,"duration":"std","reduce":{"reduce":"sum", "add":"mcnt"},"season_start":getStdStartString(date_current),"prec":2},
+            {"name":"pcpn","vN":pcpnMinor,"duration":"mtd","reduce":{"reduce":"sum", "add":"mcnt"},"prec":2},
+            {"name":"avgt","vN":avgtMinor},
+            {"name":"avgt","vN":avgtMinor,"duration":"ytd","reduce":{"reduce":"mean", "add":"mcnt"},"prec":1},
+            {"name":"avgt","vN":avgtMinor,"duration":"std","reduce":{"reduce":"mean", "add":"mcnt"},"season_start":getStdStartString(date_current),"prec":1},
+            {"name":"avgt","vN":avgtMinor,"duration":"mtd","reduce":{"reduce":"mean", "add":"mcnt"},"prec":1},
+        ]
+        return {
+            "sid":this.getLocation.sid,
+            "sdate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+            "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+            "elems":elems,
+            "meta":""
+        }
+    };
 
     // data is loading - boolean - to control the spinner
     @observable explorer_dataIsLoading = false
@@ -2071,6 +2802,14 @@ export class AppStore {
     }
     @computed get explorer_getDataIsLoading() {
         return this.explorer_dataIsLoading;
+    }
+
+    @observable explorer_dailyDataIsLoading = false
+    @action explorer_setDailyDataIsLoading = (b) => {
+        this.explorer_dailyDataIsLoading = b;
+    }
+    @computed get explorer_getDailyDataIsLoading() {
+        return this.explorer_dailyDataIsLoading;
     }
 
     // data is loading - boolean - to control the spinner
@@ -2084,19 +2823,14 @@ export class AppStore {
 
     // Station explorer hourly data (latest conditions) download
     @action explorer_downloadData = () => {
-        //console.log("Call explorer_downloadData")
         let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.explorer_getAcisParams : this.explorer_getAcisParams_tscan
         this.explorer_initLatestConditions();
         this.explorer_setDataIsLoading(true);
         return axios
-          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.explorer_getAcisParams)
-          //.post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.explorer_getAcisParams)
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
           .then(res => {
-            //console.log('SUCCESS downloading from ACIS');
-            //console.log(res);
             if (res.data.hasOwnProperty('error')) {
-                console.log('Error: resetting data to null');
+                console.error('Error: resetting data to null');
                 this.explorer_setClimateData(null);
                 this.explorer_initLatestConditions()
             } else {
@@ -2106,7 +2840,32 @@ export class AppStore {
             this.explorer_setDataIsLoading(false);
           })
           .catch(err => {
-            console.log(
+            console.error(
+              "Request Error: " + (err.response.data || err.response.statusText)
+            );
+          });
+    }
+
+    // Station explorer daily data (latest conditions) download
+    @action explorer_downloadDailyData = () => {
+        let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.explorer_getDailyAcisParams : this.explorer_getDailyAcisParams_tscan
+        this.explorer_initLatestDailyConditions();
+        this.explorer_setDailyDataIsLoading(true);
+        return axios
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
+          .then(res => {
+            if (res.data.hasOwnProperty('error')) {
+                console.error('Error: resetting data to null');
+                this.explorer_setDailyClimateData(null);
+                this.explorer_initLatestDailyConditions()
+            } else {
+                this.explorer_setDailyClimateData(res.data.data.slice(0));
+                this.explorer_setLatestDailyConditions()
+            }
+            this.explorer_setDailyDataIsLoading(false);
+          })
+          .catch(err => {
+            console.error(
               "Request Error: " + (err.response.data || err.response.statusText)
             );
           });
@@ -2114,29 +2873,24 @@ export class AppStore {
 
     // Station explorer hourly data (latest conditions) download
     @action explorerClimateSummary_downloadData = () => {
-        //console.log("Call explorerClimateSummary_downloadData")
-	let params = (this.getLocation.sid.split(' ')[1]==='17') ? this.explorerClimateSummary_getAcisParams : this.explorerClimateSummary_getAcisParams_tscan
+        let params = this.explorerClimateSummary_getAcisParams(this.getLocation.sid.split(' ')[1] !== '17')
         this.explorer_initClimateSummary();
         this.explorerClimateSummary_setDataIsLoading(true);
         return axios
-          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.explorer_getAcisParams)
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, params)
+          .post('https://data.nrcc.rcc-acis.org/StnData', params)
           .then(res => {
-            //console.log('SUCCESS downloading climate summary from ACIS');
-            //console.log(res);
             if (res.data.hasOwnProperty('error')) {
-                console.log('Error: resetting data to null');
+                console.error('Error: resetting data to null');
                 this.explorerClimateSummary_setClimateData(null);
                 this.explorer_initClimateSummary()
             } else {
-                //this.explorerClimateSummary_setClimateData(res.data.data.slice(0));
                 this.explorerClimateSummary_setClimateData(res.data.data[0]);
                 this.explorer_setClimateSummary()
             }
             this.explorerClimateSummary_setDataIsLoading(false);
           })
           .catch(err => {
-            console.log(
+            console.error(
               "Request Error: " + (err.response.data || err.response.statusText)
             );
           });
@@ -2170,7 +2924,7 @@ export class AppStore {
           varUnits = {
             airtemp_units : '°F',
             humidity_units : '%',
-            solarrad_units : 'W/m2',
+            solarrad_units : 'Wm⁻²',
             wind_units : 'mph',
           };
         return varUnits
@@ -2187,8 +2941,7 @@ export class AppStore {
             this.livestock_livestockType = t;
         }
     }
-    @action livestock_setLivestockTypeFromRadioGroup = (e) => {
-        let t = e.target.value;
+    @action livestock_setLivestockTypeFromRadioGroup = (t) => {
         // has the livestock changed?
         let changed = (this.livestock_getLivestockType===t) ? false : true
         // only update and download data if time frame has changed
@@ -2252,7 +3005,7 @@ export class AppStore {
     //     date : date of observation
     //     temp : temperature for hour (F)
     //     humid : humidity for hour (%)
-    //     solar : total solar radiation for hour (W/m2)
+    //     solar : total solar radiation for hour (Wm⁻²)
     //     wind : wind speed for hour (mph)
     @observable livestock_climateSummary = [{
                 'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
@@ -2454,16 +3207,12 @@ export class AppStore {
 
     // Livestock Heat Index tool daily data download - download data using parameters
     @action livestock_downloadData = () => {
-        //console.log("Call livestock_downloadData")
         this.livestock_setDataIsLoading(true);
         return axios
-          //.post(`${protocol}//data.rcc-acis.org/StnData`, this.wxgraph_getAcisParams)
-          .post(`${protocol}//data.nrcc.rcc-acis.org/StnData`, this.livestock_getAcisParams)
+          .post('https://data.nrcc.rcc-acis.org/StnData', this.livestock_getAcisParams)
           .then(res => {
-            //console.log('SUCCESS downloading from ACIS');
-            //console.log(res);
             if (res.data.hasOwnProperty('error')) {
-                console.log('Error: resetting data to null');
+                console.error('Error: resetting data to null');
                 this.livestock_setClimateData(null);
                 this.livestock_initClimateSummary()
             } else {
@@ -2473,10 +3222,318 @@ export class AppStore {
             this.livestock_setDataIsLoading(false);
           })
           .catch(err => {
-            console.log(
+            console.error(
               "Request Error: " + (err.response.data || err.response.statusText)
             );
           });
+    }
+
+    ////////////////////////////////////
+    /// TOOL: WIND CHILL / HEAT INDEX
+    ////////////////////////////////////
+    @observable windheat_vars={
+            airtemp : true,
+            humidity : true,
+            wind : true,
+        };
+    @action windheat_setVars = name => event => {
+            this.windheat_vars[name] = event.target.checked
+        }
+    @computed get windheat_getVars() {
+        return this.windheat_vars
+    }
+    @computed get windheat_getVarLabels() {
+          return {
+            airtemp_label : 'Air Temperature',
+            humidity_label : 'Relative Humidity',
+            wind_label : 'Wind',
+          };
+    }
+    @computed get windheat_getVarUnits() {
+        let varUnits = {}
+          varUnits = {
+            airtemp_units : '°F',
+            humidity_units : '%',
+            wind_units : 'mph',
+          };
+        return varUnits
+    }
+
+    // windheat to view data
+    // - options are 'windchill', 'heatindex'
+    @observable windheat_windheatType = 'windchill'
+    @action windheat_setwindheatType = (t) => {
+        // has the windheat changed?
+        let changed = (this.windheat_getWindHeatType===t) ? false : true
+        // only update and download data if windheat has changed
+        if (changed===true) {
+            this.windheat_windheatType = t;
+        }
+    }
+    @action windheat_setwindheatTypeFromRadioGroup = (t) => {
+        // has the windheat changed?
+        let changed = (this.windheat_getWindHeatType===t) ? false : true
+        // only update and download data if time frame has changed
+        if (changed===true) {
+            this.windheat_windheatType = t;
+        }
+    }
+    @computed get windheat_getWindHeatType() {
+        return this.windheat_windheatType;
+    }
+
+    // windheat tool daily data download - set parameters
+    @computed get windheat_getAcisParams() {
+            let elems
+            let numdays
+            elems = [
+                {"vX":23}, //temp
+                {"vX":24}, //relative humidity
+                {"vX":128}, //wind speed
+            ]
+            numdays=-3
+
+            return {
+                "sid":this.getLocation.sid,
+                "sdate":moment(date_current,'YYYY-MM-DD').add(numdays,'days').format("YYYY-MM-DD"),
+                "edate":moment(date_current,'YYYY-MM-DD').format("YYYY-MM-DD"),
+                "elems":elems,
+                "meta":""
+            }
+        }
+
+    // windheat tool forecast data download - set parameters
+    //    get two days before date to ensure plenty of date is retrieved for alignment of hours with observed data
+    //    start hour is 23 to handle edge case of a PR/VI station (Atlantic Timezone: GMT -4) and non-daylight savings time date (locHrly would return for Eastern Standard Time: GMT -5)
+    @computed get windheat_getLocHrlyParams() {
+        const { ll } = this.getLocation;
+        return {
+            "lon": ll[0],
+            "lat": ll[1],
+            "tzo": -5,
+            "sdate": moment(date_current,'YYYY-MM-DD').add(-3,'days').format("YYYYMMDD23"),
+            "edate": "now"
+        }
+    }
+
+    // data is loading - boolean - to control the spinner
+    @observable windheat_dataIsLoading = false
+    @action windheat_setDataIsLoading = (b) => {
+        this.windheat_dataIsLoading = b;
+    }
+    @computed get windheat_getDataIsLoading() {
+        return this.windheat_dataIsLoading;
+    }
+
+    // climate data saved in this var
+    // - the full request downloaded from ACIS
+    @observable windheat_climateData = null;
+    @action windheat_setClimateData = (res) => {
+        this.windheat_climateData = res
+    }
+    @computed get windheat_getClimateData() {
+        return this.windheat_climateData
+    }
+
+    // forecasted climate data saved in this var
+    // - the full request downloaded from locHrly
+    @observable windheat_forecastData = null;
+    @action windheat_setForecastData = (res) => {
+        this.windheat_forecastData = res
+    }
+    @computed get windheat_getForecastData() {
+        return this.windheat_forecastData
+    }
+
+    // summary for windheat
+    // - data included for both observed and forecasted:
+    //     date : date of observation
+    //     temp : temperature for hour (F)
+    //     humid : humidity for hour (%)
+    //     wind : wind speed for hour (mph)
+    @observable windheat_climateSummary = [{
+        'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+        'avgt': null,
+        'humid': null,
+        'wind': null,
+        'windchill': null,
+        'heatindex': null,
+        'fcstAvgt': null,
+        'fcstHumid': null,
+        'fcstWind': null,
+        'fcstWindchill': null,
+        'fcstHeatindex': null,
+    }];
+    @action windheat_initClimateSummary = () => {
+        this.windheat_climateSummary = [{
+            'date': moment(date_current,'YYYY-MM-DD').format('YYYY-MM-DD'),
+            'avgt': null,
+            'humid': null,
+            'wind': null,
+            'windchill': null,
+            'heatindex': null,
+            'fcstAvgt': null,
+            'fcstHumid': null,
+            'fcstWind': null,
+            'fcstWindchill': null,
+            'fcstHeatindex': null,
+        }];
+    }
+    @action windheat_setClimateSummary = () => {
+        let data = this.windheat_getClimateData;
+        let forecastRes = this.windheat_getForecastData;
+        let dataObjArray_hours = [];
+
+        const MISSING = 'M';
+        const NO_VALUE = '--';
+
+        // hourly data for two days
+        data.forEach(function (d) {
+            // Extract date
+            const dateToday = d[0];
+            
+            let startIdx = 0;
+            let numHours = d[1].length;
+            if (dateToday===data[0][0]) {
+                // If it is the first day only use the midnight hour (idx = 23)
+                startIdx = 23;
+            } else if (dateToday===data[data.length-1][0]) {
+                // If it is the last day leave off hours from end that have missing data
+                let numFutureMissingHours = 0
+                for (let i = numHours-1; i >= 0; i--) { 
+                    if (d[1][i]===MISSING) {
+                        numFutureMissingHours += 1;
+                    } else {
+                        break;
+                    }
+                }
+                numHours -= numFutureMissingHours  
+            }
+
+            // Iterate hours
+            for (let i = startIdx; i < numHours; i++) { 
+                // Extract data and parse into usable form
+                const tvar = (d[1][i]===MISSING) ? MISSING : parseFloat(d[1][i]);
+                const hvar = (d[2][i]===MISSING || parseFloat(d[2][i])<0.0 || parseFloat(d[2][i])>100.0) ? MISSING : parseFloat(d[2][i]);
+                const wvar = (d[3][i]===MISSING || parseFloat(d[3][i])<0.0) ? MISSING : parseFloat(d[3][i]);
+                
+                // Calculate heat index and wind chill
+                const windchill = (tvar === MISSING || wvar === MISSING) ? MISSING : calculateWindChill(tvar, wvar, MISSING, NO_VALUE);
+                const heatindex = (tvar === MISSING || hvar === MISSING) ? MISSING : calculateHeatIndex(tvar, hvar, MISSING, NO_VALUE);
+
+                //format hour
+                let formattedHourString; 
+                if (i<=8) {
+                    formattedHourString = dateToday+' 0'+(i+1).toString()+':00'
+                } else if (8<i && i<23) {
+                    formattedHourString = dateToday+' '+(i+1).toString()+':00'
+                } else if (23<=i) {
+                    formattedHourString = moment(dateToday,"YYYY-MM-DD").add(1,'days').format("YYYY-MM-DD")+' 00:00'
+                }
+
+                // construct return
+                dataObjArray_hours.push({
+                    'date':formattedHourString,
+                    'avgt': tvar,
+                    'humid': hvar,
+                    'wind': wvar,
+                    'windchill': windchill,
+                    'heatindex': heatindex,
+                    'fcstAvgt': NO_VALUE,
+                    'fcstHumid': NO_VALUE,
+                    'fcstWind': NO_VALUE,
+                    'fcstWindchill': NO_VALUE,
+                    'fcstHeatindex': NO_VALUE,
+                })
+            }
+        })
+
+        if (forecastRes !== null) {
+            // Calculate hour offset difference between locHrly timezone (-4 or -5) and station local timezone (precalculated in scan_stations.json)
+            const stationTzo = this.getLocation.tzo;
+            const locHrlyTzo = parseInt(forecastRes.data.hrlyData[0][0].slice(-6,-3), 10);
+            const tzoDiff = locHrlyTzo - stationTzo;
+    
+            // Combine locHrly data, it will all be considered forecast data by this tool
+            const locHrlyObs = forecastRes.data.hrlyData.map(hrArr => ([hrArr[0], hrArr[3], hrArr[4], hrArr[7]]));
+            const locHrlyFcst = forecastRes.data.fcstData.map(hrArr => ([hrArr[0], hrArr[2], hrArr[3], hrArr[6]]));
+            const hrlyFcst = locHrlyObs.concat(locHrlyFcst);
+    
+            // Find index of last observed time in forecast data
+            const lastObservedHr = dataObjArray_hours[dataObjArray_hours.length - 1];
+            const targetDate = lastObservedHr.date.slice(0,10);
+            const targetHr = lastObservedHr.date.slice(11, 13);
+            const lastObservedIdx = hrlyFcst.findIndex(hrArr => hrArr[0].slice(0,10) === targetDate && hrArr[0].slice(11, 13) === targetHr);
+    
+            // If forecast data is available, add it to the return object
+            if (lastObservedIdx >= 0) {
+                hrlyFcst.slice(lastObservedIdx + 1 + tzoDiff).forEach(([date, tvar, hvar, wvar]) => {
+                    // Parse into usable form
+                    tvar = (tvar === MISSING) ? MISSING : Math.round(parseFloat(tvar));
+                    hvar = (hvar === MISSING || parseFloat(hvar)<0.0 || parseFloat(hvar)>100.0) ? MISSING : Math.round(parseFloat(hvar));
+                    // Parse and convert from knots to MPH
+                    wvar = (wvar === MISSING || parseFloat(wvar)<0.0) ? MISSING : Math.round(parseFloat(wvar) * 1.151 * 10) / 10;
+    
+                    // Calculate heat index and wind chill
+                    const windchill = (tvar === MISSING || wvar === MISSING) ? MISSING : calculateWindChill(tvar, wvar, MISSING, NO_VALUE);
+                    const heatindex = (tvar === MISSING || hvar === MISSING) ? MISSING : calculateHeatIndex(tvar, hvar, MISSING, NO_VALUE);
+                
+                    // Convert datetime in locHrly timezone to station local timezone and format to match observed
+                    let formattedHourString = parse(date, "yyyy-MM-dd'T'HH:mm:ssXXX", new Date());
+                    formattedHourString = subHours(formattedHourString, tzoDiff);
+                    formattedHourString = format(formattedHourString, "yyyy-MM-dd HH:mm");
+                
+                    // construct return
+                    dataObjArray_hours.push({
+                    'date':formattedHourString,
+                    'avgt': NO_VALUE,
+                    'humid': NO_VALUE,
+                    'wind': NO_VALUE,
+                    'windchill': NO_VALUE,
+                    'heatindex': NO_VALUE,
+                    'fcstAvgt': tvar,
+                    'fcstHumid': hvar,
+                    'fcstWind': wvar,
+                    'fcstWindchill': windchill,
+                    'fcstHeatindex': heatindex,
+                    })
+                })
+            }
+        }
+
+        this.windheat_climateSummary = dataObjArray_hours;
+    }
+    @computed get windheat_getClimateSummary() {
+        return this.windheat_climateSummary
+    }
+
+    // windheat tool daily data download - download data using parameters
+    @action windheat_downloadData = () => {
+        this.windheat_setDataIsLoading(true);
+        
+        const dailyDataPromise = axios
+          .post('https://data.nrcc.rcc-acis.org/StnData', this.windheat_getAcisParams);
+        
+        const forecastDataPromise = axios
+          .post('https://hrly.nrcc.cornell.edu/locHrly', this.windheat_getLocHrlyParams);
+
+        return Promise.all([ dailyDataPromise, forecastDataPromise ])
+            .then(([dailyRes, forecastRes]) => {
+                if (dailyRes.data.hasOwnProperty('error')) {
+                    console.error('Error: resetting data to null');
+                    this.windheat_setClimateData(null);
+                    this.windheat_setForecastData(null);
+                    this.windheat_initClimateSummary()
+                } else {
+                    this.windheat_setClimateData(dailyRes.data.data.slice(0));
+                    this.windheat_setForecastData(typeof forecastRes.data === 'string' ? null : forecastRes);
+                    this.windheat_setClimateSummary()
+                }
+                this.windheat_setDataIsLoading(false);
+            })
+            .catch(err => {
+                console.error(err);
+            });
     }
 
     ////////////////////////////////////

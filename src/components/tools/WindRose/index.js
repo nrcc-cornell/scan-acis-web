@@ -1,16 +1,11 @@
-///////////////////////////////////////////////////////////////////////////////
-///////////////////////////////////////////////////////////////////////////////
-
 import React, { Component } from 'react';
 import { inject, observer} from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-//import Typography from '@material-ui/core/Typography';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
+import { MuiThemeProvider, createTheme } from '@material-ui/core/styles'
 import green from '@material-ui/core/colors/green';
 import grey from '@material-ui/core/colors/grey'
-import Button from '@material-ui/core/Button';
 import Box from '@material-ui/core/Box';
 import Hidden from '@material-ui/core/Hidden';
 
@@ -22,10 +17,10 @@ import Windrose from './Windrose.jsx'
 import WindroseTable from './WindroseTable.jsx'
 import WindroseEmpty from './WindroseEmpty.jsx'
 import WindroseTableEmpty from './WindroseTableEmpty.jsx'
+import WindroseDoc from './WindRoseDoc/index.js';
 import Footer from './Footer.jsx'
 
-// Styles
-//import '../../../styles/WindRose.css';
+import CollapsibleDocumentation from '../../CollapsibleDocumentation';
 
 const styles = theme => ({
   wrapper: {
@@ -43,7 +38,7 @@ const styles = theme => ({
   },
 });
 
-const theme = createMuiTheme({
+const theme = createTheme({
   palette: {
     primary: {
       main: green[800],
@@ -103,7 +98,6 @@ const theme = createMuiTheme({
 })
 
 var app;
-var history;
 
 @inject('store') @observer
 class WindRose extends Component {
@@ -114,7 +108,6 @@ class WindRose extends Component {
         const dmonth = ('0' + (today.getMonth() + 1)).slice(-2)
         const ddate = ('0' + today.getDate()).slice(-2)
         app = this.props.store.app;
-        history = this.props.history;
         app.setToolName('windrose')
         this.state = {
           highChartOptions: { series: null },
@@ -182,7 +175,6 @@ class WindRose extends Component {
         this.initStateForLoading()
         LoadStationData({sid:this.state.userParams.sid, period:[this.state.userParams.fromDate,this.state.userParams.toDate], wsunits: this.state.userParams.wsunits})
           .then(response => {
-            console.log(response);
             this.setState({
               acisWindResults: response,
               data_is_loading: false
@@ -229,17 +221,16 @@ class WindRose extends Component {
     }
 
     render() {
-
         const { classes } = this.props;
-        let url_doc = app.getToolInfo(this.props.name).url_doc
 
         return (
           <MuiThemeProvider theme={theme}>
 
             <br/>
+            <br/>
             {/* begin charts */}
-            <Grid item container direction="column" justify="center" alignItems="center" spacing={2} xs={12}>
-              <Grid item container direction="row" justify="center" alignItems="center" spacing={4}>
+            <Grid item container direction="column" justifyContent="center" alignItems="center" spacing={2} xs={12}>
+              <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={4}>
                 <Hidden lgUp>
                   <Grid item>
                   <ChangeOptions
@@ -248,14 +239,9 @@ class WindRose extends Component {
                   />
                   </Grid>
                 </Hidden>
-                <Grid item>
-                  <Button variant="outlined" color="primary" onClick={()=>{history.push(url_doc)}}>
-                    Documentation
-                  </Button>
-                </Grid>
               </Grid>
 
-              <Grid item container direction="row" justify="space-evenly" alignItems="center">
+              <Grid item container direction="row" justifyContent="space-evenly" alignItems="center">
                 <Hidden mdDown>
                   <Grid item>
                   {!this.state.data_is_loading &&
@@ -306,6 +292,10 @@ class WindRose extends Component {
 
             <Footer />
             {/* end charts */}
+
+            <CollapsibleDocumentation
+              docsProp={<WindroseDoc />}
+            />
           </MuiThemeProvider>
         );
     }

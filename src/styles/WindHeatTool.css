@@ -1,0 +1,7 @@
+.chartContainer {
+  height: 300px;
+  width: 90vw;
+  min-width: 310px;
+  max-width: 960px;
+  margin: 0 auto;
+}

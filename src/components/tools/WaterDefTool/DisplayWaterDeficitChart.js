@@ -50,7 +50,7 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
           tooltip: { useHtml:true, shared:true, borderColor:"#000000", borderWidth:2, borderRadius:8, shadow:false, backgroundColor:"#ffffff",
               xDateFormat:"%b %d, %Y", shape: 'rect',valueDecimals:2,
               crosshairs: { width:1, color:"#ff0000", snap:true }},
-          credits: { text:"Powered by ACIS", href:"http://www.rcc-acis.org/", color:"#000000" },
+          credits: { text:"Powered by ACIS", href:"https://www.rcc-acis.org/", color:"#000000" },
           legend: false,
           xAxis: { type: 'datetime', gridLineWidth: 1, crosshair: true, startOnTick: true, endOnTick: false, labels: { align: 'center', x: 0, y: 20 },
                      dateTimeLabelFormats:{ day:'%d %b', week:'%d %b', month:'%b<br/>%Y', year:'%Y' },
@@ -70,7 +70,7 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
                   label:{
                       text:'No Plant Stress',
                       style: {
-                        color: '#0000FF',
+                        color: '#2692BF',
                         fontWeight: 'bold'
                       }
                   }
@@ -83,7 +83,7 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
                   label:{
                       text:'Plant Stress',
                       style: {
-                        color: '#FF0000',
+                        color: '#C70039',
                         fontWeight: 'bold'
                       },
                   }
@@ -96,7 +96,7 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
                   label:{
                       text:'Wilting Point',
                       style: {
-                        color: 'black',
+                        color: '#342E37',
                         fontWeight: 'bold'
                       },
                   }
@@ -105,12 +105,12 @@ const DisplayWaterDeficitChart = ({data,depthRangeTop,depthRangeBottom,units,stn
           series: [{
             name:'Water Deficit',
             type: 'line',
-            color: 'black',
+            color: '#342E37',
             zones: [{
               value: (data.fc_ref - data.pwp_ref)/2.,
-              color: '#0000FF'
+              color: '#2692BF'
             },{
-              color: '#FF0000'
+              color: '#C70039'
             }],
             data: data.data_series,
             zIndex: 102,

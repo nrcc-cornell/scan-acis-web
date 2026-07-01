@@ -19,7 +19,7 @@ const VarPickerExtreme = (props) => {
       <Box width="240px" padding={1} border={1} borderRadius={2} borderColor="primary.main" bgcolor={(props.tmaxSelected) ? "#f5f5dc" : "#ffffff"}>
 
 
-      <Grid item container direction="column" justify="flex-start" spacing={1}>
+      <Grid item container direction="column" justifyContent="flex-start" spacing={1}>
         <Grid item>
           <Typography variant="h6" style={{color: (props.tmaxSelected) ? '#000000' : '#B0B0B0'}}>
             <Checkbox
@@ -34,7 +34,7 @@ const VarPickerExtreme = (props) => {
 
       { props.tmaxSelected &&
 
-      <Grid item container direction="column" justify="flex-start" spacing={1}>
+      <Grid item container direction="column" justifyContent="flex-start" spacing={1}>
         <Grid item>
           <Typography component="span" variant="body1">
             <ComparisonSelect value={props.tmaxComparison} onchange={props.onchangeTmaxComparison} />
@@ -56,7 +56,7 @@ const VarPickerExtreme = (props) => {
 
       </Box>
       <Box width="240px" padding={1} border={1} borderRadius={2} borderColor="primary.main" bgcolor={(props.tminSelected) ? "#f5f5dc" : "#ffffff"}>
-      <Grid item container direction="column" justify="flex-start" spacing={1}>
+      <Grid item container direction="column" justifyContent="flex-start" spacing={1}>
         <Grid item>
           <Typography variant="h6" style={{color: (props.tminSelected) ? '#000000' : '#B0B0B0'}}>
             <Checkbox
@@ -71,7 +71,7 @@ const VarPickerExtreme = (props) => {
 
       { props.tminSelected &&
 
-      <Grid item container direction="column" justify="flex-start" spacing={1}>
+      <Grid item container direction="column" justifyContent="flex-start" spacing={1}>
         <Grid item>
           <Typography variant="body1">
             <ComparisonSelect value={props.tminComparison} onchange={props.onchangeTminComparison} />
@@ -92,7 +92,7 @@ const VarPickerExtreme = (props) => {
 
       </Box>
       <Box width="240px" padding={1} border={1} borderRadius={2} borderColor="primary.main" bgcolor={(props.prcpSelected) ? "#f5f5dc" : "#ffffff"}>
-      <Grid item container direction="column" justify="flex-start" spacing={1}>
+      <Grid item container direction="column" justifyContent="flex-start" spacing={1}>
         <Grid item>
           <Typography variant="h6" style={{color: (props.prcpSelected) ? '#000000' : '#B0B0B0'}}>
             <Checkbox
@@ -107,7 +107,7 @@ const VarPickerExtreme = (props) => {
 
       { props.prcpSelected &&
 
-      <Grid item container direction="column" justify="flex-start" spacing={1}>
+      <Grid item container direction="column" justifyContent="flex-start" spacing={1}>
         <Grid item>
           <Typography variant="body1">
             <ComparisonSelect value={props.prcpComparison} onchange={props.onchangePrcpComparison} />

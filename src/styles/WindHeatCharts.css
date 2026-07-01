@@ -1,0 +1,52 @@
+#livestock-charts {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 99%;
+}
+
+.customized-legend-windheat {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.7vw;
+  margin-bottom: 0.7vw;
+  height: calc(20px + 1.0vw);
+  font-size: calc(10px + 0.8vw);
+  font-family: Roboto;
+  line-height: calc(1em + 0.5vw);
+  text-align: center;
+}
+
+.customized-tooltip-windheat {
+  font-family: Roboto;
+  line-height: calc(1em + 0.5vw);
+  background-color: #ffffff;
+  padding: 6px;
+  border-color: #000000;
+  border: 1px solid;
+}
+
+.customized-tooltip-windheat-OLD {
+  margin-top: 6vw;
+  font-size: calc(6px + 0.7vw);
+  font-family: Roboto;
+  line-height: calc(1em + 0.5vw);
+}
+
+.legend-item-windheat {
+  margin: 1vw;
+}
+
+.legend-symbol {
+  margin: 0 10 0 0;
+}
+
+.recharts-cartesian-axis { font-size: calc(10px + 0.2vw); font-family: "Roboto",Helvetica,sans-serif; }
+
+.isHidden {
+  display: none;
+}

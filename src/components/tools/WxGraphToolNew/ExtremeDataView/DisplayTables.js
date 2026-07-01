@@ -37,7 +37,7 @@ const DisplayTables = ({data,stnName,loading,tmaxTitle,tminTitle,prcpTitle,tmaxS
             })
         }
 
-        let tableTitle = 'Number of exceedences @ '+stnName
+        let tableTitle = 'Number of exceedances @ '+stnName
 
         return (
                 <MUIDataTable

@@ -97,14 +97,17 @@ class StationExplorerClimateSummary extends Component {
                   spinnerSize={'10vw'}
                 >
                   <Typography variant="h6" noWrap>
-                    Climate Summary (as of {app.explorer_getClimateSummary.date})
+                    Climate Summary as of {app.explorer_getClimateSummary.date}
+                  </Typography>
+                  <Typography variant="body2" style={{ fontStyle: 'italic', fontSize: '0.75rem', color: 'rgb(100,100,100)' }}>
+                    Number of missing days in parentheses
                   </Typography>
                   <Typography component="span" variant="body2" gutterBottom noWrap>
                     <table cellPadding="6"><tbody>
                       <tr><td></td><td>Since</td><td>Temperature</td><td>Precipitation</td></tr>
-                      <tr><td>Year-to-date</td><td>{app.explorer_getClimateSummary.ytd_start}</td><td>{this.tempWithUnits(app.explorer_getClimateSummary.t_ytd_o)} ({this.tempWithSign(app.explorer_getClimateSummary.t_ytd_n)})</td><td>{this.precipWithUnits(app.explorer_getClimateSummary.p_ytd_o)} ({this.precipWithSign(app.explorer_getClimateSummary.p_ytd_n)})</td></tr>
-                      <tr><td>Season-to-date</td><td>{app.explorer_getClimateSummary.std_start}</td><td>{this.tempWithUnits(app.explorer_getClimateSummary.t_std_o)} ({this.tempWithSign(app.explorer_getClimateSummary.t_std_n)})</td><td>{this.precipWithUnits(app.explorer_getClimateSummary.p_std_o)} ({this.precipWithSign(app.explorer_getClimateSummary.p_std_n)})</td></tr>
-                      <tr><td>Month-to-date</td><td>{app.explorer_getClimateSummary.mtd_start}</td><td>{this.tempWithUnits(app.explorer_getClimateSummary.t_mtd_o)} ({this.tempWithSign(app.explorer_getClimateSummary.t_mtd_n)})</td><td>{this.precipWithUnits(app.explorer_getClimateSummary.p_mtd_o)} ({this.precipWithSign(app.explorer_getClimateSummary.p_mtd_n)})</td></tr>
+                      <tr><td>Year-to-date</td><td>{app.explorer_getClimateSummary.ytd_start}</td><td>{this.tempWithUnits(app.explorer_getClimateSummary.t_ytd_o)} ({app.explorer_getClimateSummary.t_ytd_n})</td><td>{this.precipWithUnits(app.explorer_getClimateSummary.p_ytd_o)} ({app.explorer_getClimateSummary.p_ytd_n})</td></tr>
+                      <tr><td>Season-to-date</td><td>{app.explorer_getClimateSummary.std_start}</td><td>{this.tempWithUnits(app.explorer_getClimateSummary.t_std_o)} ({app.explorer_getClimateSummary.t_std_n})</td><td>{this.precipWithUnits(app.explorer_getClimateSummary.p_std_o)} ({app.explorer_getClimateSummary.p_std_n})</td></tr>
+                      <tr><td>Month-to-date</td><td>{app.explorer_getClimateSummary.mtd_start}</td><td>{this.tempWithUnits(app.explorer_getClimateSummary.t_mtd_o)} ({app.explorer_getClimateSummary.t_mtd_n})</td><td>{this.precipWithUnits(app.explorer_getClimateSummary.p_mtd_o)} ({app.explorer_getClimateSummary.p_mtd_n})</td></tr>
                     </tbody></table>
                   </Typography>
                 </LoadingOverlay>
