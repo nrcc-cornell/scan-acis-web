@@ -102,7 +102,6 @@ class HistoricalChart extends Component {
     return yearData ? yearData.isMissing : false;
   }
 
-  
   idxToDate = (idx) => {
     const fruitSeasonStart = app.fruit_info[app.getToolName].seasonStart;
     const referenceDate = new Date(2025, fruitSeasonStart[0] - 1, fruitSeasonStart[1]);
@@ -298,7 +297,7 @@ class HistoricalChart extends Component {
       ticks = ticks.filter(t => t <= lastIdxOnX);
     }
     return (
-      <div id="fruit-chart">
+      <div id="fruit-chart" style={{ marginTop: 0,  }}>
         <Grid container direction="row" justifyContent="center" alignItems="center" spacing={2}>
           <Grid item>
             <Typography variant="h6">
@@ -310,104 +309,100 @@ class HistoricalChart extends Component {
           </Grid>
         </Grid>
 
-        <Grid container justifyContent="left" alignItems="flexStart">
-          <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
-            <Grid item>
-              <Typography variant="subtitle2">
-                {this.props.stnName}
-              </Typography>
-            </Grid>
-          </Grid>
-
-          <Grid item container direction="row" justifyContent="center" alignItems="center" xs={12}>
-              <ResponsiveContainer width="100%" height={600}>
-                <ComposedChart
-                  data={data}
-                  // data={this.props.data.filter(d => ![0, null].includes(d.categories[this.props.chartInfo.dataInfo[1].key]))}
-                  syncId="anyId"
-                  margin={{top: 0, right: 30, left: 0, bottom: 0}}
-                  layout="vertical"
-                >
-                  <CartesianGrid strokeDasharray="3 3"/>
-                  
-                  <XAxis
-                    type="number"
-                    tickFormatter={this.idxToDate}
-                    ticks={ticks}
-                    domain={[ticks[0],lastIdxOnX]}
-                    label={this.createXAxisLabel(data)}
-                  />
-                  <YAxis
-                    dataKey="year"
-                    type="category"
-                  >
-                    <Label
-                      value="Year"
-                      angle={-90}
-                      position="insideLeft"
-                      offset={10}
-                      style={{ textAnchor: 'middle' }}
-                    />
-                  </YAxis>
-
-                  {app.getToolName === 'pawpaw' && this.state.disabled && !this.state.disabled.includes('firstFreezeIdx') &&
-                    <Scatter dataKey="firstFreezeIdx" shape={<FreezeBar />} />
-                  }
-
-                  {this.props.chartInfo.dataInfo && this.state.disabled &&
-                    this.props.chartInfo.dataInfo
-                      .map((info, index) => {
-                        const isActive = !this.state.disabled.includes(info.key);
-                        if (app.getToolName === 'blueberryGrowth') {
-                          return (
-                            <Scatter
-                              name={info.label}
-                              key={info.key}
-                              dataKey={(d) => d['categories'][info.key]}
-                              shape={<CustomDot info={{...info, isActive}} />}
-                            />
-                          );
-                        } else {
-                          return (
-                            <Bar
-                              name={info.label}
-                              stackId="a"
-                              key={info.key}
-                              dataKey={(d) => d['categories'][info.key]}
-                              radius={this.getRadius(index)}
-                              shape={<CustomCell info={{...info, isActive, isLast: index === this.props.chartInfo.dataInfo.length - 1}} />}
-                            ></Bar>
-                          );
-                        }
-                      })
-                  }
-
-                  {data.length === 0 ? '' : <Tooltip
-                    cursor={{ stroke: 'red', strokeWidth: 2, fill: 'transparent' }}
-                    content={this.renderCustomTooltip}
-                  />}
-
-                  {this.props.chartInfo.dataInfo && this.state.disabled &&
-                    <Legend
-                      payload={this.props.chartInfo.dataInfo.map(info => ({
-                        dataKey: info.key,
-                        dataLabel: info.label,
-                        color: info.color
-                      }))}
-                      content={this.renderCustomizedLegend}
-                    />
-                  }
-                </ComposedChart>
-              </ResponsiveContainer>
-              {app.getToolName !== 'blueberryHarvest' &&
-                <Grid item>
-                  <Typography variant="caption">
-                    {'(click legend to toggle categories)'}
-                  </Typography>
-                </Grid>
-              }
+        <Grid item container direction="row" justifyContent="center" alignItems="center" spacing={1}>
+          <Grid item>
+            <Typography variant="subtitle2">
+              {this.props.stnName}
+            </Typography>
           </Grid>
         </Grid>
+
+        <ResponsiveContainer width="100%" height="100%">
+          <ComposedChart
+            data={data}
+            // data={this.props.data.filter(d => ![0, null].includes(d.categories[this.props.chartInfo.dataInfo[1].key]))}
+            syncId="anyId"
+            margin={{top: 0, right: 30, left: 0, bottom: 0}}
+            layout="vertical"
+          >
+            <CartesianGrid strokeDasharray="3 3"/>
+            
+            <XAxis
+              type="number"
+              tickFormatter={this.idxToDate}
+              ticks={ticks}
+              domain={[ticks[0],lastIdxOnX]}
+              label={this.createXAxisLabel(data)}
+            />
+            <YAxis
+              dataKey="year"
+              type="category"
+            >
+              <Label
+                value="Year"
+                angle={-90}
+                position="insideLeft"
+                offset={10}
+                style={{ textAnchor: 'middle' }}
+              />
+            </YAxis>
+
+            {app.getToolName === 'pawpaw' && this.state.disabled && !this.state.disabled.includes('firstFreezeIdx') &&
+              <Scatter dataKey="firstFreezeIdx" shape={<FreezeBar />} />
+            }
+
+            {this.props.chartInfo.dataInfo && this.state.disabled &&
+              this.props.chartInfo.dataInfo
+                .map((info, index) => {
+                  const isActive = !this.state.disabled.includes(info.key);
+                  if (app.getToolName === 'blueberryGrowth') {
+                    return (
+                      <Scatter
+                        name={info.label}
+                        key={info.key}
+                        dataKey={(d) => d['categories'][info.key]}
+                        shape={<CustomDot info={{...info, isActive}} />}
+                      />
+                    );
+                  } else {
+                    return (
+                      <Bar
+                        name={info.label}
+                        stackId="a"
+                        key={info.key}
+                        dataKey={(d) => d['categories'][info.key]}
+                        radius={this.getRadius(index)}
+                        shape={<CustomCell info={{...info, isActive, isLast: index === this.props.chartInfo.dataInfo.length - 1}} />}
+                      ></Bar>
+                    );
+                  }
+                })
+            }
+
+            {data.length === 0 ? '' : <Tooltip
+              cursor={{ stroke: 'red', strokeWidth: 2, fill: 'transparent' }}
+              content={this.renderCustomTooltip}
+            />}
+
+            {this.props.chartInfo.dataInfo && this.state.disabled &&
+              <Legend
+                payload={this.props.chartInfo.dataInfo.map(info => ({
+                  dataKey: info.key,
+                  dataLabel: info.label,
+                  color: info.color
+                }))}
+                content={this.renderCustomizedLegend}
+              />
+            }
+          </ComposedChart>
+        </ResponsiveContainer>
+        {app.getToolName !== 'blueberryHarvest' &&
+          <Grid item>
+            <Typography variant="caption">
+              {'(click legend to toggle categories)'}
+            </Typography>
+          </Grid>
+        }
       </div>
     );
   }
