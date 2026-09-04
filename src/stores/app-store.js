@@ -1132,7 +1132,7 @@ export class AppStore {
         const years = Object.keys(data);
         years.sort();
         
-        const results = years.map(year => {
+        const results = years.map((year, yearIdx) => {
             const { firstFreezeDate, firstFreezeIdx, gddObs, percentMissing } = data[year];
             
             let categories = {};
@@ -1160,6 +1160,11 @@ export class AppStore {
                         lastIdx = v;
                     }
                 }
+            }
+
+            if (yearIdx === years.length - 1 && categories['transparent'] === -1) {
+                categories['transparent'] = categories[info[0].key];
+                categories[info[0].key] = 0;
             }
 
             return {

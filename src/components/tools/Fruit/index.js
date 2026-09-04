@@ -258,9 +258,11 @@ class FruitTool extends Component {
                           />
                       }
                       
-                      <CollapsibleDocumentation
-                        docsProp={<FruittoolDoc />}
-                      />
+                      <div style={{ marginTop: '18px' }}>
+                        <CollapsibleDocumentation
+                          docsProp={<FruittoolDoc />}
+                        />
+                      </div>
                     </Grid>
                 </Grid>
             </Grid>
